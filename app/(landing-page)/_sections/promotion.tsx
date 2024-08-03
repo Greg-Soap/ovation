@@ -57,7 +57,7 @@ export default function Promotion() {
 			className={`w-full py-[36px] bg-[#C1FE17] items-center justify-center gap-4 promotion relative ${isHidden ? "hidden" : "flex"}`}
 		>
 			<p className="text-2xl text-[#0B0A10] font-semibold">
-				Ovation Secures $Archway $10,000 grant
+				Ovation Secures ArchwayHQ grant
 			</p>
 
 			<img

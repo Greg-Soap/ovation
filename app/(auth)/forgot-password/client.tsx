@@ -1,4 +1,5 @@
 'use client'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -33,6 +34,7 @@ const formSchema = z.object({
 })
 
 export default function ResetForm() {
+  const router = useRouter()
   const [page, setPage] = useState<number>(1)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -238,7 +240,7 @@ export default function ResetForm() {
           </p>
         </div>
         <Button className="w-full h-[53px] font-semibold text-sm">
-          <Link className="w-full" href={'login'}>
+          <Link className="w-full" href={'/login'}>
             Back to Login
           </Link>
         </Button>

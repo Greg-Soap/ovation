@@ -19,22 +19,45 @@ interface MenuItem {
   icon: ReactElement
   text: string
   path: string
+  isNotAvailable: boolean
 }
 
 const menuItems: MenuItem[] = [
-  { icon: <HomeIcon />, text: 'Home', path: '/apps/timeline' },
-  { icon: <DiscoverIcon />, text: 'Discover', path: '/apps/discover' },
-  { icon: <ProfileIcon />, text: 'Profile', path: '/apps/profile' },
-  { icon: <SettingsIcon />, text: 'Settings', path: '/apps/settings' },
+  {
+    icon: <HomeIcon />,
+    text: 'Home',
+    path: '/apps/timeline',
+    isNotAvailable: true,
+  },
+  {
+    icon: <DiscoverIcon />,
+    text: 'Discover',
+    path: '/apps/discover',
+    isNotAvailable: false,
+  },
+  {
+    icon: <ProfileIcon />,
+    text: 'Profile',
+    path: '/apps/profile',
+    isNotAvailable: false,
+  },
+  {
+    icon: <SettingsIcon />,
+    text: 'Settings',
+    path: '/apps/settings',
+    isNotAvailable: false,
+  },
   {
     icon: <AsideMsgIcon className="w-6 h-6 group-hover:stroke-white" />,
     text: 'Messages',
     path: '/apps/messages',
+    isNotAvailable: false,
   },
   {
     icon: <NotificationIcon />,
     text: 'Notification',
     path: '/apps/notification',
+    isNotAvailable: false,
   },
 ]
 
@@ -47,34 +70,39 @@ export default function Aside() {
   }
 
   return (
-    <aside className="flex flex-col items-center gap-7 pt-4 min-w-[310px] w-[310px] border-r border-[#1A1A1A] sticky top-0 bg-[#111115]">
-      <div className="w-[85%] flex flex-col h-fit gap-3">
+    <aside className="flex flex-col items-center gap-7 pt-4 min-w-[310px] w-[310px] border-r border-[#1A1A1A] sticky top-0 overflow-scroll bg-[#111115]">
+      <div className="w-[85%] flex flex-col h-fit gap-2">
         {menuItems.map((item, index) => {
           const isActive = currentPath.includes(item.path)
 
           return (
             <button
               type="button"
-              className={`flex items-center gap-2 p-3 rounded-[50px] group transition-all duration-300 ${
+              className={`flex items-center gap-2 py-4 px-6 rounded-[50px] hover:bg-[#18181C] focus:bg-[#232227] disabled:opacity-20 group transition-all duration-300 ${
                 isActive
                   ? 'bg-[#232227] fill-white stroke-white'
-                  : 'fill-[#B3B3B3] stroke-[#B3B3B3] bg-transparent'
+                  : 'fill-white stroke-white bg-transparent'
               }`}
               key={index}
               onClick={() => handleClick(item.path)}
             >
               {item.icon}
               <p
-                className={`group-hover:text-white ${isActive ? 'text-white font-medium' : 'text-[#B3B3B3]'}`}
+                className={`flex items-center gap-2 text-[18px] text-white group-hover:text-white group-focus:text-[#CCCCCC] ${isActive ? 'text-white font-medium' : 'text-[#B3B3B3]'}`}
               >
-                {item.text}
+                {item.text}{' '}
+                <span
+                  className={`${item.isNotAvailable ? 'flex' : 'hidden'} h-fit text-[8px] text-[#CFF073] px-[5px] py-[3px] border border-[#CFF073] rounded-[7px] bg-[#CFF0731A]`}
+                >
+                  Coming soon
+                </span>
               </p>
             </button>
           )
         })}
       </div>
 
-      <div className="flex items-center justify-between w-[90%] absolute bottom-0 pb-5">
+      <div className="flex items-center justify-between w-[90%] sticky bottom-0 p py-5 bg-[#111115]">
         <div className="flex items-center gap-2">
           <Image
             src="/assets/images/timeline/Shape.png"

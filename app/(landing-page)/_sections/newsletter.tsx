@@ -44,7 +44,7 @@ export function Newsletter() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-8 w-full"
+          className="space-y-8 w-full border border-[#FFFFFF33] bg-[#FFFFFF0D] rounded-[500px]"
         >
           <FormField
             control={form.control}

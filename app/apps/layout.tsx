@@ -8,9 +8,9 @@ export default function AsideLayout({
 }) {
   return (
     <html lang="en">
-      <body className="h-screen">
+      <body className="h-screen flex flex-col w-full items-center">
         <TimelineHeader />
-        <main className="flex w-full other-link overflow-y-scroll">
+        <main className="flex w-full other-link overflow-y-scroll max-w-[1440px]">
           <Aside />
           {children}
         </main>

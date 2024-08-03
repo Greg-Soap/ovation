@@ -4,27 +4,27 @@ import { generateRandomString } from '@/lib/helper-func'
 export default function InfoCards() {
   return (
     <section className="container w-[70%] grid grid-cols-2 gap-x-5 gap-y-12 py-20 info-card">
-      {moreCards.map((card, index) => (
+      {moreCards.map((card) => (
         <div
-          className="gradient-container bg-opacity-50 rounded-[20px] p-[1px] max-w-[602px] relative"
+          className="gradient-container bg-opacity-50 rounded-[20px] p-[1px] max-w-[602px] max-h-[684px] relative"
           key={generateRandomString()}
         >
           <div
-            className={`p-[10px] flex flex-col items-center rounded-[20px] bg-card-gradient h-full py-10 info-card-ctn ${card.forSmallerScreens ? 'pr-0' : ''}`}
+            className={`flex flex-col items-center justify-center rounded-[20px] bg-card-gradient h-full py-10 info-card-ctn ${card.forSmallerScreens ? 'pr-0' : ''}`}
           >
             <img
-              className="rounded-lg p-[8px] w-auto h-[295px] large-screen"
+              className={`rounded-lg ${card.isFullWidth ? 'w-auto h-auto' : 'w-[90%] h-auto'} large-screen`}
               src={card.imgSrc}
               alt=""
             />
 
             <img
-              className={`rounded-lg p-[8px] hidden small-device ${card.forSmallerScreens ? 'ml-[14.75%] w-[90%]' : ''}`}
+              className={`rounded-lg hidden small-device`}
               src={card.smallSreenImage}
               alt=""
             />
 
-            <div className="flex flex-col px-[6px] gap-3 mt-20 info-card-det-ctn">
+            <div className="flex flex-col gap-3 mt-10 info-card-det-ctn px-[10px]">
               <p
                 className={`text-white text-lg md:text-2xl font-medium text-center ${card.forSmallerScreens ? 'pr-[10px]' : ''}`}
               >
@@ -45,35 +45,38 @@ export default function InfoCards() {
 }
 const moreCards = [
   {
-    header: 'Social Media',
+    header: 'Intelligent Profiles',
     description:
-      'Users will be enabled to have more meaningful interactions, the ability to create unique posts, recognise post contributions, and filtering.',
-    imgSrc: 'assets/images/info/info1-3x.png',
-    smallSreenImage: 'assets/images/info/info1-sm.png',
+      'Showcase your NFT collections with intelligent profiles that highlight your unique notoriety, favorite NFTs, sales, experience, and more',
+    imgSrc: 'assets/images/info/stats.png',
+    smallSreenImage: 'assets/images/info/stats.png',
     forSmallerScreens: false,
+    isFullWidth: false,
   },
   {
-    header: 'Personalised Portfolio',
+    header: 'Earn Badges',
     description:
-      'Through blockchain interoperability, and an NFT centric UI/UX, users have one pane into their NFT portfolio, notoriety, and social notoriety.',
-    imgSrc: 'assets/images/info/info2-3x.png',
-    smallSreenImage: 'assets/images/info/info2-sm.png',
+      'Gain recognition and rewards by earning badges as you highlight experience, sales, and showcase your NFTs.',
+    imgSrc: 'assets/images/info/card-2.png',
+    smallSreenImage: 'assets/images/info/card-2.png',
     forSmallerScreens: false,
+    isFullWidth: false,
   },
   {
-    header: 'Earn $OVA',
+    header: 'Discover',
     description:
-      'Earn $OVA tokens in a variety of ways: Sharing NFTs, Earning badges, Drawing engagement, Interacting on the platform, Owning a Genesis NFT',
-    imgSrc: 'assets/images/info/info3-3x.png',
-    smallSreenImage: 'assets/images/info/exp.png',
+      'Easily discover and connect with other users through the discover page, featuring top profiles and badges.',
+    imgSrc: 'assets/images/info/card-3.png',
+    smallSreenImage: 'assets/images/info/card-3.png',
     forSmallerScreens: false,
+    isFullWidth: false,
   },
   {
-    header: 'Discover collections',
-    description:
-      'Discover NFT collections by genre, ranking, trending, and other metrics. Users are recommended collections based upon their interests and NFT portfolio.',
-    imgSrc: 'assets/images/info/info4-3x.png',
-    smallSreenImage: 'assets/images/info/info-4sm.png',
+    header: 'Future Features Teaser',
+    description: 'Stay tuned for exciting new features!',
+    imgSrc: 'assets/images/info/card-4.png',
+    smallSreenImage: 'assets/images/info/card-4.png',
     forSmallerScreens: true,
+    isFullWidth: true,
   },
 ]

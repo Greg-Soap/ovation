@@ -32,8 +32,8 @@ function Logo() {
 }
 const links: NavLink[] = [
   {
-    title: 'Learn',
-    href: '#',
+    title: 'Teams',
+    href: '/teams',
   },
   {
     title: 'News',
@@ -48,10 +48,10 @@ const links: NavLink[] = [
 function Navigation({ mobile = false, navLinks = [] }: NavigationProps) {
   const [mobileNavigationOpened, setMobileNavigationOpened] = useState(false)
 
-  const navClassName = ` text-lg text-primary-foreground space-x-2
+  const navClassName = ` flex justify-between items-center w-full text-lg text-primary-foreground space-x-2
     ${
       mobile
-        ? `transition transform -right-full absolute top-[90px] z-20 py-4 pb-7 w-full overflow-y-auto sm:hidden backdrop-filter backdrop-blur-md ${
+        ? `transition flex-col transform -right-full absolute top-[90px] z-20 py-4 pb-7 w-full overflow-y-auto sm:hidden backdrop-filter backdrop-blur-md ${
             mobileNavigationOpened
               ? '-translate-x-full visible bg-[#111310] opacity-100'
               : 'hidden opacity-0'
@@ -61,11 +61,11 @@ function Navigation({ mobile = false, navLinks = [] }: NavigationProps) {
   `
 
   const navListClassName = `
-    flex
+    flex 
     ${mobile ? 'flex-col space-y-2 w-full ' : 'items-center gap-5'}
   `
   const navListItemClassName = `
-    group relative rounded-full  px-5 py-2 hover:shadow-[0px_4px_20px_0px_#AFC76B4D] text-lg text-primary-foreground transform transition-transform
+    group relative rounded-full  px-5 py-2 hover:shadow-[0px_4px_20px_0px_#AFC76B4D] text-lg text-[#FFFFFF] transform transition-transform
     ${mobile ? 'w-full overflow-x-visible' : ''}
   `
   const navListLinkClassName = mobile ? 'mx-2 rounded-[20px]' : ''
@@ -94,6 +94,7 @@ function Navigation({ mobile = false, navLinks = [] }: NavigationProps) {
       )}
 
       <nav className={navClassName}>
+        <div />
         <ul className={navListClassName}>
           {navLinks.map(({ title, href, button }) => (
             <li
@@ -105,7 +106,7 @@ function Navigation({ mobile = false, navLinks = [] }: NavigationProps) {
             >
               {button ? (
                 <Button variant={'default'} className={` ${mobile && 'mx-4'}`}>
-                  <a href={href}>{title}</a>
+                  <Link href={href}>{title}</Link>
                 </Button>
               ) : (
                 <NavLink
@@ -118,20 +119,6 @@ function Navigation({ mobile = false, navLinks = [] }: NavigationProps) {
               )}
             </li>
           ))}
-          <Button
-            className="hover:bg-transparent hover:scale-105 border-[#bdff00] border-[.1px] text-black rounded-full"
-            variant={'ghost'}
-          >
-            <Link
-              className={`
-							block whitespace-nowrap  text-lg text-primary-foreground no-underline transition 
-							${mobile && ''}
-							`}
-              href="/apps/timeline"
-            >
-              Dashboard
-            </Link>
-          </Button>
         </ul>
       </nav>
     </>

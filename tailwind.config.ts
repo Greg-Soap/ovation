@@ -26,7 +26,6 @@ const config = {
           '6px 6px 10px -1px rgba(128, 128, 128, 1), -6px -6px 10px -1px rgba(128, 128, 128, 1)',
         progressInner:
           'inset 4px 4px 6px -1px rgba(207, 240, 115, 1), inset -4px -4px 6px -1px rgba(207, 240, 115, 1), -0.5px -0.5px 0px rgba(207, 240, 115, 1), 0.5px 0.5px 0px rgba(207, 240, 115, 1), 0px 12px 10px -10px rgba(207, 240, 115, 1)',
-
       },
       fontFamily: {
         heading: ['Istok Web', 'sans-serif'],
@@ -37,9 +36,8 @@ const config = {
           'linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0) 50.88%, rgba(255, 255, 255, 0.1) 100%)',
         'card-gradient': 'linear-gradient(180deg, #2B301B 0%, #121215 100%)',
 
-
         'profile-banner': "url('/assets/images/profile/image8.png')",
-
+        'team-banner': "url('/assets/images/teams/teambg.png')",
       },
       colors: {
         border: 'hsl(var(--border))',
@@ -100,8 +98,42 @@ const config = {
           from: { transform: 'translateY(0)' },
           to: { transform: 'translateY(calc(-100% - var(--gap)))' },
         },
+        ripple: {
+          '0%, 100%': {
+            transform: 'translate(-50%, -50%) scale(1)',
+          },
+          '50%': {
+            transform: 'translate(-50%, -50%) scale(0.9)',
+          },
+        },
+        shimmer: {
+          '0%, 90%, 100%': {
+            'background-position': 'calc(-100% - var(--shimmer-width)) 0',
+          },
+          '30%, 60%': {
+            'background-position': 'calc(100% + var(--shimmer-width)) 0',
+          },
+        },
+        'shine-pulse': {
+          '0%': {
+            'background-position': '0% 0%',
+          },
+          '50%': {
+            'background-position': '100% 100%',
+          },
+          to: {
+            'background-position': '0% 0%',
+          },
+        },
+        'border-beam': {
+          '100%': {
+            'offset-distance': '100%',
+          },
+        },
       },
       animation: {
+        ripple: 'ripple var(--duration,2s) ease calc(var(--i, 0)*.2s) infinite',
+        shimmer: 'shimmer 8s infinite',
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         marquee: 'marquee var(--duration) linear infinite',

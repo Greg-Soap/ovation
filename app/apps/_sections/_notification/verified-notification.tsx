@@ -150,7 +150,7 @@ const notifications = [
 
 export default function VerifiedNotification() {
   return (
-    <div className="w-full flex flex-col">
+    <div className="col-span-2 w-full flex flex-col border border-[#1A1A1A] other-link overflow-auto">
       {notifications.map((notification, index) => (
         <div
           className="w-full flex items-center justify-between py-7 px-8 border-b border-[#1A1A1A]"

@@ -351,7 +351,7 @@ export default function AccountForm() {
   function renderForm4() {
     const handleClick = () => {
       toast.success('Profile created successfully')
-      router.push('/')
+      router.push('/apps/timeline')
     }
 
     return (
@@ -361,7 +361,7 @@ export default function AccountForm() {
           <Image src={bnb} alt="wallet icon" />
         </div>
         <Button
-          onClick={() => toast.success('Profile created succesfully')}
+          onClick={() => handleClick()}
           className=" w-full text-sm font-semibold h-[53px]"
         >
           Make my profile
