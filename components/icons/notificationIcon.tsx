@@ -1,4 +1,6 @@
-export default function NotificationIcon() {
+import { CustomIcon } from '@/app/types'
+
+export default function NotificationIcon(props: CustomIcon) {
   return (
     <svg
       viewBox="0 0 23 23"
@@ -6,6 +8,7 @@ export default function NotificationIcon() {
       stroke="none"
       xmlns="http://www.w3.org/2000/svg"
       className="w-6 h-6 group-hover:fill-white"
+      {...props}
     >
       <path
         d="M11.8086 10.5164C11.4328 10.5164 11.1211 10.2047 11.1211 9.82887V6.77637C11.1211 6.40053 11.4328 6.08887 11.8086 6.08887C12.1844 6.08887 12.4961 6.40053 12.4961 6.77637V9.82887C12.4961 10.2139 12.1844 10.5164 11.8086 10.5164Z"

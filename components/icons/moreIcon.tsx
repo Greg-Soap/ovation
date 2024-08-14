@@ -1,10 +1,13 @@
-export default function MoreIcon() {
+import { CustomIcon } from '@/app/types'
+
+export default function MoreIcon(props: CustomIcon) {
   return (
     <svg
       viewBox="0 0 18 5"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className="w-6 h-1"
+      {...props}
     >
       <path
         d="M2 0.714844C0.9 0.714844 0 1.61484 0 2.71484C0 3.81484 0.9 4.71484 2 4.71484C3.1 4.71484 4 3.81484 4 2.71484C4 1.61484 3.1 0.714844 2 0.714844Z"

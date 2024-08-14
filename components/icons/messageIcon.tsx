@@ -1,9 +1,12 @@
-export default function MessageIcon() {
+import { CustomIcon } from '@/app/types'
+
+export default function MessageIcon(props: CustomIcon) {
   return (
     <svg
       viewBox="0 0 17 16"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      {...props}
       className="w-[17px] h-4"
     >
       <path

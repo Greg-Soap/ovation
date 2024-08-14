@@ -13,7 +13,7 @@ export default function LoginLayout({
     >
       <Header />
       <div className="w-full h-full flex items-center lg:items-start lg:mt-32 justify-center">
-        <div className=" rounded-lg border-1 w-[500px] h-fit p-0">
+        <div className=" rounded-lg border-1 w-[80vw] h-[80vh] md:w-[500px] md:h-fit p-0">
           {children}
         </div>
       </div>

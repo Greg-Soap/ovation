@@ -1,4 +1,6 @@
-export default function LikeIcon(props: any) {
+import { CustomIcon } from '@/app/types'
+
+export default function LikeIcon(props: CustomIcon) {
   return (
     <svg
       viewBox="0 0 17 16"

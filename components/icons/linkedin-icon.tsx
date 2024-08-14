@@ -1,4 +1,6 @@
-export default function LinkedInIcon(props: any) {
+import { CustomIcon } from '@/app/types'
+
+export default function LinkedInIcon(props: CustomIcon) {
   return (
     <svg
       width="38"

@@ -1,6 +1,7 @@
+import { CustomIcon } from '@/app/types'
 import * as React from 'react'
 
-export default function AsideMsgIcon(props: any) {
+export default function AsideMsgIcon(props: CustomIcon) {
   return (
     <svg
       viewBox="0 0 23 23"

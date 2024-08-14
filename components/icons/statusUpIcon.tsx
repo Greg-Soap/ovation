@@ -1,6 +1,7 @@
+import { CustomIcon } from '@/app/types'
 import * as React from 'react'
 
-export default function StatusUpIcon(props: any) {
+export default function StatusUpIcon(props: CustomIcon) {
   return (
     <svg
       viewBox="0 0 24 25"

@@ -1,4 +1,6 @@
-export default function Editicon(props: any) {
+import { CustomIcon } from '@/app/types'
+
+export default function Editicon(props: CustomIcon) {
   return (
     <svg
       viewBox="0 0 12 13"

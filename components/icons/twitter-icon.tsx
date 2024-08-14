@@ -1,4 +1,6 @@
-export default function TwitterIcon(props: any) {
+import { CustomIcon } from '@/app/types'
+
+export default function TwitterIcon(props: CustomIcon) {
   return (
     <svg
       viewBox="0 0 38 38"

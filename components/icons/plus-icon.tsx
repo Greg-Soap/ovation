@@ -1,4 +1,6 @@
-export default function PlusIcon(props: any) {
+import { CustomIcon } from '@/app/types'
+
+export default function PlusIcon(props: CustomIcon) {
   return (
     <svg
       viewBox="0 0 14 14"

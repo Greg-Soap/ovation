@@ -1,11 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 import Marquee from "@/components/animations/marquee";
+import PulseButton from "@/components/animations/pulse-btn";
 import { Button } from "@/components/ui/button";
 import { generateRandomString } from "@/lib/helper-func";
+import Link from "next/link";
 
 export default function ExtendedPartners() {
 	return (
-		<section className="container flex flex-col w-full items-center justify-center h-fit py-20">
+		<section className="container flex flex-col w-full items-center justify-center h-fit py-20 overflow-hidden">
 			<div className="relative flex  flex-col items-center justify-center">
 				<Marquee className="[--duration:20s]">
 					<p className=" font-bold font-heading text-[70px] leading-[90px] tracking-[-0.55px] md:text-[280px] md:leading-[355px] md:tracking-[-2px] text-white">
@@ -25,7 +27,16 @@ export default function ExtendedPartners() {
 						anyone else? Are you ready to build your community on Ovation before
 						anyone else?
 					</p>
-					<Button>Join us as a partner</Button>
+					<Link href="/" className="flex items-center gap-2">
+						<Button
+							asChild
+							className="bg-[#CFF073] text-sm text-[#0B0A10] h-fit gap-2"
+						>
+							<PulseButton pulseColor="#CFF073">
+								Join us as a partner
+							</PulseButton>
+						</Button>
+					</Link>
 				</div>
 			</div>
 

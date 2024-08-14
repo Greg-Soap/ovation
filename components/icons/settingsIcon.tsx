@@ -1,4 +1,6 @@
-export default function SettingsIcon() {
+import { CustomIcon } from '@/app/types'
+
+export default function SettingsIcon(props: CustomIcon) {
   return (
     <svg
       viewBox="0 0 23 23"
@@ -6,6 +8,7 @@ export default function SettingsIcon() {
       stroke="none"
       xmlns="http://www.w3.org/2000/svg"
       className="w-6 h-6 group-hover:fill-white"
+      {...props}
     >
       <path
         d="M11.8047 14.9619C9.90719 14.9619 8.36719 13.4219 8.36719 11.5244C8.36719 9.62691 9.90719 8.08691 11.8047 8.08691C13.7022 8.08691 15.2422 9.62691 15.2422 11.5244C15.2422 13.4219 13.7022 14.9619 11.8047 14.9619ZM11.8047 9.46191C10.668 9.46191 9.74219 10.3877 9.74219 11.5244C9.74219 12.6611 10.668 13.5869 11.8047 13.5869C12.9414 13.5869 13.8672 12.6611 13.8672 11.5244C13.8672 10.3877 12.9414 9.46191 11.8047 9.46191Z"

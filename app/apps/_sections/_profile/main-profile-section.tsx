@@ -32,7 +32,7 @@ const featured: Featured[] = [
 
 export default function MainProfileSection() {
   return (
-    <div className="col-span-2 h-full flex flex-col items-center bg-[#111115]">
+    <div className="col-span-2 h-full  flex flex-col items-center bg-[#111115]">
       <div className="flex flex-col mt-5 w-[95%] h-fit border border-[#353538] rounded-[14px] px-5 py-[15px] gap-[30px]">
         <p className="text-white font-medium">Featured</p>
 
@@ -70,7 +70,7 @@ export default function MainProfileSection() {
       </div>
 
       <Tabs defaultValue="post" className="w-full  my-16">
-        <TabsList className="items-center rounded-none px-7 py-5 border-y gap-4 border-[#353538] w-full justify-start">
+        <TabsList className="items-center rounded-none px-7 py-5 border-y gap-4 border-[#353538] w-full overflow-x-scroll justify-start">
           <TabsTrigger
             value="post"
             className="text-xs text-[#999999] px-5 py-[10px] rounded-[603px] bg-[#232227] border-none font-normal data-[state=active]:bg-white data-[state=active]:text-[#232227]"

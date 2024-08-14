@@ -9,8 +9,8 @@ interface RippleProps {
 }
 
 const Ripple = React.memo(function Ripple({
-	mainRectWidth = 1000,
-	mainRectHeight = 740,
+	mainRectWidth = 1020,
+	mainRectHeight = 695,
 	mainRectOpacity = 0.07,
 	numRectangles = 8,
 }: RippleProps) {

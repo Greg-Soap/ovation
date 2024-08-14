@@ -64,6 +64,7 @@ body {
 }
 * {
   scroll-behavior: smooth;
+  
 }
 
 ::-webkit-scrollbar {
@@ -98,10 +99,12 @@ body {
     1;
 }*/
 
-aside,
-.timeline-main,
-.other-link {
-  height: calc(100vh - 90px);
+@media screen and (min-width: 1024px) {
+  aside,
+  .timeline-main,
+  .other-link {
+    height: calc(100vh - 90px);
+  }
 }
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
@@ -142,8 +145,6 @@ input:focus {
   .hero-header {
     @apply w-[80%];
   }
-
- 
 
   .extended-partners-det-ctn {
     @apply w-[90%];
@@ -321,7 +322,7 @@ input:focus {
     @apply py-7;
   }
 
-  .info-card div img {
+  .info-card ~ div ~ img {
     @apply h-[215px];
   }
 

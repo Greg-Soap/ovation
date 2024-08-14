@@ -44,7 +44,7 @@ export default function Stats() {
         <div className="grid grid-cols-3 gap-5">
           {overview.map((item, index) => (
             <div
-              className="border border-[#FFFFFF0D] rounded-[10px] bg-[#18181C] px-[30px] py-6 flex flex-col gap-5"
+              className="border border-[#FFFFFF0D] rounded-[10px] bg-[#18181C]  lg:px-[30px] px-2p py-2  lg:py-6 flex flex-col gap-5"
               key={index}
             >
               <p className="text-[#808080] text-sm font-medium">

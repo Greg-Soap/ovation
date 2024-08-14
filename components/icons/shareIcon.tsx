@@ -1,10 +1,13 @@
-export default function ShareIcon() {
+import { CustomIcon } from '@/app/types'
+
+export default function ShareIcon(props: CustomIcon) {
   return (
     <svg
       viewBox="0 0 22 22"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className="w-[22px] h-[22px] fill-white stroke-whites"
+      {...props}
     >
       <path
         d="M15.5469 5.65576C17.3802 6.92993 18.6452 8.95576 18.9019 11.2933L15.5469 5.65576Z"

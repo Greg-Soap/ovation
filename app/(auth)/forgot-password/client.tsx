@@ -18,7 +18,7 @@ import Link from 'next/link'
 import arrow from '@/public/assets/images/arrow-right.svg'
 import Image from 'next/image'
 import { useState } from 'react'
-import completeIcon from '@/public/assets/images/ovationAuthCompleteIcon.svg'
+import CompleteIcon from '@/public/assets/images/ovationAuthCompleteIcon'
 import {
   InputOTP,
   InputOTPGroup,
@@ -117,7 +117,7 @@ export default function ResetForm() {
                 <FormLabel className="text-sm text-white">Input OTP</FormLabel>
                 <FormControl {...field}>
                   <InputOTP maxLength={6}>
-                    <InputOTPGroup className="flex gap-4">
+                    <InputOTPGroup className="w-full flex md:gap-4 gap-2">
                       <InputOTPSlot
                         className="border-[1px] border-[#353538] rounded-lg w-16 h-16"
                         index={0}
@@ -231,7 +231,7 @@ export default function ResetForm() {
     return (
       <div className="w-full flex flex-col items-center justify-center gap-6">
         <div className="w-16 h-16 rounded-full bg-[#333726] flex items-center justify-center">
-          <Image src={completeIcon} alt="success icon" />
+          <CompleteIcon />
         </div>
         <div className="w-full text-white flex flex-col items-center justify-center ">
           <h1 className="font-semibold text-3xl">Success</h1>

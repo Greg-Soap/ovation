@@ -4,7 +4,7 @@ import Topics from '../../_components/_timeline/Topic'
 
 export default function OtherLinks() {
   return (
-    <div className="h-[100vh] p-4 bg-[#111115] overflow-x-hidden overflow-y-scroll pt-5  flex flex-col gap-[3rem]  pb-[10rem]">
+    <div className="h-[100vh] p-4 bg-[#111115] overflow-x-hidden overflow-y-scroll hidden lg:flex flex-col gap-[3rem]  pb-[10rem]">
       <SearchInput />
       <FeaturedCard className={''} />
       <Topics />

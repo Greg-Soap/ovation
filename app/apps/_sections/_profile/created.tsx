@@ -137,7 +137,7 @@ export default function Created() {
 
           <div className="flex items-center justify-between">
             <Tabs defaultValue="All" className="w-full flex flex-col gap-10">
-              <TabsList className="flex justify-between items-center">
+              <TabsList className="flex justify-between items-center w-full overflow-x-scroll">
                 <div className="flex items-center gap-2">
                   {buttons.map((item, index) => (
                     <TabsTrigger

@@ -174,7 +174,7 @@ const FeaturedTest: FeaturedUser = {
 
 export default function page() {
   return (
-    <div className="flex flex-col w-full bg-[#111115] h-fit items-center justify-center">
+    <div className="flex flex-col w-full  bg-[#111115] h-fit items-center justify-center">
       <div
         className="h-[250px] w-full g-orange-400 flex items-center justify-center bg-cover shadow"
         style={{ backgroundImage: `url('/assets/images/discoverBack.svg')` }}
@@ -185,7 +185,7 @@ export default function page() {
         />
       </div>
       <GetStarted />
-      <div className="grid grid-cols-3 w-[95%] gap-5">
+      <div className=" flex flex-col lg:grid lg:grid-cols-3 w-[95%] gap-5">
         <DiscoverLeft />
         {/* <OtherLinks /> */}
         <DiscoverRight filteredData={TestData} />
@@ -203,9 +203,9 @@ function GetStarted() {
       </div>
 
       <div className="w-full h-fit flex flex-col gap-4">
-        <div className="flex bg-[#18181C] border border-[#FFFFFF14] rounded-[10px] items-center justify-between px-5 py-10">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center justify-center rounded-full w-11 h-11 bg-[#333726]">
+        <div className="flex flex-col lg:flex-row gap-4 bg-[#18181C] border border-[#FFFFFF14] rounded-[10px] items-center justify-between  px-5 py-10">
+          <div className="flex items-center gap-2">
+            <div className="flex items-center justify-center rounded-full min-w-11 min-h-11 bg-[#333726]">
               <img
                 src="/assets/images/profile/task1.png"
                 alt="wallet icon"
@@ -237,9 +237,9 @@ function GetStarted() {
           </Button>
         </div>
 
-        <div className="flex bg-[#18181C] border border-[#FFFFFF14] rounded-[10px] items-center justify-between px-5 py-10">
+        <div className="flex flex-col lg:flex-row gap-4  bg-[#18181C] border border-[#FFFFFF14] rounded-[10px] items-center justify-between px-5 py-10">
           <div className="flex items-center gap-4">
-            <div className="flex items-center justify-center rounded-full w-11 h-11 bg-[#333726]">
+            <div className="flex items-center justify-center rounded-full min-w-11 min-h-11 bg-[#333726]">
               <img
                 src="/assets/images/profile/task2.png"
                 alt="wallet icon"
@@ -270,9 +270,9 @@ function GetStarted() {
           </Button>
         </div>
 
-        <div className="flex bg-[#18181C] border border-[#FFFFFF14] rounded-[10px] items-center justify-between px-5 py-10">
+        <div className="flex flex-col lg:flex-row gap-4  bg-[#18181C] border border-[#FFFFFF14] rounded-[10px] items-center justify-between px-5 py-10">
           <div className="flex items-center gap-4">
-            <div className="flex items-center justify-center rounded-full w-11 h-11 bg-[#333726]">
+            <div className="flex items-center justify-center rounded-full min-w-11 min-h-11 bg-[#333726]">
               <img
                 src="/assets/images/profile/task3.png"
                 alt="wallet icon"
@@ -328,7 +328,10 @@ function DiscoverFeature(user: FeaturedUser) {
           View all
         </Button>
       </div>
-      <div id="featured-user" className={`flex gap-10 items-center w-full`}>
+      <div
+        id="featured-user"
+        className={`flex-col lg:flex-row flex gap-10 items-center w-full`}
+      >
         <img
           src="/assets/images/timeline/_other-section/featured.png"
           alt={`${user.userName}'s display picture`}
@@ -519,10 +522,13 @@ function DiscoverHolders({ setFilter, Filter, data }: DiscoverHoldersProps) {
               </div>
             </div>
           </div>{' '}
-          <div id="runner-up" className="flex gap-2 justify-between">
+          <div
+            id="runner-up"
+            className="lg:flex-row flex flex-col gap-2 justify-between"
+          >
             <div
               id="2"
-              className="rounded-lg w-[49%] min-h-[360px] bg-cover flex flex-col justify-end center items-center"
+              className="rounded-lg lg:w-[49%] min-h-[360px] bg-cover flex flex-col justify-end center items-center"
               style={{
                 backgroundImage: `url(/assets/images/${filteredData[1].displayImg})`,
               }}
@@ -559,7 +565,7 @@ function DiscoverHolders({ setFilter, Filter, data }: DiscoverHoldersProps) {
             </div>
             <div
               id="3"
-              className="rounded-lg w-[49%] min-h-[360px] bg-cover flex flex-col justify-end center items-center"
+              className="rounded-lg lg:w-[49%] min-h-[360px] bg-cover flex flex-col justify-end center items-center"
               style={{
                 backgroundImage: `url(/assets/images/${filteredData[2].displayImg})`,
               }}
