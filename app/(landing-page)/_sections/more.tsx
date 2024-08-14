@@ -1,7 +1,6 @@
-import ShineBorder from "@/components/animations/shiny-border";
 import { Button } from "@/components/ui/button";
-import { blogs } from "../news/page";
 import Link from "next/link";
+import { blogs } from "../news/data";
 
 export default function MoreFromOvation() {
 	return (
@@ -44,25 +43,3 @@ export default function MoreFromOvation() {
 		</section>
 	);
 }
-const moreCards = [
-	{
-		description:
-			"Ovation. The First NFT Superapp Working to Transform Your NFT Experience.",
-	},
-	{
-		description:
-			"Ovation. The First NFT Superapp Working to Transform Your NFT Experience.",
-	},
-	{
-		description:
-			"Ovation. The First NFT Superapp Working to Transform Your NFT Experience.",
-	},
-	{
-		description:
-			"Ovation. The First NFT Superapp Working to Transform Your NFT Experience.",
-	},
-	{
-		description:
-			"Ovation. The First NFT Superapp Working to Transform Your NFT Experience.",
-	},
-];

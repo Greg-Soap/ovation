@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
 
 export default function NewsDetails({ params }: any) {
+	const [copied, setCopied] = useState(false);
 	const blog = blogs.find((b) => b.id === Number.parseInt(params.newsId));
 
 	if (!blog) {
@@ -13,8 +14,6 @@ export default function NewsDetails({ params }: any) {
 	}
 
 	const filteredBlogs = blogs.filter((b) => b.id !== blog.id);
-
-	const [copied, setCopied] = useState(false);
 
 	const copyToClipboard = () => {
 		const currentUrl = window.location.href;
