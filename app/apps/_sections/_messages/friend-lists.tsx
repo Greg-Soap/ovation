@@ -92,8 +92,10 @@ export default function FriendList() {
   }
 
   return (
-    <section className="w-full grid grid-cols-3 bg-[#111115]">
-      <div className="col-span-1 flex flex-col other-link border-r border-[#1A1A1A] overflow-auto">
+    <>
+      <div
+        className={`${clickFriend ? 'hidden lg:flex' : 'flex'} w-full h-[100vh] lg:h-full lg:col-span-1 flex-col other-link border-r border-[#1A1A1A] overflow-auto`}
+      >
         <div className="flex flex-col gap-5 px-[30px] py-8">
           <p className="text-[28px] text-white font-semibold">Mesaages</p>
           <SearchInput width="full" />
@@ -131,7 +133,7 @@ export default function FriendList() {
         </div>
       </div>
 
-      {clickFriend && <MessageContainer friend={clickFriend} />}
-    </section>
+      <MessageContainer friend={clickFriend} />
+    </>
   )
 }

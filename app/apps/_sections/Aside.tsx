@@ -73,7 +73,7 @@ export default function Aside() {
   }
 
   return (
-    <aside className=" hidden xl:flex flex-col items-center gap-7 pt-4 min-w-[310px] w-[310px] border-r border-[#1A1A1A] sticky top-0 overflow-scroll bg-[#111115]">
+    <aside className="hidden xl:flex flex-col items-center gap-7 pt-4 min-w-[310px] w-[310px] border-r border-[#1A1A1A] sticky top-0 overflow-scroll bg-[#111115]">
       <div className="w-[85%] flex flex-col h-fit gap-2">
         {menuItems.map((item, index) => {
           const isActive = currentPath.includes(item.path)
@@ -81,7 +81,7 @@ export default function Aside() {
           return (
             <Button
               type="button"
-              className={`flex items-center gap-2 py-4 px-6 rounded-[50px] hover:bg-[#18181C] focus:bg-[#232227] disabled:opacity-20 group transition-all duration-300 ${
+              className={`w-[90%] flex items-center justify-stretch gap-2 py-7 px-[30px] rounded-[50px] hover:bg-[#18181C] focus:bg-[#232227] disabled:opacity-20 group transition-all duration-300 ${
                 isActive
                   ? 'bg-[#232227] fill-white stroke-white'
                   : 'fill-white stroke-white bg-transparent'
@@ -106,34 +106,43 @@ export default function Aside() {
         })}
       </div>
 
-      <div className="flex items-center justify-between w-[90%] absolute bottom-0 p py-5 bg-[#111115]">
-        <div className="flex items-center gap-2">
-          <Image
-            src="/assets/images/timeline/Shape.png"
-            alt="User Display Picture"
-            width={40}
-            height={40}
-          />
+      <div className="flex flex-col items-center gap-10 w-[90%] absolute bottom-0 p py-5 bg-[#111115]">
+        <div className="flex w-full items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Image
+              src="/assets/images/timeline/Shape.png"
+              alt="User Display Picture"
+              width={40}
+              height={40}
+            />
 
-          <div className="flex flex-col">
-            <p className="text-base font-semibold leading-5 text-white">
-              0xrxc.....d67579
-            </p>
-            <p className="text-xs leading-5 font-medium text-[#B3B3B3]">
-              2,000 &OVA
-            </p>
+            <div className="flex flex-col">
+              <p className="text-base font-semibold leading-5 text-white">
+                0xrxc.....d67579
+              </p>
+              <p className="text-xs leading-5 font-medium text-[#B3B3B3]">
+                2,000 &OVA
+              </p>
+            </div>
           </div>
+
+          <Popover>
+            <PopoverTrigger className="p-1 rounded-full">
+              <MoreIcon />
+            </PopoverTrigger>
+            <PopoverContent className="w-fit bg-[#232227] flex flex-col items-start border-none text-white text-base py-2">
+              <button className="py-[10px]">Add an existing account</button>
+              <button className="py-[10px]">Logout @pancake</button>
+            </PopoverContent>
+          </Popover>
         </div>
 
-        <Popover>
-          <PopoverTrigger className="p-1 rounded-full">
-            <MoreIcon />
-          </PopoverTrigger>
-          <PopoverContent className="w-fit bg-[#232227] flex flex-col items-start border-none text-white text-base py-2">
-            <button className="py-[10px]">Add an existing account</button>
-            <button className="py-[10px]">Logout @pancake</button>
-          </PopoverContent>
-        </Popover>
+        <Button
+          variant={`default`}
+          className="text-[#F8F8FF] text-xs font-semibold py-2 h-fit w-full bg-[#4865FC]"
+        >
+          Submit a feedback
+        </Button>
       </div>
     </aside>
   )

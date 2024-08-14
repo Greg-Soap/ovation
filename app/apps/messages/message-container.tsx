@@ -1,4 +1,5 @@
 'use client'
+
 import EmojiPicker, { EmojiStyle, Theme } from 'emoji-picker-react'
 import GalleryIcon from '@/components/icons/galleryIcon'
 import EmojiIcon from '@/components/icons/emojiIcon'
@@ -40,8 +41,36 @@ export default function MessageContainer({ friend }: any) {
     setMessage((prevMessage) => prevMessage + emojiObject.emoji)
   }
 
+  if (!friend) {
+    return (
+      <section
+        className={`${friend ? 'flex' : 'hidden lg:flex'} w-full h-[100vh] lg:h-full lg:col-span-2 flex-col items-center justify-center bg-[#111115] other-link overflow-auto`}
+      >
+        <div className="flex flex-col items-center gap-[13px]">
+          <div className="flex flex-col items-center gap-[6px]">
+            <p className="text-[#F8F8FF] text-xl font-semibold">
+              Select Message
+            </p>
+            <p className="text-[#E6E6E6] text-sm">
+              Choose from previous conversation or start a new one below
+            </p>
+          </div>
+
+          <Button
+            variant={`default`}
+            className="px-3 py-2 h-fit rounded-[27px] text-xs text-[#111115] font-semibold transition-all duration-300 hover:opacity-80"
+          >
+            New message
+          </Button>
+        </div>
+      </section>
+    )
+  }
+
   return (
-    <section className="col-span-2 flex flex-col other-link  bg-[#111115] overflow-auto">
+    <section
+      className={`${friend ? 'flex' : 'hidden lg:flex'} w-full h-[100vh] lg:h-full lg:col-span-2  flex-col items-center justify-center bg-[#111115] other-link overflow-auto`}
+    >
       <div className="w-full border-b border-[#1A1A1A] py-9 flex flex-col items-center gap-4 h-fit">
         <Image
           src={friend.friendDisplayPicture}
@@ -78,21 +107,21 @@ export default function MessageContainer({ friend }: any) {
 
       <div className="w-full flex flex-col p-[30px] gap-[35px]">
         <div className="w-full flex flex-col items-end">
-          <p className="px-5 py-[10px] bg-[#1D3E00] rounded-s-[20px] rounded-tr-[20px] text-white font-medium max-w-[50%]">
+          <p className="px-5 py-[10px] bg-[#1D3E00] rounded-s-[20px] rounded-tr-[20px] text-white font-medium max-w-[85%] lg:max-w-[50%]">
             Hello, how are you doing?
           </p>
           <p className="text-sm text-[#808080]">08:15 AM</p>
         </div>
 
         <div className="w-full flex flex-col items-start">
-          <p className="px-5 py-[10px] bg-[#232227] rounded-e-[20px] rounded-tl-[20px] text-white font-medium max-w-[50%]">
+          <p className="px-5 py-[10px] bg-[#232227] rounded-e-[20px] rounded-tl-[20px] text-white font-medium max-w-[85%] lg:max-w-[50%]">
             Hello, how are you doing?
           </p>
           <p className="text-sm text-[#808080]">08:15 AM</p>
         </div>
 
         <div className="w-full flex flex-col items-end">
-          <p className="px-5 py-[10px] bg-[#1D3E00] rounded-s-[20px] rounded-tr-[20px] text-white font-medium max-w-[50%]">
+          <p className="px-5 py-[10px] bg-[#1D3E00] rounded-s-[20px] rounded-tr-[20px] text-white font-medium max-w-[85%] lg:max-w-[50%]">
             I have a question about the return policy for a product I purchased.
           </p>
           <p className="text-sm text-[#808080]">08:15 AM</p>
@@ -107,7 +136,7 @@ export default function MessageContainer({ friend }: any) {
         </div>
       </div>
 
-      <div className="w-full p-5 border-t border-[#1A1A1A] sticky bottom-0 bg-[#111115]">
+      <div className="w-full p-5 border-t border-[#1A1A1A] absolute lg:sticky bottom-0 bg-[#111115]">
         <div className="w-full flex items-center bg-[#232227] rounded-[500px] p-2 h-fit">
           <div className="flex">
             <Button variant={'msgBox'}>

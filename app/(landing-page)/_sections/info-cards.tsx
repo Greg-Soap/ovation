@@ -51,7 +51,7 @@ const moreCards = [
 		header: "Intelligent Profiles",
 		description:
 			"Showcase your NFT collections with intelligent profiles that highlight your unique notoriety, favorite NFTs, sales, experience, and more",
-		imgSrc: "/assets/images/info/stats.png",
+		imgSrc: "/assets/images/info/Stats.png",
 		component: null,
 		hasComponent: false,
 		isFullWidth: false,
