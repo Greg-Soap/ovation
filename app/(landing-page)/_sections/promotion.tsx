@@ -1,4 +1,5 @@
 import { ArrowRightIcon } from "@/public/assets/images/arrow-right";
+import Link from "next/link";
 import React, { useState } from "react";
 
 export default function Promotion() {
@@ -57,12 +58,12 @@ export default function Promotion() {
 		<section
 			className={`w-full py-[36px] bg-[#C1FE17] items-center justify-center gap-4 promotion relative ${isHidden ? "hidden" : "flex"}`}
 		>
-			<p className="text-2xl text-[#0B0A10] font-semibold">
-				Ovation Secures ArchwayHQ grant
-			</p>
-
+			<Link href="/news/1">
+				<p className="text-2xl text-[#0B0A10] font-semibold">
+					Ovation Secures ArchwayHQ grant
+				</p>
+			</Link>
 			<ArrowRightIcon />
-
 			{cancelButton}
 		</section>
 	);

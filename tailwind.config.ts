@@ -41,7 +41,7 @@ const config = {
 				"card-gradient": "linear-gradient(180deg, #2B301B 0%, #121215 100%)",
 
 				"profile-banner": "url('/assets/images/profile/image8.png')",
-				"team-banner": "url('/assets/images/teams/teambg.png')",
+				"team-banner": "url('/assets/images/teams/teambg.jpg')",
 				"news-gradient":
 					"linear-gradient(112.5deg, #A5DB10 -0.03%, #BC1700 99.94%)",
 			},

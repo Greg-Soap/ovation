@@ -15,6 +15,17 @@ import NotificationIcon from '@/components/icons/notificationIcon'
 import MoreIcon from '@/components/icons/moreIcon'
 import AsideMsgIcon from '@/components/icons/asideMsgIcon'
 import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { FeedbackModal } from './feedback'
 
 interface MenuItem {
   icon: ReactElement
@@ -137,12 +148,21 @@ export default function Aside() {
           </Popover>
         </div>
 
-        <Button
-          variant={`default`}
-          className="text-[#F8F8FF] text-xs font-semibold py-2 h-fit w-full bg-[#4865FC]"
-        >
-          Submit a feedback
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant={`default`}
+              className="text-[#F8F8FF] text-xs font-semibold py-2 h-fit w-full bg-[#4865FC]"
+            >
+              Submit a feedback
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="flex flex-col items-center justify-center p-0 m-0 w-fit h-fit overflow-auto border-none">
+            <>
+              <FeedbackModal />
+            </>
+          </DialogContent>
+        </Dialog>
       </div>
     </aside>
   )

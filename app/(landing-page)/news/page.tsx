@@ -24,12 +24,19 @@ export default function News() {
 						href={`/news/${blogs[0].id}`}
 						className="flex flex-col gap-6 w-full"
 					>
-						<div className="flex items-center justify-center bg-news-gradient h-[448px] w-full">
-							<Image
+						<div className="relative w-full h-auto sm:h-[461px] rounded-xl overflow-hidden">
+							<img
 								src={`${blogs[0].image}`}
-								alt="Partners"
-								width={834}
-								height={177}
+								alt="Blog"
+								className="relative z-10 w-auto h-full mx-auto  object-cover"
+							/>
+							<div
+								className="absolute inset-0 bg-cover bg-center blur-lg"
+								style={{
+									backgroundImage: `url(${blogs[0].image})`,
+									filter: "blur(20px)",
+									zIndex: 1,
+								}}
 							/>
 						</div>
 

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import PulseButton from "@/components/animations/pulse-btn";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -42,7 +43,11 @@ export default function Socials() {
 				</div>
 
 				<div className="flex lg:flex-row flex-col items-center gap-5 w-fit">
-					<Link href="/" className="flex items-center gap-2">
+					<Link
+						href="https://x.com/Ovation_Network"
+						className="flex items-center gap-2"
+						target="_blank"
+					>
 						<Button
 							asChild
 							className="bg-[#CFF073] text-sm text-[#0B0A10] h-fit gap-2"
@@ -57,7 +62,11 @@ export default function Socials() {
 							</PulseButton>
 						</Button>
 					</Link>
-					<Link href="/" className="flex items-center gap-2">
+					<Link
+						href=" https://www.linkedin.com/company/ovationnetwork/posts/?feedView=all"
+						className="flex items-center gap-2"
+						target="_blank"
+					>
 						<Button
 							asChild
 							className="bg-[#CFF073] text-sm text-[#0B0A10] h-fit gap-2"
