@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import Google from '@/public/assets/images/ovationAuthGoogle'
+import Ether from '@/public/assets/images/ovationAuthEthereum'
 import {
   Form,
   FormControl,
@@ -45,16 +47,25 @@ export default function LoginForm() {
         <h1 className="text-3xl font-semibold text-white">Login</h1>
         <p className="text-sm"> Hi, Welcome back ✋</p>
       </div>
-      <div id="login__connect-wallet" className="flex flex-col gap-4">
-        <Button className="bg-white w-full hover:scale-105">
-          Connect your wallet
+      <div className="  flex justify-between mb-4">
+        <Button className="text-[10px] font-semibold p-4 md:text-base w-[48%] bg-white flex gap-4">
+          {/* <Image src={ether} alt="ether image" /> */}
+          <Ether />
+          <p>Login with Wallet</p>
         </Button>
+        <Button className="p-4 text-[10px] font-semibold md:text-base w-[48%] bg-white flex gap-4">
+          {/* <Image src={Google} alt="google image" /> */}
+          <Google />
+          <p>Login with Google</p>
+        </Button>
+      </div>
+      <div id="login__connect-wallet" className="flex flex-col gap-4">
         <span className="flex gap-2 items-center justify-center">
-          <span className="w-1/3 h-[1px] border-[#C1C0C6] border-b-0 border-[1px]  text-[#C1C0C6]" />
+          <span className="w-[47%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]  text-[#C1C0C6]" />
           <p className="text-[10px] font-medium text-[#C1C0C6] text-center">
-            OR LOGIN WITH USERNAME
+            OR
           </p>
-          <span className="w-1/3 h-[1px] border-[#C1C0C6] border-b-0 border-[1px]" />
+          <span className="w-[47%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]" />
         </span>
       </div>
       <Form {...form}>

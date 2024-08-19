@@ -497,6 +497,7 @@ function DiscoverHolders({ setFilter, Filter, data }: DiscoverHoldersProps) {
                 <span className="font-semibold">1</span>
                 <div className="w-[50px] h-[50px] rounded-full overflow-hidden border-2 border-white">
                   <img
+                    alt="image"
                     src={`/assets/images/${filteredData[0].displayImg}`}
                     width={50}
                     height={50}
@@ -538,6 +539,7 @@ function DiscoverHolders({ setFilter, Filter, data }: DiscoverHoldersProps) {
                   <span className="font-semibold">2</span>
                   <div className="w-[50px] h-[50px] rounded-full overflow-hidden border-2 border-white">
                     <img
+                      alt="image"
                       src={`/assets/images/${filteredData[1].displayImg}`}
                       width={50}
                       height={50}
@@ -575,6 +577,7 @@ function DiscoverHolders({ setFilter, Filter, data }: DiscoverHoldersProps) {
                   <span className="font-semibold">3</span>
                   <div className="w-[50px] h-[50px] rounded-full overflow-hidden border-2 border-white">
                     <img
+                      alt="images"
                       src={`/assets/images/${filteredData[2].displayImg}`}
                       width={50}
                       height={50}
@@ -610,6 +613,7 @@ function DiscoverHolders({ setFilter, Filter, data }: DiscoverHoldersProps) {
                   <span className="font-semibold">{index + 4}</span>
                   <div className="w-[50px] h-[50px] rounded-full overflow-hidden border-2 border-white">
                     <img
+                      alt="user image"
                       src={`/assets/images/${user.displayImg}`}
                       width={50}
                       height={50}
@@ -723,6 +727,7 @@ function DiscoverRight({ filteredData }: DiscoverRightProps) {
               <div className="flex items-center gap-2">
                 <div className="w-[30px] h-[30px] rounded-full overflow-hidden border-2 border-white">
                   <img
+                    alt="image"
                     src={`/assets/images/${user.displayImg}`}
                     className="w-full h-full object-cover"
                   />

@@ -20,10 +20,8 @@ import { toast } from 'sonner'
 import arrow from '@/public/assets/images/arrow-right.png'
 import Bnb from '@/public/assets/images/ovationWallets/ovationWalletIcon2'
 
-import Google from '@/public/assets/images/ovationAuthGoogle'
-import Ether from '@/public/assets/images/ovationAuthEthereum'
 import walletData from './_data'
-import { useState } from 'react'
+import { SetStateAction, useEffect, useState } from 'react'
 
 const formSchema = z.object({
   email: z.string().email('Input a valid email address'),
@@ -35,10 +33,23 @@ const formSchema = z.object({
   wallet: z.string(),
 })
 
-export default function AccountForm() {
+interface Props {
+  setOptionalLeft: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export default function AccountForm({ setOptionalLeft }: Props) {
   const router = useRouter()
   const [page, setPage] = useState(1)
   const [active, setActive] = useState(0)
+
+  useEffect(() => {
+    if (page === 1) {
+      setOptionalLeft(true)
+    } else {
+      setOptionalLeft(false)
+    }
+  }, [page]) // Re-run the effect whenever `page` changes
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -61,18 +72,6 @@ export default function AccountForm() {
   function renderForm1() {
     return (
       <div>
-        <div className="  flex justify-between mb-4">
-          <Button className="text-[10px] font-semibold p-4 md:text-base w-[48%] bg-white flex gap-4">
-            {/* <Image src={ether} alt="ether image" /> */}
-            <Ether />
-            <p>Login with Wallet</p>
-          </Button>
-          <Button className="p-4 text-[10px] font-semibold md:text-base w-[48%] bg-white flex gap-4">
-            {/* <Image src={Google} alt="google image" /> */}
-            <Google />
-            <p>Login with Google</p>
-          </Button>
-        </div>
         <div className="flex items-center justify-between mb-5">
           <span className="w-[46%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]  text-[#C1C0C6]" />
           <p className="text-[10px] font-medium text-[#C1C0C6]">OR</p>
