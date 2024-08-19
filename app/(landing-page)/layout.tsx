@@ -1,29 +1,29 @@
-'use client'
+'use client';
 
-import Footer from './_sections/footer'
-import { Header } from './_sections/nav'
-import Promotion from './_sections/promotion'
-import Preloader from './_components/preloader'
-import React, { useEffect, useState } from 'react'
+import Footer from './_sections/footer';
+import { Header } from './_sections/nav';
+import Promotion from './_sections/promotion';
+import Preloader from './_components/preloader';
+import React, { useEffect, useState } from 'react';
 
 export default function LandingPageLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 2000)
+      setIsLoading(false);
+    }, 2000);
 
-    return () => clearTimeout(timer)
-  }, [])
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <>{isLoading ? <Preloader /> : <Application>{children}</Application>}</>
-  )
+  );
 }
 
 function Application({ children }: { children: React.ReactNode }) {
@@ -38,5 +38,5 @@ function Application({ children }: { children: React.ReactNode }) {
         </body>
       </html>
     </React.Fragment>
-  )
+  );
 }

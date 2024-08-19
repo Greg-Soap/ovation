@@ -1,19 +1,19 @@
-'use client'
+'use client';
 
-import Grider from '@/components/layout/grider'
-import OtherLinks from '../_sections/_timeline/other-link'
-import SearchInput from '../_components/_timeline/search-input'
-import { Button } from '@/components/ui/button'
-import VerifyIcon from '@/components/icons/verifyIcon'
-import Image from 'next/image'
-import Link from 'next/link'
+import Grider from '@/components/layout/grider';
+import OtherLinks from '../_sections/_timeline/other-link';
+import SearchInput from '../_components/_timeline/search-input';
+import { Button } from '@/components/ui/button';
+import VerifyIcon from '@/components/icons/verifyIcon';
+import Image from 'next/image';
+import Link from 'next/link';
 import {
-  BadgedHolders,
-  FeaturedUser,
+  type BadgedHolders,
+  type FeaturedUser,
   DiscoverFilter,
-  DiscoverHoldersProps,
-} from '@/app/types'
-import { useEffect, useState } from 'react'
+  type DiscoverHoldersProps,
+} from '@/app/types';
+import { useEffect, useState } from 'react';
 
 const TestData: BadgedHolders[] = [
   {
@@ -159,7 +159,7 @@ const TestData: BadgedHolders[] = [
     contributorAmount: 14300,
     blueAmount: 12400,
   },
-]
+];
 
 const FeaturedTest: FeaturedUser = {
   displayName: 'Josh.eth',
@@ -170,7 +170,7 @@ const FeaturedTest: FeaturedUser = {
   badges: 7,
   img: '/assets/images/timeline/_other-section/featured.png',
   desc: 'Passionate NFT holder exploring the future of digital ownership. Join me in discovering the limitless possibilities of the NFT ecosystem. #NFTCommunity',
-}
+};
 
 export default function page() {
   return (
@@ -191,7 +191,7 @@ export default function page() {
         <DiscoverRight filteredData={TestData} />
       </div>
     </div>
-  )
+  );
 }
 
 function GetStarted() {
@@ -305,17 +305,17 @@ function GetStarted() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function DiscoverLeft() {
-  const [Filter, setFilter] = useState<DiscoverFilter>(DiscoverFilter.Creators)
+  const [Filter, setFilter] = useState<DiscoverFilter>(DiscoverFilter.Creators);
   return (
     <div className="col-span-2 mt-10 mb-[20px] flex flex-col gap-10">
       <DiscoverFeature {...FeaturedTest} />
       <DiscoverHolders setFilter={setFilter} Filter={Filter} data={TestData} />
     </div>
-  )
+  );
 }
 
 function DiscoverFeature(user: FeaturedUser) {
@@ -380,51 +380,51 @@ function DiscoverFeature(user: FeaturedUser) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function DiscoverHolders({ setFilter, Filter, data }: DiscoverHoldersProps) {
   const [filteredData, setFilteredData] = useState<BadgedHolders[]>(
     data.sort((a, b) => a.contributorAmount - b.contributorAmount),
-  )
+  );
 
   useEffect(() => {
     const filterData = () => {
-      let newData = [...data] // Create a shallow copy of data to avoid direct mutation
+      const newData = [...data]; // Create a shallow copy of data to avoid direct mutation
 
       if (Filter === DiscoverFilter.Contributors) {
         // Assuming you want to sort the data based on some criteria
         // Replace `criteria` with the actual property you want to sort by
-        newData.sort((a, b) => a.contributorAmount - b.contributorAmount)
+        newData.sort((a, b) => a.contributorAmount - b.contributorAmount);
       } else if (Filter === DiscoverFilter.BlueChipHolders) {
         // Assuming you want to sort the data based on some criteria
         // Replace `criteria` with the actual property you want to sort by
-        newData.sort((a, b) => a.blueAmount - b.blueAmount)
+        newData.sort((a, b) => a.blueAmount - b.blueAmount);
       } else if (Filter === DiscoverFilter.Creators) {
         // Assuming you want to sort the data based on some criteria
         // Replace `criteria` with the actual property you want to sort by
-        newData.sort((a, b) => a.creatorAmount - b.creatorAmount)
+        newData.sort((a, b) => a.creatorAmount - b.creatorAmount);
       } else if (Filter === DiscoverFilter.FounderHolders) {
         // Assuming you want to sort the data based on some criteria
         // Replace `criteria` with the actual property you want to sort by
-        newData.sort((a, b) => a.founderNftAMount - b.founderNftAMount)
+        newData.sort((a, b) => a.founderNftAMount - b.founderNftAMount);
       } else if (Filter === DiscoverFilter.HighestNetWorth) {
         // Assuming you want to sort the data based on some criteria
         // Replace `criteria` with the actual property you want to sort by
-        newData.sort((a, b) => a.netWorth - b.netWorth)
+        newData.sort((a, b) => a.netWorth - b.netWorth);
       } else if (Filter === DiscoverFilter.NftHolders) {
         // Assuming you want to sort the data based on some criteria
         // Replace `criteria` with the actual property you want to sort by
-        newData.sort((a, b) => a.topHoldersAmount - b.topHoldersAmount)
+        newData.sort((a, b) => a.topHoldersAmount - b.topHoldersAmount);
       }
 
-      setFilteredData(newData)
-    }
+      setFilteredData(newData);
+    };
 
-    console.log(filteredData)
+    console.log(filteredData);
 
-    filterData()
-  }, [Filter, data]) // This effect depends on `Filter` and `data`, it runs whenever either changes
+    filterData();
+  }, [Filter, data, filteredData]); // This effect depends on `Filter` and `data`, it runs whenever either changes
 
   return (
     <div className="w-full flex flex-col gap-10">
@@ -438,7 +438,7 @@ function DiscoverHolders({ setFilter, Filter, data }: DiscoverHoldersProps) {
           <Button
             className={`${Filter === DiscoverFilter.Contributors ? 'bg-white text-[#232227]' : 'bg-[#232227] text-[#999999]'} rounded-full px-5 py-[10px] h-fit text-xs`}
             onClick={() => {
-              setFilter(DiscoverFilter.Contributors)
+              setFilter(DiscoverFilter.Contributors);
             }}
           >
             Top Contributors
@@ -446,7 +446,7 @@ function DiscoverHolders({ setFilter, Filter, data }: DiscoverHoldersProps) {
           <Button
             className={`${Filter === DiscoverFilter.Creators ? 'bg-white text-[#232227]' : 'bg-[#232227] text-[#999999]'} rounded-full px-5 py-[10px] h-fit text-xs`}
             onClick={() => {
-              setFilter(DiscoverFilter.Creators)
+              setFilter(DiscoverFilter.Creators);
             }}
           >
             Top Creators
@@ -454,7 +454,7 @@ function DiscoverHolders({ setFilter, Filter, data }: DiscoverHoldersProps) {
           <Button
             className={`${Filter === DiscoverFilter.NftHolders ? 'bg-white text-[#232227]' : 'bg-[#232227] text-[#999999]'} rounded-full px-5 py-[10px] h-fit text-xs`}
             onClick={() => {
-              setFilter(DiscoverFilter.NftHolders)
+              setFilter(DiscoverFilter.NftHolders);
             }}
           >
             Top NFT Holders
@@ -462,7 +462,7 @@ function DiscoverHolders({ setFilter, Filter, data }: DiscoverHoldersProps) {
           <Button
             className={`${Filter === DiscoverFilter.BlueChipHolders ? 'bg-white text-[#232227]' : 'bg-[#232227] text-[#999999]'} rounded-full px-5 py-[10px] h-fit text-xs`}
             onClick={() => {
-              setFilter(DiscoverFilter.BlueChipHolders)
+              setFilter(DiscoverFilter.BlueChipHolders);
             }}
           >
             Blue Chip Holders
@@ -470,7 +470,7 @@ function DiscoverHolders({ setFilter, Filter, data }: DiscoverHoldersProps) {
           <Button
             className={`${Filter === DiscoverFilter.FounderHolders ? 'bg-white text-[#232227]' : 'bg-[#232227] text-[#999999]'} rounded-full px-5 py-[10px] h-fit text-xs`}
             onClick={() => {
-              setFilter(DiscoverFilter.FounderHolders)
+              setFilter(DiscoverFilter.FounderHolders);
             }}
           >
             Founders NFT Holders
@@ -478,7 +478,7 @@ function DiscoverHolders({ setFilter, Filter, data }: DiscoverHoldersProps) {
           <Button
             className={`${Filter === DiscoverFilter.HighestNetWorth ? 'bg-white text-[#232227]' : 'bg-[#232227] text-[#999999]'} rounded-full px-5 py-[10px] h-fit text-xs`}
             onClick={() => {
-              setFilter(DiscoverFilter.HighestNetWorth)
+              setFilter(DiscoverFilter.HighestNetWorth);
             }}
           >
             Highest Net Worth
@@ -640,10 +640,10 @@ function DiscoverHolders({ setFilter, Filter, data }: DiscoverHoldersProps) {
       </div>
       <div></div>
     </div>
-  )
+  );
 }
 interface DiscoverRightProps {
-  filteredData: BadgedHolders[]
+  filteredData: BadgedHolders[];
 }
 
 function DiscoverRight({ filteredData }: DiscoverRightProps) {
@@ -747,5 +747,5 @@ function DiscoverRight({ filteredData }: DiscoverRightProps) {
         ))}
       </div>
     </div>
-  )
+  );
 }
