@@ -42,7 +42,7 @@ export default function NewsDetails({ params }: any) {
   return (
     <section className='flex flex-col w-full container'>
       <div className='flex flex-col gap-[61px] items-center pt-[120px] pb-[80px]'>
-        <p className='text-[#F8F8FF] text-[30px] sm:text-5xl font-bold w-[90%] sm:w-[80%] text-center'>
+        <p className='text-[#F8F8FF] text-[30px] sm:text-5xl font-bold w-full sm:w-[80%] text-center'>
           {blog.blogHeader}
         </p>
         <div className='relative w-full h-[300px] sm:h-[461px] rounded-xl overflow-hidden'>
