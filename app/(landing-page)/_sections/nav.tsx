@@ -65,7 +65,7 @@ function Navigation({ mobile = false, navLinks = [] }: NavigationProps) {
     ${mobile ? "flex-col space-y-2 w-full " : "items-center gap-5"}
   `;
 	const navListItemClassName = `
-    group relative rounded-full  px-1 py-1  hover:shadow-[0px_4px_20px_0px_#AFC76B4D] text-lg text-[#FFFFFF] transform transition-transform
+    group relative rounded-full  px-1 py-1   text-lg text-[#FFFFFF] transform transition-transform
     ${mobile ? "w-full overflow-x-visible" : ""}
   `;
 	const navListLinkClassName = mobile ? "mx-2 rounded-[20px]" : "";
@@ -127,10 +127,10 @@ function Navigation({ mobile = false, navLinks = [] }: NavigationProps) {
 
 function NavLink({ children, className, mobile, href }: NavLinkProps) {
 	return (
-		<Button variant={"ghost"} size={"tiny"} className="hover:bg-transparent">
+		<Button variant={"ghost"} size={"tiny"} className="hover:bg-transparent ">
 			<Link
 				className={`
-        block whitespace-nowrap  text-lg text-primary-foreground no-underline transition
+        block whitespace-nowrap  text-lg text-primary-foreground no-underline transition hover:text-[#CFF073]
         ${mobile && ""}
         ${className}
         `}

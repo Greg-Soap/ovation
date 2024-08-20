@@ -56,11 +56,11 @@ export default function News() {
 						Recent blog
 					</p>
 
-					<div className="grid grid-cols-1 sm:grid-cols-2 lg:flex flex-wrap w-full gap-y-20 gap-x-9">
+					<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-y-20 gap-x-9">
 						{blogs.slice(1).map((blog, index) => (
 							<Link
 								href={`/news/${blog.id}`}
-								className="flex flex-col gap-6 h-auto w-fit max-w-[385px]"
+								className="flex flex-col gap-6 h-full w-full "
 								key={index}
 							>
 								<img
