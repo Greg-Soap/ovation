@@ -1,9 +1,12 @@
+import AuthLayout from '../auth-layout'
 import ResetForm from './client'
 
 export default function page() {
   return (
-    <section className="flex flex-col gap-11">
-      <ResetForm />
-    </section>
+    <AuthLayout>
+      <section className="flex flex-col gap-11">
+        <ResetForm />
+      </section>
+    </AuthLayout>
   )
 }
