@@ -6,7 +6,7 @@ export default function Features() {
     <section className='container flex flex-col items-center gap-10 py-8 md:gap-20 md:py-16 mt-24 md:mt-20'>
       <div>
         <h2 className='text-center font-bold font-heading text-white text-[26px] leading-[32px]  md:text-[40px] md:leading-[50px]'>
-          All your NFTs - one powerful platform
+          All your NFTs - One Powerful Platform
         </h2>
         <p className='text-center font-medium text-base md:text-2xl tracking-[-0.87px] mt-2'>
           Imagine if X, Opensea, and Discord had a web3 baby- that would be us.
