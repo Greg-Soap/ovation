@@ -10,6 +10,8 @@ import { toast } from 'sonner'
 import { BorderBeam } from '@/components/animations/border-beam'
 import { FadeText } from '@/components/animations/fade'
 import axios from 'axios'
+import SuccessMail from '../_components/success'
+import { useState } from 'react'
 
 const formSchema = z.object({
   subscriberEmail: z.string().email({
@@ -18,6 +20,7 @@ const formSchema = z.object({
 })
 
 export default function Hero() {
+  const [success, setSuccess] = useState(false)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -36,7 +39,7 @@ export default function Hero() {
           },
         },
       )
-
+      setSuccess(true)
       toast.success('Thank you for subscribing to our newsletter!')
     } catch (error) {
       if (axios.isAxiosError(error)) {
@@ -110,43 +113,46 @@ export default function Hero() {
         The only web3 social platform offering intelligent profiles, personalized portfolios, and a
         blockchain-enabled UI for a unified NFT experience.
       </FadeText>
+      {success ? (
+        <SuccessMail />
+      ) : (
+        <div className='lg:w-[50%] w-[90%] flex flex-col gap-4 items-center justify-center mb-10'>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 w-full mt-10'>
+              <FormField
+                control={form.control}
+                name='subscriberEmail'
+                render={({ field }) => (
+                  <FormItem className='relative'>
+                    <FormControl>
+                      <div className='relative border border-[#666666] bg-[#FFFFFF1A] rounded-[500px]'>
+                        <Input placeholder='Enter your email' {...field} className='text-lg' />
+                        <Button
+                          className='absolute top-[20%] right-[15px] text-xs text-[#111115] px-4 py-3 h-fit'
+                          type='submit'>
+                          Submit
+                        </Button>
+                        <BorderBeam
+                          size={125}
+                          duration={8}
+                          anchor={90}
+                          colorFrom='#C1FE17'
+                          colorTo='#bbff00'
+                        />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </form>
 
-      <div className='lg:w-[50%] w-[90%] flex flex-col gap-4 items-center justify-center mb-10'>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 w-full mt-10'>
-            <FormField
-              control={form.control}
-              name='subscriberEmail'
-              render={({ field }) => (
-                <FormItem className='relative'>
-                  <FormControl>
-                    <div className='relative border border-[#666666] bg-[#FFFFFF1A] rounded-[500px]'>
-                      <Input placeholder='Enter your email' {...field} className='text-lg' />
-                      <Button
-                        className='absolute top-[20%] right-[15px] text-xs text-[#111115] px-4 py-3 h-fit'
-                        type='submit'>
-                        Submit
-                      </Button>
-                      <BorderBeam
-                        size={125}
-                        duration={8}
-                        anchor={90}
-                        colorFrom='#C1FE17'
-                        colorTo='#bbff00'
-                      />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </form>
-
-          <p className='text-[#999999] text-center'>
-            Sign up and be the first to know about our MVP Launch!
-          </p>
-        </Form>
-      </div>
+            <p className='text-[#999999] text-center'>
+              Sign up and be the first to know about our MVP Launch!
+            </p>
+          </Form>
+        </div>
+      )}
     </section>
   )
 }
