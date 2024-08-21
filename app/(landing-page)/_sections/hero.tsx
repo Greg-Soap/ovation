@@ -25,43 +25,43 @@ export default function Hero() {
     },
   })
 
- const onSubmit = async (values: z.infer<typeof formSchema>) => {
-  try {
-     await axios.post(
-      'http://ovationwebapi.us-east-1.elasticbeanstalk.com/api/Newsletter',
-      { subscriberEmail: values.subscriberEmail },
-      {
-        headers: {
-          tokenId: '7bb00541-dddf-4cd7-ac41-90a335e11e02',
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      await axios.post(
+        'https://apiovation.com/api/Newsletter',
+        { subscriberEmail: values.subscriberEmail },
+        {
+          headers: {
+            tokenId: '7bb00541-dddf-4cd7-ac41-90a335e11e02',
+          },
         },
-      }
-    );
+      )
 
-    toast.success('Thank you for subscribing to our newsletter!');
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      const { status } = error.response || { status: 0 };
+      toast.success('Thank you for subscribing to our newsletter!')
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const { status } = error.response || { status: 0 }
 
-      switch (status) {
-        case 409:
-          toast.error('Duplicate: This email already exists in our database');
-          break;
-        case 400:
-          toast.error("This email doesn't exist");
-          break;
-        case 500:
-          toast.error('System: Our system is down temporarily, please try again later');
-          break;
-        default:
-          toast.error('An unknown error occurred. Please try again later.');
-          break;
+        switch (status) {
+          case 409:
+            toast.error('Duplicate: This email already exists in our database')
+            break
+          case 400:
+            toast.error("This email doesn't exist")
+            break
+          case 500:
+            toast.error('System: Our system is down temporarily, please try again later')
+            break
+          default:
+            toast.error('An unknown error occurred. Please try again later.')
+            break
+        }
+      } else {
+        console.error('Unexpected error:', error)
+        toast.error('An unexpected error occurred. Please try again later.')
       }
-    } else {
-      console.error('Unexpected error:', error);
-      toast.error('An unexpected error occurred. Please try again later.');
     }
   }
-};
 
   return (
     <section className='pt-32 pb-8 flex flex-col items-center justify-center w-fit h-fit bg-vector-one bg-top bg-contain bg-no-repeat relative '>

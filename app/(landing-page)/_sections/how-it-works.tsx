@@ -13,7 +13,7 @@ export default function HowItWorks() {
         Artists, projects, and enthusiasts can effortlessly and impactfully showcase their
         NFTs, contributions, and notoriety
       </p>
-     
+
       <div className='mt-8 md:mt-24 w-[90%] h-[195px] lg:w-[998px] md:h-[564px]  bg-transparent   flex items-center justify-center rounded-[20px]'>
         <ReactPlayer
           url='https://res.cloudinary.com/dkv32rrmi/video/upload/v1724130500/videos/ldmoljcpmc3qkorm9hyc.mov'
@@ -22,10 +22,14 @@ export default function HowItWorks() {
           width={'100%'}
           light={true}
           playing={playing}
-          onClickPreview={() => {setPlaying(true)}}
-          playIcon={<div className=' w-[90%] h-[195px] lg:w-[998px] md:h-[564px]  bg-[#333726]   flex items-center justify-center rounded-[20px]'>
-            <img src="/assets/images/play.png" alt="play button" />
-          </div>}
+          onClickPreview={() => {
+            setPlaying(true)
+          }}
+          playIcon={
+            <div className=' w-[90%] h-[195px] lg:w-[998px] md:h-[564px]  bg-black   flex items-center justify-center rounded-[20px]'>
+              <img src='/assets/images/play.png' alt='play button' />
+            </div>
+          }
         />
       </div>
     </section>
