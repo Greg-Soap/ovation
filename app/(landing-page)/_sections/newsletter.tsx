@@ -24,27 +24,42 @@ export function Newsletter() {
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      const response = await axios.post(
-        'http://ovationwebapi.us-east-1.elasticbeanstalk.com/api/Newsletter',
-        { subscriberEmail: values.subscriberEmail },
-        {
-          headers: {
-            token_id: '7bb00541-dddf-4cd7-ac41-90a335e11e02',
-          },
+  try {
+    await axios.post(
+      'http://ovationwebapi.us-east-1.elasticbeanstalk.com/api/Newsletter',
+      { subscriberEmail: values.subscriberEmail },
+      {
+        headers: {
+          tokenId: '7bb00541-dddf-4cd7-ac41-90a335e11e02',
         },
-      )
-
-      if (response.status === 200) {
-        toast.success('Thank you for subscribing to our newsletter!')
-      } else {
-        toast.error('An error occurred. Please try again.')
       }
-    } catch (error) {
-      toast.error('An error occurred. Please try again.')
-      console.error(error)
+    );
+
+    toast.success('Thank you for subscribing to our newsletter!');
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      const { status } = error.response || { status: 0 };
+
+      switch (status) {
+        case 409:
+          toast.error('Duplicate: This email already exists in our database');
+          break;
+        case 400:
+          toast.error("This email doesn't exist");
+          break;
+        case 500:
+          toast.error('System: Our system is down temporarily, please try again later');
+          break;
+        default:
+          toast.error('An unknown error occurred. Please try again later.');
+          break;
+      }
+    } else {
+      console.error('Unexpected error:', error);
+      toast.error('An unexpected error occurred. Please try again later.');
     }
   }
+};
   return (
     <section className='pt-[60px] md:pt-[120px] pb-[40px] md:pb-[80px] container flex items-center gap-6 md:gap-12 flex-col md:flex-row '>
       <div className='w-full'>
