@@ -8,7 +8,7 @@ export default function Features() {
         <h2 className='text-center font-bold font-heading text-white text-[26px] leading-[32px]  md:text-[40px] md:leading-[50px]'>
           All your NFTs - One Powerful Platform
         </h2>
-        <p className='text-center font-medium text-base md:text-2xl tracking-[-0.87px] mt-2'>
+        <p className='text-center font-light text-base md:text-2xl tracking-[-0.87px] mt-2 '>
           Imagine if X, Opensea, and Discord had a web3 baby- that would be us.
         </p>
       </div>
@@ -18,7 +18,7 @@ export default function Features() {
             className='flex flex-col py-3 items-center w-full md:w-[370px]'
             key={generateRandomString()}>
             <img src={feature.icon} alt={feature.title} className='w-9 h-9 md:w-14 md:h-14 mb-6' />
-            <h6 className='text-lg md:text-2xl text-center text-white font-bold font-heading'>
+            <h6 className='text-lg md:text-2xl text-center text-white font-bold font-heading mb-2'>
               {feature.title}
             </h6>
             <p className='text-sm md:text-xl text-center font-light'>{feature.description}</p>
