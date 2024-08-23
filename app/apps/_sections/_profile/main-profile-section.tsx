@@ -69,41 +69,41 @@ export default function MainProfileSection() {
         </div>
       </div>
 
-      <Tabs defaultValue="post" className="w-full  my-16">
-        <TabsList className="items-center rounded-none px-7 py-5 border-y gap-4 border-[#353538] w-full overflow-x-scroll justify-start">
+      <Tabs defaultValue="post" className="w-full my-16">
+        <TabsList className="items-center rounded-none px-7 pt-5 pb-0 border-y gap-4 border-[#353538] w-full h-fit overflow-x-scroll justify-start">
           <TabsTrigger
             value="post"
-            className="text-xs text-[#999999] px-5 py-[10px] rounded-[603px] bg-[#232227] border-none font-normal data-[state=active]:bg-white data-[state=active]:text-[#232227]"
+            className="text-xs text-[#999999] px-5 py-[10px] bg-transparent border-b-2 border-transparent font-normal data-[state=active]:bg-transparent data-[state=active]:border-[#CFF073] data-[state=active]:text-[#F8F8FF] transition-all duration-300"
           >
             Post
           </TabsTrigger>
           <TabsTrigger
             value="replies"
-            className="text-xs text-[#999999] px-5 py-[10px] rounded-[603px] bg-[#232227] border-none font-normal data-[state=active]:bg-white data-[state=active]:text-[#232227]"
+            className="text-xs text-[#999999] px-5 py-[10px] bg-transparent border-b-2 border-transparent font-normal data-[state=active]:bg-transparent data-[state=active]:border-[#CFF073] data-[state=active]:text-[#F8F8FF] transition-all duration-300"
           >
             Replies
           </TabsTrigger>
           <TabsTrigger
             value="portfolio"
-            className="text-xs text-[#999999] px-5 py-[10px] rounded-[603px] bg-[#232227] border-none font-normal data-[state=active]:bg-white data-[state=active]:text-[#232227]"
+            className="text-xs text-[#999999] px-5 py-[10px] bg-transparent border-b-2 border-transparent font-normal data-[state=active]:bg-transparent data-[state=active]:border-[#CFF073] data-[state=active]:text-[#F8F8FF] transition-all duration-300"
           >
             Portfolio
           </TabsTrigger>
           <TabsTrigger
             value="created"
-            className="text-xs text-[#999999] px-5 py-[10px] rounded-[603px] bg-[#232227] border-none font-normal data-[state=active]:bg-white data-[state=active]:text-[#232227]"
+            className="text-xs text-[#999999] px-5 py-[10px] bg-transparent border-b-2 border-transparent font-normal data-[state=active]:bg-transparent data-[state=active]:border-[#CFF073] data-[state=active]:text-[#F8F8FF] transition-all duration-300"
           >
             Created
           </TabsTrigger>
           <TabsTrigger
             value="stat"
-            className="text-xs text-[#999999] px-5 py-[10px] rounded-[603px] bg-[#232227] border-none font-normal data-[state=active]:bg-white data-[state=active]:text-[#232227]"
+            className="text-xs text-[#999999] px-5 py-[10px] bg-transparent border-b-2 border-transparent font-normal data-[state=active]:bg-transparent data-[state=active]:border-[#CFF073] data-[state=active]:text-[#F8F8FF] transition-all duration-300"
           >
             Stat
           </TabsTrigger>
           <TabsTrigger
             value="experience"
-            className="text-xs text-[#999999] px-5 py-[10px] rounded-[603px] bg-[#232227] border-none font-normal data-[state=active]:bg-white data-[state=active]:text-[#232227]"
+            className="text-xs text-[#999999] px-5 py-[10px] m-0 bg-transparent border-b-2 border-transparent font-normal data-[state=active]:bg-transparent data-[state=active]:border-[#CFF073] data-[state=active]:text-[#F8F8FF] transition-all duration-300"
           >
             Experience
           </TabsTrigger>

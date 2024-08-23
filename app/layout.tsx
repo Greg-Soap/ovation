@@ -12,10 +12,10 @@ export const metadata: Metadata = {
     description:
       'Discover a unique NFT marketplace where you can explore and earn NFTs through personalized portfolios. Experience the future of digital collectibles with Ovation.',
     images: [
-      'https://www.ovation-two.vercel.app/assets/images/dashboard-demo.png',
+      'https://www.ovation.network/assets/images/dashboard-demo.png',
     ],
     siteName: 'Ovation',
-    url: 'https://www.ovation-two.vercel.app',
+    url: 'https://www.ovation.network',
     type: 'website',
   },
   twitter: {
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
       'Discover a unique NFT marketplace where you can explore and earn NFTs through personalized portfolios. Experience the future of digital collectibles with Ovation.',
     creator: '@EmmanuelGreg',
     images: [
-      'https://www.ovation-two.vercel.app/assets/images/dashboard-demo.png',
+      'https://www.ovation.network/assets/images/dashboard-demo.png',
     ],
   },
   icons: { shortcut: ['/favicon.ico'] },
