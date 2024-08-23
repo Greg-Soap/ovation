@@ -9,7 +9,7 @@ export default function HowItWorks() {
         How it works
       </p>
 
-      <p className='text-base md:text-2xl w-[80%] text-center mt-2 section-description'>
+      <p className='text-base md:text-2xl w-[80%] text-center mt-2 section-description font-light'>
         Artists, projects, and enthusiasts can effortlessly and impactfully showcase their
         NFTs, contributions, and notoriety
       </p>
