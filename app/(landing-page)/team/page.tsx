@@ -15,21 +15,21 @@ interface Teams {
 const team: Teams[] = [
   {
     image: '/assets/images/teams/Jack2-teams.png',
-    name: 'Jack Bliss',
+    name: 'Jack',
     position: 'CEO',
     social: 'twitter',
     href: 'https://x.com/Jack_Ovation',
   },
   {
     image: '/assets/images/teams/Grant2-teams.png',
-    name: 'Grant Weaver',
+    name: 'Grant',
     position: 'CFO',
     social: 'twitter',
     href: 'https://x.com/GOVAWOVA',
   },
   {
     image: '/assets/images/teams/Maanav-teams.png',
-    name: 'Maanav J. Porwal',
+    name: 'Maanav J.',
     position: 'CMO',
     social: 'linkedin',
     href: 'http://www.linkedin.com/in/manavporwal',
@@ -43,7 +43,7 @@ const team: Teams[] = [
   // },
   {
     image: '/assets/images/teams/Malcom2-teams.png',
-    name: 'Malcolm Henzaga',
+    name: 'Malcolm',
     position: 'COO',
     social: 'linkedin',
     href: 'https://www.linkedin.com/in/malcolmhenzaga/',
