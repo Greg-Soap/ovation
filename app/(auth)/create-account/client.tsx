@@ -48,7 +48,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
     } else {
       setOptionalLeft(false)
     }
-  }, [page]) // Re-run the effect whenever `page` changes
+  }, [page, setOptionalLeft]) // Re-run the effect whenever `page` changes
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

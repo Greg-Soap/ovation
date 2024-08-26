@@ -69,7 +69,7 @@ export default function Teams() {
 
           <div className='w-full grid grid-cols-1 md:grid-cols-2 gap-y-[60px] gap-x-5'>
             {team.map((item, index) => (
-              <div className='flex flex-col gap-6 w-fit ' key={index}>
+              <div className='flex flex-col gap-6 w-fit items-center ' key={index}>
                 <div className=' rounded-full w-full  md:w-[70%]'>
                   <Image
                     src={`${item.image}`}

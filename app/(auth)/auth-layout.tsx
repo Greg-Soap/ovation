@@ -21,7 +21,7 @@ export default function AuthLayout({
         {showAuthLeftOptional && (
           <div
             id="auth-left-optional"
-            className="text-white text-5xl w-[525px] font-bold leading-[60px]  h-[600px] md:w-[500px] justify-center flex flex-col gap-8 items-center "
+            className=" hidden text-white text-5xl w-[525px] font-bold leading-[60px]  h-[600px] md:w-[500px] justify-center xl:flex flex-col gap-8 items-center "
           >
             Experience the Next-Generation NFT Social Platform
             <div className="flex gap-3 font-normal opacity-70 w-full  text-lg  ">
