@@ -24,9 +24,9 @@ export const blogs: Blog[] = [
   {
     id: 1,
     image: '/assets/images/news/news-bg.png',
-    blogHeader: 'Ovation Technologies Secures ArchwayHQ Grant for Expanded Operations',
+    blogHeader: 'Ovation Technologies Secures Archway Foundation Grant for Expanded Operations',
     blogDetails:
-      'It is with great excitement that we announce that Ovation has been approved for the ArchwayHQ grant!',
+      'It is with great excitement that we announce that Ovation has been approved for the Archway Foundation grant!',
     sections: [
       {
         content:
@@ -34,17 +34,17 @@ export const blogs: Blog[] = [
       },
       {
         content:
-          'This grant not only solidifies Ovation’s position in the rapidly evolving NFT space but also provides us with the financial runway to continue our ambitious project into Q1 2025. By partnering with ArchwayHQ, Ovation will leverage the advanced capabilities of the Archway blockchain to enhance our offerings, ensuring scalability, security, and seamless user experiences.',
+          'This grant not only solidifies Ovation’s position in the rapidly evolving NFT space but also provides us with the financial runway to continue our ambitious project into Q1 2025. By partnering with Archway Foundation, Ovation will leverage the advanced capabilities of the Archway blockchain to enhance our offerings, ensuring scalability, security, and seamless user experiences.',
       },
       {
         content:
-          'Stay tuned for more details as we embark on this exciting journey, pushing the boundaries of what’s possible in the NFT and blockchain industries. Together with ArchwayHQ, we are set to revolutionize the future of decentralized digital experiences.',
+          'Stay tuned for more details as we embark on this exciting journey, pushing the boundaries of what’s possible in the NFT and blockchain industries. Together with Archway Foundation, we are set to revolutionize the future of decentralized digital experiences.',
       },
       {
         content: 'For more information, visit:',
         link: [
           {
-            name: 'ArchwayHQ Website',
+            name: 'Archway Foundation Website',
             url: 'https://archway.io/',
           },
           {

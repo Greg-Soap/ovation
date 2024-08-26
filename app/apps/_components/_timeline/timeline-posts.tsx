@@ -1,9 +1,5 @@
 import Image from 'next/image'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import type { ReactElement } from 'react'
 import React, { useState } from 'react'
@@ -175,7 +171,7 @@ export default function TimelinePosts() {
   }
 
   const [postActions, setPostActions] = useState<PostAction[]>([
-    { icon: <LikeIcon className="w-[17px] h-4" />, value: 43, isActive: false },
+    { icon: <LikeIcon className='w-[17px] h-4' />, value: 43, isActive: false },
     { icon: <MessageIcon />, value: 43, isActive: false },
     { icon: <RepostIcon />, value: 43, isActive: false },
     { icon: <ClapIcon />, value: 43, isActive: false },
@@ -194,45 +190,39 @@ export default function TimelinePosts() {
     <>
       {isShown.map((post, index) => (
         <section
-          className="w-full  h-fit py-10 px-[10px] flex flex-col  items-center  border-t border-[#1A1A1A]"
-          key={post.id}
-        >
-          <article className="max-w-[820px] flex flex-col  items-end gap-2">
-            <div className="w-full flex h-fit items-center justify-between">
-              <div className="flex items-center gap-[10px]">
+          className='w-full  h-fit py-10 px-[10px] flex flex-col  items-center  border-t border-[#1A1A1A]'
+          key={post.id}>
+          <article className='max-w-[820px] flex flex-col  items-end gap-2'>
+            <div className='w-full flex h-fit items-center justify-between'>
+              <div className='flex items-center gap-[10px]'>
                 <Image
                   src={post.userDisplayPicture}
-                  alt="User Display Picture"
+                  alt='User Display Picture'
                   width={36}
                   height={36}
                 />
 
-                <div className="flex items-center gap-1">
-                  <p className="text-base font-semibold text-white mr-2 flex items-center gap-1">
+                <div className='flex items-center gap-1'>
+                  <p className='text-base font-semibold text-white mr-2 flex items-center gap-1'>
                     {post.displayName}
                     <VerifyIcon />
                   </p>
-                  <p className="text-xs font-medium text-[#808080]">
-                    {post.userName}
-                  </p>
-                  <div className="w-1 h-1 rounded-full bg-[#808080]"></div>
-                  <p className="text-xs leading-5 font-medium text-[#808080]">
-                    2h
-                  </p>
+                  <p className='text-xs font-medium text-[#808080]'>{post.userName}</p>
+                  <div className='w-1 h-1 rounded-full bg-[#808080]' />
+                  <p className='text-xs leading-5 font-medium text-[#808080]'>2h</p>
                 </div>
               </div>
 
               <Popover>
-                <PopoverTrigger className="p-1 rounded-full">
+                <PopoverTrigger className='p-1 rounded-full'>
                   <MoreIcon />
                 </PopoverTrigger>
-                <PopoverContent className="w-fit bg-[#232227] flex flex-col items-start px-2 py-4 border-none">
+                <PopoverContent className='w-fit bg-[#232227] flex flex-col items-start px-2 py-4 border-none'>
                   {postMenu.map((menu, index) => (
                     <Button
-                      variant="default"
+                      variant='default'
                       className={`flex py-[10px] w-full justify-start bg-transparent gap-2 font-medium rounded-none ${menu.isDeleteButton ? 'text-[#FF0000]' : 'text-white'}`}
-                      key={index}
-                    >
+                      key={index}>
                       {menu.icon}
                       {menu.text}
                     </Button>
@@ -241,108 +231,82 @@ export default function TimelinePosts() {
               </Popover>
             </div>
 
-            <div
-              className={
-                'flex flex-col w-[93.5%] h-fit max-w-[820px] gap-[22px]'
-              }
-            >
-              <p className="text-sm leading-5 text-[#E6E6E6]">
+            <div className={'flex flex-col w-[93.5%] h-fit max-w-[820px] gap-[22px]'}>
+              <p className='text-sm leading-5 text-[#E6E6E6]'>
                 Dedicated NFT enthusiast, embracing the
-                <span className="text-[#CFF073]"> #digital</span> revolution one
-                token at a time. Let&apos; explore the world of blockchain art
-                together! #NFTCommunity Let&apos; explore the world of
-                blockchain art together! #NFTCommunity Let&apos; explore the
+                <span className='text-[#CFF073]'> #digital</span> revolution one token at a time.
+                Let&apos; explore the world of blockchain art together! #NFTCommunity Let&apos;
+                explore the world of blockchain art together! #NFTCommunity Let&apos; explore the
                 world of blockchain art together! #NFTCommunity
               </p>
 
               <div
-                className={`${post.hasMedia ? 'flex' : 'hidden'} w-full h-auto rounded-[20px] flex-col`}
-              >
-                <img
-                  src={post.imgSrc}
-                  alt="Post media"
-                  className="w-full h-auto"
-                />
+                className={`${post.hasMedia ? 'flex' : 'hidden'} w-full h-auto rounded-[20px] flex-col`}>
+                <img src={post.imgSrc} alt='Post media' className='w-full h-auto' />
               </div>
 
-              <div
-                className={`${post.hasVoiceRecord ? 'flex' : 'hidden'} flex-col w-full h-fit`}
-              >
-                <div className="flex w-full py-3 px-[17px] rounded-[500px] items-center gap-[6px] bg-[#232227] mb-5">
-                  <div className="w-fit h-fit rounded-full bg-black">
+              <div className={`${post.hasVoiceRecord ? 'flex' : 'hidden'} flex-col w-full h-fit`}>
+                <div className='flex w-full py-3 px-[17px] rounded-[500px] items-center gap-[6px] bg-[#232227] mb-5'>
+                  <div className='w-fit h-fit rounded-full bg-black'>
                     <PlayIcon />
                   </div>
                   <img
-                    src="/assets/images/timeline/frame121.svg"
-                    alt="Recording"
-                    className="w-[82%] h-4"
+                    src='/assets/images/timeline/frame121.svg'
+                    alt='Recording'
+                    className='w-[82%] h-4'
                   />
-                  <p className="text-white text-sm">05:04</p>
+                  <p className='text-white text-sm'>05:04</p>
                   <Button
-                    variant="default"
-                    className="px-3 py-0 h-[20px] bg-[#111115] rounded-[500px] leading-4 text-xs text-white"
-                  >
+                    variant='default'
+                    className='px-3 py-0 h-[20px] bg-[#111115] rounded-[500px] leading-4 text-xs text-white'>
                     1x
                   </Button>
                 </div>
 
-                <div className="flex flex-col w-full h-fit px-4 gap-3 border-l-[4px] border-[#4D4D4D]">
+                <div className='flex flex-col w-full h-fit px-4 gap-3 border-l-[4px] border-[#4D4D4D]'>
                   {post.transcripts.map((list, index) => (
-                    <p
-                      className="flex items-center gap-2 text-sm text-[#808080]"
-                      key={index}
-                    >
-                      {list.time}{' '}
-                      <span className="text-white">{list.text}</span>
+                    <p className='flex items-center gap-2 text-sm text-[#808080]' key={index}>
+                      {list.time} <span className='text-white'>{list.text}</span>
                     </p>
                   ))}
                   {post.extraTranscripts.map((list, index) => (
                     <p
                       className={`${list.isHidden ? 'flex' : 'hidden'} items-center gap-2 text-sm text-[#808080]`}
-                      key={index}
-                    >
-                      {list.time}{' '}
-                      <span className="text-white">{list.text}</span>
+                      key={index}>
+                      {list.time} <span className='text-white'>{list.text}</span>
                     </p>
                   ))}
                   <Button
-                    variant="default"
-                    className="p-0 w-fit h-fit bg-transparent text-sm text-[#9CBD40] font-normal hover:opacity-80 transition-all duration-300"
-                    onClick={() => toggleTranscripts(index)}
-                  >
+                    variant='default'
+                    className='p-0 w-fit h-fit bg-transparent text-sm text-[#9CBD40] font-normal hover:opacity-80 transition-all duration-300'
+                    onClick={() => toggleTranscripts(index)}>
                     {isShown ? 'Hide transcript' : 'View transcript'}
                   </Button>
                 </div>
               </div>
 
               <div
-                className={`${post.hasEvent ? 'flex' : 'hidden'} flex-col w-full h-fit border border-[#18181C] rounded-lg`}
-              >
-                <p className="py-5 px-3 text-sm font-semibold text-white bg-[#18181C]">
+                className={`${post.hasEvent ? 'flex' : 'hidden'} flex-col w-full h-fit border border-[#18181C] rounded-lg`}>
+                <p className='py-5 px-3 text-sm font-semibold text-white bg-[#18181C]'>
                   {post.eventHeader}
                 </p>
-                <img
-                  src={post.eventImage}
-                  alt="Link Preview"
-                  className="w-full h-auto"
-                />
-                <div className="px-3 flex flex-col bg-[#18181C] pt-3 py-1">
-                  <p className="flex items-center gap-[6px] text-[11px] leading-[15px] text-[#B3B3B3]">
+                <img src={post.eventImage} alt='Link Preview' className='w-full h-auto' />
+                <div className='px-3 flex flex-col bg-[#18181C] pt-3 py-1'>
+                  <p className='flex items-center gap-[6px] text-[11px] leading-[15px] text-[#B3B3B3]'>
                     <Image
-                      src="/assets/images/timeline/_post/calender.png"
-                      alt="calender icon"
+                      src='/assets/images/timeline/_post/calender.png'
+                      alt='calender icon'
                       width={12}
                       height={12}
                     />
                     {post.eventDate}
                   </p>
                   <Button
-                    variant="link"
-                    className="flex items-center w-fit p-0 leading-[15px] underline gap-[6px] text-[11px] text-[#B3B3B3] bg-transparent font-normal"
-                  >
+                    variant='link'
+                    className='flex items-center w-fit p-0 leading-[15px] underline gap-[6px] text-[11px] text-[#B3B3B3] bg-transparent font-normal'>
                     <Image
-                      src="/assets/images/timeline/_post/location.png"
-                      alt="calender icon"
+                      src='/assets/images/timeline/_post/location.png'
+                      alt='calender icon'
                       width={12}
                       height={12}
                     />
@@ -350,21 +314,20 @@ export default function TimelinePosts() {
                   </Button>
                 </div>
 
-                <div className="flex w-full items-center justify-end p-3">
-                  <Button className="text-[10px] leading-3 text-[#111115] py-2 px-[10px] bg-[#CFF073]">
+                <div className='flex w-full items-center justify-end p-3'>
+                  <Button className='text-[10px] leading-3 text-[#111115] py-2 px-[10px] bg-[#CFF073]'>
                     Add to calender
                   </Button>
                 </div>
               </div>
 
-              <div className="w-full flex h-fit gap-3">
+              <div className='w-full flex h-fit gap-3'>
                 {postActions.map((action, index) => (
                   <Button
-                    variant="default"
+                    variant='default'
                     className={`flex gap-1 bg-transparent outline-none px-1 py-0 rounded-none text-xs leading-4 ${action.isActive ? 'text-[#cff073cc] fill-[#cff07366] stroke-[#cff07366]' : 'text-[#B3B3B3] fill-[#B3B3B3] stroke-[#B3B3B3]'}`}
                     key={index}
-                    onClick={() => handleClick(index)}
-                  >
+                    onClick={() => handleClick(index)}>
                     {action.icon}
                     {action.value}
                   </Button>

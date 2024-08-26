@@ -130,86 +130,79 @@ export default function Created() {
   }
 
   return (
-    <div className="w-full py-10 flex items-center justify-center">
-      <div className="w-[95%] px-7 py-6 rounded-[14px] border border-[#353538] flex flex-col gap-[42px]">
-        <div className="flex flex-col gap-[21px]">
-          <p className="text-white font-medium">Created</p>
+    <div className='w-full py-10 flex items-center justify-center'>
+      <div className='w-[95%] px-7 py-6 rounded-[14px] border border-[#353538] flex flex-col gap-[42px]'>
+        <div className='flex flex-col gap-[21px]'>
+          <p className='text-white font-medium'>Created</p>
 
-          <div className="flex items-center justify-between">
-            <Tabs defaultValue="All" className="w-full flex flex-col gap-10">
-              <TabsList className="flex justify-between items-center w-full overflow-x-scroll">
-                <div className="flex items-center gap-2">
+          <div className='flex items-center justify-between'>
+            <Tabs defaultValue='All' className='w-full flex flex-col gap-10'>
+              <TabsList className='flex justify-between items-center w-full overflow-x-scroll'>
+                <div className='flex items-center gap-2'>
                   {buttons.map((item, index) => (
                     <TabsTrigger
                       value={item.name}
-                      className="bg-[#232227] text-[#999999] p-3 rounded-[50px] h-fit text-xs border-none data-[state=active]:bg-white data-[state=active]:text-[#232227]"
-                      key={index}
-                    >
-                      {item.name + '(' + item.itemCount + ')'}
+                      className='bg-[#232227] text-[#999999] p-3 rounded-[50px] h-fit text-xs border-none data-[state=active]:bg-white data-[state=active]:text-[#232227]'
+                      key={index}>
+                      {`${item.name}(${item.itemCount})`}
                     </TabsTrigger>
                   ))}
                 </div>
 
                 <Select>
-                  <SelectTrigger className="w-fit rounded-[7px] otline-none border border-[#333333] text-white text-xs bg-[#232227]">
-                    <SelectValue placeholder="Filters" />
+                  <SelectTrigger className='w-fit rounded-[7px] otline-none border border-[#333333] text-white text-xs bg-[#232227]'>
+                    <SelectValue placeholder='Filters' />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="light">Light</SelectItem>
-                    <SelectItem value="dark">Dark</SelectItem>
-                    <SelectItem value="system">System</SelectItem>
+                    <SelectItem value='light'>Light</SelectItem>
+                    <SelectItem value='dark'>Dark</SelectItem>
+                    <SelectItem value='system'>System</SelectItem>
                   </SelectContent>
                 </Select>
               </TabsList>
-              <TabsContent value="All">
-                <div className="flex flex-wrap gap-4">
+              <TabsContent value='All'>
+                <div className='flex flex-wrap gap-4'>
                   {items.map((item, index) => (
                     <div
-                      className="w-[296px] flex flex-col bg-[#18181C] border border-[#FFFFFF14] rounded-[10px]"
-                      key={index}
-                    >
+                      className='w-full lg:w-[296px] flex flex-col bg-[#18181C] border border-[#FFFFFF14] rounded-[10px]'
+                      key={index}>
                       <Image
                         src={item.imgSrc}
-                        alt="NFT Preview"
-                        width={317}
+                        alt='NFT Preview'
+                        width={500}
                         height={217}
-                        className="rounded-t-[10px]"
+                        className='rounded-t-[10px]'
                       />
 
-                      <div className="flex flex-col items-center justify-between bg-[#111115] border border-[#FFFFFF0D] px-3 py-3 rounded-b-[10px] gap-3">
-                        <div className="flex items-center justify-between w-full">
-                          <div className="flex flex-col items-start">
-                            <p className="text-[11px] text-[#999999]">Artist</p>
-                            <p className="text-white text-sm font-semibold">
-                              {item.artist}
-                            </p>
+                      <div className='flex flex-col items-center justify-between bg-[#111115] border border-[#FFFFFF0D] px-3 py-3 rounded-b-[10px] gap-3'>
+                        <div className='flex items-center justify-between w-full'>
+                          <div className='flex flex-col items-start'>
+                            <p className='text-[11px] text-[#999999]'>Artist</p>
+                            <p className='text-white text-sm font-semibold'>{item.artist}</p>
                           </div>
-                          <div className="flex flex-col items-end">
-                            <p className="text-[11px] text-[#999999]">Price</p>
-                            <p className="text-white text-sm font-semibold">
+                          <div className='flex flex-col items-end'>
+                            <p className='text-[11px] text-[#999999]'>Price</p>
+                            <p className='text-white text-sm font-semibold'>
                               {item.price + ' ' + 'ETH'}
                             </p>
                           </div>
                         </div>
 
-                        <div className="flex w-full items-center justify-between pt-3 border-t border-[#353538]">
-                          <div className="flex items-center gap-1">
+                        <div className='flex w-full items-center justify-between pt-3 border-t border-[#353538]'>
+                          <div className='flex items-center gap-1'>
                             <LikeIcon
                               className={`w-4 h-4 transition-all duration-300 ${item.isLiked ? 'stroke-none fill-[#CFF073]' : 'stroke-white fill-none'}`}
                               onClick={() => toggleLike(index)}
                             />
-                            <p className="text-xs text-white font-normal">
-                              {item.isLiked
-                                ? item.likeCount + 1
-                                : item.likeCount}
+                            <p className='text-xs text-white font-normal'>
+                              {item.isLiked ? item.likeCount + 1 : item.likeCount}
                             </p>
                           </div>
 
                           <Button
-                            variant="default"
+                            variant='default'
                             className={`${item.isHidden ? 'outline outline-1 outline-[#CFF073] bg-transparent text-[#CFF073]' : 'bg-[#CFF073] text-[#111115]'} px-3 py-[6px] h-fit text-[10px] font-medium`}
-                            onClick={() => toggleHidden(index)}
-                          >
+                            onClick={() => toggleHidden(index)}>
                             {item.isHidden ? 'Unhide' : 'Hide'}
                           </Button>
                         </div>
@@ -218,55 +211,49 @@ export default function Created() {
                   ))}
                 </div>
               </TabsContent>
-              <TabsContent value="Complete">
-                <div className="flex flex-wrap gap-4">
+              <TabsContent value='Complete'>
+                <div className='flex flex-wrap gap-4'>
                   {items.map((item, index) => (
                     <div
                       className={`${item.isComplete ? 'flex' : 'hidden'} w-[296px] flex-col bg-[#18181C] border border-[#FFFFFF14] rounded-[10px]`}
-                      key={index}
-                    >
+                      key={index}>
                       <Image
                         src={item.imgSrc}
-                        alt="NFT Preview"
+                        alt='NFT Preview'
                         width={317}
                         height={217}
-                        className="rounded-t-[10px]"
+                        className='rounded-t-[10px]'
                       />
 
-                      <div className="flex flex-col items-center justify-between bg-[#111115] border border-[#FFFFFF0D] px-3 py-3 rounded-b-[10px] gap-3">
-                        <div className="flex items-center justify-between w-full">
-                          <div className="flex flex-col items-start">
-                            <p className="text-[11px] text-[#999999]">Artist</p>
-                            <p className="text-white text-sm font-semibold">
-                              {item.artist}
-                            </p>
+                      <div className='flex flex-col items-center justify-between bg-[#111115] border border-[#FFFFFF0D] px-3 py-3 rounded-b-[10px] gap-3'>
+                        <div className='flex items-center justify-between w-full'>
+                          <div className='flex flex-col items-start'>
+                            <p className='text-[11px] text-[#999999]'>Artist</p>
+                            <p className='text-white text-sm font-semibold'>{item.artist}</p>
                           </div>
-                          <div className="flex flex-col items-end">
-                            <p className="text-[11px] text-[#999999]">Price</p>
-                            <p className="text-white text-sm font-semibold">
+                          <div className='flex flex-col items-end'>
+                            <p className='text-[11px] text-[#999999]'>Price</p>
+                            <p className='text-white text-sm font-semibold'>
                               {item.price + ' ' + 'ETH'}
                             </p>
                           </div>
                         </div>
 
-                        <div className="flex w-full items-center justify-between pt-3 border-t border-[#353538]">
-                          <div className="flex items-center gap-1">
+                        <div className='flex w-full items-center justify-between pt-3 border-t border-[#353538]'>
+                          <div className='flex items-center gap-1'>
                             <LikeIcon
                               className={`w-4 h-4 ${item.isLiked ? 'stroke-none fill-[#CFF073]' : 'stroke-white fill-none'}`}
                               onClick={() => toggleLike(index)}
                             />
-                            <p className="text-xs text-white font-normal">
-                              {item.isLiked
-                                ? item.likeCount + 1
-                                : item.likeCount}
+                            <p className='text-xs text-white font-normal'>
+                              {item.isLiked ? item.likeCount + 1 : item.likeCount}
                             </p>
                           </div>
 
                           <Button
-                            variant="default"
+                            variant='default'
                             className={`${item.isHidden ? 'outline outline-1 outline-[#CFF073] bg-transparent text-[#CFF073]' : 'bg-[#CFF073] text-[#111115]'} px-3 py-[6px] h-fit text-[10px] font-medium`}
-                            onClick={() => toggleHidden(index)}
-                          >
+                            onClick={() => toggleHidden(index)}>
                             {item.isHidden ? 'Unhide' : 'Hide'}
                           </Button>
                         </div>
@@ -275,55 +262,49 @@ export default function Created() {
                   ))}
                 </div>
               </TabsContent>
-              <TabsContent value="Domain">
-                <div className="flex flex-wrap gap-4">
+              <TabsContent value='Domain'>
+                <div className='flex flex-wrap gap-4'>
                   {items.map((item, index) => (
                     <div
                       className={`${item.isDomain ? 'flex' : 'hidden'} w-[296px] flex-col bg-[#18181C] border border-[#FFFFFF14] rounded-[10px]`}
-                      key={index}
-                    >
+                      key={index}>
                       <Image
                         src={item.imgSrc}
-                        alt="NFT Preview"
+                        alt='NFT Preview'
                         width={317}
                         height={217}
-                        className="rounded-t-[10px]"
+                        className='rounded-t-[10px]'
                       />
 
-                      <div className="flex flex-col items-center justify-between bg-[#111115] border border-[#FFFFFF0D] px-3 py-3 rounded-b-[10px] gap-3">
-                        <div className="flex items-center justify-between w-full">
-                          <div className="flex flex-col items-start">
-                            <p className="text-[11px] text-[#999999]">Artist</p>
-                            <p className="text-white text-sm font-semibold">
-                              {item.artist}
-                            </p>
+                      <div className='flex flex-col items-center justify-between bg-[#111115] border border-[#FFFFFF0D] px-3 py-3 rounded-b-[10px] gap-3'>
+                        <div className='flex items-center justify-between w-full'>
+                          <div className='flex flex-col items-start'>
+                            <p className='text-[11px] text-[#999999]'>Artist</p>
+                            <p className='text-white text-sm font-semibold'>{item.artist}</p>
                           </div>
-                          <div className="flex flex-col items-end">
-                            <p className="text-[11px] text-[#999999]">Price</p>
-                            <p className="text-white text-sm font-semibold">
+                          <div className='flex flex-col items-end'>
+                            <p className='text-[11px] text-[#999999]'>Price</p>
+                            <p className='text-white text-sm font-semibold'>
                               {item.price + ' ' + 'ETH'}
                             </p>
                           </div>
                         </div>
 
-                        <div className="flex w-full items-center justify-between pt-3 border-t border-[#353538]">
-                          <div className="flex items-center gap-1">
+                        <div className='flex w-full items-center justify-between pt-3 border-t border-[#353538]'>
+                          <div className='flex items-center gap-1'>
                             <LikeIcon
                               className={`w-4 h-4 ${item.isLiked ? 'stroke-none fill-[#CFF073]' : 'stroke-white fill-none'}`}
                               onClick={() => toggleLike(index)}
                             />
-                            <p className="text-xs text-white font-normal">
-                              {item.isLiked
-                                ? item.likeCount + 1
-                                : item.likeCount}
+                            <p className='text-xs text-white font-normal'>
+                              {item.isLiked ? item.likeCount + 1 : item.likeCount}
                             </p>
                           </div>
 
                           <Button
-                            variant="default"
+                            variant='default'
                             className={`${item.isHidden ? 'outline outline-1 outline-[#CFF073] bg-transparent text-[#CFF073]' : 'bg-[#CFF073] text-[#111115]'} px-3 py-[6px] h-fit text-[10px] font-medium`}
-                            onClick={() => toggleHidden(index)}
-                          >
+                            onClick={() => toggleHidden(index)}>
                             {item.isHidden ? 'Unhide' : 'Hide'}
                           </Button>
                         </div>
@@ -332,55 +313,49 @@ export default function Created() {
                   ))}
                 </div>
               </TabsContent>
-              <TabsContent value="Collectibles">
-                <div className="flex flex-wrap gap-4">
+              <TabsContent value='Collectibles'>
+                <div className='flex flex-wrap gap-4'>
                   {items.map((item, index) => (
                     <div
                       className={`${item.isCollectible ? 'flex' : 'hidden'} w-[296px] flex-col bg-[#18181C] border border-[#FFFFFF14] rounded-[10px]`}
-                      key={index}
-                    >
+                      key={index}>
                       <Image
                         src={item.imgSrc}
-                        alt="NFT Preview"
+                        alt='NFT Preview'
                         width={317}
                         height={217}
-                        className="rounded-t-[10px]"
+                        className='rounded-t-[10px]'
                       />
 
-                      <div className="flex flex-col items-center justify-between bg-[#111115] border border-[#FFFFFF0D] px-3 py-3 rounded-b-[10px] gap-3">
-                        <div className="flex items-center justify-between w-full">
-                          <div className="flex flex-col items-start">
-                            <p className="text-[11px] text-[#999999]">Artist</p>
-                            <p className="text-white text-sm font-semibold">
-                              {item.artist}
-                            </p>
+                      <div className='flex flex-col items-center justify-between bg-[#111115] border border-[#FFFFFF0D] px-3 py-3 rounded-b-[10px] gap-3'>
+                        <div className='flex items-center justify-between w-full'>
+                          <div className='flex flex-col items-start'>
+                            <p className='text-[11px] text-[#999999]'>Artist</p>
+                            <p className='text-white text-sm font-semibold'>{item.artist}</p>
                           </div>
-                          <div className="flex flex-col items-end">
-                            <p className="text-[11px] text-[#999999]">Price</p>
-                            <p className="text-white text-sm font-semibold">
+                          <div className='flex flex-col items-end'>
+                            <p className='text-[11px] text-[#999999]'>Price</p>
+                            <p className='text-white text-sm font-semibold'>
                               {item.price + ' ' + 'ETH'}
                             </p>
                           </div>
                         </div>
 
-                        <div className="flex w-full items-center justify-between pt-3 border-t border-[#353538]">
-                          <div className="flex items-center gap-1">
+                        <div className='flex w-full items-center justify-between pt-3 border-t border-[#353538]'>
+                          <div className='flex items-center gap-1'>
                             <LikeIcon
                               className={`w-4 h-4 ${item.isLiked ? 'stroke-none fill-[#CFF073]' : 'stroke-white fill-none'}`}
                               onClick={() => toggleLike(index)}
                             />
-                            <p className="text-xs text-white font-normal">
-                              {item.isLiked
-                                ? item.likeCount + 1
-                                : item.likeCount}
+                            <p className='text-xs text-white font-normal'>
+                              {item.isLiked ? item.likeCount + 1 : item.likeCount}
                             </p>
                           </div>
 
                           <Button
-                            variant="default"
+                            variant='default'
                             className={`${item.isHidden ? 'outline outline-1 outline-[#CFF073] bg-transparent text-[#CFF073]' : 'bg-[#CFF073] text-[#111115]'} px-3 py-[6px] h-fit text-[10px] font-medium`}
-                            onClick={() => toggleHidden(index)}
-                          >
+                            onClick={() => toggleHidden(index)}>
                             {item.isHidden ? 'Unhide' : 'Hide'}
                           </Button>
                         </div>
@@ -389,55 +364,49 @@ export default function Created() {
                   ))}
                 </div>
               </TabsContent>
-              <TabsContent value="Metaverse">
-                <div className="flex flex-wrap gap-4">
+              <TabsContent value='Metaverse'>
+                <div className='flex flex-wrap gap-4'>
                   {items.map((item, index) => (
                     <div
                       className={`${item.isMetaverse ? 'flex' : 'hidden'} w-[296px] flex-col bg-[#18181C] border border-[#FFFFFF14] rounded-[10px]`}
-                      key={index}
-                    >
+                      key={index}>
                       <Image
                         src={item.imgSrc}
-                        alt="NFT Preview"
+                        alt='NFT Preview'
                         width={317}
                         height={217}
-                        className="rounded-t-[10px]"
+                        className='rounded-t-[10px]'
                       />
 
-                      <div className="flex flex-col items-center justify-between bg-[#111115] border border-[#FFFFFF0D] px-3 py-3 rounded-b-[10px] gap-3">
-                        <div className="flex items-center justify-between w-full">
-                          <div className="flex flex-col items-start">
-                            <p className="text-[11px] text-[#999999]">Artist</p>
-                            <p className="text-white text-sm font-semibold">
-                              {item.artist}
-                            </p>
+                      <div className='flex flex-col items-center justify-between bg-[#111115] border border-[#FFFFFF0D] px-3 py-3 rounded-b-[10px] gap-3'>
+                        <div className='flex items-center justify-between w-full'>
+                          <div className='flex flex-col items-start'>
+                            <p className='text-[11px] text-[#999999]'>Artist</p>
+                            <p className='text-white text-sm font-semibold'>{item.artist}</p>
                           </div>
-                          <div className="flex flex-col items-end">
-                            <p className="text-[11px] text-[#999999]">Price</p>
-                            <p className="text-white text-sm font-semibold">
+                          <div className='flex flex-col items-end'>
+                            <p className='text-[11px] text-[#999999]'>Price</p>
+                            <p className='text-white text-sm font-semibold'>
                               {item.price + ' ' + 'ETH'}
                             </p>
                           </div>
                         </div>
 
-                        <div className="flex w-full items-center justify-between pt-3 border-t border-[#353538]">
-                          <div className="flex items-center gap-1">
+                        <div className='flex w-full items-center justify-between pt-3 border-t border-[#353538]'>
+                          <div className='flex items-center gap-1'>
                             <LikeIcon
                               className={`w-4 h-4 ${item.isLiked ? 'stroke-none fill-[#CFF073]' : 'stroke-white fill-none'}`}
                               onClick={() => toggleLike(index)}
                             />
-                            <p className="text-xs text-white font-normal">
-                              {item.isLiked
-                                ? item.likeCount + 1
-                                : item.likeCount}
+                            <p className='text-xs text-white font-normal'>
+                              {item.isLiked ? item.likeCount + 1 : item.likeCount}
                             </p>
                           </div>
 
                           <Button
-                            variant="default"
+                            variant='default'
                             className={`${item.isHidden ? 'outline outline-1 outline-[#CFF073] bg-transparent text-[#CFF073]' : 'bg-[#CFF073] text-[#111115]'} px-3 py-[6px] h-fit text-[10px] font-medium`}
-                            onClick={() => toggleHidden(index)}
-                          >
+                            onClick={() => toggleHidden(index)}>
                             {item.isHidden ? 'Unhide' : 'Hide'}
                           </Button>
                         </div>
@@ -446,55 +415,49 @@ export default function Created() {
                   ))}
                 </div>
               </TabsContent>
-              <TabsContent value="Art">
-                <div className="flex flex-wrap gap-4">
+              <TabsContent value='Art'>
+                <div className='flex flex-wrap gap-4'>
                   {items.map((item, index) => (
                     <div
                       className={`${item.isArt ? 'flex' : 'hidden'} w-[296px] flex-col bg-[#18181C] border border-[#FFFFFF14] rounded-[10px]`}
-                      key={index}
-                    >
+                      key={index}>
                       <Image
                         src={item.imgSrc}
-                        alt="NFT Preview"
+                        alt='NFT Preview'
                         width={317}
                         height={217}
-                        className="rounded-t-[10px]"
+                        className='rounded-t-[10px]'
                       />
 
-                      <div className="flex flex-col items-center justify-between bg-[#111115] border border-[#FFFFFF0D] px-3 py-3 rounded-b-[10px] gap-3">
-                        <div className="flex items-center justify-between w-full">
-                          <div className="flex flex-col items-start">
-                            <p className="text-[11px] text-[#999999]">Artist</p>
-                            <p className="text-white text-sm font-semibold">
-                              {item.artist}
-                            </p>
+                      <div className='flex flex-col items-center justify-between bg-[#111115] border border-[#FFFFFF0D] px-3 py-3 rounded-b-[10px] gap-3'>
+                        <div className='flex items-center justify-between w-full'>
+                          <div className='flex flex-col items-start'>
+                            <p className='text-[11px] text-[#999999]'>Artist</p>
+                            <p className='text-white text-sm font-semibold'>{item.artist}</p>
                           </div>
-                          <div className="flex flex-col items-end">
-                            <p className="text-[11px] text-[#999999]">Price</p>
-                            <p className="text-white text-sm font-semibold">
+                          <div className='flex flex-col items-end'>
+                            <p className='text-[11px] text-[#999999]'>Price</p>
+                            <p className='text-white text-sm font-semibold'>
                               {item.price + ' ' + 'ETH'}
                             </p>
                           </div>
                         </div>
 
-                        <div className="flex w-full items-center justify-between pt-3 border-t border-[#353538]">
-                          <div className="flex items-center gap-1">
+                        <div className='flex w-full items-center justify-between pt-3 border-t border-[#353538]'>
+                          <div className='flex items-center gap-1'>
                             <LikeIcon
                               className={`w-4 h-4 ${item.isLiked ? 'stroke-none fill-[#CFF073]' : 'stroke-white fill-none'}`}
                               onClick={() => toggleLike(index)}
                             />
-                            <p className="text-xs text-white font-normal">
-                              {item.isLiked
-                                ? item.likeCount + 1
-                                : item.likeCount}
+                            <p className='text-xs text-white font-normal'>
+                              {item.isLiked ? item.likeCount + 1 : item.likeCount}
                             </p>
                           </div>
 
                           <Button
-                            variant="default"
+                            variant='default'
                             className={`${item.isHidden ? 'outline outline-1 outline-[#CFF073] bg-transparent text-[#CFF073]' : 'bg-[#CFF073] text-[#111115]'} px-3 py-[6px] h-fit text-[10px] font-medium`}
-                            onClick={() => toggleHidden(index)}
-                          >
+                            onClick={() => toggleHidden(index)}>
                             {item.isHidden ? 'Unhide' : 'Hide'}
                           </Button>
                         </div>

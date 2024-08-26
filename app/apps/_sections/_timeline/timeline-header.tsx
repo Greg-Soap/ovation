@@ -1,4 +1,6 @@
 import Image from 'next/image'
+import HamburgerMenu from '../../_components/_timeline/hamburger'
+import Hamburger from '../../_components/_timeline/hamburger'
 
 export default function TimelineHeader() {
   const sunIcon = (
@@ -20,22 +22,26 @@ export default function TimelineHeader() {
   )
 
   return (
-    <header className="w-full hidden  lg:flex items-center h-[90px] border-r border-b border-[#1A1A1A] bg-[#111115] sticky top-0  max1440px]">
-      <nav className="flex items-center gap-3">
-        <div className="lg:w-[310px] flex items-center h-[90px] border-r border-[#1A1A1A]">
-          <Image
-            src="/assets/images/logo/logo.png"
-            alt="Logo"
-            width={220}
-            height={100}
-          />
+    <header className="w-full flex items-center h-[90px] border-r border-b border-[#1A1A1A] bg-[#111115] sticky top-0  max1440px]">
+      <nav className="flex items-center justify-between  w-full pl-2 pr-2 lg:p-0">
+        <div className="flex w-full">
+          <div className="lg:w-[310px] hidden xl:flex items-center h-[90px] border-r border-[#1A1A1A]">
+            <Image
+              src="/assets/images/logo/logo.png"
+              alt="Logo"
+              width={220}
+              height={100}
+            />
+          </div>
+          <div className="flex items-center gap-3 p-2">
+            {sunIcon}
+            <p className="text-[#CCCCCC] text-base lg:text-xl font-medium">
+              Good Morning, John
+            </p>
+          </div>
         </div>
-        <div className="flex items-center gap-3">
-          {sunIcon}
-          <p className="text-[#CCCCCC] text-xl font-medium">
-            Good Morning, John
-          </p>
-        </div>
+
+        <Hamburger />
       </nav>
     </header>
   )

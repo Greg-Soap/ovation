@@ -86,7 +86,7 @@ const extendedPartners = [
   },
   {
     imgSrc: 'assets/images/extended/extended6.png',
-    name: 'ArchwayHQ',
+    name: 'Archway Foundation',
     position: 'Layer 1 Chain',
   },
   {
