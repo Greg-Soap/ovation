@@ -1,19 +1,24 @@
+'use client'
 import React from 'react'
+import { ErrorBoundary, type FallbackProps } from 'react-error-boundary'
 import LoginForm from './client'
 import AuthLayout from '../auth-layout'
-// const LoginPage = () => {
-// //   return <LoginForm />
-// // }
 
-// LoginPage.getLayout = function getLayout(page: React.ReactElement) {
-//   return <AuthLayout showAuthLeftOptional={true}>{page}</AuthLayout>
-// }
-export default function page() {
+function ErrorFallback({ error }: FallbackProps) {
   return (
-    <AuthLayout showAuthLeftOptional={true}>
-      <LoginForm />
-    </AuthLayout>
+    <div>
+      <h2>Something went wrong:</h2>
+      <pre>{error.message}</pre>
+    </div>
   )
 }
 
-// export default LoginPage
+export default function Page() {
+  return (
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <AuthLayout showAuthLeftOptional={true}>
+        <LoginForm />
+      </AuthLayout>
+    </ErrorBoundary>
+  )
+}
