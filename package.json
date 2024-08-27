@@ -27,10 +27,12 @@
 		"@radix-ui/react-slot": "^1.0.2",
 		"@radix-ui/react-tabs": "^1.1.0",
 		"@react-oauth/google": "^0.12.1",
+		"@walletconnect/web3-provider": "^1.8.0",
 		"axios": "^1.7.4",
 		"class-variance-authority": "^0.7.0",
 		"clsx": "^2.1.1",
 		"emoji-picker-react": "^4.11.1",
+		"ethers": "^6.13.2",
 		"framer-motion": "^11.2.10",
 		"iconsax-react": "^0.0.8",
 		"input-otp": "^1.2.4",
@@ -46,6 +48,7 @@
 		"sonner": "^1.5.0",
 		"tailwind-merge": "^2.3.0",
 		"tailwindcss-animate": "^1.0.7",
+		"web3modal": "^1.9.12",
 		"zod": "^3.23.8"
 	},
 	"devDependencies": {
