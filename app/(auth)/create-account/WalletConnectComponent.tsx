@@ -32,7 +32,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
                 walletconnect: {
                     package: WalletConnectProvider,
                     options: {
-                        infuraId: 'OVATION_INFURA_ID', // Replace with ovation Infura ID
+                        infuraId: "31d3bc64338c4a03b3903dc695fe28b8",
                     },
                 },
             },
