@@ -10,6 +10,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Popover } from '@/components/ui/popover'
 import { PopoverContent, PopoverTrigger } from '@radix-ui/react-popover'
+import { ArrowLeft } from 'iconsax-react'
 
 interface FriendProps {
   friendDisplayPicture: string
@@ -23,7 +24,7 @@ interface FriendProps {
   isOpened: boolean
 }
 
-export default function MessageContainer({ friend }: any) {
+export default function MessageContainer({ friend, goBack }: any) {
   const [sendStatus, setSendStatus] = useState<boolean>(true)
   const [message, setMessage] = useState<string>('')
 
@@ -51,7 +52,7 @@ export default function MessageContainer({ friend }: any) {
             <p className="text-[#F8F8FF] text-xl font-semibold">
               Select Message
             </p>
-            <p className="text-[#E6E6E6] text-sm">
+            <p className="text-[#E6E6E6] text-[11px]">
               Choose from previous conversation or start a new one below
             </p>
           </div>
@@ -69,69 +70,74 @@ export default function MessageContainer({ friend }: any) {
 
   return (
     <section
-      className={`${friend ? 'flex' : 'hidden lg:flex'} w-full h-[100vh] lg:h-full lg:col-span-2  flex-col items-center justify-center bg-[#111115] other-link overflow-auto`}
+      className={`${friend ? 'flex' : 'hidden lg:flex'} w-full h-[100vh] lg:h-full lg:col-span-2  flex-col items-center justify-center bg-[#111115] other-link overflow-scroll`}
     >
-      <div className="w-full border-b border-[#1A1A1A] py-9 flex flex-col items-center gap-4 h-fit">
+      <div className="flex lg:hidden bg-[rgba(17,17,21,0.8)] items-center gap-4 w-full p-5 absolute top-0">
+        <ArrowLeft color="white" variant="Outline" size={35} onClick={goBack} />
+        <p className="text-sm font-medium text-[#F8F8FF]">
+          {friend.displayName}
+        </p>
+      </div>
+
+      <div className="w-full border-b border-[#1A1A1A] py-9 flex flex-col items-center gap-4 h-fit mt-[250px]">
         <Image
           src={friend.friendDisplayPicture}
           alt="User Display Picture"
-          width={99}
-          height={99}
+          width={81}
+          height={81}
         />
 
         <div className="flex flex-col gap-1 w-fit items-center">
-          <p className="text-white text-2xl font-semibold w-fit leading-[30px] text-center">
+          <p className="text-[#F8F8FF] text-xl font-semibold w-fit leading-[30px] text-center">
             {friend.displayName}
           </p>
-          <p className="text-lg text-[#808080] w-fit leading-[27px]">
-            {friend.userName}
-          </p>
+          <p className="text-sm text-[#808080] w-fit">{friend.userName}</p>
         </div>
 
-        <p className="text-sm text-[#E6E6E6] text-center max-w-[70%]">
+        <p className="text-xs text-[#E6E6E6] text-center max-w-[70%]">
           {friend.biography}
         </p>
 
         <div className="flex items-center gap-6">
-          <p className="flex items-center gap-[9px] text-lg text-[#E6E6E6] font-semibold">
+          <p className="flex items-center gap-[9px] text-sm text-[#E6E6E6] font-semibold">
             {friend.followingCount}{' '}
             <span className="text-[#808080] font-medium">Following</span>
           </p>
 
-          <p className="flex items-center gap-[9px] text-lg text-[#E6E6E6] font-semibold">
+          <p className="flex items-center gap-[9px] text-sm text-[#E6E6E6] font-semibold">
             {friend.followerCount + 'K'}
             <span className="text-[#808080] font-medium">Followers</span>
           </p>
         </div>
       </div>
 
-      <div className="w-full flex flex-col p-[30px] gap-[35px]">
-        <div className="w-full flex flex-col items-end">
-          <p className="px-5 py-[10px] bg-[#1D3E00] rounded-s-[20px] rounded-tr-[20px] text-white font-medium max-w-[85%] lg:max-w-[50%]">
+      <div className="w-full flex flex-col px-3 pt-[30px] pb-[100px] md:px-[30px] md:pt-[30px] md:pb-[90px] xir:p-[30px] gap-5 md:gap-[35px]">
+        <div className="w-full flex flex-col gap-1 items-end">
+          <p className="px-5 py-[10px] bg-[#1D3E00] rounded-s-[20px] rounded-tr-[20px] text-[#F8F8FF] text-sm font-medium max-w-[85%] lg:max-w-[50%]">
             Hello, how are you doing?
           </p>
-          <p className="text-sm text-[#808080]">08:15 AM</p>
+          <p className="text-[11px] text-[#808080]">08:15 AM</p>
         </div>
 
-        <div className="w-full flex flex-col items-start">
-          <p className="px-5 py-[10px] bg-[#232227] rounded-e-[20px] rounded-tl-[20px] text-white font-medium max-w-[85%] lg:max-w-[50%]">
+        <div className="w-full flex flex-col gap-1 items-start">
+          <p className="px-5 py-[10px] bg-[#232227] rounded-e-[20px] rounded-tl-[20px] text-[#F8F8FF] text-sm font-medium max-w-[85%] lg:max-w-[50%]">
             Hello, how are you doing?
           </p>
-          <p className="text-sm text-[#808080]">08:15 AM</p>
+          <p className="text-[11px] text-[#808080]">08:15 AM</p>
         </div>
 
-        <div className="w-full flex flex-col items-end">
-          <p className="px-5 py-[10px] bg-[#1D3E00] rounded-s-[20px] rounded-tr-[20px] text-white font-medium max-w-[85%] lg:max-w-[50%]">
+        <div className="w-full flex flex-col gap-1 items-end">
+          <p className="px-5 py-[10px] bg-[#1D3E00] rounded-s-[20px] rounded-tr-[20px] text-[#F8F8FF] text-sm font-medium max-w-[85%] lg:max-w-[50%]">
             I have a question about the return policy for a product I purchased.
           </p>
-          <p className="text-sm text-[#808080]">08:15 AM</p>
+          <p className="text-[11px] text-[#808080]">08:15 AM</p>
         </div>
 
-        <div className="w-full flex flex-col items-start">
+        <div className="w-full flex flex-col gap-1 items-start">
           <div className="flex items-center h-auto gap-2 px-5 py-[10px] bg-[#232227] rounded-e-[20px] rounded-tl-[20px]">
-            <div className="bg-[#698A0D] w-[15px] h-[15px] rounded-full animate-bounce"></div>
-            <div className="bg-[#698A0D] w-[15px] h-[15px] rounded-full animate-bounce delay-300"></div>
-            <div className="bg-[#698A0D] w-[15px] h-[15px] rounded-full animate-bounce delay-500"></div>
+            <div className="bg-[#698A0D] w-3 h-3 rounded-full animate-bounce"></div>
+            <div className="bg-[#698A0D] w-3 h-3 rounded-full animate-bounce delay-300"></div>
+            <div className="bg-[#698A0D] w-3 h-3 rounded-full animate-bounce delay-500"></div>
           </div>
         </div>
       </div>

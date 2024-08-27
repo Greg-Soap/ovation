@@ -2,11 +2,21 @@
 import Image from 'next/image'
 import React from 'react'
 import { usePathname, useRouter } from 'next/navigation'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { FeedbackModal } from './feedback'
-import { LocationDiscover, Profile, Setting2, Message, NotificationBing } from 'iconsax-react'
+import {
+  LocationDiscover,
+  Profile,
+  Setting2,
+  Message,
+  NotificationBing,
+} from 'iconsax-react'
 import { MoreSquare } from 'iconsax-react'
 
 const menuItems = [
@@ -14,26 +24,31 @@ const menuItems = [
     icon: LocationDiscover,
     text: 'Discover',
     path: '/apps/discover',
+    mobile: true,
   },
   {
     icon: Profile,
     text: 'Profile',
     path: '/apps/profile',
+    mobile: false,
   },
   {
     icon: Setting2,
     text: 'Settings',
     path: '/apps/settings',
+    mobile: false,
   },
   {
     icon: Message,
     text: 'Messages',
     path: '/apps/messages',
+    mobile: true,
   },
   {
     icon: NotificationBing,
     text: 'Notification',
     path: '/apps/notification',
+    mobile: true,
   },
 ]
 
@@ -46,23 +61,61 @@ export default function Aside() {
   }
 
   return (
-    <aside className='hidden xl:flex flex-col items-center gap-7 pt-4 min-w-[310px] w-[310px] border-r border-[#1A1A1A] sticky top-0 overflow-scroll bg-[#111115]'>
-      <div className='w-[85%] flex flex-col h-fit gap-2'>
+    <aside className="fixed flex flex-col items-center justify-between lg:justify-start lg:gap-7 lg:pt-4 min-w-[310px] w-full lg:w-[310px] lg:border-r border-[#1A1A1A] other-link overflow-scroll bg-[#232227] lg:bg-[#111115] bottom-0">
+      <div className="hidden lg:flex w-[90%] items-center justify-between border border-[#333333] bg-[#18181C] p-3 rounded-[8px]">
+        <div className="flex items-center gap-[7px]">
+          <Image
+            src="/assets/images/timeline/Shape.png"
+            alt="User Display Picture"
+            width={28}
+            height={28}
+          />
+          <div className="flex flex-col">
+            <p className="text-xs font-semibold leading-5 text-white">
+              0xrxc.....d67579
+            </p>
+            <p className="text-[10px] leading-5 font-medium text-[#B3B3B3]">
+              2,000 &OVA
+            </p>
+          </div>
+        </div>
+        <Popover>
+          <PopoverTrigger className="p-1 rounded-full">
+            <MoreSquare size={24} color="white" variant="Outline" />
+          </PopoverTrigger>
+          <PopoverContent className="w-fit bg-[#232227] flex flex-col items-start border-none text-white text-base py-2">
+            <Button variant={'ghost'} className="py-[10px]">
+              Add an existing account
+            </Button>
+            <Button variant={'ghost'} className="py-[10px]">
+              Logout @pancake
+            </Button>
+          </PopoverContent>
+        </Popover>
+      </div>
+
+      <div className="lg:relative w-full h-fit lg:h-[550px] lg:w-[85%] flex flex-row lg:flex-col justify-between lg:justify-start px-6 gap-2">
         {menuItems.map((item, index) => {
           const isActive = currentPath.includes(item.path)
           const Icon = item.icon
 
           return (
             <Button
-              type='button'
-              className={`w-[90%] flex items-center justify-stretch gap-2 py-7 px-[30px] rounded-[50px] hover:bg-[#18181C] focus:bg-[#232227] group transition-all duration-300 ${
-                isActive ? 'bg-[#232227]' : 'bg-transparent'
+              type="button"
+              className={`w-fit lg:w-[90%] ${item.mobile ? 'flex' : 'hidden lg:flex'} items-center justify-start gap-2 p-3 lg:py-7 lg:px-[30px] rounded-[50px] hover:bg-[#18181C] focus:bg-[#232227] group transition-all duration-300 ${
+                isActive ? 'bg-transparent lg:bg-[#232227]' : 'bg-transparent'
               }`}
               key={index}
-              onClick={() => handleClick(item.path)}>
-              <Icon size={24} color='white' variant={isActive ? 'Bold' : 'Outline'} />
+              onClick={() => handleClick(item.path)}
+            >
+              <Icon
+                size={24}
+                color={`white`}
+                variant={isActive ? 'Bold' : 'Outline'}
+              />
               <p
-                className={`flex items-center gap-2 text-[18px] group-hover:text-white group-focus:text-[#CCCCCC] ${isActive ? 'text-white font-medium' : 'text-[#B3B3B3]'}`}>
+                className={`hidden lg:flex items-center gap-2 text-lg group-hover:text-white group-focus:text-[#CCCCCC] ${isActive ? 'text-white font-medium' : 'text-[#B3B3B3]'}`}
+              >
                 {item.text}
               </p>
             </Button>
@@ -70,44 +123,29 @@ export default function Aside() {
         })}
       </div>
 
-      <div className='flex flex-col items-center gap-10 w-[90%] absolute bottom-0 p py-5 bg-[#111115]'>
-        <div className='flex w-full items-center justify-between'>
-          <div className='flex items-center gap-2'>
-            <Image
-              src='/assets/images/timeline/Shape.png'
-              alt='User Display Picture'
-              width={40}
-              height={40}
-            />
-            <div className='flex flex-col'>
-              <p className='text-base font-semibold leading-5 text-white'>0xrxc.....d67579</p>
-              <p className='text-xs leading-5 font-medium text-[#B3B3B3]'>2,000 &OVA</p>
-            </div>
-          </div>
-          <Popover>
-            <PopoverTrigger className='p-1 rounded-full'>
-              <MoreSquare size={24} color='white' variant='Outline' />
-            </PopoverTrigger>
-            <PopoverContent className='w-fit bg-[#232227] flex flex-col items-start border-none text-white text-base py-2'>
-              <Button variant={'ghost'} className='py-[10px]'>
-                Add an existing account
-              </Button>
-              <Button variant={'ghost'} className='py-[10px]'>
-                Logout @pancake
-              </Button>
-            </PopoverContent>
-          </Popover>
+      <div className="hidden lg:flex flex-col items-center gap-4 w-[90%] sticky bottom-3 px-[5px] pt-5 pb-1.5 bg-[#18181C] border border-[#29292F] rounded-[10px] mb-3">
+        <img
+          src="/assets/images/aside-absolute.png"
+          alt="Message"
+          className="absolute -top-4 w-[33px] h-[33px]"
+        />
+        <div className="w-full flex flex-col items-center gap-0.5">
+          <p className="text-[#F8F8FF] text-xs font-medium">Help us improve</p>
+          <p className="text-[#B3B3B3] text-[9px] text-center">
+            Your input will help us improve and create an even better experience
+            for everyone. Thank you for being a part of this journey!
+          </p>
         </div>
-
         <Dialog>
           <DialogTrigger asChild>
             <Button
               variant={'default'}
-              className='text-[#F8F8FF] text-xs font-semibold py-2 h-fit w-full bg-[#4865FC]'>
+              className="text-[#0B0A10] text-xs font-semibold py-2 px-3 w-full h-[30px] bg-[#CFF073] rounded-[8px]"
+            >
               Submit a feedback
             </Button>
           </DialogTrigger>
-          <DialogContent className='flex flex-col items-center justify-center p-0 m-0 w-fit h-fit overflow-auto border-none'>
+          <DialogContent className="flex flex-col items-center justify-center p-0 m-0 w-fit h-fit overflow-auto border-none">
             <FeedbackModal />
           </DialogContent>
         </Dialog>
