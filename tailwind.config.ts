@@ -18,9 +18,6 @@ const config = {
         lg: '1024px',
       },
     },
-    screens: {
-      xir: '802px',
-    },
     extend: {
       boxShadow: {
         top: '0px -75px 15px 30px rgba(189, 255, 0, 0.09)',
@@ -33,6 +30,9 @@ const config = {
         info2: '0px 5.68px 18.2px 0px #AFC76B4D',
         info3: '0px 5.16px 16.55px 0px #AFC76B40',
         info4: '0px 4.7px 15.06px 0px #AFC76B1A',
+      },
+      screens: {
+        xir: '802px',
       },
       fontFamily: {
         heading: ['Istok Web', 'sans-serif'],

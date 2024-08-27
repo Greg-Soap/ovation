@@ -61,7 +61,7 @@ export default function Aside() {
   }
 
   return (
-    <aside className="fixed flex flex-col items-center justify-between lg:justify-start lg:gap-7 lg:pt-4 min-w-[310px] w-full lg:w-[310px] lg:border-r border-[#1A1A1A] other-link overflow-scroll bg-[#232227] lg:bg-[#111115] bottom-0">
+    <aside className="fixed lg:relative flex flex-col items-center justify-between lg:justify-start lg:gap-7 lg:pt-4 min-w-[310px] w-full lg:w-[310px] lg:border-r border-[#1A1A1A] other-link overflow-scroll bg-[#232227] lg:bg-[#111115] bottom-0">
       <div className="hidden lg:flex w-[90%] items-center justify-between border border-[#333333] bg-[#18181C] p-3 rounded-[8px]">
         <div className="flex items-center gap-[7px]">
           <Image
@@ -94,7 +94,7 @@ export default function Aside() {
         </Popover>
       </div>
 
-      <div className="lg:relative w-full h-fit lg:h-[550px] lg:w-[85%] flex flex-row lg:flex-col justify-between lg:justify-start px-6 gap-2">
+      <div className="w-full h-fit lg:h-[550px] lg:w-[85%] flex flex-row lg:flex-col justify-between lg:justify-start px-6 gap-2">
         {menuItems.map((item, index) => {
           const isActive = currentPath.includes(item.path)
           const Icon = item.icon
@@ -102,7 +102,7 @@ export default function Aside() {
           return (
             <Button
               type="button"
-              className={`w-fit lg:w-[90%] ${item.mobile ? 'flex' : 'hidden lg:flex'} items-center justify-start gap-2 p-3 lg:py-7 lg:px-[30px] rounded-[50px] hover:bg-[#18181C] focus:bg-[#232227] group transition-all duration-300 ${
+              className={`w-fit lg:w-full ${item.mobile ? 'flex' : 'hidden lg:flex'} items-center justify-start gap-2 p-3 lg:py-7 lg:px-[30px] rounded-[50px] hover:bg-[#18181C] focus:bg-[#232227] group transition-all duration-300 ${
                 isActive ? 'bg-transparent lg:bg-[#232227]' : 'bg-transparent'
               }`}
               key={index}
