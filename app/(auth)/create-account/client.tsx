@@ -274,10 +274,10 @@ export default function AccountForm({ setOptionalLeft }: Props) {
     return (
       <div>
         <WalletConnectComponent
-        onWalletConnected={handleWalletConnected}
-        onWalletDisconnected={handleWalletDisconnected}
-        setPage={setPage}
-      />
+          onWalletConnected={handleWalletConnected}
+          onWalletDisconnected={handleWalletDisconnected}
+          setPage={setPage}
+        />
       </div>
       // <div className="flex flex-col gap-7">
       //   <div className="grid grid-cols-2 gap-4">

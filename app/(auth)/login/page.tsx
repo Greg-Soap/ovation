@@ -18,11 +18,11 @@ const clientId = process.env.GOOGLE_CLIENT_ID as string;
 export default function Page() {
   return (
     <GoogleOAuthProvider clientId='200915400648-d5tpcs81rgjoqgac6idku39bi1dd5ga6.apps.googleusercontent.com'>
-    <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <AuthLayout showAuthLeftOptional={true}>
-        <LoginForm />
-      </AuthLayout>
-    </ErrorBoundary>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <AuthLayout showAuthLeftOptional={true}>
+          <LoginForm />
+        </AuthLayout>
+      </ErrorBoundary>
     </GoogleOAuthProvider>
   )
 }
