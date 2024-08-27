@@ -72,7 +72,7 @@ export default function MessageContainer({ friend, goBack }: any) {
     <section
       className={`${friend ? 'flex' : 'hidden lg:flex'} w-full h-[100vh] lg:h-full lg:col-span-2  flex-col items-center justify-center bg-[#111115] other-link overflow-scroll`}
     >
-      <div className="flex items-center gap-4 w-full p-5 absolute top-0">
+      <div className="flex lg:hidden bg-[rgba(17,17,21,0.8)] items-center gap-4 w-full p-5 absolute top-0">
         <ArrowLeft color="white" variant="Outline" size={35} onClick={goBack} />
         <p className="text-sm font-medium text-[#F8F8FF]">
           {friend.displayName}
