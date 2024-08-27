@@ -111,7 +111,7 @@ export default function MessageContainer({ friend, goBack }: any) {
         </div>
       </div>
 
-      <div className="w-full flex flex-col p-[30px] gap-[35px]">
+      <div className="w-full flex flex-col px-3 pt-[30px] pb-[100px] md:px-[30px] md:pt-[30px] md:pb-[90px] xir:p-[30px] gap-5 md:gap-[35px]">
         <div className="w-full flex flex-col gap-1 items-end">
           <p className="px-5 py-[10px] bg-[#1D3E00] rounded-s-[20px] rounded-tr-[20px] text-[#F8F8FF] text-sm font-medium max-w-[85%] lg:max-w-[50%]">
             Hello, how are you doing?
