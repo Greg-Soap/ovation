@@ -33,6 +33,7 @@ const config = {
       },
       screens: {
         xir: '802px',
+        xl: '1280px',
       },
       fontFamily: {
         heading: ['Istok Web', 'sans-serif'],

@@ -15,7 +15,7 @@ const CircleProgress = React.forwardRef<
   <ProgressPrimitive.Root
     ref={ref}
     className={cn(
-      'relative h-[60px] w-[60px] overflow-hidden rounded-full bg-primary/20 flex justify-center items-center',
+      'relative h-[41px] w-[41px] overflow-hidden rounded-full bg-primary/20 flex justify-center items-center',
       className,
     )}
     {...props}
@@ -24,7 +24,7 @@ const CircleProgress = React.forwardRef<
     }}
   >
     <div>
-      <img src={imgSrc} alt="illustration" className="w-[30px] h-[30px]" />
+      <img src={imgSrc} alt="illustration" className="w-6 h-6" />
     </div>
   </ProgressPrimitive.Root>
 ))

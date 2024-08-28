@@ -4,7 +4,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import Image from 'next/image'
@@ -33,34 +39,44 @@ export default function ComingSoon() {
   }
 
   return (
-    <div className='w-full flex items-center justify-center mt-12'>
-      <div className='flex flex-col items-center justify-center px-11 py-7 rounded-[20px] gap-[52px]'>
-        <p className='text-[28px] text-white font-semibold'>COMING SOON.....</p>
+    <div className="w-full flex items-center justify-center mt-12">
+      <div className="flex flex-col items-center justify-center px-11 py-7 rounded-[20px] gap-[52px]">
+        <p className="text-lg text-[#F8F8FF] font-semibold">COMING SOON.....</p>
 
         <Image
-          src='/assets/images/profile/soon.png'
-          alt='Coming soon illustration'
-          width={175}
-          height={107}
+          src="/assets/images/profile/soon.png"
+          alt="Coming soon illustration"
+          width={210}
+          height={129}
         />
 
-        <div className='flex flex-col gap-5 items-center'>
-          <p className={`${isSubmitted ? 'hidden' : 'flex'} text-center text-xl text-[#E6E6E6]`}>
+        <div className="flex flex-col gap-4 items-center">
+          <p
+            className={`${isSubmitted ? 'hidden' : 'flex'} text-center text-[#E6E6E6]`}
+          >
             Subscribe below to be notified of when it goes live
           </p>
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className={`${isSubmitted ? 'hidden' : ''} space-y-8 w-full border border-[#FFFFFF33] rounded-[500px] bg-[#FFFFFF0D]`}>
+              className={`${isSubmitted ? 'hidden' : ''} space-y-4 w-full border border-[#FFFFFF33] rounded-[500px] bg-[#FFFFFF0D]`}
+            >
               <FormField
                 control={form.control}
-                name='email'
+                name="email"
                 render={({ field }) => (
-                  <FormItem className='relative'>
+                  <FormItem className="relative">
                     <FormControl>
-                      <div className='relative'>
-                        <Input placeholder='Your email address' {...field} />
-                        <Button className='absolute top-[20%] right-[15px]' type='submit'>
+                      <div className="relative flex flex-row items-center px-2">
+                        <Input
+                          placeholder="Your email address"
+                          {...field}
+                          className="text-sm h-fit p-4"
+                        />
+                        <Button
+                          className="text-[10px] font-semibold text-[#111115] px-3 py-2 h-fit"
+                          type="submit"
+                        >
                           Subscribe
                         </Button>
                       </div>
@@ -71,7 +87,7 @@ export default function ComingSoon() {
               />
             </form>
           </Form>
-          <p className='text-sm text-[#999999] text-center'>
+          <p className="text-xs text-[#999999] text-center">
             {isSubmitted
               ? 'Your response has been recorded, we will notify you when we go live'
               : 'Be among the special ones to get early notification when we launch'}
