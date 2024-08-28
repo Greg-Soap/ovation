@@ -82,7 +82,9 @@ export default function LoginForm() {
 
         <GoogleLogin
           onSuccess={handleSuccess}
+          //@ts-ignore
           onError={handleError}
+          //@ts-ignore
           render={({ onClick }) => (
             <Button onClick={onClick} className="p-4 text-[10px] font-semibold md:text-base w-[48%] bg-white flex gap-4">
               {/* <Image src={Google} alt="google image" /> */}
