@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 // import Web3 from 'web3';
 import Web3Modal from 'web3modal';
 import WalletConnectProvider from '@walletconnect/web3-provider';
-import { ethers } from 'ethers';
+import { BrowserProvider } from 'ethers';
 import walletData from './_data';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -14,6 +14,8 @@ interface WalletConnectComponentProps {
     onWalletConnected?: (account: string) => void;
     onWalletDisconnected?: () => void;
 }
+
+const infuraId = process.env.NEXT_PUBLIC_INFURA_ID as string;
 
 const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
     setPage,
@@ -32,7 +34,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
                 walletconnect: {
                     package: WalletConnectProvider,
                     options: {
-                        infuraId: "31d3bc64338c4a03b3903dc695fe28b8",
+                        infuraId: { infuraId },
                     },
                 },
             },
@@ -43,11 +45,11 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
 
     const connectMetaMask = async () => {
         if ((window as any).ethereum) {
-            const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+            const provider = new BrowserProvider(window.ethereum);
             try {
                 await provider.send('eth_requestAccounts', []);
-                const signer = provider.getSigner();
-                const account = await signer.getAddress();
+                const signer = await provider.getSigner();
+                const account = signer.address;
                 setProvider(provider);
                 setAccount(account);
                 if (onWalletConnected) onWalletConnected(account);
@@ -65,9 +67,9 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
 
         try {
             const instance = await web3Modal.connectTo('walletconnect'); // Direct connection to WalletConnect
-            const provider = new ethers.providers.Web3Provider(instance);
-            const signer = provider.getSigner();
-            const account = await signer.getAddress();
+            const provider = new BrowserProvider(instance);
+            const signer = await provider.getSigner();
+            const account = signer.address;
             setProvider(provider);
             setAccount(account);
             if (onWalletConnected) onWalletConnected(account);
@@ -95,10 +97,10 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
     const connectOKXWallet = async () => {
         if ((window as any).okexchain) {
             try {
-                const provider = new ethers.providers.Web3Provider((window as any).okexchain);
+                const provider = new BrowserProvider((window as any).okexchain);
                 await provider.send('eth_requestAccounts', []);
-                const signer = provider.getSigner();
-                const account = await signer.getAddress();
+                const signer = await provider.getSigner();
+                const account = signer.address;
                 setProvider(provider);
                 setAccount(account);
                 if (onWalletConnected) onWalletConnected(account);
@@ -114,10 +116,10 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
     const connectTrustWallet = async () => {
         if ((window as any).ethereum && (window as any).ethereum.isTrust) {
             try {
-                const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+                const provider = new BrowserProvider((window as any).ethereum);
                 await provider.send('eth_requestAccounts', []);
-                const signer = provider.getSigner();
-                const account = await signer.getAddress();
+                const signer = await provider.getSigner();
+                const account = signer.address;
                 setProvider(provider);
                 setAccount(account);
                 if (onWalletConnected) onWalletConnected(account);
@@ -133,10 +135,10 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
     const connectBinanceChainWallet = async () => {
         if ((window as any).BinanceChain) {
             try {
-                const provider = new ethers.providers.Web3Provider((window as any).BinanceChain);
+                const provider = new BrowserProvider((window as any).BinanceChain);
                 await provider.send('eth_requestAccounts', []);
-                const signer = provider.getSigner();
-                const account = await signer.getAddress();
+                const signer = await provider.getSigner();
+                const account = signer.address;
                 setProvider(provider);
                 setAccount(account);
                 if (onWalletConnected) onWalletConnected(account);
@@ -152,10 +154,10 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
     const connectCoin98Wallet = async () => {
         if ((window as any).coin98) {
             try {
-                const provider = new ethers.providers.Web3Provider((window as any).coin98);
+                const provider = new BrowserProvider((window as any).coin98);
                 await provider.send('eth_requestAccounts', []);
-                const signer = provider.getSigner();
-                const account = await signer.getAddress();
+                const signer = await provider.getSigner();
+                const account = signer.address;
                 setProvider(provider);
                 setAccount(account);
                 if (onWalletConnected) onWalletConnected(account);
@@ -171,10 +173,10 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
     const connectOperaWallet = async () => {
         if ((window as any).ethereum && (window as any).ethereum.isOpera) {
             try {
-                const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+                const provider = new BrowserProvider((window as any).ethereum);
                 await provider.send('eth_requestAccounts', []);
-                const signer = provider.getSigner();
-                const account = await signer.getAddress();
+                const signer = await provider.getSigner();
+                const account = signer.address;
                 setProvider(provider);
                 setAccount(account);
                 if (onWalletConnected) onWalletConnected(account);
@@ -190,10 +192,10 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
     const connectBraveWallet = async () => {
         if ((window as any).ethereum && (window as any).ethereum.isBraveWallet) {
             try {
-                const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+                const provider = new BrowserProvider((window as any).ethereum);
                 await provider.send('eth_requestAccounts', []);
-                const signer = provider.getSigner();
-                const account = await signer.getAddress();
+                const signer = await provider.getSigner();
+                const account = signer.address;
                 setProvider(provider);
                 setAccount(account);
                 if (onWalletConnected) onWalletConnected(account);
@@ -209,10 +211,10 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
     const connectMathWallet = async () => {
         if ((window as any).ethereum && (window as any).ethereum.isMathWallet) {
             try {
-                const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+                const provider = new BrowserProvider((window as any).ethereum);
                 await provider.send('eth_requestAccounts', []);
-                const signer = provider.getSigner();
-                const account = await signer.getAddress();
+                const signer = await provider.getSigner();
+                const account = signer.address;
                 setProvider(provider);
                 setAccount(account);
                 if (onWalletConnected) onWalletConnected(account);
@@ -228,10 +230,10 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
     const connectSafePalWallet = async () => {
         if ((window as any).ethereum && (window as any).ethereum.isSafePal) {
             try {
-                const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+                const provider = new BrowserProvider((window as any).ethereum);
                 await provider.send('eth_requestAccounts', []);
-                const signer = provider.getSigner();
-                const account = await signer.getAddress();
+                const signer = await provider.getSigner();
+                const account = signer.address;
                 setProvider(provider);
                 setAccount(account);
                 if (onWalletConnected) onWalletConnected(account);
@@ -247,10 +249,10 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
     const connectTokenPocket = async () => {
         if ((window as any).ethereum && (window as any).ethereum.isTokenPocket) {
             try {
-                const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+                const provider = new BrowserProvider((window as any).ethereum);
                 await provider.send('eth_requestAccounts', []);
-                const signer = provider.getSigner();
-                const account = await signer.getAddress();
+                const signer = await provider.getSigner();
+                const account = signer.address;
                 setProvider(provider);
                 setAccount(account);
                 if (onWalletConnected) onWalletConnected(account);
@@ -282,8 +284,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
                             <Button
                                 key={wallet.id}
                                 onClick={() => setPage(4)}
-                                className="text-start flex justify-between p-2 md:p-[1rem] h-[58px] w-full md:w-[242px] text-xs md:text-sm font-semibold text-white border-[1px] border-solid bg-transparent border-[#353538]"
-                            >
+                                className="text-start flex justify-between p-2 md:p-[1rem] h-[58px] w-full md:w-[242px] text-xs md:text-sm font-semibold text-white border-[1px] border-solid bg-transparent border-[#353538]">
                                 <p> {wallet.name}</p>
                                 {/* <Image
                               className="w-6 h-6s"
