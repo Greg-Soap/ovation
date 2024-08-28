@@ -8,6 +8,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import arrow from '@/public/assets/images/arrow-right.png';
 import { Button } from '@/components/ui/button';
+import { chainIdToChainName } from '@/lib/helper-func';
 
 interface WalletConnectComponentProps {
     setPage: React.Dispatch<React.SetStateAction<number>>;
@@ -25,6 +26,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
     const [provider, setProvider] = useState<any>(null);
     const [web3Modal, setWeb3Modal] = useState<Web3Modal | null>(null);
     const [account, setAccount] = useState<string | null>(null);
+    const [chain, setChain] = useState<string | null>(null);
 
     useEffect(() => {
 
@@ -49,6 +51,10 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
             try {
                 await provider.send('eth_requestAccounts', []);
                 const signer = await provider.getSigner();
+
+                const network = await provider.getNetwork();
+                setChain(chainIdToChainName[Number(network.chainId)]);
+
                 const account = signer.address;
                 setProvider(provider);
                 setAccount(account);
@@ -69,6 +75,10 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
             const instance = await web3Modal.connectTo('walletconnect'); // Direct connection to WalletConnect
             const provider = new BrowserProvider(instance);
             const signer = await provider.getSigner();
+
+            const network = await provider.getNetwork();
+            setChain(chainIdToChainName[Number(network.chainId)]);
+
             const account = signer.address;
             setProvider(provider);
             setAccount(account);
@@ -100,6 +110,10 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
                 const provider = new BrowserProvider((window as any).okexchain);
                 await provider.send('eth_requestAccounts', []);
                 const signer = await provider.getSigner();
+
+                const network = await provider.getNetwork();
+                setChain(chainIdToChainName[Number(network.chainId)]);
+
                 const account = signer.address;
                 setProvider(provider);
                 setAccount(account);
@@ -119,6 +133,10 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
                 const provider = new BrowserProvider((window as any).ethereum);
                 await provider.send('eth_requestAccounts', []);
                 const signer = await provider.getSigner();
+
+                const network = await provider.getNetwork();
+                setChain(chainIdToChainName[Number(network.chainId)]);
+
                 const account = signer.address;
                 setProvider(provider);
                 setAccount(account);
@@ -138,6 +156,10 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
                 const provider = new BrowserProvider((window as any).BinanceChain);
                 await provider.send('eth_requestAccounts', []);
                 const signer = await provider.getSigner();
+
+                const network = await provider.getNetwork();
+                setChain(chainIdToChainName[Number(network.chainId)]);
+
                 const account = signer.address;
                 setProvider(provider);
                 setAccount(account);
@@ -157,6 +179,10 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
                 const provider = new BrowserProvider((window as any).coin98);
                 await provider.send('eth_requestAccounts', []);
                 const signer = await provider.getSigner();
+
+                const network = await provider.getNetwork();
+                setChain(chainIdToChainName[Number(network.chainId)]);
+
                 const account = signer.address;
                 setProvider(provider);
                 setAccount(account);
@@ -176,6 +202,10 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
                 const provider = new BrowserProvider((window as any).ethereum);
                 await provider.send('eth_requestAccounts', []);
                 const signer = await provider.getSigner();
+
+                const network = await provider.getNetwork();
+                setChain(chainIdToChainName[Number(network.chainId)]);
+
                 const account = signer.address;
                 setProvider(provider);
                 setAccount(account);
@@ -195,6 +225,10 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
                 const provider = new BrowserProvider((window as any).ethereum);
                 await provider.send('eth_requestAccounts', []);
                 const signer = await provider.getSigner();
+
+                const network = await provider.getNetwork();
+                setChain(chainIdToChainName[Number(network.chainId)]);
+
                 const account = signer.address;
                 setProvider(provider);
                 setAccount(account);
@@ -214,6 +248,10 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
                 const provider = new BrowserProvider((window as any).ethereum);
                 await provider.send('eth_requestAccounts', []);
                 const signer = await provider.getSigner();
+
+                const network = await provider.getNetwork();
+                setChain(chainIdToChainName[Number(network.chainId)]);
+
                 const account = signer.address;
                 setProvider(provider);
                 setAccount(account);
@@ -233,6 +271,10 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
                 const provider = new BrowserProvider((window as any).ethereum);
                 await provider.send('eth_requestAccounts', []);
                 const signer = await provider.getSigner();
+
+                const network = await provider.getNetwork();
+                setChain(chainIdToChainName[Number(network.chainId)]);
+
                 const account = signer.address;
                 setProvider(provider);
                 setAccount(account);
@@ -252,6 +294,10 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
                 const provider = new BrowserProvider((window as any).ethereum);
                 await provider.send('eth_requestAccounts', []);
                 const signer = await provider.getSigner();
+
+                const network = await provider.getNetwork();
+                setChain(chainIdToChainName[Number(network.chainId)]);
+
                 const account = signer.address;
                 setProvider(provider);
                 setAccount(account);
@@ -271,6 +317,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
         }
         setProvider(null);
         setAccount(null);
+        setChain(null);
         if (onWalletDisconnected) onWalletDisconnected();
         console.log('Disconnected wallet');
     };

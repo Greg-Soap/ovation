@@ -64,3 +64,14 @@ interface DecodedToken {
 export const decodeIdToken = (idToken: string): DecodedToken => {
   return jwtDecode<DecodedToken>(idToken);
 };
+
+export const chainIdToChainName: { [key: number]: string } = {
+  1: "eth",
+  56: "bsc",
+  137: "polygon",
+  43114: "avalanche",
+  250: "fantom",
+  25: "cronos",
+  42161: "arbitrum",
+  10: "optimism",
+};

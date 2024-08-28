@@ -20,7 +20,6 @@ import Link from 'next/link'
 import arrow from '@/public/assets/images/arrow-right.png'
 import Image from 'next/image'
 import { GoogleLogin } from '@react-oauth/google';
-import axios from 'axios'
 import { decodeIdToken } from '@/lib/helper-func';
 
 const formSchema = z.object({
