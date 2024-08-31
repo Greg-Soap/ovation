@@ -27,12 +27,12 @@ const badges = [
 export default function Badges() {
   return (
     <div className="flex flex-col bg-[#18181C] rounded-[20px] gap-4 px-5 py-[18px]">
-      <p className="text-sm font-medium text-[#808080]">Badges</p>
+      <p className="text-xs font-medium text-[#808080]">Badges</p>
 
       <div className="flex justify-between">
         {badges.map((item, index) => (
           <div
-            className="flex flex-col gap-[6px] justify-center items-center"
+            className="flex flex-col gap-2 justify-center items-center"
             key={index}
           >
             <CircleProgress value={item.progress} imgSrc={item.imgSrc} />

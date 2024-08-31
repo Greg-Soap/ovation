@@ -34,13 +34,7 @@ const team: Teams[] = [
     social: 'linkedin',
     href: 'http://www.linkedin.com/in/manavporwal',
   },
-  // {
-  // 	image: "/assets/images/teams/Guy-teams.png",
-  // 	name: "Guy Garcia",
-  // 	position: "CTO",
-  // 	social: "linkedin",
-  // 	href: "https://www.linkedin.com/in/guygarcia/",
-  // },
+
   {
     image: '/assets/images/teams/Malcom2-teams.png',
     name: 'Malcolm',
