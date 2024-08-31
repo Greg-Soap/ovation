@@ -1,5 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { jwtDecode } from 'jwt-decode';
+
 function generateRandomString(length = 10) {
   const characters =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -51,3 +53,25 @@ export const useResponsiveAnimation: UseResponsiveAnimation = (
 
   return { xValues, duration }
 }
+
+interface DecodedToken {
+  sub: string;
+  name: string;
+  email: string;
+  picture: string;
+}
+
+export const decodeIdToken = (idToken: string): DecodedToken => {
+  return jwtDecode<DecodedToken>(idToken);
+};
+
+export const chainIdToChainName: { [key: number]: string } = {
+  1: "eth",
+  56: "bsc",
+  137: "polygon",
+  43114: "avalanche",
+  250: "fantom",
+  25: "cronos",
+  42161: "arbitrum",
+  10: "optimism",
+};
