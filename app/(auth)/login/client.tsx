@@ -19,7 +19,7 @@ import { toast } from 'sonner'
 import Link from 'next/link'
 import arrow from '@/public/assets/images/arrow-right.png'
 import Image from 'next/image'
-import { GoogleLogin } from '@react-oauth/google'
+import { useGoogleLogin } from '@react-oauth/google'
 import { decodeIdToken } from '@/lib/helper-func'
 
 const formSchema = z.object({
@@ -44,19 +44,20 @@ export default function LoginForm() {
     router.push('/apps/discover')
   }
 
+  const loginGoogle = useGoogleLogin({
+    onSuccess: (codeResponse) => console.log(codeResponse),
+    flow: 'auth-code',
+  })
+
   const handleSuccess = async (response: any) => {
-    // Extract access token from response
     const { credential } = response
     if (!credential) {
-      //handle no credentials
       return
     }
 
     try {
       const userInfo = decodeIdToken(credential)
       console.log('User Info:', userInfo)
-
-      // Handle user info and perform authentication to check if user already exist in the api
     } catch (error) {
       console.error('Error decoding ID token:', error)
     }
@@ -74,26 +75,16 @@ export default function LoginForm() {
       </div>
       <div className='  flex justify-between mb-4'>
         <Button className='text-[10px] font-semibold p-4 md:text-base w-[48%] bg-white flex gap-4'>
-          {/* <Image src={ether} alt="ether image" /> */}
           <Ether />
           <p>Login with Wallet</p>
         </Button>
 
-        <GoogleLogin
-          onSuccess={handleSuccess}
-          //@ts-ignore
-          onError={handleError}
-          //@ts-ignore
-          render={({ onClick }) => (
-            <Button
-              onClick={onClick}
-              className='p-4 text-[10px] font-semibold md:text-base w-[48%] bg-white flex gap-4'>
-              {/* <Image src={Google} alt="google image" /> */}
-              <Google />
-              <p>Login with Google</p>
-            </Button>
-          )}
-        />
+        <Button
+          onClick={loginGoogle}
+          className='p-4 text-[10px] font-semibold md:text-base w-[48%] bg-white flex gap-4'>
+          <Google />
+          <p>Login with Google</p>
+        </Button>
       </div>
       <div id='login__connect-wallet' className='flex flex-col gap-4'>
         <span className='flex gap-2 items-center justify-center'>

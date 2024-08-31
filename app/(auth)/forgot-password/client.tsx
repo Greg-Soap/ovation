@@ -1,30 +1,17 @@
 'use client'
+
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import Link from 'next/link'
-import arrow from '@/public/assets/images/arrow-right.svg'
-import Image from 'next/image'
 import { useState } from 'react'
 import CompleteIcon from '@/public/assets/images/ovationAuthCompleteIcon'
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSeparator,
-  InputOTPSlot,
-} from '@/components/ui/input-otp'
+import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '@/components/ui/input-otp'
 
 const formSchema = z.object({
   email: z.string().email('Input a valid email address'),
@@ -50,44 +37,32 @@ export default function ResetForm() {
 
   function renderForm1() {
     return (
-      <div className="flex flex-col gap-7">
+      <div className='flex flex-col gap-7'>
         <div>
-          <h1 className="font-semibold text-3xl text-white">
-            Forgot password?
-          </h1>
-          <p className="text-sm">
-            Enter your email to recieve a verification pin
-          </p>
+          <h1 className='font-semibold text-3xl text-white'>Forgot password?</h1>
+          <p className='text-sm'>Enter your email to receive a verification pin</p>
         </div>
-        <form
-          onSubmit={form.handleSubmit(formSubmit)}
-          className="flex flex-col gap-7"
-        >
+        <form onSubmit={form.handleSubmit(formSubmit)} className='flex flex-col gap-7'>
           <FormField
             control={form.control}
-            name="email"
+            name='email'
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-white text-sm">
-                  Email address
-                </FormLabel>
+                <FormLabel className='text-white text-sm'>Email address</FormLabel>
                 <FormControl {...field}>
                   <Input
-                    className="h-[46px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
-                    placeholder="btcoverfiat@degen.eth"
-                    type="email"
+                    className='h-[46px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full'
+                    placeholder='btcoverfiat@degen.eth'
+                    type='email'
                   />
                 </FormControl>
               </FormItem>
             )}
           />
           <Button
-            onClick={() => {
-              setPage(2)
-            }}
-            type="submit"
-            className=" hover:bg-white text-sm font-semibold h-[52px] w-full"
-          >
+            onClick={() => setPage(2)}
+            type='submit'
+            className='hover:bg-white text-sm font-semibold h-[52px] w-full'>
             Send confirmation pin
           </Button>
         </form>
@@ -97,57 +72,30 @@ export default function ResetForm() {
 
   function renderForm2() {
     return (
-      <div className="flex flex-col gap-11">
+      <div className='flex flex-col gap-11'>
         <div>
-          <h1 className="font-semibold text-3xl text-white">Enter Pin</h1>
-          <p className="text-sm">
-            Enter the 6-digit verification pin sent to your email address to
-            recieve a password
+          <h1 className='font-semibold text-3xl text-white'>Enter Pin</h1>
+          <p className='text-sm'>
+            Enter the 6-digit verification pin sent to your email address to receive a password
           </p>
         </div>
-        <form
-          onSubmit={form.handleSubmit(formSubmit)}
-          className="flex flex-col gap-7"
-        >
+        <form onSubmit={form.handleSubmit(formSubmit)} className='flex flex-col gap-7'>
           <FormField
             control={form.control}
-            name="otp"
+            name='otp'
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm text-white">Input OTP</FormLabel>
+                <FormLabel className='text-sm text-white'>Input OTP</FormLabel>
                 <FormControl {...field}>
                   <InputOTP maxLength={6}>
-                    <InputOTPGroup className="w-full flex md:gap-4 gap-2">
-                      <InputOTPSlot
-                        className="border-[1px] border-[#353538] rounded-lg w-16 h-16"
-                        index={0}
-                      />
-
-                      <InputOTPSlot
-                        className="border-[1px] border-[#353538] rounded-lg w-16 h-16"
-                        index={1}
-                      />
-
-                      <InputOTPSlot
-                        className="border-[1px] border-[#353538] rounded-lg w-16 h-16"
-                        index={2}
-                      />
-                      <InputOTPSeparator />
-
-                      <InputOTPSlot
-                        className="border-[1px] border-[#353538] rounded-lg w-16 h-16"
-                        index={3}
-                      />
-
-                      <InputOTPSlot
-                        className="border-[1px] border-[#353538] rounded-lg w-16 h-16"
-                        index={4}
-                      />
-
-                      <InputOTPSlot
-                        className="border-[1px] border-[#353538] rounded-lg w-16 h-16"
-                        index={5}
-                      />
+                    <InputOTPGroup className='w-full flex md:gap-4 gap-2'>
+                      {[...Array(6)].map((_, index) => (
+                        <InputOTPSlot
+                          key={index}
+                          className='border-[1px] border-[#353538] rounded-lg w-16 h-16'
+                          index={index}
+                        />
+                      ))}
                     </InputOTPGroup>
                   </InputOTP>
                 </FormControl>
@@ -155,12 +103,9 @@ export default function ResetForm() {
             )}
           />
           <Button
-            onClick={() => {
-              setPage(3)
-            }}
-            type="submit"
-            className=" hover:bg-white text-sm font-semibold h-[52px] w-full"
-          >
+            onClick={() => setPage(3)}
+            type='submit'
+            className='hover:bg-white text-sm font-semibold h-[52px] w-full'>
             Continue
           </Button>
         </form>
@@ -170,28 +115,23 @@ export default function ResetForm() {
 
   function renderForm3() {
     return (
-      <div className="flex flex-col gap-7">
+      <div className='flex flex-col gap-7'>
         <div>
-          <h1 className="font-semibold text-3xl text-white">
-            Enter new password?
-          </h1>
-          <p className="text-sm">Choose a new password for your account</p>
+          <h1 className='font-semibold text-3xl text-white'>Enter new password?</h1>
+          <p className='text-sm'>Choose a new password for your account</p>
         </div>
-        <form
-          onSubmit={form.handleSubmit(formSubmit)}
-          className="flex flex-col gap-6"
-        >
+        <form onSubmit={form.handleSubmit(formSubmit)} className='flex flex-col gap-6'>
           <FormField
             control={form.control}
-            name="password"
+            name='password'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl {...field}>
                   <Input
-                    placeholder="Enter your new password"
-                    className="h-[46px]  bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
-                    type="text"
+                    placeholder='Enter your new password'
+                    className='h-[46px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full'
+                    type='text'
                   />
                 </FormControl>
               </FormItem>
@@ -199,27 +139,24 @@ export default function ResetForm() {
           />
           <FormField
             control={form.control}
-            name="passwordConfirm"
+            name='passwordConfirm'
             render={({ field }) => (
-              <FormItem className="flex flex-col end-0">
+              <FormItem className='flex flex-col end-0'>
                 <FormLabel>Retype Password</FormLabel>
                 <FormControl {...field}>
                   <Input
-                    placeholder="Re-type your password"
-                    className="h-[46px]   border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
-                    type="password"
+                    placeholder='Re-type your password'
+                    className='h-[46px] border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full'
+                    type='password'
                   />
                 </FormControl>
               </FormItem>
             )}
           />
           <Button
-            onClick={() => {
-              setPage(4)
-            }}
-            type="submit"
-            className=" hover:bg-white text-sm font-semibold h-[52px] w-full"
-          >
+            onClick={() => setPage(4)}
+            type='submit'
+            className='hover:bg-white text-sm font-semibold h-[52px] w-full'>
             Continue
           </Button>
         </form>
@@ -229,18 +166,18 @@ export default function ResetForm() {
 
   function renderSuccess() {
     return (
-      <div className="w-full flex flex-col items-center justify-center gap-6">
-        <div className="w-16 h-16 rounded-full bg-[#333726] flex items-center justify-center">
+      <div className='w-full flex flex-col items-center justify-center gap-6'>
+        <div className='w-16 h-16 rounded-full bg-[#333726] flex items-center justify-center'>
           <CompleteIcon />
         </div>
-        <div className="w-full text-white flex flex-col items-center justify-center ">
-          <h1 className="font-semibold text-3xl">Success</h1>
-          <p className="text-[#B3B3B3] text-sm">
+        <div className='w-full text-white flex flex-col items-center justify-center'>
+          <h1 className='font-semibold text-3xl'>Success</h1>
+          <p className='text-[#B3B3B3] text-sm'>
             Your password has been updated you can now login again
           </p>
         </div>
-        <Button className="w-full h-[53px] font-semibold text-sm">
-          <Link className="w-full" href={'/login'}>
+        <Button className='w-full h-[53px] font-semibold text-sm'>
+          <Link className='w-full' href={'/login'}>
             Back to Login
           </Link>
         </Button>
