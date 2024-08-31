@@ -19,6 +19,9 @@ import { toast } from 'sonner'
 import Link from 'next/link'
 import arrow from '@/public/assets/images/arrow-right.png'
 import Image from 'next/image'
+import { GoogleLogin } from '@react-oauth/google';
+import { decodeIdToken } from '@/lib/helper-func';
+
 const formSchema = z.object({
   username: z.string(),
   password: z.string(),
@@ -41,6 +44,28 @@ export default function LoginForm() {
     router.push('/apps/discover')
   }
 
+  const handleSuccess = async (response: any) => {
+    // Extract access token from response
+    const { credential } = response;
+    if (!credential) {
+      //handle no credentials
+      return;
+    }
+
+    try {
+      const userInfo = decodeIdToken(credential);
+      console.log('User Info:', userInfo);
+
+      // Handle user info and perform authentication to check if user already exist in the api
+    } catch (error) {
+      console.error('Error decoding ID token:', error);
+    }
+  };
+
+  const handleError = (error: any) => {
+    console.error('Login Failed:', error);
+  };
+
   return (
     <div className="flex flex-col gap-11">
       <div id="login__header">
@@ -53,11 +78,20 @@ export default function LoginForm() {
           <Ether />
           <p>Login with Wallet</p>
         </Button>
-        <Button className="p-4 text-[10px] font-semibold md:text-base w-[48%] bg-white flex gap-4">
-          {/* <Image src={Google} alt="google image" /> */}
-          <Google />
-          <p>Login with Google</p>
-        </Button>
+
+        <GoogleLogin
+          onSuccess={handleSuccess}
+          //@ts-ignore
+          onError={handleError}
+          //@ts-ignore
+          render={({ onClick }) => (
+            <Button onClick={onClick} className="p-4 text-[10px] font-semibold md:text-base w-[48%] bg-white flex gap-4">
+              {/* <Image src={Google} alt="google image" /> */}
+              <Google />
+              <p>Login with Google</p>
+            </Button>
+          )}
+        />
       </div>
       <div id="login__connect-wallet" className="flex flex-col gap-4">
         <span className="flex gap-2 items-center justify-center">
@@ -132,3 +166,22 @@ export default function LoginForm() {
     </div>
   )
 }
+
+
+// {
+//   "iss": "https://accounts.google.com",
+//   "azp": "200915400648-d5tpcs81rgjoqgac6idku39bi1dd5ga6.apps.googleusercontent.com",
+//   "aud": "200915400648-d5tpcs81rgjoqgac6idku39bi1dd5ga6.apps.googleusercontent.com",
+//   "sub": "116548347670545315155",
+//   "hd": "ovation.network",
+//   "email": "no-reply@ovation.network",
+//   "email_verified": true,
+//   "nbf": 1724760237,
+//   "name": "No Reply",
+//   "picture": "https://lh3.googleusercontent.com/a/ACg8ocJA5hRpUGFRgfus3B7eYUPZGh7tmP50LHlnzyCVLPYJAAlsOd8=s96-c",
+//   "given_name": "No",
+//   "family_name": "Reply",
+//   "iat": 1724760537,
+//   "exp": 1724764137,
+//   "jti": "4d4c4a63cca179a117ae930be1ad0e5cfd96f542"
+// }

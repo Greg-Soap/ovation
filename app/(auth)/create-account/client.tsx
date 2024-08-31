@@ -19,9 +19,9 @@ import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import arrow from '@/public/assets/images/arrow-right.png'
 import Bnb from '@/public/assets/images/ovationWallets/ovationWalletIcon2'
-
-import walletData from './_data'
+// import walletData from './_data'
 import { SetStateAction, useEffect, useState } from 'react'
+import WalletConnectComponent from './WalletConnectComponent';
 
 const formSchema = z.object({
   email: z.string().email('Input a valid email address'),
@@ -68,6 +68,16 @@ export default function AccountForm({ setOptionalLeft }: Props) {
     console.log('submitted')
     toast.success('submitted')
   }
+
+  const handleWalletConnected = (account: string) => {
+    console.log('Wallet connected:', account);
+    // Additional logic when a wallet is connected
+  };
+
+  const handleWalletDisconnected = () => {
+    console.log('Wallet disconnected');
+    // Additional logic when a wallet is disconnected
+  };
 
   function renderForm1() {
     return (
@@ -262,33 +272,40 @@ export default function AccountForm({ setOptionalLeft }: Props) {
 
   function renderForm3() {
     return (
-      <div className="flex flex-col gap-7">
-        <div className="grid grid-cols-2 gap-4">
-          {walletData.map((wallet) => (
-            <Button
-              key={wallet.id}
-              onClick={() => setPage(4)}
-              className="text-start flex justify-between p-2 md:p-[1rem] h-[58px] w-full md:w-[242px] text-xs md:text-sm font-semibold text-white border-[1px] border-solid bg-transparent border-[#353538]"
-            >
-              <p> {wallet.name}</p>
-              {/* <Image
-                className="w-6 h-6s"
-                src={wallet.img}
-                alt={`${wallet.name} icon`}
-              /> */}
-              <wallet.img />
-            </Button>
-          ))}
-        </div>
-
-        <div className="flex gap-2 items-center justify-center">
-          <p>Wallet not listed?</p> {''}
-          <Link href="" className="h-6 text-[#Cff073]">
-            Connect manually
-          </Link>
-          <Image src={arrow} alt="arrow" />
-        </div>
+      <div>
+        <WalletConnectComponent
+          onWalletConnected={handleWalletConnected}
+          onWalletDisconnected={handleWalletDisconnected}
+          setPage={setPage}
+        />
       </div>
+      // <div className="flex flex-col gap-7">
+      //   <div className="grid grid-cols-2 gap-4">
+      //     {walletData.map((wallet) => (
+      //       <Button
+      //         key={wallet.id}
+      //         onClick={() => setPage(4)}
+      //         className="text-start flex justify-between p-2 md:p-[1rem] h-[58px] w-full md:w-[242px] text-xs md:text-sm font-semibold text-white border-[1px] border-solid bg-transparent border-[#353538]"
+      //       >
+      //         <p> {wallet.name}</p>
+      //         {/* <Image
+      //           className="w-6 h-6s"
+      //           src={wallet.img}
+      //           alt={`${wallet.name} icon`}
+      //         /> */}
+      //         <wallet.img />
+      //       </Button>
+      //     ))}
+      //   </div>
+
+      //   <div className="flex gap-2 items-center justify-center">
+      //     <p>Wallet not listed?</p> {''}
+      //     <Link href="" className="h-6 text-[#Cff073]">
+      //       Connect manually
+      //     </Link>
+      //     <Image src={arrow} alt="arrow" />
+      //   </div>
+      // </div>
     )
   }
 
