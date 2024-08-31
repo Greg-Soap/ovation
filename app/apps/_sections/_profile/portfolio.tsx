@@ -63,7 +63,7 @@ export default function Portfolio() {
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
               <PortfolioCard
-                index={index}
+                key={index}
                 isLiked={item.isLiked}
                 imgSrc={item.imgSrc}
                 artist={item.artist}
@@ -78,7 +78,7 @@ export default function Portfolio() {
           <div className="flex h-fit flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
               <PortfolioCard
-                index={index}
+                key={index}
                 isLiked={item.isLiked}
                 imgSrc={item.imgSrc}
                 artist={item.artist}
@@ -93,7 +93,7 @@ export default function Portfolio() {
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
               <PortfolioCard
-                index={index}
+                key={index}
                 isLiked={item.isLiked}
                 imgSrc={item.imgSrc}
                 artist={item.artist}
@@ -108,7 +108,7 @@ export default function Portfolio() {
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
               <PortfolioCard
-                index={index}
+                key={index}
                 isLiked={item.isLiked}
                 imgSrc={item.imgSrc}
                 artist={item.artist}
@@ -123,7 +123,7 @@ export default function Portfolio() {
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
               <PortfolioCard
-                index={index}
+                key={index}
                 isLiked={item.isLiked}
                 imgSrc={item.imgSrc}
                 artist={item.artist}
@@ -138,7 +138,7 @@ export default function Portfolio() {
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
               <PortfolioCard
-                index={index}
+                key={index}
                 isLiked={item.isLiked}
                 imgSrc={item.imgSrc}
                 artist={item.artist}
@@ -154,6 +154,16 @@ export default function Portfolio() {
   )
 }
 
+interface CardProps {
+  index?: number
+  isLiked?: boolean
+  imgSrc?: string
+  artist?: string
+  price?: number
+  className?: string
+  likeFunction?: () => void | undefined
+}
+
 function PortfolioCard({
   index,
   isLiked,
@@ -162,7 +172,7 @@ function PortfolioCard({
   price,
   className,
   likeFunction,
-}: any) {
+}: CardProps) {
   return (
     <div
       className={`${className} w-full min-w-[261px] max-w-[296px] flex-col bg-[#18181C] border border-[#FFFFFF14] rounded-[10px] relative m-0`}
@@ -171,11 +181,11 @@ function PortfolioCard({
       <div className="flex items-center p-2 rounded-full bg-[#333726] absolute right-5 top-3">
         <LikeIcon
           className={`w-4 h-4 transition-all duration-300 ${isLiked ? 'stroke-none fill-[#CFF073]' : 'stroke-[#CFF073] fill-none'}`}
-          onClick={() => likeFunction()}
+          onClick={() => likeFunction && likeFunction()}
         />
       </div>
       <Image
-        src={imgSrc}
+        src={`${imgSrc}`}
         alt="NFT Preview"
         width={500}
         height={217}

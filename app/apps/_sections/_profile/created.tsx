@@ -63,7 +63,7 @@ export default function Created() {
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
               <CreatedCard
-                index={index}
+                key={index}
                 isLiked={item.isLiked}
                 likeCount={item.likeCount}
                 imgSrc={item.imgSrc}
@@ -81,7 +81,7 @@ export default function Created() {
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
               <CreatedCard
-                index={index}
+                key={index}
                 isLiked={item.isLiked}
                 likeCount={item.likeCount}
                 imgSrc={item.imgSrc}
@@ -99,7 +99,7 @@ export default function Created() {
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
               <CreatedCard
-                index={index}
+                key={index}
                 isLiked={item.isLiked}
                 likeCount={item.likeCount}
                 imgSrc={item.imgSrc}
@@ -117,7 +117,7 @@ export default function Created() {
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
               <CreatedCard
-                index={index}
+                key={index}
                 isLiked={item.isLiked}
                 likeCount={item.likeCount}
                 imgSrc={item.imgSrc}
@@ -135,7 +135,7 @@ export default function Created() {
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
               <CreatedCard
-                index={index}
+                key={index}
                 isLiked={item.isLiked}
                 likeCount={item.likeCount}
                 imgSrc={item.imgSrc}
@@ -153,7 +153,7 @@ export default function Created() {
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
               <CreatedCard
-                index={index}
+                key={index}
                 isLiked={item.isLiked}
                 likeCount={item.likeCount}
                 imgSrc={item.imgSrc}
@@ -187,7 +187,6 @@ function CreatedCard({
   return (
     <div
       className={`${className} w-full min-w-[261px] max-w-[296px] flex-col bg-[#18181C] border border-[#FFFFFF14] rounded-[10px]`}
-      key={index}
     >
       <Image
         src={imgSrc}
