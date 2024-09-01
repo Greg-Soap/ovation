@@ -83,7 +83,7 @@ export default function Portfolio() {
                 imgSrc={item.imgSrc}
                 artist={item.artist}
                 price={item.price}
-                className={`${item.isComplete ? 'flex' : 'hidden'}`}
+                className={`${item.type === 'isComplete' ? 'flex' : 'hidden'}`}
                 likeFunction={() => toggleLike(index)}
               />
             ))}
@@ -98,7 +98,7 @@ export default function Portfolio() {
                 imgSrc={item.imgSrc}
                 artist={item.artist}
                 price={item.price}
-                className={`${item.isDomain ? 'flex' : 'hidden'}`}
+                className={`${item.type === 'isDomain' ? 'flex' : 'hidden'}`}
                 likeFunction={() => toggleLike(index)}
               />
             ))}
@@ -113,7 +113,7 @@ export default function Portfolio() {
                 imgSrc={item.imgSrc}
                 artist={item.artist}
                 price={item.price}
-                className={`${item.isCollectible ? 'flex' : 'hidden'}`}
+                className={`${item.type === 'isCollectible' ? 'flex' : 'hidden'}`}
                 likeFunction={() => toggleLike(index)}
               />
             ))}
@@ -128,7 +128,7 @@ export default function Portfolio() {
                 imgSrc={item.imgSrc}
                 artist={item.artist}
                 price={item.price}
-                className={`${item.isMetaverse ? 'flex' : 'hidden'}`}
+                className={`${item.type === 'isMetaverse' ? 'flex' : 'hidden'}`}
                 likeFunction={() => toggleLike(index)}
               />
             ))}
@@ -143,7 +143,7 @@ export default function Portfolio() {
                 imgSrc={item.imgSrc}
                 artist={item.artist}
                 price={item.price}
-                className={`${item.isArt ? 'flex' : 'hidden'}`}
+                className={`${item.type === 'isArt' ? 'flex' : 'hidden'}`}
                 likeFunction={() => toggleLike(index)}
               />
             ))}
@@ -234,84 +234,59 @@ function PortfolioCard({
 interface Button {
   name: string
   itemCount: number
-  isActive: boolean
 }
 
 interface CreatedNFT {
+  type: 'isComplete' | 'isDomain' | 'isCollectible' | 'isMetaverse' | 'isArt'
   imgSrc: string
   artist: string
   price: number
   isLiked: boolean
-  isComplete: boolean
-  isDomain: boolean
-  isCollectible: boolean
-  isMetaverse: boolean
-  isArt: boolean
 }
 
 const buttons: Button[] = [
-  { name: 'All', itemCount: 20, isActive: true },
-  { name: 'Complete', itemCount: 4, isActive: false },
-  { name: 'Domain', itemCount: 4, isActive: false },
-  { name: 'Collectibles', itemCount: 4, isActive: false },
-  { name: 'Metaverse', itemCount: 4, isActive: false },
-  { name: 'Art', itemCount: 4, isActive: false },
+  { name: 'All', itemCount: 20 },
+  { name: 'Complete', itemCount: 4 },
+  { name: 'Domain', itemCount: 4 },
+  { name: 'Collectibles', itemCount: 4 },
+  { name: 'Metaverse', itemCount: 4 },
+  { name: 'Art', itemCount: 4 },
 ]
 
 const createdNFT: CreatedNFT[] = [
   {
+    type: 'isComplete',
     imgSrc: '/assets/images/profile/featuredNFT.png',
     artist: 'Bored Ape',
     price: 14,
     isLiked: false,
-    isComplete: true,
-    isDomain: false,
-    isCollectible: false,
-    isMetaverse: false,
-    isArt: false,
   },
   {
+    type: 'isDomain',
     imgSrc: '/assets/images/profile/featuredNFT.png',
     artist: 'Micheal Marcagi',
     price: 14,
     isLiked: false,
-    isComplete: false,
-    isDomain: true,
-    isCollectible: false,
-    isMetaverse: false,
-    isArt: false,
   },
   {
+    type: 'isCollectible',
     imgSrc: '/assets/images/profile/featuredNFT.png',
     artist: 'Hozier',
     price: 14,
     isLiked: false,
-    isComplete: false,
-    isDomain: false,
-    isCollectible: true,
-    isMetaverse: false,
-    isArt: false,
   },
   {
+    type: 'isMetaverse',
     imgSrc: '/assets/images/profile/featuredNFT.png',
     artist: 'Royel Otis',
     price: 14,
     isLiked: false,
-    isComplete: false,
-    isDomain: false,
-    isCollectible: false,
-    isMetaverse: true,
-    isArt: false,
   },
   {
+    type: 'isArt',
     imgSrc: '/assets/images/profile/featuredNFT.png',
     artist: 'Matt Hansen',
     price: 14,
     isLiked: false,
-    isComplete: false,
-    isDomain: false,
-    isCollectible: false,
-    isMetaverse: false,
-    isArt: true,
   },
 ]

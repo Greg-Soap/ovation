@@ -10,13 +10,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import LikeIcon from '@/components/icons/likeIcon'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import NftCard from '../../_components/_profile/nft-card'
+//import LikeIcon from '@/components/icons/likeIcon'
 
 export default function Created() {
   const [items, setItems] = useState<CreatedNFT[]>(createdNFT)
 
-  const toggleHidden = (index: number) => {
+  /*const toggleHidden = (index: number) => {
     const updatedList = items.map((item, i) =>
       i === index ? { ...item, isHidden: !item.isHidden } : item,
     )
@@ -30,14 +31,14 @@ export default function Created() {
     )
 
     setItems(updatedList)
-  }
+  }*/
 
   return (
     <div className="w-full py-10 flex items-center justify-center">
       <Tabs defaultValue="All" className="w-[95%] flex flex-col gap-[34px]">
         <TabsList className="flex justify-between items-center w-full overflow-x-scroll">
           <div className="flex items-center gap-1.5">
-            {buttons.map((item, index) => (
+            {buttons.map((item: Button, index: number) => (
               <TabsTrigger
                 value={item.name}
                 className="bg-[#232227] text-[#999999] p-2.5 rounded-[50px] max-h-fit text-[10px] border-none data-[state=active]:bg-white data-[state=active]:text-[#232227]"
@@ -62,17 +63,13 @@ export default function Created() {
         <TabsContent value="All">
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
-              <CreatedCard
+              <NftCard
+                type="created"
                 key={index}
-                isLiked={item.isLiked}
-                likeCount={item.likeCount}
                 imgSrc={item.imgSrc}
                 artist={item.artist}
                 price={item.price}
                 className={`flex`}
-                isHidden={item.isHidden}
-                likeFunction={() => toggleLike(index)}
-                hiddenFunction={() => toggleHidden(index)}
               />
             ))}
           </div>
@@ -80,17 +77,13 @@ export default function Created() {
         <TabsContent value="Complete">
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
-              <CreatedCard
+              <NftCard
                 key={index}
-                isLiked={item.isLiked}
-                likeCount={item.likeCount}
+                type="created"
                 imgSrc={item.imgSrc}
                 artist={item.artist}
                 price={item.price}
-                className={`${item.isComplete ? 'flex' : 'hidden'}`}
-                isHidden={item.isHidden}
-                likeFunction={() => toggleLike(index)}
-                hiddenFunction={() => toggleHidden(index)}
+                className={`${item.type === 'isComplete' ? 'flex' : 'hidden'}`}
               />
             ))}
           </div>
@@ -98,17 +91,13 @@ export default function Created() {
         <TabsContent value="Domain">
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
-              <CreatedCard
+              <NftCard
                 key={index}
-                isLiked={item.isLiked}
-                likeCount={item.likeCount}
+                type="created"
                 imgSrc={item.imgSrc}
                 artist={item.artist}
                 price={item.price}
-                className={`${item.isDomain ? 'flex' : 'hidden'}`}
-                isHidden={item.isHidden}
-                likeFunction={() => toggleLike(index)}
-                hiddenFunction={() => toggleHidden(index)}
+                className={`${item.type === 'isDomain' ? 'flex' : 'hidden'}`}
               />
             ))}
           </div>
@@ -116,17 +105,13 @@ export default function Created() {
         <TabsContent value="Collectibles">
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
-              <CreatedCard
+              <NftCard
                 key={index}
-                isLiked={item.isLiked}
-                likeCount={item.likeCount}
+                type="created"
                 imgSrc={item.imgSrc}
                 artist={item.artist}
                 price={item.price}
-                className={`${item.isCollectible ? 'flex' : 'hidden'}`}
-                isHidden={item.isHidden}
-                likeFunction={() => toggleLike(index)}
-                hiddenFunction={() => toggleHidden(index)}
+                className={`${item.type === 'isCollectible' ? 'flex' : 'hidden'}`}
               />
             ))}
           </div>
@@ -134,17 +119,13 @@ export default function Created() {
         <TabsContent value="Metaverse">
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
-              <CreatedCard
+              <NftCard
                 key={index}
-                isLiked={item.isLiked}
-                likeCount={item.likeCount}
+                type="created"
                 imgSrc={item.imgSrc}
                 artist={item.artist}
                 price={item.price}
-                className={`${item.isMetaverse ? 'flex' : 'hidden'}`}
-                isHidden={item.isHidden}
-                likeFunction={() => toggleLike(index)}
-                hiddenFunction={() => toggleHidden(index)}
+                className={`${item.type === 'isMetaverse' ? 'flex' : 'hidden'}`}
               />
             ))}
           </div>
@@ -152,17 +133,13 @@ export default function Created() {
         <TabsContent value="Art">
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
-              <CreatedCard
+              <NftCard
                 key={index}
-                isLiked={item.isLiked}
-                likeCount={item.likeCount}
+                type="created"
                 imgSrc={item.imgSrc}
                 artist={item.artist}
                 price={item.price}
-                className={`${item.isArt ? 'flex' : 'hidden'}`}
-                isHidden={item.isHidden}
-                likeFunction={() => toggleLike(index)}
-                hiddenFunction={() => toggleHidden(index)}
+                className={`${item.type === 'isArt' ? 'flex' : 'hidden'}`}
               />
             ))}
           </div>
@@ -172,6 +149,73 @@ export default function Created() {
   )
 }
 
+interface Button {
+  name: string
+  itemCount: number
+}
+
+interface CreatedNFT {
+  type: 'isComplete' | 'isDomain' | 'isCollectible' | 'isMetaverse' | 'isArt'
+  imgSrc: string
+  artist: string
+  price: number
+  isLiked: boolean
+  likeCount: number
+}
+
+const buttons: Button[] = [
+  { name: 'All', itemCount: 20 },
+  { name: 'Complete', itemCount: 4 },
+  { name: 'Domain', itemCount: 4 },
+  { name: 'Collectibles', itemCount: 4 },
+  { name: 'Metaverse', itemCount: 4 },
+  { name: 'Art', itemCount: 4 },
+]
+
+const createdNFT: CreatedNFT[] = [
+  {
+    type: 'isComplete',
+    imgSrc: '/assets/images/profile/featuredNFT.png',
+    artist: 'Bored Ape',
+    price: 14,
+    isLiked: false,
+    likeCount: 40,
+  },
+  {
+    type: 'isDomain',
+    imgSrc: '/assets/images/profile/featuredNFT.png',
+    artist: 'Micheal Marcagi',
+    price: 14,
+    isLiked: false,
+    likeCount: 39,
+  },
+  {
+    type: 'isCollectible',
+    imgSrc: '/assets/images/profile/featuredNFT.png',
+    artist: 'Hozier',
+    price: 14,
+    isLiked: false,
+    likeCount: 38,
+  },
+  {
+    type: 'isMetaverse',
+    imgSrc: '/assets/images/profile/featuredNFT.png',
+    artist: 'Royel Otis',
+    price: 14,
+    isLiked: false,
+    likeCount: 37,
+  },
+  {
+    type: 'isArt',
+    imgSrc: '/assets/images/profile/featuredNFT.png',
+    artist: 'Matt Hansen',
+    price: 14,
+    isLiked: false,
+    likeCount: 36,
+  },
+]
+
+/*the entire card  just incase they'll implement any of the feature later on
 function CreatedCard({
   index,
   isLiked,
@@ -208,126 +252,40 @@ function CreatedCard({
           </p>
         </div>
       </div>
+
+      <div className="flex w-full items-center justify-between pt-3 border-t border-[#353538]">
+        <div className="flex items-center gap-1">
+          <LikeIcon
+            className={`w-4 h-4 transition-all duration-300 ${isLiked ? 'stroke-none fill-[#CFF073]' : 'stroke-white fill-none'}`}
+            onClick={() => likeFunction()}
+          />
+          <p className="text-xs text-white font-normal">
+            {isLiked ? likeCount + 1 : likeCount}
+          </p>
+        </div>
+
+        <Button
+          variant="default"
+          className={`${isHidden ? 'outline outline-1 outline-[#CFF073] bg-transparent text-[#CFF073]' : 'bg-[#CFF073] text-[#111115]'} px-3 py-[6px] h-fit text-[10px] font-medium`}
+          onClick={() => hiddenFunction()}
+        >
+          {isHidden ? 'Unhide' : 'Hide'}
+        </Button>
+      </div>
     </div>
   )
 }
 
-interface Button {
-  name: string
-  itemCount: number
-  isActive: boolean
-}
-
-interface CreatedNFT {
-  imgSrc: string
-  artist: string
-  price: number
-  isLiked: boolean
-  likeCount: number
-  isHidden: boolean
-  isComplete: boolean
-  isDomain: boolean
-  isCollectible: boolean
-  isMetaverse: boolean
-  isArt: boolean
-}
-
-const buttons: Button[] = [
-  { name: 'All', itemCount: 20, isActive: true },
-  { name: 'Complete', itemCount: 4, isActive: false },
-  { name: 'Domain', itemCount: 4, isActive: false },
-  { name: 'Collectibles', itemCount: 4, isActive: false },
-  { name: 'Metaverse', itemCount: 4, isActive: false },
-  { name: 'Art', itemCount: 4, isActive: false },
-]
-
-const createdNFT: CreatedNFT[] = [
-  {
-    imgSrc: '/assets/images/profile/featuredNFT.png',
-    artist: 'Bored Ape',
-    price: 14,
-    isLiked: false,
-    likeCount: 40,
-    isHidden: false,
-    isComplete: true,
-    isDomain: false,
-    isCollectible: false,
-    isMetaverse: false,
-    isArt: false,
-  },
-  {
-    imgSrc: '/assets/images/profile/featuredNFT.png',
-    artist: 'Micheal Marcagi',
-    price: 14,
-    isLiked: false,
-    likeCount: 39,
-    isHidden: false,
-    isComplete: false,
-    isDomain: true,
-    isCollectible: false,
-    isMetaverse: false,
-    isArt: false,
-  },
-  {
-    imgSrc: '/assets/images/profile/featuredNFT.png',
-    artist: 'Hozier',
-    price: 14,
-    isLiked: false,
-    likeCount: 38,
-    isHidden: false,
-    isComplete: false,
-    isDomain: false,
-    isCollectible: true,
-    isMetaverse: false,
-    isArt: false,
-  },
-  {
-    imgSrc: '/assets/images/profile/featuredNFT.png',
-    artist: 'Royel Otis',
-    price: 14,
-    isLiked: false,
-    likeCount: 37,
-    isHidden: false,
-    isComplete: false,
-    isDomain: false,
-    isCollectible: false,
-    isMetaverse: true,
-    isArt: false,
-  },
-  {
-    imgSrc: '/assets/images/profile/featuredNFT.png',
-    artist: 'Matt Hansen',
-    price: 14,
-    isLiked: false,
-    likeCount: 36,
-    isHidden: false,
-    isComplete: false,
-    isDomain: false,
-    isCollectible: false,
-    isMetaverse: false,
-    isArt: true,
-  },
-]
-
-/* Bottom section of the card
-
-<div className="flex w-full items-center justify-between pt-3 border-t border-[#353538]">
-          <div className="flex items-center gap-1">
-            <LikeIcon
-              className={`w-4 h-4 transition-all duration-300 ${isLiked ? 'stroke-none fill-[#CFF073]' : 'stroke-white fill-none'}`}
-              onClick={() => likeFunction()}
-            />
-            <p className="text-xs text-white font-normal">
-              {isLiked ? likeCount + 1 : likeCount}
-            </p>
-          </div>
-
-          <Button
-            variant="default"
-            className={`${isHidden ? 'outline outline-1 outline-[#CFF073] bg-transparent text-[#CFF073]' : 'bg-[#CFF073] text-[#111115]'} px-3 py-[6px] h-fit text-[10px] font-medium`}
-            onClick={() => hiddenFunction()}
-          >
-            {isHidden ? 'Unhide' : 'Hide'}
-          </Button>
-        </div>
+        <CreatedCard
+                key={index}
+                isLiked={item.isLiked}
+                likeCount={item.likeCount}
+                imgSrc={item.imgSrc}
+                artist={item.artist}
+                price={item.price}
+                className={`${item.isArt ? 'flex' : 'hidden'}`}
+                isHidden={item.isHidden}
+                likeFunction={() => toggleLike(index)}
+                hiddenFunction={() => toggleHidden(index)}
+              />
 **/
