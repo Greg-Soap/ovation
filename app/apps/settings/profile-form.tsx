@@ -19,6 +19,7 @@ import { Button } from '@/components/ui/button'
 import { DatePicker } from '@/components/ui/date-picker'
 import { Textarea } from '@/components/ui/textarea'
 import SettingsChange from '../_components/_settings/settings-change'
+import { useState } from 'react'
 
 const formSchema = z.object({
   displayname: z.string(),
@@ -32,6 +33,8 @@ const formSchema = z.object({
 })
 
 export default function ProfileForm() {
+  const [disabled, setDisabled] = useState(true)
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
@@ -45,6 +48,7 @@ export default function ProfileForm() {
       <form
         className="mt-[45px] flex flex-col gap-7 w-full"
         onSubmit={form.handleSubmit(formSUbmit)}
+        onChange={() => setDisabled(false)}
       >
         <div className="w-full flex gap-7 flex-col  lg:px-10 2xl:pl-20">
           <FormField
@@ -188,7 +192,7 @@ export default function ProfileForm() {
             )}
           />{' '}
         </div>
-        <SettingsChange />
+        <SettingsChange disabled={disabled} />
       </form>
     </Form>
   )

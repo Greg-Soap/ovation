@@ -23,6 +23,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { useState } from 'react'
+import { Checkbox } from '@/components/ui/checkbox'
 
 const formSchema = z.object({
   Company: z.string(),
@@ -36,6 +38,9 @@ const formSchema = z.object({
 })
 
 export default function ExperienceForm() {
+  const [disabled, setDisabled] = useState<boolean>(true)
+  const [disableDate, setDisableDate] = useState<boolean>(false)
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
@@ -46,13 +51,16 @@ export default function ExperienceForm() {
 
   return (
     <div className="flex flex-col gap-[23px]">
-      <p className="text-lg text-[#E6E6E6] font-medium lg:px-10 2xl:pl-20">
+      <p className="text-lg text-[#E6E6E6] font-medium lg:px-10 2xl:px-20">
         Experience 1
       </p>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="w-full flex gap-7 flex-col lg:px-10 2xl:pl-20 pb-5">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          onChange={() => setDisabled(false)}
+        >
+          <div className="flex gap-7 flex-col lg:px-10 2xl:pl-20 pb-5">
             <FormField
               control={form.control}
               name="Company"
@@ -61,7 +69,7 @@ export default function ExperienceForm() {
                   <FormLabel className="text-sm text-[#B3B3B3]">
                     Company
                   </FormLabel>
-                  <FormControl>
+                  <FormControl {...field}>
                     <Select>
                       <SelectTrigger className="w-full h-[47px] rounded-full px-5 otline-none border border-[#333333] text-[#F8F8FF]">
                         <SelectValue
@@ -72,11 +80,18 @@ export default function ExperienceForm() {
                       <SelectContent className="bg-[#111115] border-none rounded-[10px] px-0">
                         {companyList.map((item, index) => (
                           <SelectItem
-                            value={item.value}
+                            value={item?.value ? item?.value : ''}
                             key={index}
-                            className="bg-[#111115] border-b border-[#4D4D4D] last:border-none text-[#F8F8FF] text-lg font-medium rounded-none hover:bg-[#111115]"
+                            className="bg-[#111115] border-b border-[#4D4D4D] last:border-none text-[#F8F8FF] text-lg font-medium rounded-none first:rounded-t-[10px] last:rounded-b-[10px] hover:bg-[#111115] px-4 py-2"
                           >
-                            {item.name}
+                            <div className="flex flex-row gap-2 items-center">
+                              <img
+                                src={`${item.imgSrc}`}
+                                alt={item.name}
+                                className="w-6 h-6"
+                              />
+                              <p>{item.name}</p>
+                            </div>
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -113,7 +128,7 @@ export default function ExperienceForm() {
                   <FormLabel className="text-sm text-[#B3B3B3]">
                     Department
                   </FormLabel>
-                  <FormControl>
+                  <FormControl {...field}>
                     <Select>
                       <SelectTrigger className="w-full h-[47px] rounded-full px-5 otline-none border border-[#333333] text-[#F8F8FF]">
                         <SelectValue
@@ -124,9 +139,9 @@ export default function ExperienceForm() {
                       <SelectContent className="bg-[#111115] border-none rounded-[10px] px-0">
                         {departmentList.map((item, index) => (
                           <SelectItem
-                            value={item?.value}
+                            value={item?.value ? item?.value : ''}
                             key={index}
-                            className="bg-[#111115] border-b border-[#4D4D4D] last:border-none text-[#F8F8FF] text-lg font-medium rounded-none hover:bg-[#111115]"
+                            className="bg-[#111115] border-b border-[#4D4D4D] last:border-none text-[#F8F8FF] text-lg font-medium rounded-none first:rounded-t-[10px] last:rounded-b-[10px] px-4 py-2"
                           >
                             {item.name}
                           </SelectItem>
@@ -150,9 +165,7 @@ export default function ExperienceForm() {
                         Start Date
                       </FormLabel>
                       <FormControl {...field}>
-                        <div className="flex border border-[#4D4D4D] rounded-full h-[47px]">
-                          <DatePicker />
-                        </div>
+                        <DatePicker />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -167,14 +180,27 @@ export default function ExperienceForm() {
                         Finish Date
                       </FormLabel>
                       <FormControl {...field}>
-                        <div className="flex border border-[#4D4D4D] rounded-full h-[47px]">
-                          <DatePicker />
-                        </div>
+                        <DatePicker disableDate={disableDate} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+              </div>
+
+              <div className="flex items-center gap-[7px] mt-[13px]">
+                <Checkbox
+                  id="work"
+                  onCheckedChange={() => setDisableDate(!disableDate)}
+                  className="border-[#CFF073] data-[state=checked]:bg-[#CFF073] data-[state=checked]:text-[#0B0A10]"
+                />
+
+                <label
+                  htmlFor="work"
+                  className="text-xs text-[#CCCDD7] leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                  I still work here
+                </label>
               </div>
             </div>
 
@@ -219,25 +245,45 @@ export default function ExperienceForm() {
             />
           </div>
 
-          <SettingsChange />
+          <SettingsChange disabled={disabled} />
         </form>
       </Form>
     </div>
   )
 }
 
-interface CommunityList {
+interface CompanyList {
   name?: string
   value?: string
   imgSrc?: string
 }
 
-const companyList = [
-  { name: 'Google', value: 'google', imgSrc: '/' },
-  { name: 'Slack', value: 'slack', imgSrc: '/' },
-  { name: 'Apple', value: 'apple', imgSrc: '/' },
-  { name: 'Meta', value: 'meta', imgSrc: '/' },
-  { name: 'Netflix', value: 'netflix', imgSrc: '/' },
+const companyList: CompanyList[] = [
+  {
+    name: 'Google',
+    value: 'google',
+    imgSrc: '/assets/images/settings/company/google.png',
+  },
+  {
+    name: 'Slack',
+    value: 'slack',
+    imgSrc: '/assets/images/settings/company/slack.png',
+  },
+  {
+    name: 'Apple',
+    value: 'apple',
+    imgSrc: '/assets/images/settings/company/apple.png',
+  },
+  {
+    name: 'Meta',
+    value: 'meta',
+    imgSrc: '/assets/images/settings/company/meta.png',
+  },
+  {
+    name: 'Netflix',
+    value: 'netflix',
+    imgSrc: '/assets/images/settings/company/netflix.png',
+  },
 ]
 
 interface DepartmentList {
@@ -245,7 +291,7 @@ interface DepartmentList {
   value?: string
 }
 
-const departmentList = [
+const departmentList: DepartmentList[] = [
   { name: 'Executive', value: 'executive' },
   { name: 'Finance', value: 'finance' },
   { name: 'Product', value: 'product' },

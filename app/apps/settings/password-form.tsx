@@ -12,6 +12,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import SettingsChange from '../_components/_settings/settings-change'
+import { useState } from 'react'
 
 const formSchema = z.object({
   oldPassword: z.string(),
@@ -20,13 +21,18 @@ const formSchema = z.object({
 })
 
 export default function PasswordForm() {
+  const [disabled, setDisabled] = useState<boolean>(true)
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
 
   return (
     <Form {...form}>
-      <form className="h-full flex flex-col w-full">
+      <form
+        className="h-full flex flex-col w-full"
+        onChange={() => setDisabled(false)}
+      >
         <div className="pl-20 h-full flex gap-7 flex-col box-border pb-5 lg:px-10 2xl:pl-20">
           <FormField
             name="oldPassword"
@@ -83,7 +89,7 @@ export default function PasswordForm() {
             )}
           />
         </div>
-        <SettingsChange />
+        <SettingsChange disabled={disabled} />
       </form>
     </Form>
   )

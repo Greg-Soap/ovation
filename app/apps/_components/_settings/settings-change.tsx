@@ -7,14 +7,17 @@ import {
 import { Button } from '@/components/ui/button'
 import DiscardChanges from '../../_sections/_settings/discard-changes'
 
-export default function SettingsChange() {
+export default function SettingsChange({ disabled, position }: any) {
   return (
-    <div className="flex gap-4 items-center bg-[#18181C] sticky justify-end lg:pr-10 bottom-0 w-full h-[103px]">
+    <div
+      className={`flex gap-4 items-center bg-[#18181C] ${position ? position : 'sticky'} bottom-0 justify-end lg:pr-10 w-full h-[103px]`}
+    >
       <Dialog>
         <DialogTrigger asChild>
           <Button
             variant={'outline'}
             type="button"
+            disabled={disabled}
             className="h-[46px] font-semibold text-white rounded-full w-[150px] bg-[#18181C] border-[1px] border-[#353538] text-[13px]"
           >
             Discard changes
@@ -27,6 +30,7 @@ export default function SettingsChange() {
 
       <Button
         type="submit"
+        disabled={disabled}
         className="h-[46px] text-[13px] text-[#0B0A10] font-semibold rounded-full w-[125px]"
       >
         Save changes

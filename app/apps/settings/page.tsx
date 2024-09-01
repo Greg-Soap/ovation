@@ -7,34 +7,11 @@ import SocialForm from '../_sections/_settings/social-form'
 import ExperienceForm from '../_sections/_settings/experience-form'
 import WalletForm from '../_sections/_settings/wallet-form'
 
-const tabHeading = [
-  {
-    heading: 'Personal Info',
-    subtitle: 'Update your information and details here',
-  },
-  {
-    heading: 'Socials',
-    subtitle: 'Set your social profile to build trust and security',
-  },
-  {
-    heading: 'Experience',
-    subtitle: 'Set your work profile to build trust and security',
-  },
-  {
-    heading: 'Wallets',
-    subtitle: 'Update your wallet info and details here',
-  },
-  {
-    heading: 'Password',
-    subtitle: 'Make your account secure',
-  },
-]
-
 export default function page() {
   return (
     <section className="w-full h-full">
       <Tabs
-        className="flex h-full overflow-hidden w-full"
+        className="flex h-full w-full overflow-hidden"
         defaultValue={'Personal Info'}
       >
         <div className="border-r-[1px] border-[#1A1A1A] min-w-[414px] lg:max-w-[505px] items-center flex flex-col pt-8 overflow-y-scroll">
@@ -48,12 +25,19 @@ export default function page() {
           >
             {tabHeading.map((item, index) => (
               <TabsTrigger
-                value={item.heading}
+                value={item.heading ? item.heading : ''}
                 key={index}
-                className="flex data-[state=active]:bg-[#18181C] data-[state=active]:border-[#18181C] flex-col justify-start items-start w-full px-[26px] py-4"
+                className="flex items-center gap-3 data-[state=active]:bg-[#18181C] data-[state=active]:border-[#18181C] justify-start w-full px-[26px] py-4"
               >
-                <h3 className="text-sm text-[#F8F8FF]">{item.heading}</h3>
-                <p className="text-[#B3B3B3] text-xs">{item.subtitle}</p>
+                <img
+                  src={`${item.imgSrc}`}
+                  alt={item.heading}
+                  className="w-6 h-6"
+                />
+                <div className="flex flex-col items-start gap-1">
+                  <h3 className="text-sm text-[#F8F8FF]">{item.heading}</h3>
+                  <p className="text-[#B3B3B3] text-xs">{item.subtitle}</p>
+                </div>
               </TabsTrigger>
             ))}
           </TabsList>
@@ -78,8 +62,8 @@ export default function page() {
           value={'Socials'}
           className="pt-8 w-full h-full overflow-y-scroll"
         >
-          <div className="flex flex-col lg:px-10 2xl:pl-20 gap-[42px]">
-            <div className="flex flex-col gap-1">
+          <div className=" w-full h-full flex flex-col  gap-[42px]">
+            <div className="flex flex-col gap-1 lg:px-10 2xl:pl-20">
               <h2 className="font-semibold text-[22px] text-[#F8F8FF]">
                 {tabHeading[1].heading}
               </h2>
@@ -93,7 +77,7 @@ export default function page() {
           value={'Experience'}
           className=" pt-8 w-full h-full overflow-y-scroll"
         >
-          <section className="flex flex-col gap-[42px]">
+          <div className="flex flex-col gap-[42px]">
             <div className="flex flex-col gap-1 lg:px-10 2xl:pl-20">
               <h2 className="font-semibold text-[22px] text-[#F8F8FF]">
                 {tabHeading[2].heading}
@@ -102,7 +86,7 @@ export default function page() {
             </div>
 
             <ExperienceForm />
-          </section>
+          </div>
         </TabsContent>
         <TabsContent
           value={'Wallets'}
@@ -138,3 +122,37 @@ export default function page() {
     </section>
   )
 }
+
+interface TagHeading {
+  imgSrc?: string
+  heading?: string
+  subtitle?: string
+}
+
+const tabHeading: TagHeading[] = [
+  {
+    imgSrc: '/assets/images/settings/tab-list/one.png',
+    heading: 'Personal Info',
+    subtitle: 'Update your information and details here',
+  },
+  {
+    imgSrc: '/assets/images/settings/tab-list/two.png',
+    heading: 'Socials',
+    subtitle: 'Set your social profile to build trust and security',
+  },
+  {
+    imgSrc: '/assets/images/settings/tab-list/three.png',
+    heading: 'Experience',
+    subtitle: 'Set your work profile to build trust and security',
+  },
+  {
+    imgSrc: '/assets/images/settings/tab-list/four.png',
+    heading: 'Wallets',
+    subtitle: 'Update your wallet info and details here',
+  },
+  {
+    imgSrc: '/assets/images/settings/tab-list/five.png',
+    heading: 'Password',
+    subtitle: 'Make your account secure',
+  },
+]
