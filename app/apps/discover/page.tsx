@@ -75,7 +75,7 @@ function GetStarted() {
           </div>
 
           <Button asChild className='transition-all duration-300 mt-2 hover:opacity-80'>
-            <Link href='/login' className='text-[10px] text-[#111115] font-medium'>
+            <Link href='/apps/profile' className='text-[10px] text-[#111115] font-medium'>
               Go to profile
             </Link>
           </Button>
@@ -101,7 +101,7 @@ function GetStarted() {
           </div>
 
           <Button asChild className='transition-all duration-300 mt-2 hover:opacity-80'>
-            <Link href='/login' className='text-[10px] text-[#111115] font-medium'>
+            <Link href='/apps/profile' className='text-[10px] text-[#111115] font-medium'>
               Go to profile
             </Link>
           </Button>

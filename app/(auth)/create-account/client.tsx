@@ -2,26 +2,18 @@
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, useFormContext } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import PathICon from '@/components/icons/pathIcon'
 import { ChevronRight } from 'lucide-react'
 import Image from 'next/image'
-import Link from 'next/link'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import arrow from '@/public/assets/images/arrow-right.png'
 import Bnb from '@/public/assets/images/ovationWallets/ovationWalletIcon2'
-// import walletData from './_data'
-import { SetStateAction, useEffect, useState } from 'react'
-import WalletConnectComponent from './WalletConnectComponent';
+import { useEffect, useState } from 'react'
+import WalletConnectComponent from './WalletConnectComponent'
 
 const formSchema = z.object({
   email: z.string().email('Input a valid email address'),
@@ -70,38 +62,35 @@ export default function AccountForm({ setOptionalLeft }: Props) {
   }
 
   const handleWalletConnected = (account: string) => {
-    console.log('Wallet connected:', account);
+    console.log('Wallet connected:', account)
     // Additional logic when a wallet is connected
-  };
+  }
 
   const handleWalletDisconnected = () => {
-    console.log('Wallet disconnected');
+    console.log('Wallet disconnected')
     // Additional logic when a wallet is disconnected
-  };
+  }
 
   function renderForm1() {
     return (
       <div>
-        <div className="flex items-center justify-between mb-5">
-          <span className="w-[46%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]  text-[#C1C0C6]" />
-          <p className="text-[10px] font-medium text-[#C1C0C6]">OR</p>
-          <span className="w-[46%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]" />
+        <div className='flex items-center justify-between mb-5'>
+          <span className='w-[46%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]  text-[#C1C0C6]' />
+          <p className='text-[10px] font-medium text-[#C1C0C6]'>OR</p>
+          <span className='w-[46%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]' />
         </div>
-        <form
-          onSubmit={form.handleSubmit(formSubmit)}
-          className="flex flex-col gap-7"
-        >
+        <form onSubmit={form.handleSubmit(formSubmit)} className='flex flex-col gap-7'>
           <FormField
             control={form.control}
-            name="displayName"
+            name='displayName'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Display name</FormLabel>
                 <FormControl {...field}>
                   <Input
-                    className="h-[46px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
-                    placeholder="kvngCZ"
-                    type="text"
+                    className='h-[46px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full'
+                    placeholder='kvngCZ'
+                    type='text'
                   />
                 </FormControl>
               </FormItem>
@@ -109,15 +98,15 @@ export default function AccountForm({ setOptionalLeft }: Props) {
           />
           <FormField
             control={form.control}
-            name="userName"
+            name='userName'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Username</FormLabel>
                 <FormControl {...field}>
                   <Input
-                    className="h-[46px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
-                    placeholder="chang_zhao"
-                    type="text"
+                    className='h-[46px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full'
+                    placeholder='chang_zhao'
+                    type='text'
                   />
                 </FormControl>
               </FormItem>
@@ -125,15 +114,15 @@ export default function AccountForm({ setOptionalLeft }: Props) {
           />
           <FormField
             control={form.control}
-            name="email"
+            name='email'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl {...field}>
                   <Input
-                    className="h-[46px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
-                    placeholder="cz@blockchain.com"
-                    type="email"
+                    className='h-[46px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full'
+                    placeholder='cz@blockchain.com'
+                    type='email'
                   />
                 </FormControl>
               </FormItem>
@@ -141,15 +130,15 @@ export default function AccountForm({ setOptionalLeft }: Props) {
           />
           <FormField
             control={form.control}
-            name="password"
+            name='password'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl {...field}>
                   <Input
-                    className="h-[46px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
-                    placeholder="*********"
-                    type="password"
+                    className='h-[46px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full'
+                    placeholder='*********'
+                    type='password'
                   />
                 </FormControl>
               </FormItem>
@@ -157,24 +146,23 @@ export default function AccountForm({ setOptionalLeft }: Props) {
           />
           <FormField
             control={form.control}
-            name="passwordConfirm"
+            name='passwordConfirm'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Confirm Password</FormLabel>
                 <FormControl {...field}>
                   <Input
-                    className="h-[46px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
-                    placeholder="*********"
-                    type="password"
+                    className='h-[46px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full'
+                    placeholder='*********'
+                    type='password'
                   />
                 </FormControl>
               </FormItem>
             )}
           />
           <Button
-            className="w-full h-[52px] hover:scale-95 text-sm font-semibold"
-            onClick={() => setPage(2)}
-          >
+            className='w-full h-[52px] hover:scale-95 text-sm font-semibold'
+            onClick={() => setPage(2)}>
             Continue
           </Button>
         </form>
@@ -188,71 +176,60 @@ export default function AccountForm({ setOptionalLeft }: Props) {
       setActive(num)
     }
     return (
-      <form
-        onSubmit={form.handleSubmit(formSubmit)}
-        className="flex flex-col gap-7"
-      >
+      <form onSubmit={form.handleSubmit(formSubmit)} className='flex flex-col gap-7'>
         <FormField
           control={form.control}
-          name="path"
+          name='path'
           render={({ field }) => (
             <FormItem>
               <FormControl {...field}>
-                <div className="flex flex-col md:flex-row items-center  flex-wrap  w-full gap-4">
+                <div className='flex flex-col md:flex-row items-center  flex-wrap  w-full gap-4'>
                   <Button
                     onClick={() => handleButtonClick(1, 'Artist')}
-                    className={` ${active === 1 ? 'border-[#cff073] border-1 shadow-2xl scale-95' : 'border-[#353538]'} h-[234px] hover:scale-95 max-w-[242px]  bg-transparent border-[1px] flex flex-col gap-2 rounded-lg`}
-                  >
-                    <span className="rounded-full mb-5 w-9 h-9 bg-[#283502] items-center flex justify-center">
+                    className={` ${active === 1 ? 'border-[#cff073] border-1 shadow-2xl scale-95' : 'border-[#353538]'} h-[234px] hover:scale-95 max-w-[242px]  bg-transparent border-[1px] flex flex-col gap-2 rounded-lg`}>
+                    <span className='rounded-full mb-5 w-9 h-9 bg-[#283502] items-center flex justify-center'>
                       <PathICon />
                     </span>
-                    <h3 className="font-semibold text-sm text-white">ARTIST</h3>
-                    <p className="text-[11px] text-wrap  text-[#B3B3B3]">
-                      Ovation elevates the experience of artists, enhancing
-                      their visibility and reputation...
+                    <h3 className='font-semibold text-sm text-white'>ARTIST</h3>
+                    <p className='text-[11px] text-wrap  text-[#B3B3B3]'>
+                      Ovation elevates the experience of artists, enhancing their visibility and
+                      reputation...
                     </p>
                   </Button>
                   <Button
                     onClick={() => handleButtonClick(2, 'Enthusiast')}
-                    className={`${active === 2 ? 'border-[#EF91FF] scale-95' : 'border-[#353538]'} h-[234px] hover:scale-95 max-w-[242px]  bg-transparent border-[1px] flex flex-col gap-2 rounded-lg`}
-                  >
-                    <span className="rounded-full mb-5 w-9 h-9 bg-[#42044C] items-center flex justify-center">
-                      <PathICon strokeLine="#EF91FF" />
+                    className={`${active === 2 ? 'border-[#EF91FF] scale-95' : 'border-[#353538]'} h-[234px] hover:scale-95 max-w-[242px]  bg-transparent border-[1px] flex flex-col gap-2 rounded-lg`}>
+                    <span className='rounded-full mb-5 w-9 h-9 bg-[#42044C] items-center flex justify-center'>
+                      <PathICon strokeLine='#EF91FF' />
                     </span>
-                    <h3 className="font-semibold text-sm text-white">
-                      ENTHUSIAST
-                    </h3>
-                    <p className="text-[11px] text-wrap text-[#B3B3B3]">
-                      ENTHUSIAST Ovation allows enthusiasts to connect with
-                      their favourite creators and communities...
+                    <h3 className='font-semibold text-sm text-white'>ENTHUSIAST</h3>
+                    <p className='text-[11px] text-wrap text-[#B3B3B3]'>
+                      ENTHUSIAST Ovation allows enthusiasts to connect with their favourite creators
+                      and communities...
                     </p>
                   </Button>
                   <Button
                     onClick={() => handleButtonClick(3, 'Project')}
-                    className={` ${active === 3 ? 'border-[#FF9B02] scale-95' : 'border-[#353538]'} h-[234px] hover:scale-95 max-w-[242px]  bg-transparent border-[1px] flex flex-col gap-2 rounded-lg`}
-                  >
-                    <span className="rounded-full mb-5 w-9 h-9 bg-[#2F2009] items-center flex justify-center">
-                      <PathICon strokeLine="#FF9B02" />
+                    className={` ${active === 3 ? 'border-[#FF9B02] scale-95' : 'border-[#353538]'} h-[234px] hover:scale-95 max-w-[242px]  bg-transparent border-[1px] flex flex-col gap-2 rounded-lg`}>
+                    <span className='rounded-full mb-5 w-9 h-9 bg-[#2F2009] items-center flex justify-center'>
+                      <PathICon strokeLine='#FF9B02' />
                     </span>
-                    <h3 className="font-semibold text-sm text-white">
-                      PROJECT
-                    </h3>
-                    <p className="text-[11px] text-wrap text-[#B3B3B3]">
-                      Ovation elevates the experience of artists, enhancing
-                      their visibility and reputation...
+                    <h3 className='font-semibold text-sm text-white'>PROJECT</h3>
+                    <p className='text-[11px] text-wrap text-[#B3B3B3]'>
+                      Ovation elevates the experience of artists, enhancing their visibility and
+                      reputation...
                     </p>
                   </Button>
                   <Button
                     onClick={() => handleButtonClick(4, 'Trader')}
-                    className={` ${active === 4 ? 'border-[#0094FF] scale-95 shadow-lg' : 'border-[#353538]'} h-[234px] hover:scale-95 max-w-[242px]  bg-transparent border-[1px] flex flex-col gap-2 rounded-lg`}
-                  >
-                    <span className="rounded-full mb-5 w-9 h-9 bg-[#0B293F] items-center flex justify-center">
-                      <PathICon strokeLine="#0094FF" />
+                    className={` ${active === 4 ? 'border-[#0094FF] scale-95 shadow-lg' : 'border-[#353538]'} h-[234px] hover:scale-95 max-w-[242px]  bg-transparent border-[1px] flex flex-col gap-2 rounded-lg`}>
+                    <span className='rounded-full mb-5 w-9 h-9 bg-[#0B293F] items-center flex justify-center'>
+                      <PathICon strokeLine='#0094FF' />
                     </span>
-                    <h3 className="font-semibold text-sm text-white">TRADER</h3>
-                    <p className="text-[11px] text-wrap text-[#B3B3B3]">
-                      Ovation allows traders to track, trade, and barter NFTs.
-                      Traders can explore...
+                    <h3 className='font-semibold text-sm text-white'>TRADER</h3>
+                    <p className='text-[11px] text-wrap text-[#B3B3B3]'>
+                      Ovation allows traders to track, trade, and barter NFTs. Traders can
+                      explore...
                     </p>
                   </Button>
                 </div>
@@ -262,8 +239,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
         />
         <Button
           onClick={() => setPage(3)}
-          className="hover:scale-95 w-full h-[52px] text-sm font-semibold"
-        >
+          className='hover:scale-95 w-full h-[52px] text-sm font-semibold'>
           Continue
         </Button>
       </form>
@@ -316,30 +292,24 @@ export default function AccountForm({ setOptionalLeft }: Props) {
     }
 
     return (
-      <div className=" flex flex-col gap-7">
-        <div className="flex text-white text-sm items-center justify-between p-4 border-[1px] border-[#353538] rounded-full">
+      <div className=' flex flex-col gap-7'>
+        <div className='flex text-white text-sm items-center justify-between p-4 border-[1px] border-[#353538] rounded-full'>
           <p>OXrvsh.srvydubhjnikm</p>
           <Bnb />
         </div>
-        <Button
-          onClick={() => handleClick()}
-          className=" w-full text-sm font-semibold h-[53px]"
-        >
+        <Button onClick={() => handleClick()} className=' w-full text-sm font-semibold h-[53px]'>
           Make my profile
         </Button>
-        <p className="text-center mb-4">
-          By clicking &quot;make my profile&quot; you agree to our privacy
-          terms, code of conduct and Conditions.
+        <p className='text-center mb-4'>
+          By clicking &quot;make my profile&quot; you agree to our privacy terms, code of conduct
+          and Conditions.
         </p>
-        <div className="flex gap-2 items-center justify-center">
+        <div className='flex gap-2 items-center justify-center'>
           <p> Not you?</p> {''}
-          <Button
-            onClick={() => setPage(3)}
-            className="h-6 bg-transparent text-[#Cff073]"
-          >
+          <Button onClick={() => setPage(3)} className='h-6 bg-transparent text-[#Cff073]'>
             Change wallet
           </Button>
-          <Image src={arrow} alt="arrow" />
+          <Image src={arrow} alt='arrow' />
         </div>
       </div>
     )
@@ -359,40 +329,39 @@ export default function AccountForm({ setOptionalLeft }: Props) {
   }
 
   return (
-    <div className="flex flex-col gap-11">
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-3xl font-semibold text-white items-center justify-between  flex">
+    <div className='flex flex-col gap-11'>
+      <div className='flex items-center justify-between'>
+        <div className='flex flex-col gap-2'>
+          <h1 className='text-3xl font-semibold text-white items-center justify-between  flex'>
             <span> Create Account</span>
             <Button
               onClick={() => setPage(3)}
-              className={`${page === 2 ? 'visible' : 'hidden'} bg-white text-black font-semibold text-sm`}
-            >
+              className={`${page === 2 ? 'visible' : 'hidden'} bg-white text-black font-semibold text-sm`}>
               Skip
             </Button>
           </h1>
-          <div className="flex gap-1 items-center justify-start">
-            <p
+          <div className='flex gap-1 items-center justify-start'>
+            <button
+              type='button'
               onClick={() => setPage(1)}
-              className={`${page >= 1 ? 'text-[#E6E6E6] font-semibold' : ''} text-xs md:text-base  text-center flex gap-0 w-fit cursor-pointer`}
-            >
+              className={`${page >= 1 ? 'text-[#E6E6E6] font-semibold' : ''} text-xs md:text-base  text-center flex gap-0 w-fit cursor-pointer`}>
               Personal info
-            </p>
-            <ChevronRight color="#cff073" height={'14px'} width={'14px'} />
-            <p
+            </button>
+            <ChevronRight color='#cff073' height={'14px'} width={'14px'} />
+            <button
+              type='button'
               onClick={() => setPage(2)}
-              className={`${page >= 2 ? 'text-[#E6E6E6] font-semibold' : ''} text-xs md:text-base  cursor-pointer`}
-            >
+              className={`${page >= 2 ? 'text-[#E6E6E6] font-semibold' : ''} text-xs md:text-base  cursor-pointer`}>
               Choose path
-            </p>
-            <ChevronRight color="#cff073" height={'14px'} width={'14px'} />
-            <p
+            </button>
+            <ChevronRight color='#cff073' height={'14px'} width={'14px'} />
+            <button
+              type='button'
               onClick={() => setPage(3)}
-              className={`${page >= 3 ? 'text-[#E6E6E6] font-semibold' : ''} text-xs md:text-base  cursor-pointer`}
-            >
+              className={`${page >= 3 ? 'text-[#E6E6E6] font-semibold' : ''} text-xs md:text-base  cursor-pointer`}>
               Connect wallet
-            </p>
-            <ChevronRight color="#cff073" height={'14px'} width={'14px'} />
+            </button>
+            <ChevronRight color='#cff073' height={'14px'} width={'14px'} />
           </div>
         </div>
       </div>
