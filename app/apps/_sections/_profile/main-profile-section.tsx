@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import NftCard from '../../_components/_profile/nft-card'
 
 export default function MainProfileSection() {
   return (
@@ -25,7 +26,6 @@ export default function MainProfileSection() {
           <div className="flex items-center gap-2.5">
             <Popover>
               <PopoverTrigger>
-                {' '}
                 <PlusIcon className="stroke-[#CFF073] w-4 h-4" />
               </PopoverTrigger>
               <PopoverContent className="max-w-[104px] flex flex-col rounded-[6px] bg-[#232227] p-0 border-none">
@@ -51,31 +51,14 @@ export default function MainProfileSection() {
 
         <div className="flex flex-wrap gap-3">
           {featured.map((item, index) => (
-            <div
-              className="w-full lg:w-[248px] flex flex-col bg-[#18181C] border border-[#FFFFFF14] rounded-[10px]"
+            <NftCard
               key={index}
-            >
-              <Image
-                src={item.imgSrc}
-                alt="NFT Preview"
-                width={500}
-                height={217}
-                className="rounded-t-[10px]"
-              />
-
-              <div className="flex items-center justify-between bg-[#111115] border border-[#FFFFFF0D] px-3 py-2 rounded-b-[10px]">
-                <div className="flex flex-col items-start">
-                  <p className="text-[11px] text-[#999999]">Artist</p>
-                  <p className="text-[#F8F8FF] text-xs font-semibold">
-                    {item.artist}
-                  </p>
-                </div>
-                <div className="flex flex-col items-end">
-                  <p className="text-[11px] text-[#999999]">Price</p>
-                  <p className="text-[#F8F8FF] text-xs font-semibold">{`${item.price} ETH`}</p>
-                </div>
-              </div>
-            </div>
+              type="featured"
+              imgSrc={item.imgSrc}
+              artist={item.artist}
+              price={item.price}
+              className="lg:w-[248px] bg-[#18181C]"
+            />
           ))}
         </div>
       </div>
