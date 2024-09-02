@@ -175,7 +175,7 @@ function PortfolioCard({
 }: CardProps) {
   return (
     <div
-      className={`${className} w-full min-w-[261px] max-w-[296px] flex-col bg-[#18181C] border border-[#FFFFFF14] rounded-[10px] relative m-0`}
+      className={`${className} w-full min-w-[261px] w-full sm:max-w-[296px] flex-col bg-[#18181C] border border-[#FFFFFF14] rounded-[10px] relative m-0`}
       key={index}
     >
       <div className="flex items-center p-2 rounded-full bg-[#333726] absolute right-5 top-3">
