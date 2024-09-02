@@ -2,7 +2,6 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import SearchInput from '../_components/_timeline/search-input'
-import { z } from 'zod'
 import ProfileForm from './profile-form'
 import PasswordForm from './password-form'
 import SocialForm from '../_sections/_settings/social-form'
@@ -60,13 +59,13 @@ export default function page() {
             className={`pt-8 w-full h-full overflow-y-scroll`}
           >
             <section className="flex flex-col gap-[42px] w-full">
-              <div className="relative flex justify-center gap-3 px-4 sm:px-10 2xl:px-20">
+              <div className="relative flex justify-center xl:justify-start gap-3 px-4 sm:px-10 2xl:px-20">
                 <ArrowLeft
                   color="white"
                   variant="Outline"
                   size={24}
                   onClick={() => setHidden(true)}
-                  className="absolute left-10"
+                  className="absolute left-10 flex xl:hidden"
                 />
 
                 <div className="flex flex-col items-center xl:items-start gap-1">
