@@ -1,6 +1,13 @@
+import { FC } from 'react'
 import { Button } from '@/components/ui/button'
 
-export default function EmptyState({ username, type, name }: any) {
+interface EmptyState {
+  username: string
+  type: string
+  name: string
+}
+
+export default function EmptyState({ username, type, name }: EmptyState) {
   return (
     <div className="flex flex-col items-center mt-5 w-[95%] h-fit border border-[#353538] rounded-[14px] px-5 pt-[15px] pb-10 gap-[30px]">
       <p className="text-sm text-[#F8F8FF] font-medium w-full">{name}</p>

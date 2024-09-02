@@ -1,7 +1,7 @@
 import Editicon from '@/components/icons/edit-icon'
 import PlusIcon from '@/components/icons/plus-icon'
 
-export default function Experience({ data }: any) {
+export default function Experience({ data }: { data: ExperienceData }) {
   return (
     <div className="w-[95%] ml-[2.5%] flex items-center justify-center rounded-[14px] flex-col gap-[34px] mt-[34px]">
       <div className="flex items-center justify-between w-full">
@@ -52,3 +52,5 @@ interface Experience {
   details: string
   extendedDetails: string
 }
+
+type ExperienceData = Experience[]

@@ -18,7 +18,7 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import LikeIcon from '@/components/icons/likeIcon'
 
-export default function Portfolio({ data }: any) {
+export default function Portfolio({ data }: { data: CreatedNFTData }) {
   const [items, setItems] = useState<CreatedNFT[]>(data)
 
   const toggleLike = (index: number) => {
@@ -243,6 +243,8 @@ interface CreatedNFT {
   price: number
   isLiked: boolean
 }
+
+type CreatedNFTData = CreatedNFT[]
 
 const buttons: Button[] = [
   { name: 'All', itemCount: 20 },
