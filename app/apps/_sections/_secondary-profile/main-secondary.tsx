@@ -1,17 +1,26 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import Created from './created'
-import Stats from './stats'
-import Portfolio from './portfolio'
-import Experience from './experience'
-import ComingSoon from './coming-soon'
 import FeaturedSection from '../../_components/_profile/featured-section'
-import { createdNFT } from '../_secondary-profile/portfolio-data'
-import { experienceData } from '../_secondary-profile/experience-data'
+import Created from '../_profile/created'
+import Stats from '../_profile/stats'
+import Portfolio from '../_profile/portfolio'
+import Experience from '../_profile/experience'
+import ComingSoon from '../_profile/coming-soon'
+import EmptyState from '../../_components/_secondary-profile/empty-state'
+import { createdNFT } from './portfolio-data'
+import { experienceData } from './experience-data'
 
-export default function MainProfileSection() {
+export default function MainSecondaryProfile() {
   return (
     <div className="col-span-2 h-full flex flex-col items-center bg-[#111115]">
-      <FeaturedSection featured={featured} showButtons={true} />
+      {featured.length === 0 ? (
+        <EmptyState
+          name="FEATURED"
+          username={'@username'}
+          type="featured post"
+        />
+      ) : (
+        <FeaturedSection featured={featured} showButtons={false} />
+      )}
 
       <Tabs defaultValue="post" className="w-full my-16">
         <TabsList className="items-center rounded-none px-7 pt-5 pb-0 border-y gap-4 border-[#353538] w-full h-fit overflow-x-scroll justify-start">
@@ -67,8 +76,19 @@ export default function MainProfileSection() {
         <TabsContent value="stat">
           <Stats />
         </TabsContent>
-        <TabsContent value="experience">
-          <Experience data={experienceData} />
+        <TabsContent
+          value="experience"
+          className="flex items-center justify-center"
+        >
+          {experienceData.length === 0 ? (
+            <EmptyState
+              name="EXPERIENCE"
+              username={'@username'}
+              type="experience on their profile"
+            />
+          ) : (
+            <Experience data={experienceData} />
+          )}
         </TabsContent>
       </Tabs>
     </div>
