@@ -4,7 +4,7 @@ import { FC } from 'react'
 import Image from 'next/image'
 
 interface NftCardProps {
-  type: 'featured' | 'portfolio' | 'created'
+  type: 'featured' | 'created'
   imgSrc: string
   artist: string
   price: number
@@ -20,7 +20,7 @@ const NftCard: FC<NftCardProps> = ({
 }: any) => {
   return (
     <div
-      className={`w-full ${className} ${type === 'featured' ? 'lg:w-[248px]' : 'min-w-[261px] max-w-[296px]'} flex flex-col border border-[#FFFFFF14] rounded-[10px]`}
+      className={`w-full ${className} ${type === 'featured' ? 'w-full sm:max-w-[275px] lg:w-[248px]' : 'w-full sm:max-w-[296px]'} flex flex-col border border-[#FFFFFF14] rounded-[10px]`}
     >
       <Image
         src={imgSrc}

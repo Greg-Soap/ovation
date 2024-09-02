@@ -51,7 +51,7 @@ export default function FeaturedSection({ featured, showButtons }: any) {
             imgSrc={item.imgSrc}
             artist={item.artist}
             price={item.price}
-            className="lg:w-[248px] bg-[#18181C]"
+            className="w-full sm:max-w-[275px] lg:w-[248px]"
           />
         ))}
       </div>
