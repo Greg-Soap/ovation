@@ -50,7 +50,7 @@ export default function ProfileForm() {
         onSubmit={form.handleSubmit(formSUbmit)}
         onChange={() => setDisabled(false)}
       >
-        <div className="w-full flex gap-7 flex-col  lg:px-10 2xl:pl-20">
+        <div className="w-full flex gap-7 flex-col px-4 sm:px-10 2xl:px-20">
           <FormField
             control={form.control}
             name="userImg"

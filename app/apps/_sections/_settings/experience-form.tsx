@@ -51,7 +51,7 @@ export default function ExperienceForm() {
 
   return (
     <div className="flex flex-col gap-[23px]">
-      <p className="text-lg text-[#E6E6E6] font-medium lg:px-10 2xl:px-20">
+      <p className="text-lg text-[#E6E6E6] font-medium px-10 2xl:px-20">
         Experience 1
       </p>
 
@@ -60,7 +60,7 @@ export default function ExperienceForm() {
           onSubmit={form.handleSubmit(onSubmit)}
           onChange={() => setDisabled(false)}
         >
-          <div className="flex gap-7 flex-col lg:px-10 2xl:pl-20 pb-5">
+          <div className="flex gap-7 flex-col px-4 sm:px-10 2xl:px-20 pb-5">
             <FormField
               control={form.control}
               name="Company"

@@ -33,19 +33,19 @@ export default function PasswordForm() {
         className="h-full flex flex-col w-full"
         onChange={() => setDisabled(false)}
       >
-        <div className="pl-20 h-full flex gap-7 flex-col box-border pb-5 lg:px-10 2xl:pl-20">
+        <div className="h-full w-full lg:max-w-[637px] flex gap-7 flex-col box-border pb-5 px-4 sm:px-10 2xl:px-20">
           <FormField
             name="oldPassword"
             control={form.control}
             render={() => (
               <FormItem className="flex flex-col gap-1">
-                <FormLabel className="text-sm text-[#B3B3B3] max-w-[637px]">
+                <FormLabel className="text-sm text-[#B3B3B3]">
                   Old Password
                 </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Input your old password"
-                    className="h-[47px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
+                    className="h-[47px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
                     type="password"
                   />
                 </FormControl>

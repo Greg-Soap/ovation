@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 export default function WalletForm() {
   return (
-    <div className="flex flex-col gap-[23px] max-w-[637px]">
+    <div className="flex flex-col gap-[23px] w-full xl:max-w-[637px]">
       <Button
         variant={`outline`}
         className="w-full h-[46px] flex items-center gap-[7px] text-[13px] font-semibold text-[#F8F8FF] border-[#29292F] rounded-full"

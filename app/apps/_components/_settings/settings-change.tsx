@@ -10,7 +10,7 @@ import DiscardChanges from '../../_sections/_settings/discard-changes'
 export default function SettingsChange({ disabled, position }: any) {
   return (
     <div
-      className={`flex gap-4 items-center bg-[#18181C] ${position ? position : 'sticky'} bottom-0 justify-end lg:pr-10 w-full h-[103px]`}
+      className={`flex gap-4 items-center bg-[#18181C] ${position ? position : 'sticky'} bottom-0 justify-end pr-4 sm:pr-10 w-full h-[103px]`}
     >
       <Dialog>
         <DialogTrigger asChild>
