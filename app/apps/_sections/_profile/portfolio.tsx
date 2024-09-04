@@ -18,8 +18,8 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import LikeIcon from '@/components/icons/likeIcon'
 
-export default function Portfolio() {
-  const [items, setItems] = useState<CreatedNFT[]>(createdNFT)
+export default function Portfolio({ data }: { data: CreatedNFTData }) {
+  const [items, setItems] = useState<CreatedNFT[]>(data)
 
   const toggleLike = (index: number) => {
     const updatedList = items.map((item, i) =>
@@ -175,7 +175,7 @@ function PortfolioCard({
 }: CardProps) {
   return (
     <div
-      className={`${className} w-full min-w-[261px] max-w-[296px] flex-col bg-[#18181C] border border-[#FFFFFF14] rounded-[10px] relative m-0`}
+      className={`${className} min-w-[261px] w-full sm:max-w-[296px] flex-col bg-[#18181C] border border-[#FFFFFF14] rounded-[10px] relative m-0`}
       key={index}
     >
       <div className="flex items-center p-2 rounded-full bg-[#333726] absolute right-5 top-3">
@@ -244,6 +244,8 @@ interface CreatedNFT {
   isLiked: boolean
 }
 
+type CreatedNFTData = CreatedNFT[]
+
 const buttons: Button[] = [
   { name: 'All', itemCount: 20 },
   { name: 'Complete', itemCount: 4 },
@@ -253,7 +255,7 @@ const buttons: Button[] = [
   { name: 'Art', itemCount: 4 },
 ]
 
-const createdNFT: CreatedNFT[] = [
+/*const createdNFT: CreatedNFT[] = [
   {
     type: 'isComplete',
     imgSrc: '/assets/images/profile/featuredNFT.png',
@@ -290,3 +292,4 @@ const createdNFT: CreatedNFT[] = [
     isLiked: false,
   },
 ]
+*/

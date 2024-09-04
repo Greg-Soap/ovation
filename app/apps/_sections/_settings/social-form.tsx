@@ -64,7 +64,7 @@ export default function SocialForm() {
               control={form.control}
               name={item.schemaName as keyof z.infer<typeof formSchema>}
               render={({ field }) => (
-                <FormItem className="w-full flex flex-col gap-2 lg:px-10 2xl:pl-20">
+                <FormItem className="w-full flex flex-col gap-2 px-10 2xl:pl-20">
                   <FormLabel className="text-sm text-[#B3B3B3]">
                     {item.name}
                   </FormLabel>
@@ -96,7 +96,7 @@ export default function SocialForm() {
 
           {otherForm.map((item, index) => (
             <div
-              className={`${isHidden ? 'hidden' : 'flex '} flex-col gap-2 lg:px-10 2xl:pl-20`}
+              className={`${isHidden ? 'hidden' : 'flex '} flex-col gap-2 px-10 2xl:pl-20`}
               key={index}
             >
               <p className="text-sm text-[#B3B3B3]">{item.name}</p>
@@ -125,7 +125,7 @@ export default function SocialForm() {
 
           <Button
             type="button"
-            className="flex items-center gap-[7px] text-sm text-[#CCCCCC] p-1 h-fit rounded-none bg-transparent lg:mx-10 2xl:ml-20"
+            className="flex items-center gap-[7px] text-sm text-[#CCCCCC] p-1 h-fit rounded-none bg-transparent mx-4 sm:mx-10 2xl:ml-20"
             onClick={() => setIsHidden(!isHidden)}
           >
             {isHidden ? 'View more' : 'View Less'}

@@ -14,8 +14,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import NftCard from '../../_components/_profile/nft-card'
 //import LikeIcon from '@/components/icons/likeIcon'
 
-export default function Created() {
-  const [items, setItems] = useState<CreatedNFT[]>(createdNFT)
+export default function Created({ data }: { data: CreatedNFTData }) {
+  //const [items, setItems] = useState<CreatedNFT[]>(data)
 
   /*const toggleHidden = (index: number) => {
     const updatedList = items.map((item, i) =>
@@ -62,7 +62,7 @@ export default function Created() {
         </TabsList>
         <TabsContent value="All">
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
-            {items.map((item, index) => (
+            {data.map((item, index) => (
               <NftCard
                 type="created"
                 key={index}
@@ -76,7 +76,7 @@ export default function Created() {
         </TabsContent>
         <TabsContent value="Complete">
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
-            {items.map((item, index) => (
+            {data.map((item, index) => (
               <NftCard
                 key={index}
                 type="created"
@@ -90,7 +90,7 @@ export default function Created() {
         </TabsContent>
         <TabsContent value="Domain">
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
-            {items.map((item, index) => (
+            {data.map((item, index) => (
               <NftCard
                 key={index}
                 type="created"
@@ -104,7 +104,7 @@ export default function Created() {
         </TabsContent>
         <TabsContent value="Collectibles">
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
-            {items.map((item, index) => (
+            {data.map((item, index) => (
               <NftCard
                 key={index}
                 type="created"
@@ -118,7 +118,7 @@ export default function Created() {
         </TabsContent>
         <TabsContent value="Metaverse">
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
-            {items.map((item, index) => (
+            {data.map((item, index) => (
               <NftCard
                 key={index}
                 type="created"
@@ -132,7 +132,7 @@ export default function Created() {
         </TabsContent>
         <TabsContent value="Art">
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
-            {items.map((item, index) => (
+            {data.map((item, index) => (
               <NftCard
                 key={index}
                 type="created"
@@ -160,8 +160,9 @@ interface CreatedNFT {
   artist: string
   price: number
   isLiked: boolean
-  likeCount: number
 }
+
+type CreatedNFTData = CreatedNFT[]
 
 const buttons: Button[] = [
   { name: 'All', itemCount: 20 },
@@ -170,49 +171,6 @@ const buttons: Button[] = [
   { name: 'Collectibles', itemCount: 4 },
   { name: 'Metaverse', itemCount: 4 },
   { name: 'Art', itemCount: 4 },
-]
-
-const createdNFT: CreatedNFT[] = [
-  {
-    type: 'isComplete',
-    imgSrc: '/assets/images/profile/featuredNFT.png',
-    artist: 'Bored Ape',
-    price: 14,
-    isLiked: false,
-    likeCount: 40,
-  },
-  {
-    type: 'isDomain',
-    imgSrc: '/assets/images/profile/featuredNFT.png',
-    artist: 'Micheal Marcagi',
-    price: 14,
-    isLiked: false,
-    likeCount: 39,
-  },
-  {
-    type: 'isCollectible',
-    imgSrc: '/assets/images/profile/featuredNFT.png',
-    artist: 'Hozier',
-    price: 14,
-    isLiked: false,
-    likeCount: 38,
-  },
-  {
-    type: 'isMetaverse',
-    imgSrc: '/assets/images/profile/featuredNFT.png',
-    artist: 'Royel Otis',
-    price: 14,
-    isLiked: false,
-    likeCount: 37,
-  },
-  {
-    type: 'isArt',
-    imgSrc: '/assets/images/profile/featuredNFT.png',
-    artist: 'Matt Hansen',
-    price: 14,
-    isLiked: false,
-    likeCount: 36,
-  },
 ]
 
 /*the entire card  just incase they'll implement any of the feature later on
