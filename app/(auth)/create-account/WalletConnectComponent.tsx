@@ -10,19 +10,22 @@ import Link from 'next/link'
 import arrow from '@/public/assets/images/arrow-right.png'
 import { Button } from '@/components/ui/button'
 import { chainIdToChainName } from '@/lib/helper-func'
+import { toast } from 'sonner'
+import ovationService from '@/services/ovation.service'
+import { useQuery } from '@tanstack/react-query'
 
 interface WalletConnectComponentProps {
-  setPage: React.Dispatch<React.SetStateAction<number>>
   onWalletConnected?: (account: string) => void
   onWalletDisconnected?: () => void
+  setIsManualWallet?: (isManualWallet: boolean) => void
 }
 
 const infuraId = process.env.NEXT_PUBLIC_INFURA_ID as string
 
 const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
-  setPage,
   onWalletConnected,
   onWalletDisconnected,
+  setIsManualWallet,
 }) => {
   const [provider, setProvider] = useState<any>(null)
   const [web3Modal, setWeb3Modal] = useState<Web3Modal | null>(null)
@@ -64,7 +67,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
         console.error('MetaMask connection failed:', error)
       }
     } else {
-      alert('Please install MetaMask!')
+      toast.error('Please install MetaMask!')
     }
   }
 
@@ -100,7 +103,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
         console.error('Phantom connection failed:', err)
       }
     } else {
-      alert('Please install Phantom Wallet!')
+      toast.error('Please install Phantom Wallet!')
     }
   }
 
@@ -123,7 +126,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
         console.error('OKX Wallet connection failed:', error)
       }
     } else {
-      alert('Please install OKX Wallet!')
+      toast.error('Please install OKX Wallet!')
     }
   }
 
@@ -146,7 +149,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
         console.error('Trust Wallet connection failed:', error)
       }
     } else {
-      alert('Please install Trust Wallet!')
+      toast.error('Please install Trust Wallet!')
     }
   }
 
@@ -169,7 +172,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
         console.error('Binance Chain Wallet connection failed:', error)
       }
     } else {
-      alert('Please install Binance Chain Wallet!')
+      toast.error('Please install Binance Chain Wallet!')
     }
   }
 
@@ -192,7 +195,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
         console.error('Coin98 Wallet connection failed:', error)
       }
     } else {
-      alert('Please install Coin98 Wallet!')
+      toast.error('Please install Coin98 Wallet!')
     }
   }
 
@@ -215,7 +218,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
         console.error('Opera Wallet connection failed:', error)
       }
     } else {
-      alert('Please install Opera Wallet!')
+      toast.error('Please install Opera Wallet!')
     }
   }
 
@@ -238,7 +241,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
         console.error('Brave Wallet connection failed:', error)
       }
     } else {
-      alert('Please install Brave Wallet!')
+      toast.error('Please install Brave Wallet!')
     }
   }
 
@@ -261,7 +264,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
         console.error('Math Wallet connection failed:', error)
       }
     } else {
-      alert('Please install Math Wallet!')
+      toast.error('Please install Math Wallet!')
     }
   }
 
@@ -284,7 +287,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
         console.error('SafePal Wallet connection failed:', error)
       }
     } else {
-      alert('Please install SafePal Wallet!')
+      toast.error('Please install SafePal Wallet!')
     }
   }
 
@@ -307,7 +310,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
         console.error('TokenPocket connection failed:', error)
       }
     } else {
-      alert('Please install TokenPocket!')
+      toast.error('Please install TokenPocket!')
     }
   }
 
@@ -322,26 +325,74 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
     console.log('Disconnected wallet')
   }
 
+  const connectWallet = async (walletName: string) => {
+    switch (walletName.toLowerCase()) {
+      case 'metamask':
+        await connectMetaMask()
+        break
+      case 'walletconnect':
+        await connectWalletConnect()
+        break
+      case 'phantom':
+        await connectPhantom()
+        break
+      case 'okx wallet':
+        await connectOKXWallet()
+        break
+      case 'trust wallet':
+        await connectTrustWallet()
+        break
+      case 'binance chain wallet':
+        await connectBinanceChainWallet()
+        break
+      case 'coin98 wallet':
+        await connectCoin98Wallet()
+        break
+      case 'opera wallet':
+        await connectOperaWallet()
+        break
+      case 'brave wallet':
+        await connectBraveWallet()
+        break
+      case 'math wallet':
+        await connectMathWallet()
+        break
+      case 'safepal wallet':
+        await connectSafePalWallet()
+        break
+      case 'tokenpocket':
+        await connectTokenPocket()
+        break
+      default:
+        console.error('Unsupported wallet:', walletName)
+        toast.error(`${walletName} is not supported yet.`)
+    }
+  }
+
+  const { data: wallets } = useQuery({
+    queryKey: ['wallets'],
+    queryFn: () => ovationService.getWallets(),
+  })
+
   return (
     <div>
       {!account ? (
         <div className='flex flex-col gap-7'>
           <div className='grid grid-cols-2 gap-4'>
-            {walletData.map((wallet) => (
+            {wallets?.data?.map((wallet) => (
               <Button
                 key={wallet.id}
-                onClick={() => setPage(4)}
-                className='text-start flex justify-between p-2 md:p-[1rem] h-[58px] w-full md:w-[242px] text-xs md:text-sm font-semibold text-white border-[1px] border-solid bg-transparent border-[#353538]'>
-                <p> {wallet.name}</p>
-
-                <wallet.img />
+                className='text-start flex justify-between p-2 md:p-[1rem] h-[58px] w-full md:w-[242px] text-xs md:text-sm font-semibold text-white border-[1px] border-solid bg-transparent border-[#353538]'
+                onClick={() => connectWallet(wallet.name)}>
+                <p>{wallet.name}</p>
+                <Image src={wallet.logoUrl} alt={wallet.name} width={20} height={20} />
               </Button>
             ))}
           </div>
 
           <div className='flex gap-2 items-center justify-center'>
             <p>Wallet not listed?</p> {''}
-            <Link href='' className='h-6 text-[#Cff073]'>
+            <Link href='' className='h-6 text-[#Cff073]' onClick={() => setIsManualWallet?.(true)}>
               Connect manually
             </Link>
             <Image src={arrow} alt='arrow' />

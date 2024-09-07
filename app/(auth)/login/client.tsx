@@ -21,6 +21,8 @@ import arrow from '@/public/assets/images/arrow-right.png'
 import Image from 'next/image'
 import { useGoogleLogin } from '@react-oauth/google'
 import { decodeIdToken } from '@/lib/helper-func'
+import { useMutation } from '@tanstack/react-query'
+import ovationService from '@/services/ovation.service'
 
 const formSchema = z.object({
   username: z.string(),
@@ -38,10 +40,19 @@ export default function LoginForm() {
     },
   })
 
-  function formSubmit() {
-    console.log('submitted')
-    toast.success('Successful!')
-    router.push('/apps/discover')
+  const loginMutation = useMutation({
+    mutationFn: ovationService.login,
+    onSuccess: () => {
+      toast.success('Login successful!')
+      router.push('/apps/discover')
+    },
+    onError: (error) => {
+      toast.error(`Login failed: ${error.message}`)
+    },
+  })
+
+  function formSubmit(values: z.infer<typeof formSchema>) {
+    loginMutation.mutate(values)
   }
 
   const loginGoogle = useGoogleLogin({
@@ -134,8 +145,10 @@ export default function LoginForm() {
           />
           <Button
             className='w-full hover:scale-105 h-[52px] text-sm font-semibold'
-            variant={'default'}>
-            Login
+            variant={'default'}
+            type='submit'
+            disabled={loginMutation.isPending}>
+            {loginMutation.isPending ? 'Logging in...' : 'Login'}
           </Button>
         </form>
 

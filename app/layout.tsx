@@ -42,7 +42,9 @@ export default function RootLayout({
     <html lang="en">
       <body
         className='overflow-x-hidden'
-      >{children}</body>
+      >
+       
+        {children}</body>
       <Toaster />
     </html>
   )

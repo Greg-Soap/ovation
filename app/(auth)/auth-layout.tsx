@@ -1,5 +1,7 @@
+'use client'
 import { Header } from '@/app/(landing-page)/_sections/nav'
 import type React from 'react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import Image from 'next/image'
 import authAvatar from '@/public/assets/images/ovationAuthAvatar.svg'
 
@@ -7,6 +9,9 @@ interface AuthLayoutProps {
   children: React.ReactNode
   showAuthLeftOptional?: boolean
 }
+
+const queryClient = new QueryClient()
+
 export default function AuthLayout({ children, showAuthLeftOptional }: AuthLayoutProps) {
   return (
     <section
@@ -27,7 +32,7 @@ export default function AuthLayout({ children, showAuthLeftOptional }: AuthLayou
         )}
 
         <div className=' rounded-lg border-1 w-[80vw] h-[80vh] md:w-[500px] md:h-fit p-0'>
-          {children}
+          <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
         </div>
       </div>
     </section>
