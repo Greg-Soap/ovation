@@ -50,7 +50,7 @@ export interface UserExperience {
   role: string
   department: string
   startDate: string
-  endDate?: string
+  endDate?: string | null
   description: string
   skill: string
 }

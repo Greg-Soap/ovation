@@ -39,6 +39,10 @@ class OvationService {
     return api.patch('/Auth/change-password', { userId, password })
   }
 
+  static changeProfilePassword(oldPassword: string, password: string) {
+    return api.patch('/Profile/change-password', { oldPassword, password })
+  }
+
   static getProfile() {
     return api.get('/Profile')
   }
@@ -48,7 +52,7 @@ class OvationService {
   }
 
   static updatePersonalInfo(data: ProfileMod) {
-    return api.put('/Profile/personal-info', data)
+    return api.patch('/Profile/personal-info', data)
   }
 
   static addExperience(data: UserExperience) {
@@ -61,6 +65,10 @@ class OvationService {
 
   static updateSocials(data: UserSocialsMod) {
     return api.put('/Profile/socials', data)
+  }
+
+  static getSocialLinks(userId: string) {
+    return api.get(`/Profile/social/${userId}`)
   }
 
   static getPath() {
