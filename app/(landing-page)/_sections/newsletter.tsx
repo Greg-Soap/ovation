@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import { BorderBeam } from '@/components/animations/border-beam'
 import axios from 'axios'
+import ovationService from '@/services/ovation.service'
 
 const formSchema = z.object({
   subscriberEmail: z.string().email({
@@ -25,15 +26,7 @@ export function Newsletter() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.post(
-        'https://apiovation.com/api/Newsletter',
-        { subscriberEmail: values.subscriberEmail },
-        {
-          headers: {
-            tokenId: '7bb00541-dddf-4cd7-ac41-90a335e11e02',
-          },
-        },
-      )
+      await ovationService.subscribeToNewsletter(values.subscriberEmail)
 
       toast.success('Thank you for subscribing to our newsletter!')
     } catch (error) {

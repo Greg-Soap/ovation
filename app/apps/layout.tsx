@@ -7,11 +7,12 @@ export default function AsideLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="flex flex-col items-center justify-center relative">
+    <div className='flex flex-col items-center justify-center relative'>
       <TimelineHeader />
-      <div className="flex flex-col lg:flex-row lg:flex-nowrap w-full other-link overflow-y-scroll max-w-[1400px]">
+      <div className='flex flex-col lg:flex-row lg:flex-nowrap w-full other-link overflow-y-scroll'>
         <Aside />
-        {children}
+        <div id='empty space' className='min-w-[310px]' />
+        <div className='container px-0 pb-[65px] lg:pb-0'>{children}</div>
       </div>
     </div>
   )

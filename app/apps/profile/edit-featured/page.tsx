@@ -49,7 +49,7 @@ export default function EditFeatured() {
       <div className="w-[95%] flex flex-col items-center py-6 gap-4 relative">
         {featuredList.map((item, index) => (
           <FeaturedCard
-            index={index}
+            key={index}
             imgSrc={item.imgSrc}
             type={item.type}
             creator={item.creator}
@@ -68,7 +68,6 @@ export default function EditFeatured() {
 }
 
 function FeaturedCard({
-  index,
   imgSrc,
   type,
   creator,
@@ -81,7 +80,7 @@ function FeaturedCard({
   isEvent,
 }: any) {
   return (
-    <div className="w-full flex flex-row gap-3 items-center" key={index}>
+    <div className="w-full flex flex-row gap-3 items-center">
       <Button className="px-0 py-1 rounded-none h-fit bg-transparent gap-1 flex flex-col">
         <DragIndicator />
       </Button>

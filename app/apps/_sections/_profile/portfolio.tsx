@@ -18,8 +18,8 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import LikeIcon from '@/components/icons/likeIcon'
 
-export default function Portfolio() {
-  const [items, setItems] = useState<CreatedNFT[]>(createdNFT)
+export default function Portfolio({ data }: { data: CreatedNFTData }) {
+  const [items, setItems] = useState<CreatedNFT[]>(data)
 
   const toggleLike = (index: number) => {
     const updatedList = items.map((item, i) =>
@@ -63,7 +63,7 @@ export default function Portfolio() {
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
               <PortfolioCard
-                index={index}
+                key={index}
                 isLiked={item.isLiked}
                 imgSrc={item.imgSrc}
                 artist={item.artist}
@@ -78,12 +78,12 @@ export default function Portfolio() {
           <div className="flex h-fit flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
               <PortfolioCard
-                index={index}
+                key={index}
                 isLiked={item.isLiked}
                 imgSrc={item.imgSrc}
                 artist={item.artist}
                 price={item.price}
-                className={`${item.isComplete ? 'flex' : 'hidden'}`}
+                className={`${item.type === 'isComplete' ? 'flex' : 'hidden'}`}
                 likeFunction={() => toggleLike(index)}
               />
             ))}
@@ -93,12 +93,12 @@ export default function Portfolio() {
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
               <PortfolioCard
-                index={index}
+                key={index}
                 isLiked={item.isLiked}
                 imgSrc={item.imgSrc}
                 artist={item.artist}
                 price={item.price}
-                className={`${item.isDomain ? 'flex' : 'hidden'}`}
+                className={`${item.type === 'isDomain' ? 'flex' : 'hidden'}`}
                 likeFunction={() => toggleLike(index)}
               />
             ))}
@@ -108,12 +108,12 @@ export default function Portfolio() {
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
               <PortfolioCard
-                index={index}
+                key={index}
                 isLiked={item.isLiked}
                 imgSrc={item.imgSrc}
                 artist={item.artist}
                 price={item.price}
-                className={`${item.isCollectible ? 'flex' : 'hidden'}`}
+                className={`${item.type === 'isCollectible' ? 'flex' : 'hidden'}`}
                 likeFunction={() => toggleLike(index)}
               />
             ))}
@@ -123,12 +123,12 @@ export default function Portfolio() {
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
               <PortfolioCard
-                index={index}
+                key={index}
                 isLiked={item.isLiked}
                 imgSrc={item.imgSrc}
                 artist={item.artist}
                 price={item.price}
-                className={`${item.isMetaverse ? 'flex' : 'hidden'}`}
+                className={`${item.type === 'isMetaverse' ? 'flex' : 'hidden'}`}
                 likeFunction={() => toggleLike(index)}
               />
             ))}
@@ -138,12 +138,12 @@ export default function Portfolio() {
           <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
             {items.map((item, index) => (
               <PortfolioCard
-                index={index}
+                key={index}
                 isLiked={item.isLiked}
                 imgSrc={item.imgSrc}
                 artist={item.artist}
                 price={item.price}
-                className={`${item.isArt ? 'flex' : 'hidden'}`}
+                className={`${item.type === 'isArt' ? 'flex' : 'hidden'}`}
                 likeFunction={() => toggleLike(index)}
               />
             ))}
@@ -154,6 +154,16 @@ export default function Portfolio() {
   )
 }
 
+interface CardProps {
+  index?: number
+  isLiked?: boolean
+  imgSrc?: string
+  artist?: string
+  price?: number
+  className?: string
+  likeFunction?: () => void | undefined
+}
+
 function PortfolioCard({
   index,
   isLiked,
@@ -162,20 +172,20 @@ function PortfolioCard({
   price,
   className,
   likeFunction,
-}: any) {
+}: CardProps) {
   return (
     <div
-      className={`${className} w-full min-w-[261px] max-w-[296px] flex-col bg-[#18181C] border border-[#FFFFFF14] rounded-[10px] relative m-0`}
+      className={`${className} min-w-[261px] w-full sm:max-w-[296px] flex-col bg-[#18181C] border border-[#FFFFFF14] rounded-[10px] relative m-0`}
       key={index}
     >
       <div className="flex items-center p-2 rounded-full bg-[#333726] absolute right-5 top-3">
         <LikeIcon
           className={`w-4 h-4 transition-all duration-300 ${isLiked ? 'stroke-none fill-[#CFF073]' : 'stroke-[#CFF073] fill-none'}`}
-          onClick={() => likeFunction()}
+          onClick={() => likeFunction && likeFunction()}
         />
       </div>
       <Image
-        src={imgSrc}
+        src={`${imgSrc}`}
         alt="NFT Preview"
         width={500}
         height={217}
@@ -224,84 +234,62 @@ function PortfolioCard({
 interface Button {
   name: string
   itemCount: number
-  isActive: boolean
 }
 
 interface CreatedNFT {
+  type: 'isComplete' | 'isDomain' | 'isCollectible' | 'isMetaverse' | 'isArt'
   imgSrc: string
   artist: string
   price: number
   isLiked: boolean
-  isComplete: boolean
-  isDomain: boolean
-  isCollectible: boolean
-  isMetaverse: boolean
-  isArt: boolean
 }
 
+type CreatedNFTData = CreatedNFT[]
+
 const buttons: Button[] = [
-  { name: 'All', itemCount: 20, isActive: true },
-  { name: 'Complete', itemCount: 4, isActive: false },
-  { name: 'Domain', itemCount: 4, isActive: false },
-  { name: 'Collectibles', itemCount: 4, isActive: false },
-  { name: 'Metaverse', itemCount: 4, isActive: false },
-  { name: 'Art', itemCount: 4, isActive: false },
+  { name: 'All', itemCount: 20 },
+  { name: 'Complete', itemCount: 4 },
+  { name: 'Domain', itemCount: 4 },
+  { name: 'Collectibles', itemCount: 4 },
+  { name: 'Metaverse', itemCount: 4 },
+  { name: 'Art', itemCount: 4 },
 ]
 
-const createdNFT: CreatedNFT[] = [
+/*const createdNFT: CreatedNFT[] = [
   {
+    type: 'isComplete',
     imgSrc: '/assets/images/profile/featuredNFT.png',
     artist: 'Bored Ape',
     price: 14,
     isLiked: false,
-    isComplete: true,
-    isDomain: false,
-    isCollectible: false,
-    isMetaverse: false,
-    isArt: false,
   },
   {
+    type: 'isDomain',
     imgSrc: '/assets/images/profile/featuredNFT.png',
     artist: 'Micheal Marcagi',
     price: 14,
     isLiked: false,
-    isComplete: false,
-    isDomain: true,
-    isCollectible: false,
-    isMetaverse: false,
-    isArt: false,
   },
   {
+    type: 'isCollectible',
     imgSrc: '/assets/images/profile/featuredNFT.png',
     artist: 'Hozier',
     price: 14,
     isLiked: false,
-    isComplete: false,
-    isDomain: false,
-    isCollectible: true,
-    isMetaverse: false,
-    isArt: false,
   },
   {
+    type: 'isMetaverse',
     imgSrc: '/assets/images/profile/featuredNFT.png',
     artist: 'Royel Otis',
     price: 14,
     isLiked: false,
-    isComplete: false,
-    isDomain: false,
-    isCollectible: false,
-    isMetaverse: true,
-    isArt: false,
   },
   {
+    type: 'isArt',
     imgSrc: '/assets/images/profile/featuredNFT.png',
     artist: 'Matt Hansen',
     price: 14,
     isLiked: false,
-    isComplete: false,
-    isDomain: false,
-    isCollectible: false,
-    isMetaverse: false,
-    isArt: true,
   },
 ]
+*/

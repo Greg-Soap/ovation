@@ -1,84 +1,17 @@
-import Image from 'next/image'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Created from './created'
 import Stats from './stats'
 import Portfolio from './portfolio'
 import Experience from './experience'
 import ComingSoon from './coming-soon'
-import Editicon from '@/components/icons/edit-icon'
-import PlusIcon from '@/components/icons/plus-icon'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
+import FeaturedSection from '../../_components/_profile/featured-section'
+import { createdNFT } from '../_secondary-profile/portfolio-data'
+import { experienceData } from '../_secondary-profile/experience-data'
 
 export default function MainProfileSection() {
   return (
     <div className="col-span-2 h-full flex flex-col items-center bg-[#111115]">
-      <div className="flex flex-col mt-5 w-[95%] h-fit border border-[#353538] rounded-[14px] px-5 py-[15px] gap-[30px]">
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-[#F8F8FF] font-medium">Featured</p>
-
-          <div className="flex items-center gap-2.5">
-            <Popover>
-              <PopoverTrigger>
-                {' '}
-                <PlusIcon className="stroke-[#CFF073] w-4 h-4" />
-              </PopoverTrigger>
-              <PopoverContent className="max-w-[104px] flex flex-col rounded-[6px] bg-[#232227] p-0 border-none">
-                <Button className="bg-[#232227] px-2 py-2.5 text-[11px] text-[#F8F8FF] rounded-none w-full h-fit rounded-t-[6px] flex justify-start">
-                  Event
-                </Button>
-                <Button className="bg-[#232227] px-2 py-2.5 text-[11px] text-[#F8F8FF] rounded-none w-full h-fit border-t border-[#333333] flex justify-start">
-                  NFT
-                </Button>
-                <Button className="bg-[#232227] px-2 py-2.5 text-[11px] text-[#F8F8FF] rounded-none w-full h-fit border-t border-[#333333] rounded-b-[6px] flex justify-start">
-                  Article
-                </Button>
-              </PopoverContent>
-            </Popover>
-
-            <Button asChild className="p-1 h-fit rounded-none bg-transparent">
-              <Link href={`/apps/profile/edit-featured`}>
-                <Editicon className="fill-[#CFF073] w-4 h-4" />
-              </Link>
-            </Button>
-          </div>
-        </div>
-
-        <div className="flex flex-wrap gap-3">
-          {featured.map((item, index) => (
-            <div
-              className="w-full lg:w-[248px] flex flex-col bg-[#18181C] border border-[#FFFFFF14] rounded-[10px]"
-              key={index}
-            >
-              <Image
-                src={item.imgSrc}
-                alt="NFT Preview"
-                width={500}
-                height={217}
-                className="rounded-t-[10px]"
-              />
-
-              <div className="flex items-center justify-between bg-[#111115] border border-[#FFFFFF0D] px-3 py-2 rounded-b-[10px]">
-                <div className="flex flex-col items-start">
-                  <p className="text-[11px] text-[#999999]">Artist</p>
-                  <p className="text-[#F8F8FF] text-xs font-semibold">
-                    {item.artist}
-                  </p>
-                </div>
-                <div className="flex flex-col items-end">
-                  <p className="text-[11px] text-[#999999]">Price</p>
-                  <p className="text-[#F8F8FF] text-xs font-semibold">{`${item.price} ETH`}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      <FeaturedSection featured={featured} showButtons={true} />
 
       <Tabs defaultValue="post" className="w-full my-16">
         <TabsList className="items-center rounded-none px-7 pt-5 pb-0 border-y gap-4 border-[#353538] w-full h-fit overflow-x-scroll justify-start">
@@ -126,16 +59,16 @@ export default function MainProfileSection() {
           <ComingSoon />
         </TabsContent>
         <TabsContent value="portfolio">
-          <Portfolio />
+          <Portfolio data={createdNFT} />
         </TabsContent>
         <TabsContent value="created">
-          <Created />
+          <Created data={createdNFT} />
         </TabsContent>
         <TabsContent value="stat">
           <Stats />
         </TabsContent>
         <TabsContent value="experience">
-          <Experience />
+          <Experience data={experienceData} />
         </TabsContent>
       </Tabs>
     </div>
