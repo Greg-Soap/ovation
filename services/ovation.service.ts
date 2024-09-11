@@ -15,6 +15,10 @@ class OvationService {
     return api.get(`/Auth/email/${email}`)
   }
 
+  static subscribeToNewsletter(email: string) {
+    return api.post('/Newsletter', { subscriberEmail: email })
+  }
+
   static checkUsername(username: string) {
     return api.get(`/Auth/username/${username}`)
   }

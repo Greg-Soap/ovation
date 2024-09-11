@@ -12,6 +12,7 @@ const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
     'X-Device-Type': 'web',
+    tokenId: process.env.NEXT_PUBLIC_TOKEN_ID,
   },
 })
 
