@@ -75,3 +75,11 @@ export const chainIdToChainName: { [key: number]: string } = {
   42161: "arbitrum",
   10: "optimism",
 };
+
+export interface NotificationMessage {
+  reference: string;
+  referenceId: string;
+  title: string;
+  message: string;
+  initiatorId: string;
+}
