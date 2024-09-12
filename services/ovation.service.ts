@@ -7,6 +7,7 @@ import type {
   UserSocialsMod,
   Path,
   Wallet,
+  ProfileData,
 } from '../models/all.model'
 
 // biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
@@ -43,8 +44,9 @@ class OvationService {
     return api.patch('/Profile/change-password', { oldPassword, password })
   }
 
-  static getProfile() {
-    return api.get('/Profile')
+  static async getProfile() {
+    const response = await api.get<ProfileData>('/Profile')
+    return response.data
   }
 
   static getUserProfile(userId: string) {

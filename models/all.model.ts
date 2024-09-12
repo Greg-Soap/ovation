@@ -79,3 +79,34 @@ export interface Wallet {
   logoUrl: string
   id: string
 }
+
+export interface ProfileData {
+  userId: string
+  username: string
+  email: string
+  profile: {
+    displayName: string
+    birthDate: string | null
+    location: string | null
+    bio: string | null
+    coverImage: string | null
+    profileImage: string | null
+  } | null
+  socials: {
+    ethico: string | null
+    lens: string | null
+    magic: string | null
+    linkedIn: string | null
+    forcaster: string | null
+    foundation: string | null
+    blur: string | null
+  } | null
+  userStats: {
+    nftCreated: number
+    badgeEarned: number
+    followers: number
+    following: number
+    networth: number
+    nftCollected: number
+  } | null
+}
