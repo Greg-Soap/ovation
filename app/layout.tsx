@@ -1,6 +1,9 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { Toaster } from '@/components/ui/sonner'
+import { NotificationService } from '@/lib/notificationService';
+import { NotificationMessage } from '@/lib/helper-func';
+import { useState, useEffect } from 'react';
 
 export const metadata: Metadata = {
   title: 'Ovation: Explore and Earn NFTs with Personalized Portfolios',
@@ -38,12 +41,39 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
+  const [notifications, setNotifications] = useState<NotificationMessage[]>([]);
+
+  useEffect(() => {
+    const notificationService = new NotificationService(); // Initialize SignalR service
+
+    var baseUrl = process.env.NEXT_PUBLIC_API_URL as string;
+    const connectSignalR = async () => {
+      await notificationService.startConnection(`${baseUrl}/notification`, 'user_access_token_here');
+
+      // Listen for incoming notifications
+      notificationService.onMessage("ReceiveNotification", (notification: NotificationMessage) => {
+        console.log("New notification received:", notification.title);
+
+        // Update notifications state
+        setNotifications((prev) => [...prev, notification]);
+      });
+    };
+
+    connectSignalR();
+
+    // Cleanup function to stop the SignalR connection when component unmounts
+    return () => {
+      notificationService.stopConnection();
+    };
+  }, []);
+
   return (
     <html lang="en">
       <body
         className='overflow-x-hidden'
       >
-       
+
         {children}</body>
       <Toaster />
     </html>
