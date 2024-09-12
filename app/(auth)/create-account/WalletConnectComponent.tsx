@@ -13,6 +13,8 @@ import { chainIdToChainName } from '@/lib/helper-func'
 import { toast } from 'sonner'
 import ovationService from '@/services/ovation.service'
 import { useQuery } from '@tanstack/react-query'
+import { OfflineSigner, DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
+import { StargateClient } from '@cosmjs/stargate';
 
 interface WalletConnectComponentProps {
   onWalletConnected?: (account: string) => void
@@ -312,6 +314,51 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
     } else {
       toast.error('Please install TokenPocket!')
     }
+  }
+
+  const chainId = "cosmoshub-4";
+  const connectKeplr = async (): Promise<void> => {
+    if (!window.keplr) {
+      alert("Please install Keplr extension");
+      return;
+    }
+
+    try {
+      await window.keplr.enable(chainId);
+
+      const offlineSigner: OfflineSigner = window.getOfflineSigner(chainId);
+
+      const accounts = await offlineSigner.getAccounts();
+      const accountAddress = accounts[0].address;
+      console.log("Connected account address:", accountAddress);
+
+      // const client = await StargateClient.connect("https://rpc.cosmos.network");
+      // const balance = await client.getAllBalances(accountAddress);
+      // console.log("Account balances:", balance);
+    } catch (error) {
+      console.error("Failed to connect to Keplr:", error);
+    }
+  }
+
+  const connectLeap = async (): Promise<void> => {
+    if (!window.leap) {
+      alert("Please install Leap Wallet extension");
+      return;
+    }
+
+    try {
+      const chainId = "cosmoshub-4"; // chain ID for Cosmos Hub
+      await window.leap.enable(chainId);
+
+      const offlineSigner = window.leap.getOfflineSigner(chainId);
+      const accounts = await offlineSigner.getAccounts();
+
+      const accountAddress = accounts[0].address;
+      console.log("Connected account address:", accountAddress);
+    } catch (error) {
+      console.error("Error connecting to Leap Wallet:", error);
+    }
+
   }
 
   const disconnectWallet = () => {
