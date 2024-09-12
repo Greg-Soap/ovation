@@ -9,9 +9,48 @@ import ExperienceForm from '../_sections/_settings/experience-form'
 import WalletForm from '../_sections/_settings/wallet-form'
 import { useState } from 'react'
 import { ArrowLeft } from 'iconsax-react'
+import React from 'react'
 
 export default function Page() {
   const [isHidden, setHidden] = useState(true)
+
+  const tabComponents = {
+    'Personal Info': ProfileForm,
+    Socials: SocialForm,
+    Experience: ExperienceForm,
+    Wallets: WalletForm,
+    Password: PasswordForm,
+  }
+
+  type TabHeading = keyof typeof tabComponents
+
+  const tabHeading: { imgSrc: string; heading: TabHeading; subtitle: string }[] = [
+    {
+      imgSrc: '/assets/images/settings/tab-list/one.png',
+      heading: 'Personal Info',
+      subtitle: 'Update your information and details here',
+    },
+    {
+      imgSrc: '/assets/images/settings/tab-list/two.png',
+      heading: 'Socials',
+      subtitle: 'Set your social profile to build trust and security',
+    },
+    {
+      imgSrc: '/assets/images/settings/tab-list/three.png',
+      heading: 'Experience',
+      subtitle: 'Set your work profile to build trust and security',
+    },
+    {
+      imgSrc: '/assets/images/settings/tab-list/four.png',
+      heading: 'Wallets',
+      subtitle: 'Update your wallet info and details here',
+    },
+    {
+      imgSrc: '/assets/images/settings/tab-list/five.png',
+      heading: 'Password',
+      subtitle: 'Make your account secure',
+    },
+  ]
 
   return (
     <section className='w-full h-full'>
@@ -40,152 +79,33 @@ export default function Page() {
         </div>
 
         <div className={`${isHidden ? 'hidden xl:flex' : 'flex'} w-full h-full`}>
-          <TabsContent value={'Personal Info'} className={'pt-8 w-full h-full overflow-y-scroll'}>
-            <section className='flex flex-col gap-[42px] w-full'>
-              <div className='relative flex justify-center xl:justify-start gap-3 px-4 sm:px-10 2xl:px-20'>
-                <ArrowLeft
-                  color='white'
-                  variant='Outline'
-                  size={24}
-                  onClick={() => setHidden(true)}
-                  className='absolute left-10 flex xl:hidden'
-                />
+          {tabHeading.map((tab) => (
+            <TabsContent
+              key={tab.heading ?? ''}
+              value={tab.heading ?? ''}
+              className='pt-8 w-full h-full overflow-y-scroll'>
+              <section className='flex flex-col gap-[42px] w-full'>
+                <div className='relative flex xl:justify-start gap-3 px-4 sm:px-10 2xl:px-20'>
+                  <ArrowLeft
+                    color='white'
+                    variant='Outline'
+                    size={24}
+                    onClick={() => setHidden(true)}
+                    className='absolute left-10 flex xl:hidden'
+                  />
 
-                <div className='flex flex-col items-center xl:items-start gap-1'>
-                  <h2 className='font-semibold text-[22px] text-[#F8F8FF]'>
-                    {tabHeading[0].heading}
-                  </h2>
-                  <p className='text-[#B3B3B3]'>{tabHeading[0].subtitle}</p>
+                  <div className='flex flex-col items-center xl:items-start gap-1'>
+                    <h2 className='font-semibold text-[22px] text-[#F8F8FF]'>{tab.heading}</h2>
+                    <p className='text-[#B3B3B3]'>{tab.subtitle}</p>
+                  </div>
                 </div>
-              </div>
 
-              <ProfileForm />
-            </section>
-          </TabsContent>
-          <TabsContent value={'Socials'} className={'pt-8 w-full h-full overflow-y-scroll'}>
-            <section className='w-full h-full flex flex-col gap-[42px]'>
-              <div className='relative flex justify-center gap-3 px-4 sm:px-10 2xl:px-20'>
-                <ArrowLeft
-                  color='white'
-                  variant='Outline'
-                  size={24}
-                  onClick={() => setHidden(true)}
-                  className='absolute left-10'
-                />
-
-                <div className='flex flex-col items-center xl:items-start gap-1'>
-                  <h2 className='font-semibold text-[22px] text-[#F8F8FF]'>
-                    {tabHeading[1].heading}
-                  </h2>
-                  <p className='text-[#B3B3B3]'>{tabHeading[1].subtitle}</p>
-                </div>
-              </div>
-
-              <SocialForm />
-            </section>
-          </TabsContent>
-          <TabsContent value={'Experience'} className={'pt-8 w-full h-full overflow-y-scroll'}>
-            <section className='flex flex-col gap-[42px]'>
-              <div className='relative flex justify-center gap-3 px-4 sm:px-10 2xl:px-20'>
-                <ArrowLeft
-                  color='white'
-                  variant='Outline'
-                  size={24}
-                  onClick={() => setHidden(true)}
-                  className='absolute left-10'
-                />
-
-                <div className='flex flex-col items-center xl:items-start gap-1'>
-                  <h2 className='font-semibold text-[22px] text-[#F8F8FF]'>
-                    {tabHeading[2].heading}
-                  </h2>
-                  <p className='text-[#B3B3B3]'>{tabHeading[2].subtitle}</p>
-                </div>
-              </div>
-
-              <ExperienceForm />
-            </section>
-          </TabsContent>
-          <TabsContent value={'Wallets'} className='pt-8 w-full h-full overflow-y-scroll'>
-            <section className='flex flex-col px-10 2xl:px-20 gap-[42px]'>
-              <div className='relative flex justify-center gap-3 px-4 sm:px-10 2xl:px-20'>
-                <ArrowLeft
-                  color='white'
-                  variant='Outline'
-                  size={24}
-                  onClick={() => setHidden(true)}
-                  className='absolute left-0'
-                />
-
-                <div className='flex flex-col items-center xl:items-start gap-1'>
-                  <h2 className='font-semibold text-[22px] text-[#F8F8FF]'>
-                    {tabHeading[3].heading}
-                  </h2>
-                  <p className='text-[#B3B3B3]'>{tabHeading[3].subtitle}</p>
-                </div>
-              </div>
-
-              <WalletForm />
-            </section>
-          </TabsContent>
-          <TabsContent value={'Password'} className=' pt-8 w-full h-full overflow-y-scroll'>
-            <section className='flex flex-col gap-[42px]'>
-              <div className='relative flex justify-center gap-3 px-4 sm:px-10 2xl:px-20'>
-                <ArrowLeft
-                  color='white'
-                  variant='Outline'
-                  size={24}
-                  onClick={() => setHidden(true)}
-                  className='absolute left-10'
-                />
-
-                <div className='flex flex-col items-center xl:items-start gap-1'>
-                  <h2 className='font-semibold text-[22px] text-[#F8F8FF]'>
-                    {tabHeading[4].heading}
-                  </h2>
-                  <p className='text-[#B3B3B3]'>{tabHeading[4].subtitle}</p>
-                </div>
-              </div>
-
-              <PasswordForm />
-            </section>
-          </TabsContent>
+                {tab.heading && React.createElement(tabComponents[tab.heading as TabHeading])}
+              </section>
+            </TabsContent>
+          ))}
         </div>
       </Tabs>
     </section>
   )
 }
-
-interface TagHeading {
-  imgSrc?: string
-  heading?: string
-  subtitle?: string
-}
-
-const tabHeading: TagHeading[] = [
-  {
-    imgSrc: '/assets/images/settings/tab-list/one.png',
-    heading: 'Personal Info',
-    subtitle: 'Update your information and details here',
-  },
-  {
-    imgSrc: '/assets/images/settings/tab-list/two.png',
-    heading: 'Socials',
-    subtitle: 'Set your social profile to build trust and security',
-  },
-  {
-    imgSrc: '/assets/images/settings/tab-list/three.png',
-    heading: 'Experience',
-    subtitle: 'Set your work profile to build trust and security',
-  },
-  {
-    imgSrc: '/assets/images/settings/tab-list/four.png',
-    heading: 'Wallets',
-    subtitle: 'Update your wallet info and details here',
-  },
-  {
-    imgSrc: '/assets/images/settings/tab-list/five.png',
-    heading: 'Password',
-    subtitle: 'Make your account secure',
-  },
-]
