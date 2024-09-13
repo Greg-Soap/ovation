@@ -1,10 +1,9 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode'
 
 function generateRandomString(length = 10) {
-  const characters =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
   let result = ''
   for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * characters.length))
@@ -55,31 +54,77 @@ export const useResponsiveAnimation: UseResponsiveAnimation = (
 }
 
 interface DecodedToken {
-  sub: string;
-  name: string;
-  email: string;
-  picture: string;
+  sub: string
+  name: string
+  email: string
+  picture: string
 }
 
 export const decodeIdToken = (idToken: string): DecodedToken => {
-  return jwtDecode<DecodedToken>(idToken);
-};
+  return jwtDecode<DecodedToken>(idToken)
+}
 
 export const chainIdToChainName: { [key: number]: string } = {
-  1: "eth",
-  56: "bsc",
-  137: "polygon",
-  43114: "avalanche",
-  250: "fantom",
-  25: "cronos",
-  42161: "arbitrum",
-  10: "optimism",
-};
+  1: 'eth',
+  56: 'bsc',
+  137: 'polygon',
+  43114: 'avalanche',
+  250: 'fantom',
+  25: 'cronos',
+  42161: 'arbitrum',
+  10: 'optimism',
+}
 
 export interface NotificationMessage {
-  reference: string;
-  referenceId: string;
-  title: string;
-  message: string;
-  initiatorId: string;
+  reference: string
+  referenceId: string
+  title: string
+  message: string
+  initiatorId: string
 }
+
+export function startCase(str?: string): string {
+  if (!str) {
+    return ''
+  }
+  return str
+    ?.replace(/([a-z])([A-Z])/g, '$1 $2') // add space between camelCase words
+    .replace(/[_-]/g, ' ') // replace underscores and hyphens with spaces
+    .replace(/\b\w/g, (match) => match.toUpperCase()) // capitalize first letter of each word
+}
+
+export function get<T>(obj: T, path: string, defaultValue?: any): Partial<T> {
+  const keys = path.split('.')
+  let result = obj
+  for (const key of keys) {
+    if (result == null) {
+      return defaultValue
+    }
+    // @ts-ignore
+    result = result[key]
+  }
+  return result ?? defaultValue
+}
+
+export function lowerCase(str: string): string {
+  if (typeof str !== 'string') {
+    console.warn('Input is not a string')
+    return ''
+  }
+  return str.toLowerCase()
+}
+
+export function capitalizeFirstLetter(str: string): string {
+  if (!str) return ''
+
+  // Replace underscores and hyphens with spaces
+  const modifiedStr = str.replace(/[_-]/g, ' ')
+
+  // Capitalize the first letter
+  const firstLetter = modifiedStr.charAt(0).toUpperCase()
+  const restOfString = modifiedStr.slice(1)
+
+  return firstLetter + restOfString
+}
+
+// snake_case, kebab-case, camelCase, PascalCase, chunk, debounce, range

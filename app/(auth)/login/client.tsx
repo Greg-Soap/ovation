@@ -23,6 +23,7 @@ import { useGoogleLogin } from '@react-oauth/google'
 import { decodeIdToken } from '@/lib/helper-func'
 import { useMutation } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
+import { setToken } from '@/lib/cookies'
 
 const formSchema = z.object({
   username: z.string(),
@@ -42,9 +43,14 @@ export default function LoginForm() {
 
   const loginMutation = useMutation({
     mutationFn: ovationService.login,
-    onSuccess: () => {
-      toast.success('Login successful!')
-      router.push('/apps/discover')
+    onSuccess: (data) => {
+      if (data?.data?.token) {
+        setToken(data?.data?.token)
+        toast.success('Login successful!')
+        router.push('/apps/discover')
+      } else {
+        toast.error('Login failed: No token received')
+      }
     },
     onError: (error) => {
       toast.error(`Login failed: ${error.message}`)

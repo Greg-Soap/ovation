@@ -9,6 +9,7 @@ import type {
   Wallet,
   ProfileData,
 } from '../models/all.model'
+import { removeToken } from '@/lib/cookies'
 
 // biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
 class OvationService {
@@ -30,6 +31,10 @@ class OvationService {
 
   static login(data: Login) {
     return api.post('/Auth/login', data)
+  }
+
+  static logout() {
+    removeToken()
   }
 
   static forgotPassword(email: string) {
@@ -74,11 +79,11 @@ class OvationService {
   }
 
   static getPath() {
-    return api.get<Path[]>('/Path')
+    return api.get<{ data: Path[]; message: string }>('/Path')
   }
 
   static getWallets() {
-    return api.get<Wallet[]>('/Wallet')
+    return api.get<{ data: Wallet[]; message: string }>('/Wallet')
   }
 }
 

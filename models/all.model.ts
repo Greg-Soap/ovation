@@ -77,7 +77,7 @@ export interface WalletAcct {
 export interface Wallet {
   name: string
   logoUrl: string
-  id: string
+  walletId: string
 }
 
 export interface ProfileData {

@@ -9,12 +9,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import arrow from '@/public/assets/images/arrow-right.png'
 import { Button } from '@/components/ui/button'
-import { chainIdToChainName } from '@/lib/helper-func'
+import { chainIdToChainName, startCase } from '@/lib/helper-func'
 import { toast } from 'sonner'
 import ovationService from '@/services/ovation.service'
 import { useQuery } from '@tanstack/react-query'
-import { OfflineSigner, DirectSecp256k1HdWallet } from '@cosmjs/proto-signing';
-import { StargateClient } from '@cosmjs/stargate';
+import { type OfflineSigner, DirectSecp256k1HdWallet } from '@cosmjs/proto-signing'
+import { StargateClient } from '@cosmjs/stargate'
 
 interface WalletConnectComponentProps {
   onWalletConnected?: (account: string) => void
@@ -316,49 +316,48 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
     }
   }
 
-  const chainId = "cosmoshub-4";
+  const chainId = 'cosmoshub-4'
   const connectKeplr = async (): Promise<void> => {
     if (!window.keplr) {
-      alert("Please install Keplr extension");
-      return;
+      toast.error('Please install Keplr extension')
+      return
     }
 
     try {
-      await window.keplr.enable(chainId);
+      await window.keplr.enable(chainId)
 
-      const offlineSigner: OfflineSigner = window.getOfflineSigner(chainId);
+      const offlineSigner: OfflineSigner = window.getOfflineSigner(chainId)
 
-      const accounts = await offlineSigner.getAccounts();
-      const accountAddress = accounts[0].address;
-      console.log("Connected account address:", accountAddress);
+      const accounts = await offlineSigner.getAccounts()
+      const accountAddress = accounts[0].address
+      console.log('Connected account address:', accountAddress)
 
       // const client = await StargateClient.connect("https://rpc.cosmos.network");
       // const balance = await client.getAllBalances(accountAddress);
       // console.log("Account balances:", balance);
     } catch (error) {
-      console.error("Failed to connect to Keplr:", error);
+      console.error('Failed to connect to Keplr:', error)
     }
   }
 
   const connectLeap = async (): Promise<void> => {
     if (!window.leap) {
-      alert("Please install Leap Wallet extension");
-      return;
+      toast.error('Please install Leap Wallet extension')
+      return
     }
 
     try {
-      const chainId = "cosmoshub-4"; // chain ID for Cosmos Hub
-      await window.leap.enable(chainId);
+      const chainId = 'cosmoshub-4' // chain ID for Cosmos Hub
+      await window.leap.enable(chainId)
 
-      const offlineSigner = window.leap.getOfflineSigner(chainId);
-      const accounts = await offlineSigner.getAccounts();
+      const offlineSigner = window.leap.getOfflineSigner(chainId)
+      const accounts = await offlineSigner.getAccounts()
 
-      const accountAddress = accounts[0].address;
-      console.log("Connected account address:", accountAddress);
+      const accountAddress = accounts[0].address
+      console.log('Connected account address:', accountAddress)
     } catch (error) {
-      console.error("Error connecting to Leap Wallet:", error);
+      console.error('Error connecting to Leap Wallet:', error)
     }
-
   }
 
   const disconnectWallet = () => {
@@ -373,46 +372,54 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
   }
 
   const connectWallet = async (walletName: string) => {
-    switch (walletName.toLowerCase()) {
-      case 'metamask':
+    const formattedWalletName = startCase(walletName)
+    switch (formattedWalletName) {
+      case 'Metamask':
         await connectMetaMask()
         break
-      case 'walletconnect':
-        await connectWalletConnect()
-        break
-      case 'phantom':
-        await connectPhantom()
-        break
-      case 'okx wallet':
-        await connectOKXWallet()
-        break
-      case 'trust wallet':
+      case 'Trust Wallet':
         await connectTrustWallet()
         break
-      case 'binance chain wallet':
+      case 'Phantom':
+        await connectPhantom()
+        break
+      case 'Biance Chain':
         await connectBinanceChainWallet()
         break
-      case 'coin98 wallet':
-        await connectCoin98Wallet()
+      case 'Wallet Connect':
+        await connectWalletConnect()
         break
-      case 'opera wallet':
+      case 'Coinmarketcap':
+        // Implement Coinmarketcap connection if available
+        toast.error('Coinmarketcap connection is not implemented yet.')
+        break
+      case 'Okx':
+        await connectOKXWallet()
+        break
+      case 'Opera Wallet':
         await connectOperaWallet()
         break
-      case 'brave wallet':
+      case 'Brave Wallet':
         await connectBraveWallet()
         break
-      case 'math wallet':
+      case 'Math Wallet':
         await connectMathWallet()
         break
-      case 'safepal wallet':
+      case 'Safe Pal':
         await connectSafePalWallet()
         break
-      case 'tokenpocket':
+      case 'Token Pocket':
         await connectTokenPocket()
         break
+      case 'Keplr':
+        await connectKeplr()
+        break
+      case 'Leap':
+        await connectLeap()
+        break
       default:
-        console.error('Unsupported wallet:', walletName)
-        toast.error(`${walletName} is not supported yet.`)
+        console.error('Unsupported wallet:', formattedWalletName)
+        toast.error(`${formattedWalletName} is not supported yet.`)
     }
   }
 
@@ -421,17 +428,19 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
     queryFn: () => ovationService.getWallets(),
   })
 
+  console.log({ wallets })
+
   return (
     <div>
       {!account ? (
         <div className='flex flex-col gap-7'>
           <div className='grid grid-cols-2 gap-4'>
-            {wallets?.data?.map((wallet) => (
+            {wallets?.data?.data?.map((wallet) => (
               <Button
-                key={wallet.id}
+                key={wallet.walletId}
                 className='text-start flex justify-between p-2 md:p-[1rem] h-[58px] w-full md:w-[242px] text-xs md:text-sm font-semibold text-white border-[1px] border-solid bg-transparent border-[#353538]'
                 onClick={() => connectWallet(wallet.name)}>
-                <p>{wallet.name}</p>
+                <p>{startCase(wallet.name)}</p>
                 <Image src={wallet.logoUrl} alt={wallet.name} width={20} height={20} />
               </Button>
             ))}

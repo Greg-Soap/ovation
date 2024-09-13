@@ -71,3 +71,22 @@ export function deleteCookie(name: Tokens) {
   if (typeof window === 'undefined') return null
   document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT`
 }
+
+export const setToken = (token: string) => {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('ovationToken', token)
+  }
+}
+
+export const getToken = (): string | null => {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('ovationToken')
+  }
+  return null
+}
+
+export const removeToken = () => {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('ovationToken')
+  }
+}
