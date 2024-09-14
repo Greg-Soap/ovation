@@ -109,4 +109,11 @@ export interface ProfileData {
     networth: number
     nftCollected: number
   } | null
+  featured: FeaturedItem[]
+}
+
+export interface FeaturedItem {
+  imgSrc: string
+  artist: string
+  price: number
 }
