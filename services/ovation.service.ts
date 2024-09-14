@@ -54,8 +54,9 @@ class OvationService {
     return response.data
   }
 
-  static getUserProfile(userId: string) {
-    return api.get(`/Profile/${userId}`)
+  static async getUserProfile(username: string) {
+    const response = await api.get(`/Profile/${username}`)
+    return response.data
   }
 
   static updatePersonalInfo(data: ProfileMod) {

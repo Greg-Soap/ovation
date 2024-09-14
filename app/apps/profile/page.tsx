@@ -8,8 +8,10 @@ import UserProfile from '../_sections/_profile/user-profile'
 import MainProfileSection from '../_sections/_profile/main-profile-section'
 import ovationService from '@/services/ovation.service'
 import type { ProfileData } from '@/models/all.model'
+import { useRouter } from 'next/navigation'
 
 export default function Page() {
+  const router = useRouter()
   const {
     data: profileData,
     isLoading,
@@ -46,6 +48,9 @@ export default function Page() {
           </Button>
           <Button
             variant='default'
+            onClick={() => {
+              router.push('/apps/settings')
+            }}
             className='bg-[#333333] py-[11px] px-4 border border-[#E6E6E64D] text-white text-xs'>
             Edit Profile
           </Button>

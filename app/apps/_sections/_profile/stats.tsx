@@ -5,7 +5,7 @@ export default function Stats() {
     <div className='w-full py-10 flex items-center justify-center'>
       <div className='w-[95%] flex flex-col gap-[34px]'>
         <div className='px-7 py-6 rounded-[14px] border border-[#353538] flex flex-col gap-[34px]'>
-          <p className='text-white font-medium'>Overview</p>
+          <p className='text-white font-medium uppercase'>Overview</p>
 
           <div className='grid grid-cols-3 gap-5'>
             {overview.map((item, index) => (
