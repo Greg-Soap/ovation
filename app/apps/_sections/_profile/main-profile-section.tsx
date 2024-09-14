@@ -36,7 +36,11 @@ export default function MainProfileSection({
         secondaryProfile={secondaryProfile}
       />
 
-      <Tabs defaultValue={currentTab} onValueChange={setTab} className='w-full my-16'>
+      <Tabs
+        defaultValue={currentTab}
+        value={currentTab}
+        onValueChange={setTab}
+        className='w-full my-16'>
         <TabsList className='items-center rounded-none px-7 pt-5 pb-0 border-y gap-4 border-[#353538] w-full h-fit overflow-x-scroll justify-start'>
           {profileTabsData.map(({ value, label }) => (
             <TabsTrigger
