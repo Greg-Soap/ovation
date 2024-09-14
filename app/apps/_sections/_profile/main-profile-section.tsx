@@ -20,7 +20,7 @@ const profileTabsData: TabData[] = [
 
 export default function MainProfileSection({ profileData }: { profileData: ProfileData }) {
   return (
-    <div className='max-w-[853px] h-full flex flex-col items-center bg-[#111115]'>
+    <div className='max-w-[853px] w-full h-full flex flex-col items-center bg-[#111115]'>
       <FeaturedSection featured={profileData?.featured} showButtons={true} />
 
       <Tabs defaultValue='portfolio' className='w-full my-16'>
@@ -35,7 +35,7 @@ export default function MainProfileSection({ profileData }: { profileData: Profi
           ))}
         </TabsList>
         {profileTabsData.map(({ value, content }) => (
-          <TabsContent key={value} value={value}>
+          <TabsContent key={value} value={value} className='w-full'>
             {content}
           </TabsContent>
         ))}

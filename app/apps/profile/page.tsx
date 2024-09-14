@@ -52,7 +52,7 @@ export default function Page() {
         </div>
       </div>
 
-      <div className='flex flex-col lg:flex-row relative h-full'>
+      <div className='flex flex-col lg:flex-row relative h-auto'>
         <UserProfile profileData={profileData as ProfileData} />
 
         <MainProfileSection profileData={profileData as ProfileData} />

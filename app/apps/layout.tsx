@@ -46,7 +46,7 @@ export default function AsideLayout({
         <Aside />
         <div id='empty space' className='min-w-[310px]' />
         <QueryClientProvider client={queryClient}>
-          <div className=' px-0 pb-[65px] lg:pb-0'>{children}</div>
+          <div className='w-full px-0 pb-[65px] lg:pb-0'>{children}</div>
         </QueryClientProvider>
       </div>
     </div>
