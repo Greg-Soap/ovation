@@ -118,17 +118,18 @@ export function FeedbackModal() {
                     <FormLabel className="text-sm text-[#F8F8FF]">
                       1. Username
                     </FormLabel>
-                    <FormControl {...field}>
-                      <>
+                    <FormControl>
+                      <div className="relative flex items-center">
                         <Input
                           placeholder=""
                           className="h-[37px] bg-[#18181C] w-full rounded-[8px] pl-[30px] text-xs text-[#B3B3B3]"
                           type="text"
+                          {...field} // Bind the field to the input
                         />
-                        <p className="text-xs absolute text-[#B3B3B3] top-[30px] left-4">
+                        <p className="text-xs absolute text-[#B3B3B3] top-[10px] left-4">
                           @
                         </p>
-                      </>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
