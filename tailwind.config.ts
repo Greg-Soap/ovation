@@ -12,9 +12,9 @@ const config = {
   theme: {
     container: {
       center: true,
-      padding: '2rem',
+      padding: '1rem',
       screens: {
-        '2xl': '1440px',
+        '2xl': '1472px',
         lg: '1024px',
       },
     },
@@ -46,8 +46,7 @@ const config = {
 
         'profile-banner': "url('/assets/images/profile/image8.png')",
         'team-banner': "url('/assets/images/teams/teambg.jpg')",
-        'news-gradient':
-          'linear-gradient(112.5deg, #A5DB10 -0.03%, #BC1700 99.94%)',
+        'news-gradient': 'linear-gradient(112.5deg, #A5DB10 -0.03%, #BC1700 99.94%)',
       },
       colors: {
         border: 'hsl(var(--border))',

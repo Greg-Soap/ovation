@@ -1,3 +1,4 @@
+'use client'
 import { useQuery } from '@tanstack/react-query'
 import NftIcon from '@/components/icons/nftIcon'
 import { Button } from '@/components/ui/button'
@@ -6,6 +7,7 @@ import StatusUpIcon from '@/components/icons/statusUpIcon'
 import UserProfile from '../_sections/_profile/user-profile'
 import MainProfileSection from '../_sections/_profile/main-profile-section'
 import ovationService from '@/services/ovation.service'
+import type { ProfileData } from '@/models/all.model'
 
 export default function Page() {
   const {
@@ -16,18 +18,18 @@ export default function Page() {
     queryKey: ['profile'],
     queryFn: () => ovationService.getProfile(),
   })
+  console.log({ profileData })
+  // if (isLoading) {
+  //   return <div>Loading...</div>
+  // }
 
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
+  // if (error) {
+  //   return <div>Error loading profile data</div>
+  // }
 
-  if (error) {
-    return <div>Error loading profile data</div>
-  }
-
-  if (!profileData) {
-    return <div>No profile data available</div>
-  }
+  // if (!profileData) {
+  //   return <div>No profile data available</div>
+  // }
 
   return (
     <>
@@ -50,10 +52,10 @@ export default function Page() {
         </div>
       </div>
 
-      <div className='flex flex-col xl:grid grid-cols-3 relative'>
-        <UserProfile profileData={profileData} />
+      <div className='flex flex-col lg:flex-row relative h-full'>
+        <UserProfile profileData={profileData as ProfileData} />
 
-        <MainProfileSection profileData={profileData} />
+        <MainProfileSection profileData={profileData as ProfileData} />
       </div>
     </>
   )
