@@ -40,7 +40,7 @@ export default function AsideLayout({
   }, [])
 
   return (
-    <div className='px-0 md:px-4 container flex flex-col items-center justify-center relative'>
+    <div className='px-0  container flex flex-col items-center justify-center relative'>
       <TimelineHeader />
       <div className='flex flex-col lg:flex-row lg:flex-nowrap w-full other-link overflow-y-scroll'>
         <Aside />
