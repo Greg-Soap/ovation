@@ -19,7 +19,7 @@ export default function FeaturedSection({ featured, showButtons }: FeaturedSecti
         <p className='text-sm text-[#F8F8FF] font-medium uppercase'>Featured</p>
         {showButtons && <ActionButtons />}
       </div>
-      {featured.length > 0 ? <FeaturedGrid items={featured} /> : <EmptyFeaturedState />}
+      {featured?.length > 0 ? <FeaturedGrid items={featured} /> : <EmptyFeaturedState />}
     </div>
   )
 }

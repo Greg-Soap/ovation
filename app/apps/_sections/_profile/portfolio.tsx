@@ -20,7 +20,7 @@ interface NFT {
   isLiked: boolean
 }
 
-type NFTCollection = NFT[]
+export type NFTCollection = NFT[]
 
 const nftCategories: NFTCategory[] = [
   { name: 'All', itemCount: 20 },

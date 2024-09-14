@@ -12,9 +12,8 @@ interface TabData {
   label: string
   content: React.ReactNode
 }
-
 const profileTabsData: TabData[] = [
-  { value: 'portfolio', label: 'Portfolio', content: <Portfolio data={createdNFT} /> },
+  { value: 'portfolio', label: 'Portfolio', content: <Portfolio initialNFTs={createdNFT} /> },
   { value: 'stat', label: 'Stat', content: <Stats /> },
   { value: 'experience', label: 'Experience', content: <Experience data={experienceData} /> },
 ]
@@ -22,7 +21,7 @@ const profileTabsData: TabData[] = [
 export default function MainProfileSection({ profileData }: { profileData: ProfileData }) {
   return (
     <div className='max-w-[853px] h-full flex flex-col items-center bg-[#111115]'>
-      <FeaturedSection featured={profileData.featured} showButtons={true} />
+      <FeaturedSection featured={profileData?.featured} showButtons={true} />
 
       <Tabs defaultValue='portfolio' className='w-full my-16'>
         <TabsList className='items-center rounded-none px-7 pt-5 pb-0 border-y gap-4 border-[#353538] w-full h-fit overflow-x-scroll justify-start'>
