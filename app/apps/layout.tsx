@@ -5,6 +5,7 @@ import { NotificationService } from '@/lib/notificationService'
 import type { NotificationMessage } from '@/lib/helper-func'
 import { useState, useEffect } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Suspense } from 'react'
 
 const queryClient = new QueryClient()
 
@@ -46,7 +47,9 @@ export default function AsideLayout({
         <Aside />
         <div id='empty space' className='min-w-[310px]' />
         <QueryClientProvider client={queryClient}>
-          <div className='w-full px-0 pb-[65px] lg:pb-0'>{children}</div>
+          <Suspense fallback={<div>Loading...</div>}>
+            <div className='w-full px-0 pb-[65px] lg:pb-0'>{children}</div>
+          </Suspense>
         </QueryClientProvider>
       </div>
     </div>

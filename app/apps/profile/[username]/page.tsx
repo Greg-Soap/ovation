@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
 import MainProfileSection from '../../_sections/_profile/main-profile-section'
 import type { ProfileData } from '@/models/all.model'
+import { Suspense } from 'react'
 
 export default function SecondaryProfile() {
   const params = useParams()
@@ -37,11 +38,15 @@ export default function SecondaryProfile() {
       </div>
 
       <div className='flex flex-col lg:flex-row relative h-auto'>
-        <UserProfile profileData={profileData as ProfileData} />
-        <MainProfileSection
-          profileData={profileData as ProfileData}
-          secondaryProfile={secondaryProfile}
-        />
+        <Suspense fallback={<div>Loading user profile...</div>}>
+          <UserProfile profileData={profileData as ProfileData} />
+        </Suspense>
+        <Suspense fallback={<div>Loading main profile section...</div>}>
+          <MainProfileSection
+            profileData={profileData as ProfileData}
+            secondaryProfile={secondaryProfile}
+          />
+        </Suspense>
       </div>
     </>
   )

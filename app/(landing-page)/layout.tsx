@@ -5,6 +5,7 @@ import { Header } from './_sections/nav'
 import Promotion from './_sections/promotion'
 import Preloader from './_components/preloader'
 import React, { useEffect, useState } from 'react'
+import { Suspense } from 'react'
 
 export default function LandingPageLayout({
   children,
@@ -21,7 +22,17 @@ export default function LandingPageLayout({
     return () => clearTimeout(timer)
   }, [])
 
-  return <>{isLoading ? <Preloader /> : <Application>{children}</Application>}</>
+  return (
+    <>
+      {isLoading ? (
+        <Preloader />
+      ) : (
+        <Suspense fallback={<Preloader />}>
+          <Application>{children}</Application>
+        </Suspense>
+      )}
+    </>
+  )
 }
 
 function Application({ children }: { children: React.ReactNode }) {
