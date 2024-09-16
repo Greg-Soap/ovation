@@ -67,13 +67,39 @@ export const decodeIdToken = (idToken: string): DecodedToken => {
 
 export const chainIdToChainName: { [key: number]: string } = {
   1: "eth",
-  56: "bsc",
   137: "polygon",
+  56: "bsc",
   43114: "avalanche",
   250: "fantom",
+  11297108109: "palm",
   25: "cronos",
   42161: "arbitrum",
+  100: "gnosis",
+  901: "chiliz",
+  8453: "base",
   10: "optimism",
+  59144: "linea",
+  1284: "moonbeam",
+  1285: "moonriver"
+};
+
+const optionValueToBlockchainName: { [optionValue: string]: string } = {
+  eth: "Ethereum",
+  polygon: "Polygon",
+  bsc: "Binance Smart Chain",
+  avalanche: "Avalanche",
+  fantom: "Fantom",
+  palm: "Palm",
+  cronos: "Cronos",
+  arbitrum: "Arbitrum One",
+  gnosis: "Gnosis",
+  chiliz: "Chiliz",
+  base: "Base",
+  optimism: "Optimism",
+  linea: "Linea",
+  moonbeam: "Moonbeam",
+  moonriver: "Moonriver",
+  solana: "Solana"
 };
 
 export interface NotificationMessage {
