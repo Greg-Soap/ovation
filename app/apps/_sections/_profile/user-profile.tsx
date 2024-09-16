@@ -7,7 +7,7 @@ import type { ProfileData } from '@/models/all.model'
 
 export default function UserProfile({ profileData }: { profileData: ProfileData }) {
   return (
-    <div className='col-span-1 flex flex-col px-4 pb-4 gap-11 border-r border-[#1A1A1A] bg-[#111115] h-full'>
+    <div className='w-full  lg:max-w-[330px] flex flex-col px-4 pb-4 gap-11 border-r border-[#1A1A1A] bg-[#111115] h-full '>
       <Image
         src='/assets/images/profile/image1.png'
         alt='User Display Picture'

@@ -1,45 +1,39 @@
-interface CreatedNFT {
-  type: 'isComplete' | 'isDomain' | 'isCollectible' | 'isMetaverse' | 'isArt'
-  imgSrc: string
-  artist: string
-  price: number
-  isLiked: boolean
-}
+import type { NFTCollection } from '../_profile/portfolio'
 
-export const createdNFT: CreatedNFT[] = [
+export const createdNFT: NFTCollection = [
   {
     type: 'isComplete',
-    imgSrc: '/assets/images/profile/featuredNFT.png',
-    artist: 'Bored Ape',
-    price: 14,
+    imageUrl: '/assets/images/profile/featuredNFT.png',
+    artistName: 'Bored Ape',
+    priceInEth: 14,
     isLiked: false,
   },
   {
     type: 'isDomain',
-    imgSrc: '/assets/images/profile/featuredNFT.png',
-    artist: 'Micheal Marcagi',
-    price: 14,
+    imageUrl: '/assets/images/profile/featuredNFT.png',
+    artistName: 'Micheal Marcagi',
+    priceInEth: 14,
     isLiked: false,
   },
   {
     type: 'isCollectible',
-    imgSrc: '/assets/images/profile/featuredNFT.png',
-    artist: 'Hozier',
-    price: 14,
+    imageUrl: '/assets/images/profile/featuredNFT.png',
+    artistName: 'Hozier',
+    priceInEth: 14,
     isLiked: false,
   },
   {
     type: 'isMetaverse',
-    imgSrc: '/assets/images/profile/featuredNFT.png',
-    artist: 'Royel Otis',
-    price: 14,
+    imageUrl: '/assets/images/profile/featuredNFT.png',
+    artistName: 'Royel Otis',
+    priceInEth: 14,
     isLiked: false,
   },
   {
     type: 'isArt',
-    imgSrc: '/assets/images/profile/featuredNFT.png',
-    artist: 'Matt Hansen',
-    price: 14,
+    imageUrl: '/assets/images/profile/featuredNFT.png',
+    artistName: 'Matt Hansen',
+    priceInEth: 14,
     isLiked: false,
   },
 ]

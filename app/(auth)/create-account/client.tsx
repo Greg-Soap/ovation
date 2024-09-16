@@ -22,7 +22,13 @@ const formSchema = z.object({
     displayName: z.string(),
     email: z.string().email('Input a valid email address'),
     username: z.string(),
-    password: z.string(),
+    password: z
+      .string()
+      .min(8, 'Password must be at least 8 characters long')
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+        'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
+      ),
   }),
   userPath: z.object({
     pathId: z.string().uuid(),
@@ -74,7 +80,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
     }
   }, [page, setOptionalLeft])
 
-  const { data: pathOptions, isLoading } = useQuery({
+  const { data: pathOptions } = useQuery({
     queryKey: ['path'],
     queryFn: () => ovationService.getPath(),
   })
@@ -152,10 +158,17 @@ export default function AccountForm({ setOptionalLeft }: Props) {
                   type='password'
                 />
               </FormControl>
+              <p className='text-xs text-[#B3B3B3] mt-2'>
+                Password must be at least 8 characters long and contain at least one uppercase
+                letter, one lowercase letter, one number, and one special character.
+              </p>
             </FormItem>
           )}
         />
-        <Button type='submit' className='w-full h-[52px] hover:scale-95 text-sm font-semibold'>
+        <Button
+          type='submit'
+          onClick={() => setPage(2)}
+          className='w-full h-[52px] hover:scale-95 text-sm font-semibold'>
           Continue
         </Button>
       </form>
@@ -180,7 +193,8 @@ export default function AccountForm({ setOptionalLeft }: Props) {
             <FormItem>
               <FormControl>
                 <div className='flex flex-col md:flex-row items-center flex-wrap w-full gap-4'>
-                  {pathOptions?.data.map((option, index) => (
+                  {pathOptions?.data?.data?.length === 0 && <p>No path options available</p>}
+                  {pathOptions?.data?.data?.map((option, index) => (
                     <Button
                       key={option.pathId}
                       onClick={() => handleButtonClick(option.pathId)}
@@ -305,11 +319,6 @@ export default function AccountForm({ setOptionalLeft }: Props) {
         <div className='flex flex-col gap-2'>
           <h1 className='text-3xl font-semibold text-white items-center justify-between  flex'>
             <span> Create Account</span>
-            <Button
-              onClick={() => setPage(3)}
-              className={`${page === 2 ? 'visible' : 'hidden'} bg-white text-black font-semibold text-sm`}>
-              Skip
-            </Button>
           </h1>
           <div className='flex gap-1 items-center justify-start'>
             <button

@@ -9,6 +9,7 @@ import type {
   Wallet,
   ProfileData,
 } from '../models/all.model'
+import { removeToken } from '@/lib/cookies'
 
 // biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
 class OvationService {
@@ -32,6 +33,10 @@ class OvationService {
     return api.post('/Auth/login', data)
   }
 
+  static logout() {
+    removeToken()
+  }
+
   static forgotPassword(email: string) {
     return api.get<{ userId: string; otp: string }>(`/Auth/forget-password/${email}`)
   }
@@ -49,8 +54,9 @@ class OvationService {
     return response.data
   }
 
-  static getUserProfile(userId: string) {
-    return api.get(`/Profile/${userId}`)
+  static async getUserProfile(username: string) {
+    const response = await api.get(`/Profile/${username}`)
+    return response.data
   }
 
   static updatePersonalInfo(data: ProfileMod) {
@@ -74,11 +80,11 @@ class OvationService {
   }
 
   static getPath() {
-    return api.get<Path[]>('/Path')
+    return api.get<{ data: Path[]; message: string }>('/Path')
   }
 
   static getWallets() {
-    return api.get<Wallet[]>('/Wallet')
+    return api.get<{ data: Wallet[]; message: string }>('/Wallet')
   }
 }
 
