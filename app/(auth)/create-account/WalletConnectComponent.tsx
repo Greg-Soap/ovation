@@ -1,5 +1,5 @@
 import type React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 // import Web3 from 'web3';
 import Web3Modal from 'web3modal'
 import WalletConnectProvider from '@walletconnect/web3-provider'
@@ -15,6 +15,7 @@ import ovationService from '@/services/ovation.service'
 import { useQuery } from '@tanstack/react-query'
 import { type OfflineSigner, DirectSecp256k1HdWallet } from '@cosmjs/proto-signing'
 import { StargateClient } from '@cosmjs/stargate'
+import Spinner from '@/components/ui/spinner'
 
 interface WalletConnectComponentProps {
   onWalletConnected?: (account: string) => void
@@ -423,7 +424,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
     }
   }
 
-  const { data: wallets } = useQuery({
+  const { data: wallets, isLoading } = useQuery({
     queryKey: ['wallets'],
     queryFn: () => ovationService.getWallets(),
   })
@@ -431,38 +432,49 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
   console.log({ wallets })
 
   return (
-    <div>
-      {!account ? (
-        <div className='flex flex-col gap-7'>
-          <div className='grid grid-cols-2 gap-4'>
-            {wallets?.data?.data?.map((wallet) => (
-              <Button
-                key={wallet.walletId}
-                className='text-start flex justify-between p-2 md:p-[1rem] h-[58px] w-full md:w-[242px] text-xs md:text-sm font-semibold text-white border-[1px] border-solid bg-transparent border-[#353538]'
-                onClick={() => connectWallet(wallet.name)}>
-                <p>{startCase(wallet.name)}</p>
-                <Image src={wallet.logoUrl} alt={wallet.name} width={20} height={20} />
-              </Button>
-            ))}
-          </div>
+    <Suspense fallback={<Spinner />}>
+      <div>
+        {!account ? (
+          <div className='flex flex-col gap-7'>
+            {isLoading ? (
+              <div className='flex justify-center items-center w-full'>
+                <Spinner size='huge' color='#Cff073' />
+              </div>
+            ) : (
+              <div className='grid grid-cols-2 gap-4'>
+                {wallets?.data?.data?.map((wallet) => (
+                  <Button
+                    key={wallet.walletId}
+                    className='text-start flex justify-between p-2 md:p-[1rem] h-[58px] w-full md:w-[242px] text-xs md:text-sm font-semibold text-white border-[1px] border-solid bg-transparent border-[#353538]'
+                    onClick={() => connectWallet(wallet.name)}>
+                    <p>{startCase(wallet.name)}</p>
+                    <Image src={wallet.logoUrl} alt={wallet.name} width={20} height={20} />
+                  </Button>
+                ))}
+              </div>
+            )}
 
-          <div className='flex gap-2 items-center justify-center'>
-            <p>Wallet not listed?</p> {''}
-            <Link href='' className='h-6 text-[#Cff073]' onClick={() => setIsManualWallet?.(true)}>
-              Connect manually
-            </Link>
-            <Image src={arrow} alt='arrow' />
+            <div className='flex gap-2 items-center justify-center'>
+              <p>Wallet not listed?</p> {''}
+              <Link
+                href=''
+                className='h-6 text-[#Cff073]'
+                onClick={() => setIsManualWallet?.(true)}>
+                Connect manually
+              </Link>
+              <Image src={arrow} alt='arrow' />
+            </div>
           </div>
-        </div>
-      ) : (
-        <div>
-          <p>Connected Account: {account}</p>
-          <button type='button' onClick={disconnectWallet}>
-            Disconnect Wallet
-          </button>
-        </div>
-      )}
-    </div>
+        ) : (
+          <div>
+            <p>Connected Account: account</p>
+            <button type='button' onClick={disconnectWallet}>
+              Disconnect Wallet
+            </button>
+          </div>
+        )}
+      </div>
+    </Suspense>
   )
 }
 

@@ -43,6 +43,7 @@ export interface Register {
   personalInfo: PersonalInfo
   userPath?: Paths
   userWallet: WalletAcct
+  type: 'Normal' | 'Google'
 }
 
 export interface UserExperience {
@@ -69,9 +70,9 @@ export interface UserSocialsMod {
 
 export interface WalletAcct {
   walletAddress: string
-  walletTypeId: string
+  walletTypeId: string | null
   chain: string
-  metadata?: string
+  metadata?: string | null
 }
 
 export interface Wallet {

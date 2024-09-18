@@ -6,16 +6,14 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import PathICon from '@/components/icons/pathIcon'
 import { ChevronRight } from 'lucide-react'
-import Image from 'next/image'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
-import arrow from '@/public/assets/images/arrow-right.png'
-import Bnb from '@/public/assets/images/ovationWallets/ovationWalletIcon2'
 import { useEffect, useState } from 'react'
 import WalletConnectComponent from './WalletConnectComponent'
 import ovationService from '@/services/ovation.service'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { ErrorDisplay } from '@/components/error-display'
 
 const formSchema = z.object({
   personalInfo: z.object({
@@ -39,6 +37,7 @@ const formSchema = z.object({
     chain: z.string(),
     metadata: z.string().nullable(),
   }),
+  type: z.enum(['Normal', 'Google']),
 })
 
 interface Props {
@@ -69,8 +68,24 @@ export default function AccountForm({ setOptionalLeft }: Props) {
         chain: '',
         metadata: null,
       },
+      type: 'Normal',
     },
   })
+
+  const { mutate: createAccount } = useMutation({
+    mutationFn: ovationService.register,
+    onSuccess: (data) => {
+      console.log(data)
+      toast.success('Profile created successfully')
+      router.push('/apps/discover')
+    },
+    onError: (error) => {
+      console.log(error)
+      toast.error('Profile creation failed')
+    },
+  })
+
+  console.log({ formValues: form.getValues(), formErrors: form.formState.errors })
 
   useEffect(() => {
     if (page === 1) {
@@ -85,9 +100,17 @@ export default function AccountForm({ setOptionalLeft }: Props) {
     queryFn: () => ovationService.getPath(),
   })
 
+  const handleFormSubmit = (data: z.infer<typeof formSchema>) => {
+    createAccount(data)
+  }
+
   function renderPersonalInfoForm() {
     return (
-      <form onSubmit={form.handleSubmit(() => setPage(2))} className='flex flex-col gap-7'>
+      <form
+        onSubmit={form.handleSubmit(() => {
+          setPage(2)
+        })}
+        className='flex flex-col gap-7'>
         <div className='flex items-center justify-between mb-5'>
           <span className='w-[46%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]  text-[#C1C0C6]' />
           <p className='text-[10px] font-medium text-[#C1C0C6]'>OR</p>
@@ -166,7 +189,6 @@ export default function AccountForm({ setOptionalLeft }: Props) {
           )}
         />
         <Button
-          type='submit'
           onClick={() => setPage(2)}
           className='w-full h-[52px] hover:scale-95 text-sm font-semibold'>
           Continue
@@ -241,9 +263,11 @@ export default function AccountForm({ setOptionalLeft }: Props) {
     )
   }
 
-  function renderManualWalletInput() {
+  function renderWalletAndConfirmation() {
+    const chains = ['Ethereum', 'Binance Smart Chain', 'Polygon', 'Avalanche'] // Add more chains as needed
+
     return (
-      <form onSubmit={form.handleSubmit(() => setPage(4))} className='flex flex-col gap-7'>
+      <form onSubmit={form.handleSubmit(handleFormSubmit)} className='flex flex-col gap-7'>
         <FormField
           control={form.control}
           name='userWallet.walletAddress'
@@ -261,40 +285,43 @@ export default function AccountForm({ setOptionalLeft }: Props) {
             </FormItem>
           )}
         />
-        <Button type='submit' className='w-full text-sm font-semibold h-[53px]'>
-          Continue
-        </Button>
-      </form>
-    )
-  }
 
-  function renderConfirmation() {
-    const handleClick = () => {
-      toast.success('Profile created successfully')
-      router.push('/apps/discover')
-    }
+        <FormField
+          control={form.control}
+          name='userWallet.chain'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Select Chain</FormLabel>
+              <FormControl>
+                <select
+                  {...field}
+                  className='w-full h-[46px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full px-4 text-white'>
+                  <option value=''>Select a chain</option>
+                  {chains.map((chain) => (
+                    <option key={chain} value={chain} className='text-white bg-transparent'>
+                      {chain}
+                    </option>
+                  ))}
+                </select>
+              </FormControl>
+            </FormItem>
+          )}
+        />
 
-    return (
-      <div className=' flex flex-col gap-7'>
-        <div className='flex text-white text-sm items-center justify-between p-4 border-[1px] border-[#353538] rounded-full'>
-          <p>OXrvsh.srvydubhjnikm</p>
-          <Bnb />
-        </div>
-        <Button onClick={handleClick} className=' w-full text-sm font-semibold h-[53px]'>
+        <Button
+          type='submit'
+          className='w-full text-sm font-semibold h-[53px]'
+          disabled={form.formState.isSubmitting}
+          isLoading={form.formState.isSubmitting}
+          loadingText='Creating profile...'>
           Make my profile
         </Button>
+
         <p className='text-center mb-4'>
           By clicking &quot;make my profile&quot; you agree to our privacy terms, code of conduct
           and Conditions.
         </p>
-        <div className='flex gap-2 items-center justify-center'>
-          <p> Not you?</p> {''}
-          <Button onClick={() => setPage(3)} className='h-6 bg-transparent text-[#Cff073]'>
-            Change wallet
-          </Button>
-          <Image src={arrow} alt='arrow' />
-        </div>
-      </div>
+      </form>
     )
   }
 
@@ -305,9 +332,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
       case 2:
         return renderPathSelection()
       case 3:
-        return isManualWallet ? renderManualWalletInput() : renderWalletSelection()
-      case 4:
-        return renderConfirmation()
+        return isManualWallet ? renderWalletAndConfirmation() : renderWalletSelection()
       default:
         return null
     }

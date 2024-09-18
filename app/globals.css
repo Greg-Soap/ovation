@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Istok+Web:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Istok+Web:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -48,23 +48,11 @@
 }
 
 body {
-  font-family:
-    'Inter',
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Open Sans',
-    'Helvetica Neue',
-    sans-serif;
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 * {
   scroll-behavior: smooth;
-  
 }
 
 ::-webkit-scrollbar {
@@ -98,6 +86,12 @@ body {
     )
     1;
 }*/
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 @media screen and (min-width: 1024px) {
   aside,
@@ -414,11 +408,7 @@ input:focus {
 
 .hero-gradient {
   background: #bdff00;
-  background: radial-gradient(
-    ellipse farthest-side at center center,
-    #bdff00 0%,
-    #0b0a10 100%
-  );
+  background: radial-gradient(ellipse farthest-side at center center, #bdff00 0%, #0b0a10 100%);
   backdrop-filter: blur(10px);
 }
 .gradient-container {
