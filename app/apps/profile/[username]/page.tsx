@@ -8,6 +8,7 @@ import { useParams } from 'next/navigation'
 import MainProfileSection from '../../_sections/_profile/main-profile-section'
 import type { ProfileData } from '@/models/all.model'
 import { Suspense } from 'react'
+import MiniLoader from '@/components/mini-loader'
 
 export default function SecondaryProfile() {
   const params = useParams()
@@ -15,13 +16,17 @@ export default function SecondaryProfile() {
   const secondaryProfile = true
   const {
     data: profileData,
-    isLoading,
-    error,
+    isLoading
   } = useQuery({
     queryKey: ['profile', username],
     queryFn: () => ovationService.getUserProfile(username),
   })
-  console.log({ profileData })
+ 
+  const { data: experienceData } = useQuery({
+    queryKey: ['experience', username],
+    queryFn: () => ovationService.getExperience(profileData?.userId as string),
+  })
+
   return (
     <>
       <div className='  relative w-full h-[262px] bg-profile-banner bg-contain bg-center'>
@@ -38,10 +43,10 @@ export default function SecondaryProfile() {
       </div>
 
       <div className='flex flex-col lg:flex-row relative h-auto'>
-        <Suspense fallback={<div>Loading user profile...</div>}>
-          <UserProfile profileData={profileData as ProfileData} />
+        <Suspense fallback={<MiniLoader />}>
+          <UserProfile profileData={profileData as ProfileData} experienceData={experienceData?.data?.data || []} isLoading={isLoading} />
         </Suspense>
-        <Suspense fallback={<div>Loading main profile section...</div>}>
+        <Suspense fallback={<MiniLoader />}>
           <MainProfileSection
             profileData={profileData as ProfileData}
             secondaryProfile={secondaryProfile}

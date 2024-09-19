@@ -1,10 +1,12 @@
+import type { ModelObject } from '@/lib/cookies'
+
 export interface ChangePassword {
   userId: string
   password: string
 }
 
 export interface Login {
-  username: string
+  userId: string
   password: string
 }
 
@@ -33,7 +35,7 @@ export interface ProfileMod {
   displayName: string
   email: string
   username: string
-  birthDate?: string
+  birthDate?: Date
   location?: string
   bio?: string
   profileImage?: string
@@ -59,13 +61,13 @@ export interface UserExperience {
 export interface UserExperienceMod extends UserExperience {}
 
 export interface UserSocialsMod {
-  linkedIn?: string
-  lens?: string
-  forcaster?: string
-  blur?: string
-  foundation?: string
-  magic?: string
-  ethico?: string
+  linkedIn?: string | null
+  lens?: string | null
+  forcaster?: string | null
+  blur?: string | null
+  foundation?: string | null
+  magic?: string | null
+  ethico?: string | null
 }
 
 export interface WalletAcct {
@@ -80,19 +82,50 @@ export interface Wallet {
   logoUrl: string
   walletId: string
 }
-
 export interface ProfileData {
-  userId: string
-  username: string
   email: string
   profile: {
     displayName: string
+    username: string
     birthDate: string | null
     location: string | null
     bio: string | null
-    coverImage: string | null
     profileImage: string | null
+    coverImage: string | null
+  }
+  userStats: {
+    nftCreated: number
+    badgeEarned: number
+    followers: number
+    following: number
+    networth: number
+    nftCollected: number
   } | null
+  socials: {
+    ethico: string | null
+    lens: string | null
+    magic: string | null
+    linkedIn: string | null
+    forcaster: string | null
+    foundation: string | null
+    blur: string | null
+  } | null
+  username: string
+  userId: string
+}
+export interface UserData {
+  userId: string
+  username: string
+  email: string
+  displayName: string
+  birthDate: string | null
+  location: string | null
+  bio: string | null
+  coverImage: string | null
+  profileImage: string | null
+  badges: Badge[]
+  nft: []
+  paths: []
   socials: {
     ethico: string | null
     lens: string | null
@@ -111,10 +144,24 @@ export interface ProfileData {
     nftCollected: number
   } | null
   featured: FeaturedItem[]
+  wallets: {
+    id: string
+    walletAddress: string
+    name: string
+    metadata: ModelObject
+    logoUrl: string
+  }[]
 }
 
 export interface FeaturedItem {
   imgSrc: string
   artist: string
   price: number
+}
+
+export interface Badge {
+  badgeId: string
+  badgeName: string
+  description: string
+  earnedAt: string
 }

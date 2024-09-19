@@ -1,4 +1,4 @@
-import { getCookie, getToken } from '@/lib/cookies'
+import { getToken } from '@/lib/cookies'
 import axios from 'axios'
 
 console.log('process.env.NODE_ENV', process.env.NODE_ENV)
@@ -21,6 +21,7 @@ api.interceptors.request.use(
     if (req.url?.includes('login')) return req
 
     const token = getToken()
+
     if (token) {
       req.headers.Authorization = `Bearer ${token}`
     }

@@ -7,6 +7,9 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { FeedbackModal } from './feedback'
 import { LocationDiscover, Profile, Setting2, Message, NotificationBing, More } from 'iconsax-react'
+import { useLocalStorage } from '@/lib/use-local-storage'
+import type { ProfileData, UserData } from '@/models/all.model'
+import ovationService from '@/services/ovation.service'
 
 const menuItems = [
   {
@@ -39,9 +42,17 @@ const menuItems = [
 export default function Aside() {
   const router = useRouter()
   const currentPath = usePathname()
+  const { storedValue, removeValue } = useLocalStorage<UserData | null>('userData', null)
+  const user = storedValue
 
   const handleClick = (path: string) => {
     router.push(path)
+  }
+
+  const handleLogout = () => {
+    ovationService.logout()
+    removeValue()
+    router.push('/')
   }
 
   return (
@@ -55,8 +66,10 @@ export default function Aside() {
             height={28}
           />
           <div className='flex flex-col'>
-            <p className='text-xs font-semibold leading-5 text-white'>0xrxc.....d67579</p>
-            <p className='text-[10px] leading-5 font-medium text-[#B3B3B3]'>2,000 &OVA</p>
+            <p className='text-xs font-semibold leading-5 text-white'>{user?.displayName}</p>
+            <p className='text-[10px] leading-5 font-medium text-[#B3B3B3]'>
+              {user?.wallets[0]?.walletAddress?.replace(/^(.{6})(.*)(.{4})$/, '$1***$3')}
+            </p>
           </div>
         </div>
         <Popover>
@@ -66,11 +79,9 @@ export default function Aside() {
           <PopoverContent
             side='right'
             className='w-fit bg-[#232227] flex flex-col items-start border-none text-white text-base py-2'>
-            <Button variant={'ghost'} className='py-[10px] w-full'>
-              Add an existing account
-            </Button>
-            <Button variant={'ghost'} className='py-[10px] w-full'>
-              Logout @pancake
+           
+            <Button variant={'ghost'} onClick={handleLogout} className='py-[10px] w-full'>
+              Logout {user?.username}
             </Button>
           </PopoverContent>
         </Popover>

@@ -10,16 +10,22 @@ import WalletForm from '../_sections/_settings/wallet-form'
 import { useState } from 'react'
 import { ArrowLeft } from 'iconsax-react'
 import React from 'react'
+import { useQuery } from '@tanstack/react-query'
+import ovationService from '@/services/ovation.service'
+import type { ProfileData } from '@/models/all.model'
 
 export default function Page() {
   const [isHidden, setHidden] = useState(true)
-
+  const { data: profileData } = useQuery({
+    queryKey: ['profile'],
+    queryFn: () => ovationService.getProfile(),
+  })
   const tabComponents = {
-    'Personal Info': ProfileForm,
-    Socials: SocialForm,
-    Experience: ExperienceForm,
-    Wallets: WalletForm,
-    Password: PasswordForm,
+    'Personal Info': (props: { profileData: ProfileData }) => <ProfileForm {...props} />,
+    Socials: (props: { userId: string }) => <SocialForm {...props} />,
+    Experience: () => <ExperienceForm />,
+    Wallets: () => <WalletForm />,
+    Password: () => <PasswordForm />,
   }
 
   type TabHeading = keyof typeof tabComponents
@@ -100,7 +106,11 @@ export default function Page() {
                   </div>
                 </div>
 
-                {tab.heading && React.createElement(tabComponents[tab.heading as TabHeading])}
+                {tab.heading &&
+                  tabComponents[tab.heading as TabHeading]({
+                    profileData: profileData?.data as ProfileData,
+                    userId: profileData?.data?.userId as string,
+                  })}
               </section>
             </TabsContent>
           ))}

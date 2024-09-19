@@ -1,8 +1,12 @@
 import Image from 'next/image'
-import HamburgerMenu from '../../_components/_timeline/hamburger'
-import Hamburger from '../../_components/_timeline/hamburger'
+import { useLocalStorage } from '@/lib/use-local-storage'
+import type { UserData } from '@/models/all.model'
+import { getGreeting } from '@/lib/helper-func'
 
 export default function TimelineHeader() {
+  const { storedValue } = useLocalStorage<UserData | null>('userData', null)
+  const user = storedValue
+
   const sunIcon = (
     <svg viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg' className='w-8 h-8'>
       <path
@@ -26,7 +30,9 @@ export default function TimelineHeader() {
           <div className='w-full container px-0 flex items-center'>
             <div className='flex items-center gap-3 p-2'>
               {sunIcon}
-              <p className='text-[#CCCCCC] text-base lg:text-xl font-medium'>Good Morning, John</p>
+              <p className='text-[#CCCCCC] text-base lg:text-xl font-medium'>
+                {getGreeting()}, {user?.displayName}
+              </p>
             </div>
           </div>
         </div>

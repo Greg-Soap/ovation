@@ -13,7 +13,10 @@ import { useEffect, useState } from 'react'
 import WalletConnectComponent from './WalletConnectComponent'
 import ovationService from '@/services/ovation.service'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { ErrorDisplay } from '@/components/error-display'
+
+import { setToken } from '@/lib/cookies'
+import { useLocalStorage } from '@/lib/use-local-storage'
+import type { UserData } from '@/models/all.model'
 
 const formSchema = z.object({
   personalInfo: z.object({
@@ -50,6 +53,8 @@ export default function AccountForm({ setOptionalLeft }: Props) {
   const [active, setActive] = useState('')
   const [isManualWallet, setIsManualWallet] = useState(false)
 
+  const { setValue } = useLocalStorage<UserData | null>('userData', null)
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -76,6 +81,9 @@ export default function AccountForm({ setOptionalLeft }: Props) {
     mutationFn: ovationService.register,
     onSuccess: (data) => {
       console.log(data)
+      setToken(data.data?.token)
+      setValue(data.data?.userData)
+
       toast.success('Profile created successfully')
       router.push('/apps/discover')
     },

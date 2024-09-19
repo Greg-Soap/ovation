@@ -24,19 +24,22 @@ import { decodeIdToken } from '@/lib/helper-func'
 import { useMutation } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
 import { setToken } from '@/lib/cookies'
+import { useLocalStorage } from '@/lib/use-local-storage'
+import type { UserData } from '@/models/all.model'
 
 const formSchema = z.object({
-  username: z.string(),
+  userId: z.string(),
   password: z.string(),
 })
 
 export default function LoginForm() {
   const router = useRouter()
+  const { setValue } = useLocalStorage<UserData | null>('userData', null)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: '',
+      userId: '',
       password: '',
     },
   })
@@ -44,8 +47,11 @@ export default function LoginForm() {
   const loginMutation = useMutation({
     mutationFn: ovationService.login,
     onSuccess: (data) => {
+      console.log({ login: data })
       if (data?.data?.token) {
         setToken(data?.data?.token)
+        setValue(data?.data?.userData)
+
         toast.success('Login successful!')
         router.push('/apps/discover')
       } else {
@@ -53,6 +59,7 @@ export default function LoginForm() {
       }
     },
     onError: (error) => {
+      console.log({ error })
       toast.error(`Login failed: ${error.message}`)
     },
   })
@@ -114,7 +121,7 @@ export default function LoginForm() {
         <form onSubmit={form.handleSubmit(formSubmit)} className='flex flex-col gap-6'>
           <FormField
             control={form.control}
-            name='username'
+            name='userId'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Username</FormLabel>

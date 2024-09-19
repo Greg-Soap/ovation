@@ -154,3 +154,10 @@ export function capitalizeFirstLetter(str: string): string {
 }
 
 // snake_case, kebab-case, camelCase, PascalCase, chunk, debounce, range
+
+export function getGreeting(): string {
+  const hour = new Date().getHours()
+  if (hour < 12) return 'Good Morning'
+  if (hour < 18) return 'Good Afternoon'
+  return 'Good Evening'
+}
