@@ -8,6 +8,8 @@ import type {
   Path,
   Wallet,
   ProfileData,
+  UserData,
+  Badge,
 } from '../models/all.model'
 import { removeToken } from '@/lib/cookies'
 
@@ -26,15 +28,19 @@ class OvationService {
   }
 
   static register(data: Register) {
-    return api.post('/Auth/register', data)
+    return api.post<{ message: string; token: string; userData: UserData }>(
+      '/Auth/register',
+      data,
+    )
   }
 
   static login(data: Login) {
-    return api.post('/Auth/login', data)
+    return api.post<{ message: string; token: string; userData: UserData }>('/Auth/login', data)
   }
 
   static logout() {
     removeToken()
+    
   }
 
   static forgotPassword(email: string) {
@@ -50,7 +56,7 @@ class OvationService {
   }
 
   static async getProfile() {
-    const response = await api.get<ProfileData>('/Profile')
+    const response = await api.get<{ data: ProfileData; message: string }>('/Profile')
     return response.data
   }
 
@@ -69,6 +75,26 @@ class OvationService {
 
   static updateExperience(id: string, data: UserExperience) {
     return api.put(`/Profile/experience/${id}`, data)
+  }
+
+  static getExperience(userId: string) {
+    return api.get<{ data: UserExperience[]; message: string }>(`/Profile/experience/${userId}`)
+  }
+
+  static getBadges(userId: string) {
+    return api.get<{ data: Badge[]; message: string }>(`/Profile/badge/${userId}?page=1`)
+  }
+
+  static getFavouriteNft(userId: string) {
+    return api.get(`/Profile/fav-nft/${userId}`)
+  }
+
+  static getNfts(userId: string) {
+    return api.get(`/Profile/nft/${userId}?page=1`)
+  }
+
+  static getStats(userId: string) {
+    return api.get(`/Profile/stat/${userId}`)
   }
 
   static updateSocials(data: UserSocialsMod) {

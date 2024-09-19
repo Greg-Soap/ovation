@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button'
 import SettingsChange from '../../_components/_settings/settings-change'
 import ovationService from '@/services/ovation.service'
 import { toast } from 'sonner'
-import type { UserSocialsMod } from '@/models/all.model'
+import type { ProfileData, UserSocialsMod } from '@/models/all.model'
 
 const formSchema = z.object({
   LinkedIn: z.string().url().optional(),
@@ -41,10 +41,8 @@ const socialPlatforms: SocialPlatform[] = [
   { name: 'EthCo', imgSrc: '/assets/images/settings/social/eth-co.png' },
 ]
 
-export default function SocialForm() {
-  const [isHidden, setIsHidden] = useState(true)
+export default function SocialForm({ userId }: { userId: string }) {
   const [disabled, setDisabled] = useState(true)
-  const userId = 'current-user-id' // Replace with actual user ID
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),

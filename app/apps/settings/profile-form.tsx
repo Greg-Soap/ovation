@@ -9,39 +9,38 @@ import { Input } from '@/components/ui/input'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { DatePicker } from '@/components/ui/date-picker'
-import { Textarea } from '@/components/ui/textarea'
 import SettingsChange from '../_components/_settings/settings-change'
 import { useState } from 'react'
 import ovationService from '@/services/ovation.service'
 import { toast } from 'sonner'
 
+import type { ProfileData } from '@/models/all.model'
+
 const formSchema = z.object({
   displayName: z.string().min(1, 'Display name is required'),
   username: z.string().min(1, 'Username is required'),
   email: z.string().email('Invalid email address'),
-  dob: z.date(),
+  birthDate: z.date(),
   location: z.string(),
-  profession: z.string(),
   bio: z.string(),
-  userImg: z.string(),
+  profileImage: z.string(),
 })
 
 type ProfileFormValues = z.infer<typeof formSchema>
 
-export default function ProfileForm() {
+export default function ProfileForm({ profileData }: { profileData: ProfileData }) {
   const [disabled, setDisabled] = useState(true)
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      displayName: '',
-      username: '',
-      email: '',
-      dob: new Date(),
-      location: '',
-      profession: '',
-      bio: '',
-      userImg: '',
+      displayName: profileData?.profile?.displayName,
+      username: profileData?.username,
+      email: profileData?.email,
+      birthDate: new Date(profileData?.profile?.birthDate || ''),
+      location: profileData?.profile?.location || '',
+      bio: profileData?.profile?.bio || '',
+      profileImage: profileData?.profile?.profileImage || '',
     },
   })
 
@@ -65,14 +64,14 @@ export default function ProfileForm() {
         <div className='w-full flex gap-7 flex-col px-4 sm:px-10 2xl:px-20'>
           <FormField
             control={form.control}
-            name='userImg'
+            name='profileImage'
             render={({ field }) => (
               <FormItem>
                 <div className='flex gap-8 items-center mb-4'>
                   <span className='w-[150px] h-[150px] rounded-full'>
                     <Image
                       alt='user image'
-                      src={pfp}
+                      src={field.value || pfp}
                       className='rounded-full w-full h-full text-[#F8F8FF]'
                     />
                   </span>
@@ -84,7 +83,7 @@ export default function ProfileForm() {
                       onClick={() => {
                         // Add logic to update profile image
                       }}>
-                      Update profile
+                      Upload image
                     </Button>
                   </FormControl>
                 </div>
@@ -138,14 +137,14 @@ export default function ProfileForm() {
                       type='email'
                     />
                   </FormControl>
-                  <Button className='text-[#0B0A10] text-xs font-medium h-fit'>Verify Email</Button>
+                  {/* <Button className='text-[#0B0A10] text-xs font-medium h-fit'>Verify Email</Button> */}
                 </div>
               </FormItem>
             )}
           />
           <FormField
             control={form.control}
-            name='dob'
+            name='birthDate'
             render={({ field }) => (
               <FormItem className='max-w-[940px] flex flex-col gap-2'>
                 <FormLabel className='text-[#B3B3B3] text-sm'>Date of birth</FormLabel>
@@ -173,31 +172,15 @@ export default function ProfileForm() {
           />
           <FormField
             control={form.control}
-            name='profession'
-            render={({ field }) => (
-              <FormItem className='flex flex-col gap-2'>
-                <FormLabel className='text-[#B3B3B3] text-sm'>Profession</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder='ex: Software Engineer'
-                    className='text-[#F8F8FF] text-sm max-w-[940px] h-[47px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full'
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
             name='bio'
             render={({ field }) => (
               <FormItem className='flex flex-col gap-2'>
                 <FormLabel className='text-[#B3B3B3] text-sm'>Bio</FormLabel>
                 <FormControl>
-                  <Textarea
+                  <Input
                     {...field}
                     placeholder='Tell us about yourself .....'
-                    className='text-[#F8F8FF] text-sm max-w-[940px] min-h-[150px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-xl'
+                    className='text-[#F8F8FF] text-sm max-w-[940px] h-[47px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full'
                   />
                 </FormControl>
               </FormItem>

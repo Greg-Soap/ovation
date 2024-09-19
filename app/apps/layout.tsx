@@ -6,6 +6,7 @@ import type { NotificationMessage } from '@/lib/helper-func'
 import { useState, useEffect } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Suspense } from 'react'
+import MiniLoader from '@/components/mini-loader'
 
 const queryClient = new QueryClient()
 
@@ -47,7 +48,7 @@ export default function AsideLayout({
         <Aside />
         <div id='empty space' className='min-w-[310px]' />
         <QueryClientProvider client={queryClient}>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<MiniLoader size='huge' />}>
             <div className='w-full px-0 pb-[65px] lg:pb-0'>{children}</div>
           </Suspense>
         </QueryClientProvider>

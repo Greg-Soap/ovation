@@ -3,21 +3,17 @@ import Stats from './stats'
 import Portfolio from './portfolio'
 import Experience from './experience'
 import FeaturedSection from '../../_components/_profile/featured-section'
-import { createdNFT } from '../_secondary-profile/portfolio-data'
 import { experienceData } from '../_secondary-profile/experience-data'
 import type { ProfileData } from '@/models/all.model'
 import { useTabUrlSync } from '@/lib/use-tab'
+import { useQuery } from '@tanstack/react-query'
+import ovationService from '@/services/ovation.service'
 
 interface TabData {
   value: string
   label: string
-  content: React.ReactNode
+  content: (nfts: any) => React.ReactNode
 }
-const profileTabsData: TabData[] = [
-  { value: 'portfolio', label: 'Portfolio', content: <Portfolio initialNFTs={createdNFT} /> },
-  { value: 'stat', label: 'Stat', content: <Stats /> },
-  { value: 'experience', label: 'Experience', content: <Experience data={experienceData} /> },
-]
 
 export default function MainProfileSection({
   profileData,
@@ -28,10 +24,29 @@ export default function MainProfileSection({
 }) {
   const { currentTab, setTab } = useTabUrlSync('portfolio')
 
+  const { data: nfts, isLoading: isNftsLoading } = useQuery({
+    queryKey: ['nfts', profileData?.userId],
+    queryFn: () => ovationService.getNfts(profileData?.userId as string),
+  })
+
+  const profileTabsData: TabData[] = [
+    { 
+      value: 'portfolio', 
+      label: 'Portfolio', 
+      content: (nfts) => <Portfolio nfts={nfts?.data?.data || []} isLoading={isNftsLoading} /> 
+    },
+    { value: 'stat', label: 'Stat', content: () => <Stats userId={profileData?.userId as string} /> },
+    { 
+      value: 'experience', 
+      label: 'Experience', 
+      content: () => <Experience data={experienceData} /> 
+    },
+  ]
+
   return (
     <div className='max-w-[853px] w-full h-full flex flex-col items-center bg-[#111115]'>
       <FeaturedSection
-        featured={profileData?.featured || []}
+        featured={[]}
         showButtons={true}
         secondaryProfile={secondaryProfile}
       />
@@ -52,8 +67,8 @@ export default function MainProfileSection({
           ))}
         </TabsList>
         {profileTabsData.map(({ value, content }) => (
-          <TabsContent key={value} value={value} className='w-full'>
-            {content}
+          <TabsContent key={value} value={value} className='w-full px-3'>
+            {content(nfts)}
           </TabsContent>
         ))}
       </Tabs>

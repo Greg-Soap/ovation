@@ -1,132 +1,181 @@
 'use client'
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { useState } from 'react'
 import Image from 'next/image'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
-import LikeIcon from '@/components/icons/likeIcon'
-
-interface NFTCategory {
-  name: string
-  itemCount: number
-}
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Skeleton } from '@/components/ui/skeleton'
 
 interface NFT {
-  type: 'isComplete' | 'isDomain' | 'isCollectible' | 'isMetaverse' | 'isArt'
-  imageUrl: string
-  artistName: string
-  priceInEth: number
-  isLiked: boolean
+  type: 'eth' | 'Complete' | 'Domain' | 'Collectible' | 'Metaverse' | 'Art';
+  imageUrl: string;
+  description?: string;
+  metaData?: {
+    Amount: string;
+    BlockNumber: string;
+    BlockNumberMinted: string | null;
+    CollectionBannerImage: string;
+    CollectionLogo: string;
+    ContractType: string;
+    LastMetadataSync: string;
+    LastTokenUriSync: string;
+    Metadata: string;
+    MinterAddress: string;
+    Name: string | null;
+    OwnerOf: string;
+    PossibleSpam: boolean;
+    RarityLabel: string;
+    RarityPercentage: number;
+    RarityRank: number;
+    Symbol: string | null;
+    TokenAddress: string;
+    TokenHash: string;
+    TokenId: string;
+    TokenUri: string;
+    VerifiedCollection: boolean;
+  };
+  name: string | null;
+  tokenAddress: string;
+  tokenId: string;
 }
 
-export type NFTCollection = NFT[]
-
-const nftCategories: NFTCategory[] = [
-  { name: 'All', itemCount: 20 },
-  { name: 'Complete', itemCount: 4 },
-  { name: 'Domain', itemCount: 4 },
-  { name: 'Collectibles', itemCount: 4 },
-  { name: 'Metaverse', itemCount: 4 },
-  { name: 'Art', itemCount: 4 },
-]
-
-export default function Portfolio({ initialNFTs }: { initialNFTs: NFTCollection }) {
-  const [nfts, setNFTs] = useState<NFTCollection>(initialNFTs)
-
-  function toggleNFTLike(index: number) {
-    setNFTs((prevNFTs) =>
-      prevNFTs.map((nft, i) => (i === index ? { ...nft, isLiked: !nft.isLiked } : nft)),
-    )
-  }
-
+function Portfolio({ nfts, isLoading }: { nfts: NFT[], isLoading: boolean }) {
   return (
-    <div className='w-full py-10 flex items-center justify-center'>
-      <Tabs defaultValue='All' className='w-[95%] max-h-fit flex flex-col gap-[34px]'>
-        <TabsList className='flex justify-between items-center w-full overflow-x-scroll'>
-          <div className='flex items-center gap-1.5'>
-            {nftCategories.map(({ name, itemCount }) => (
-              <TabsTrigger
-                key={name}
-                value={name}
-                className='bg-[#232227] text-[#999999] p-2.5 rounded-[50px] max-h-fit text-[10px] border-none data-[state=active]:bg-white data-[state=active]:text-[#232227]'>
-                {`${name}(${itemCount})`}
-              </TabsTrigger>
+    <div className="w-full py-10 flex items-center justify-center">
+      <div className="w-full max-w-7xl">
+        {isLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
+            {[...Array(6)].map((_, index) => (
+              <NFTCardSkeleton key={index} />
             ))}
           </div>
-        </TabsList>
-        {nftCategories.map(({ name }) => (
-          <TabsContent key={name} value={name}>
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3'>
-              {nfts
-                .filter((nft) => name === 'All' || nft.type === `is${name}`)
-                .map((nft, index) => (
-                  <NFTCard
-                    key={index}
-                    {...nft}
-                    className='flex'
-                    onLike={() => toggleNFTLike(index)}
-                  />
-                ))}
-            </div>
-          </TabsContent>
-        ))}
-      </Tabs>
+        ) : !nfts || nfts.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-64">
+            <p className="text-white text-lg font-semibold">No NFTs Available</p>
+            <p className="text-[#999999] text-sm mt-2">There are no NFTs in your collection.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
+            {nfts.map((nft, index) => (
+              <NFTCard key={index} {...nft} />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   )
 }
 
-interface NFTCardProps extends NFT {
-  className?: string
-  onLike?: () => void
+function NFTCardSkeleton() {
+  return (
+    <div className="flex flex-col bg-[#18181C] border border-[#FFFFFF14] rounded-[10px] overflow-hidden h-full">
+      <Skeleton className="w-full pt-[100%]" />
+      <div className="flex flex-col justify-between bg-[#111115] border-t border-[#FFFFFF0D] p-3 flex-grow">
+        <div className="flex items-start justify-between w-full mb-2">
+          <div className="flex-grow mr-2">
+            <Skeleton className="h-4 w-3/4 mb-2" />
+            <Skeleton className="h-3 w-full" />
+          </div>
+          <Skeleton className="h-8 w-8 rounded-full" />
+        </div>
+      </div>
+    </div>
+  )
 }
 
-function NFTCard({ isLiked, imageUrl, artistName, priceInEth, className, onLike }: NFTCardProps) {
+function NFTCard({ imageUrl, name, metaData, tokenAddress, tokenId }: NFT) {
+  const getImageSrc = (url: string) => {
+    if (url.startsWith('ipfs://')) {
+      return `https://gateway.pinata.cloud/ipfs/${url.slice(7)}`;
+    }
+    return url;
+  };
+
+  const getNFTName = () => {
+    if (metaData?.Metadata) {
+      const parsedMetadata = JSON.parse(metaData.Metadata);
+      return parsedMetadata.name || name || 'Unnamed NFT';
+    }
+    return name || 'Unnamed NFT';
+  };
+
+  const getNFTDescription = () => {
+    if (metaData?.Metadata) {
+      const parsedMetadata = JSON.parse(metaData.Metadata);
+      return parsedMetadata.description || 'No description available';
+    }
+    return 'No description available';
+  };
+
+  const truncateDescription = (description: string, maxLength = 50) => {
+    if (description.length <= maxLength) return description;
+    return `${description.slice(0, maxLength)}...`;
+  };
+
+  const description = getNFTDescription();
+  const truncatedDescription = truncateDescription(description);
+  const showReadMore = description.length > 100;
+
   return (
-    <div
-      className={`${className} flex-col bg-[#18181C] border border-[#FFFFFF14] rounded-[10px] relative m-0`}>
-      <Button
-        variant='default'
-        className='flex items-center p-2 rounded-full bg-[#333726] absolute right-5 top-3'
-        onClick={onLike}>
-        <LikeIcon
-          className={`w-4 h-4 transition-all duration-300 ${isLiked ? 'stroke-none fill-[#CFF073]' : 'stroke-[#CFF073] fill-none'}`}
+    <div className="flex flex-col bg-[#18181C] border border-[#FFFFFF14] rounded-[10px] overflow-hidden h-full">
+      <div className="relative pt-[100%]">
+        <Image
+          src={getImageSrc(imageUrl)}
+          alt="NFT Preview"
+          layout="fill"
+          objectFit="cover"
+          className="absolute top-0 left-0 w-full h-full"
         />
-      </Button>
-      <Image
-        src={imageUrl}
-        alt='NFT Preview'
-        width={500}
-        height={217}
-        className='rounded-t-[10px]'
-      />
-
-      <div className='flex flex-col items-center justify-between bg-[#111115] border border-[#FFFFFF0D] px-3 py-3 rounded-b-[10px] gap-3'>
-        <div className='flex items-center justify-between w-full'>
-          <div className='flex flex-col items-start gap-1'>
-            <p className='text-xs text-[#F8F8FF] font-semibold'>{artistName}</p>
-            <p className='text-[#999999] text-[11px]'>{`${priceInEth} ETH`}</p>
+      </div>
+      <div className="flex flex-col justify-between bg-[#111115] border-t border-[#FFFFFF0D] p-3 flex-grow">
+        <div className="flex items-start justify-between w-full mb-2">
+          <div className="flex-grow mr-2">
+            <p className="text-sm text-[#F8F8FF] font-semibold truncate">{getNFTName()}</p>
+            <p className="text-[#999999] text-xs mt-1">
+              {truncatedDescription}
+              {showReadMore && (
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <button className="text-[#CFF073] ml-1 hover:underline focus:outline-none">
+                      Read more
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px] bg-[#18181C] text-white">
+                    <DialogHeader>
+                      <DialogTitle>{getNFTName()}</DialogTitle>
+                    </DialogHeader>
+                    <p className="text-sm text-[#999999]">{description}</p>
+                  </DialogContent>
+                </Dialog>
+              )}
+            </p>
           </div>
-
           <Popover>
             <PopoverTrigger>
               <Button
-                variant='default'
-                className='text-white gap-1 flex items-center bg-transparent h-fit p-1'>
-                <div className='w-1 h-1 bg-white rounded-full' />
-                <div className='w-1 h-1 bg-white rounded-full' />
-                <div className='w-1 h-1 bg-white rounded-full' />
+                variant="ghost"
+                size="icon"
+                className="text-white h-8 w-8 p-0"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="1" />
+                  <circle cx="12" cy="5" r="1" />
+                  <circle cx="12" cy="19" r="1" />
+                </svg>
               </Button>
             </PopoverTrigger>
-            <PopoverContent className='rounded-[7px] bg-[#232227] flex flex-col w-fit p-0 border-none'>
+            <PopoverContent className="rounded-[7px] bg-[#232227] flex flex-col w-fit p-0 border-none">
               <Button
-                variant='default'
-                className='text-white text-xs justify-start font-medium px-3 py-[10px] bg-transparent w-full h-fit border-b border-[#333333] rounded-none'>
+                variant="ghost"
+                className="text-white text-xs justify-start font-medium px-3 py-[10px] w-full h-fit border-b border-[#333333] rounded-none"
+              >
                 Feature NFT
               </Button>
               <Button
-                variant='default'
-                className='text-white text-xs justify-start font-medium px-3 py-[10px] w-full bg-transparent h-fit'>
+                variant="ghost"
+                className="text-white text-xs justify-start font-medium px-3 py-[10px] w-full h-fit"
+              >
                 Make NFT public
               </Button>
             </PopoverContent>
@@ -136,3 +185,5 @@ function NFTCard({ isLiked, imageUrl, artistName, priceInEth, className, onLike 
     </div>
   )
 }
+
+export default Portfolio

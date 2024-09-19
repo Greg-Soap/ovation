@@ -5,7 +5,7 @@ interface SpinnerProps {
   color?: string
 }
 
-function Spinner({ size = 'average', color = 'black' }: SpinnerProps) {
+function Spinner({ size = 'average', color = '#Cff073' }: SpinnerProps) {
   const sizeMap = {
     huge: 'w-20 h-20 border-8',
     average: 'w-12 h-12 border-4',
