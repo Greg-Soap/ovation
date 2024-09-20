@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Suspense } from 'react'
 import MiniLoader from '@/components/mini-loader'
+import { toast } from 'sonner'
 
 const queryClient = new QueryClient()
 
@@ -18,20 +19,6 @@ export default function AsideLayout({
   const [notifications, setNotifications] = useState<NotificationMessage[]>([])
 
   useEffect(() => {
-    const notificationService = new NotificationService() // Initialize SignalR service
-
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL as string
-    const connectSignalR = async () => {
-      await notificationService.startConnection(`${baseUrl}/notification`, 'user_access_token_here')
-
-      // Listen for incoming notifications
-      notificationService.onMessage('ReceiveNotification', (notification: NotificationMessage) => {
-        console.log('New notification received:', notification.title)
-
-        // Update notifications state
-        setNotifications((prev) => [...prev, notification])
-      })
-    }
 
     connectSignalR()
 
@@ -40,6 +27,21 @@ export default function AsideLayout({
       notificationService.stopConnection()
     }
   }, [])
+
+  const notificationService = new NotificationService()
+
+    const connectSignalR = async () => {
+
+      await notificationService.startConnection()
+
+      // Listen for incoming notifications
+      notificationService.onMessage('ReceiveNotification', (notification: NotificationMessage) => {
+        console.log('New notification received:', notification.title)
+        toast.success(`${notification.title}\n${notification.message}`)
+
+        setNotifications((prev) => [...prev, notification])
+      })
+    }
 
   return (
     <div className='px-0  container flex flex-col items-center justify-center relative'>
