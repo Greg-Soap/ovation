@@ -1,13 +1,20 @@
 import * as signalR from '@microsoft/signalr'
+import { getToken } from '@/lib/cookies'
 
 export class NotificationService {
   private connection: signalR.HubConnection | null = null
+  private token = getToken() as string
+  private hubUrl = `https://apiovation.com/notification`
 
-  public startConnection = async (hubUrl: string, token = '') => {
+  public startConnection = async () => {
     try {
       this.connection = new signalR.HubConnectionBuilder()
-        .withUrl(hubUrl, {
-          accessTokenFactory: () => token,
+        .withUrl(this.hubUrl, {
+          accessTokenFactory: () => {
+            return this.token
+          },
+          skipNegotiation: true,
+          transport: signalR.HttpTransportType.WebSockets
         })
         .withAutomaticReconnect()
         .configureLogging(signalR.LogLevel.Information)
