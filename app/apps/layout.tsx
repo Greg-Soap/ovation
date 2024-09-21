@@ -8,6 +8,9 @@ import { Suspense } from 'react'
 import MiniLoader from '@/components/mini-loader'
 import { toast } from 'sonner'
 import Aside from './aside'
+import { logOut, signIn } from '@/lib/firebaseAuthService'
+import { useLocalStorage } from '@/lib/use-local-storage'
+import { UserData } from "@/models/all.model";
 
 const queryClient = new QueryClient()
 
@@ -17,13 +20,17 @@ export default function AsideLayout({
   children: React.ReactNode
 }) {
   const [notifications, setNotifications] = useState<NotificationMessage[]>([])
+  const { storedValue } = useLocalStorage<UserData | null>('userData', null)
+  const user = storedValue
 
   useEffect(() => {
     connectSignalR()
+    firebaseSignIn()
 
     // Cleanup function to stop the SignalR connection when component unmounts
     return () => {
       notificationService.stopConnection()
+      firebaseSignOut()
     }
   }, [])
 
@@ -34,11 +41,18 @@ export default function AsideLayout({
 
     // Listen for incoming notifications
     notificationService.onMessage('ReceiveNotification', (notification: NotificationMessage) => {
-      console.log('New notification received:', notification.title)
       toast.success(`${notification.title}\n${notification.message}`)
 
       setNotifications((prev) => [...prev, notification])
     })
+  }
+
+  const firebaseSignIn = async () => {
+    await signIn(user!.userId, user!.email)
+  }
+
+  const firebaseSignOut = async () => {
+    await logOut()
   }
 
   return (

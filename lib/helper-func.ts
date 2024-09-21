@@ -82,7 +82,7 @@ export const chainIdToChainName: { [key: number]: string } = {
   1285: "moonriver"
 };
 
-const optionValueToBlockchainName: { [optionValue: string]: string } = {
+export const optionValueToBlockchainName: { [optionValue: string]: string } = {
   eth: "Ethereum",
   polygon: "Polygon",
   bsc: "Binance Smart Chain",

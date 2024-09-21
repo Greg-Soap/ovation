@@ -2,6 +2,7 @@ import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
+import { getAnalytics } from "firebase/analytics";
 
 // ovation web app Firebase configuration
 const firebaseConfig = {
@@ -15,11 +16,12 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase (ensure it is only initialized once)
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+const app = !getApps().length ? initializeApp(firebaseConfig, 'Ovation Technologies') : getApp();
 
 // Firebase services
 export const auth = getAuth(app);
 export const firestore = getFirestore(app);
 export const storage = getStorage(app);
+const analytics = getAnalytics(app);
 
 export default app;
