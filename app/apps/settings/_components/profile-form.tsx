@@ -9,12 +9,14 @@ import { Input } from '@/components/ui/input'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { DatePicker } from '@/components/ui/date-picker'
-import SettingsChange from '../_components/_settings/settings-change'
+import SettingsChange from './settings-change'
 import { useState } from 'react'
 import ovationService from '@/services/ovation.service'
 import { toast } from 'sonner'
 
 import type { ProfileData } from '@/models/all.model'
+import { useLocalStorage } from '@/lib/use-local-storage'
+import { useMutation } from '@tanstack/react-query'
 
 const formSchema = z.object({
   displayName: z.string().min(1, 'Display name is required'),
@@ -31,28 +33,43 @@ type ProfileFormValues = z.infer<typeof formSchema>
 export default function ProfileForm({ profileData }: { profileData: ProfileData }) {
   const [disabled, setDisabled] = useState(true)
 
+  const { storedValue, setValue } = useLocalStorage<ProfileFormValues>('profileDraft', {
+    displayName: '',
+    username: '',
+    email: '',
+    birthDate: new Date(),
+    location: '',
+    bio: '',
+    profileImage: '',
+  })
+
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      displayName: profileData?.profile?.displayName,
-      username: profileData?.username,
-      email: profileData?.email,
-      birthDate: new Date(profileData?.profile?.birthDate || ''),
-      location: profileData?.profile?.location || '',
-      bio: profileData?.profile?.bio || '',
-      profileImage: profileData?.profile?.profileImage || '',
+      displayName: profileData?.profile?.displayName || storedValue.displayName,
+      username: profileData?.username || storedValue.username,
+      email: profileData?.email || storedValue.email,
+      birthDate: new Date(profileData?.profile?.birthDate || storedValue.birthDate),
+      location: profileData?.profile?.location || storedValue.location,
+      bio: profileData?.profile?.bio || storedValue.bio,
+      profileImage: profileData?.profile?.profileImage || storedValue.profileImage,
+    },
+  })
+
+  const { mutate: updateProfile } = useMutation({
+    mutationFn: (data: ProfileFormValues) => ovationService.updatePersonalInfo(data),
+    onSuccess: () => {
+      toast.success('Profile updated successfully')
+      setDisabled(true)
+    },
+    onError: (error) => {
+      console.error('Error updating profile:', error)
+      toast.error('Failed to update profile. Please try again.')
     },
   })
 
   const onSubmit = async (data: ProfileFormValues) => {
-    try {
-      await ovationService.updatePersonalInfo(data)
-      toast.success('Profile updated successfully')
-      setDisabled(true)
-    } catch (error) {
-      console.error('Error updating profile:', error)
-      toast.error('Failed to update profile. Please try again.')
-    }
+    updateProfile(data)
   }
 
   return (
@@ -187,7 +204,11 @@ export default function ProfileForm({ profileData }: { profileData: ProfileData 
             )}
           />
         </div>
-        <SettingsChange disabled={disabled} />
+        <SettingsChange
+          disabled={disabled}
+          isLoading={form.formState.isSubmitting}
+          saveDraft={() => setValue(form.getValues())}
+        />
       </form>
     </Form>
   )

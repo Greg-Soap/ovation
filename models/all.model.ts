@@ -56,6 +56,7 @@ export interface UserExperience {
   endDate?: string | null
   description: string
   skill: string
+  id?: string
 }
 
 export interface UserExperienceMod extends UserExperience {}

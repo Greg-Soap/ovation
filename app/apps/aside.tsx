@@ -5,11 +5,11 @@ import { usePathname, useRouter } from 'next/navigation'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
-import { FeedbackModal } from './feedback'
 import { LocationDiscover, Profile, Setting2, Message, NotificationBing, More } from 'iconsax-react'
 import { useLocalStorage } from '@/lib/use-local-storage'
-import type { ProfileData, UserData } from '@/models/all.model'
+import type { UserData } from '@/models/all.model'
 import ovationService from '@/services/ovation.service'
+import FeedbackModal from './feedback'
 
 const menuItems = [
   {
@@ -79,7 +79,6 @@ export default function Aside() {
           <PopoverContent
             side='right'
             className='w-fit bg-[#232227] flex flex-col items-start border-none text-white text-base py-2'>
-           
             <Button variant={'ghost'} onClick={handleLogout} className='py-[10px] w-full'>
               Logout {user?.username}
             </Button>

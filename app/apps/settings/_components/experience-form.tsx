@@ -10,80 +10,102 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { DatePicker } from '@/components/ui/date-picker'
 import { Textarea } from '@/components/ui/textarea'
-import SettingsChange from '../../_components/_settings/settings-change'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import { useState } from 'react'
+import SettingsChange from './settings-change'
 import { Checkbox } from '@/components/ui/checkbox'
 import ovationService from '@/services/ovation.service'
 import { toast } from 'sonner'
+import { useMutation } from '@tanstack/react-query'
+import { useLocalStorage } from '@/lib/use-local-storage'
+import { useEffect, useState, Dispatch, SetStateAction } from 'react'
+import { parseISO, format } from 'date-fns'
 
 const formSchema = z.object({
-  id: z.string().optional(),
   company: z.string().min(1, 'Company is required'),
   role: z.string().min(1, 'Role is required'),
   department: z.string().min(1, 'Department is required'),
-  startDate: z.date(),
-  endDate: z.date().nullable(),
+  startDate: z.string().transform((str) => new Date(str).toISOString()),
+  endDate: z
+    .string()
+    .nullable()
+    .transform((str) => (str ? new Date(str).toISOString() : null)),
   description: z.string().min(1, 'Description is required'),
   skills: z.array(z.string()),
 })
 
 type FormValues = z.infer<typeof formSchema>
 
-export default function ExperienceForm({ experienceId }: { experienceId?: string }) {
-  const [disabled, setDisabled] = useState<boolean>(true)
+export default function ExperienceForm() {
+  const [isDisabled, setIsDisabled] = useState<boolean>(true)
   const [isCurrentJob, setIsCurrentJob] = useState<boolean>(false)
+  const { storedValue, setValue } = useLocalStorage<Partial<FormValues>>('experienceDraft', {
+    company: '',
+    role: '',
+    department: '',
+    startDate: '',
+    endDate: null,
+    description: '',
+    skills: [],
+  })
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      id: experienceId,
-      company: '',
-      role: '',
-      department: '',
-      startDate: new Date(),
-      endDate: null,
-      description: '',
-      skills: [],
+      company: storedValue.company || '',
+      role: storedValue.role || '',
+      department: storedValue.department || '',
+      startDate: storedValue.startDate || '',
+      endDate: storedValue.endDate || null,
+      description: storedValue.description || '',
+      skills: storedValue.skills || [],
     },
   })
 
-  async function onSubmit(data: FormValues) {
-    try {
-      if (!data.id) {
-        throw new Error('Experience ID is required')
-      }
-      await ovationService.updateExperience(data.id, {
+  const { mutate, isPending } = useMutation({
+    mutationFn: (data: FormValues) =>
+      ovationService.addExperience({
         ...data,
-        startDate: data.startDate.toISOString(),
-        endDate: isCurrentJob ? null : data.endDate?.toISOString(),
+        startDate: data.startDate,
+        endDate: isCurrentJob ? null : data.endDate,
         skill: data.skills.join(', '),
-      })
+      }),
+    onSuccess: () => {
       toast.success('Experience updated successfully')
-      setDisabled(true)
-    } catch (error) {
+      setIsDisabled(true)
+    },
+    onError: (error) => {
       console.error('Failed to update experience:', error)
       toast.error('Failed to update experience. Please try again later.')
+    },
+  })
+
+  function formatDateForAPI(dateString: string | null): string | null {
+    if (!dateString) return null
+    const date = parseISO(dateString)
+    return format(date, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx")
+  }
+
+  async function handleSubmit(data: FormValues) {
+    const formattedData = {
+      ...data,
+      startDate: formatDateForAPI(data.startDate),
+      endDate: isCurrentJob ? null : formatDateForAPI(data.endDate),
     }
+    console.log('Formatted data', formattedData)
+    //@ts-ignore
+    mutate(formattedData)
+    setValue(data as Partial<FormValues>) // Save to local storage on submit
   }
 
   return (
-    <div className='flex flex-col gap-[23px]'>
+    <div className='flex flex-col gap-[23px] h-full'>
       <p className='text-lg text-[#E6E6E6] font-medium px-10 2xl:px-20'>Experience 1</p>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} onChange={() => setDisabled(false)}>
+        <form onSubmit={form.handleSubmit(handleSubmit)} onChange={() => setIsDisabled(false)}>
           <div className='flex gap-7 flex-col px-4 sm:px-10 2xl:px-20 pb-5'>
             <FormField
               control={form.control}
@@ -91,25 +113,12 @@ export default function ExperienceForm({ experienceId }: { experienceId?: string
               render={({ field }) => (
                 <FormItem className='flex flex-col gap-2'>
                   <FormLabel className='text-sm text-[#B3B3B3]'>Company</FormLabel>
-                  <FormControl {...field}>
-                    <Select>
-                      <SelectTrigger className='w-full h-[47px] rounded-full px-5 otline-none border border-[#333333] text-[#F8F8FF]'>
-                        <SelectValue placeholder='ex. Google' className='text-sm' />
-                      </SelectTrigger>
-                      <SelectContent className='bg-[#111115] border-none rounded-[10px] px-0'>
-                        {companyList.map((item, index) => (
-                          <SelectItem
-                            value={item?.value ? item?.value : ''}
-                            key={index}
-                            className='bg-[#111115] border-b border-[#4D4D4D] last:border-none text-[#F8F8FF] text-lg font-medium rounded-none first:rounded-t-[10px] last:rounded-b-[10px] hover:bg-[#111115] px-4 py-2'>
-                            <div className='flex flex-row gap-2 items-center'>
-                              <img src={`${item.imgSrc}`} alt={item.name} className='w-6 h-6' />
-                              <p>{item.name}</p>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                  <FormControl>
+                    <Input
+                      placeholder='ex. Google'
+                      {...field}
+                      className='h-[47px] text-sm text-[#F8F8FF] border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]'
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -140,22 +149,12 @@ export default function ExperienceForm({ experienceId }: { experienceId?: string
               render={({ field }) => (
                 <FormItem className='flex flex-col gap-2'>
                   <FormLabel className='text-sm text-[#B3B3B3]'>Department</FormLabel>
-                  <FormControl {...field}>
-                    <Select>
-                      <SelectTrigger className='w-full h-[47px] rounded-full px-5 otline-none border border-[#333333] text-[#F8F8FF]'>
-                        <SelectValue placeholder='ex. Google' className='text-sm h-[47px]' />
-                      </SelectTrigger>
-                      <SelectContent className='bg-[#111115] border-none rounded-[10px] px-0'>
-                        {departmentList.map((item, index) => (
-                          <SelectItem
-                            value={item?.value ? item?.value : ''}
-                            key={index}
-                            className='bg-[#111115] border-b border-[#4D4D4D] last:border-none text-[#F8F8FF] text-lg font-medium rounded-none first:rounded-t-[10px] last:rounded-b-[10px] px-4 py-2'>
-                            {item.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                  <FormControl>
+                    <Input
+                      placeholder='ex. Engineering'
+                      {...field}
+                      className='h-[47px] text-sm text-[#F8F8FF] border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]'
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -171,7 +170,10 @@ export default function ExperienceForm({ experienceId }: { experienceId?: string
                     <FormItem className='flex flex-col gap-2'>
                       <FormLabel className='text-sm text-[#B3B3B3]'>Start Date</FormLabel>
                       <FormControl {...field}>
-                        <DatePicker />
+                        <DatePicker
+                          selected={field.value ? parseISO(field.value) : null}
+                          onChange={(date: Date) => field.onChange(date.toISOString())}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -204,7 +206,6 @@ export default function ExperienceForm({ experienceId }: { experienceId?: string
                   }}
                   className='border-[#CFF073] data-[state=checked]:bg-[#CFF073] data-[state=checked]:text-[#0B0A10]'
                 />
-
                 <label
                   htmlFor='work'
                   className='text-xs text-[#CCCDD7] leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
@@ -254,56 +255,13 @@ export default function ExperienceForm({ experienceId }: { experienceId?: string
             />
           </div>
 
-          <SettingsChange disabled={disabled} />
+          <SettingsChange
+            disabled={isDisabled}
+            isLoading={isPending}
+            saveDraft={() => setValue(form.getValues())}
+          />
         </form>
       </Form>
     </div>
   )
 }
-
-interface CompanyList {
-  name?: string
-  value?: string
-  imgSrc?: string
-}
-
-const companyList: CompanyList[] = [
-  {
-    name: 'Google',
-    value: 'google',
-    imgSrc: '/assets/images/settings/company/google.png',
-  },
-  {
-    name: 'Slack',
-    value: 'slack',
-    imgSrc: '/assets/images/settings/company/slack.png',
-  },
-  {
-    name: 'Apple',
-    value: 'apple',
-    imgSrc: '/assets/images/settings/company/apple.png',
-  },
-  {
-    name: 'Meta',
-    value: 'meta',
-    imgSrc: '/assets/images/settings/company/meta.png',
-  },
-  {
-    name: 'Netflix',
-    value: 'netflix',
-    imgSrc: '/assets/images/settings/company/netflix.png',
-  },
-]
-
-interface DepartmentList {
-  name?: string
-  value?: string
-}
-
-const departmentList: DepartmentList[] = [
-  { name: 'Executive', value: 'executive' },
-  { name: 'Finance', value: 'finance' },
-  { name: 'Product', value: 'product' },
-  { name: 'Engineering', value: 'engineering' },
-  { name: 'Marketing', value: 'marketing' },
-]

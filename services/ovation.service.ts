@@ -28,10 +28,7 @@ class OvationService {
   }
 
   static register(data: Register) {
-    return api.post<{ message: string; token: string; userData: UserData }>(
-      '/Auth/register',
-      data,
-    )
+    return api.post<{ message: string; token: string; userData: UserData }>('/Auth/register', data)
   }
 
   static login(data: Login) {
@@ -40,7 +37,6 @@ class OvationService {
 
   static logout() {
     removeToken()
-    
   }
 
   static forgotPassword(email: string) {
@@ -63,6 +59,19 @@ class OvationService {
   static async getUserProfile(username: string) {
     const response = await api.get(`/Profile/${username}`)
     return response.data
+  }
+
+  static async sendFeedback(data: {
+    userEmail: string
+    satisfactory: string
+    usefulFeature: string[]
+    improvement: string
+    confusion?: string
+    likelyRecommend?: string
+    addition?: string
+    biggestPain?: string
+  }) {
+    return api.post('/Feedback', data)
   }
 
   static updatePersonalInfo(data: ProfileMod) {
@@ -98,11 +107,11 @@ class OvationService {
   }
 
   static updateSocials(data: UserSocialsMod) {
-    return api.put('/Profile/socials', data)
+    return api.patch('/Profile/socials', data)
   }
 
   static getSocialLinks(userId: string) {
-    return api.get(`/Profile/social/${userId}`)
+    return api.get<{ data: UserSocialsMod; message: string }>(`/Profile/social/${userId}`)
   }
 
   static getPath() {
