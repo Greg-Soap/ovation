@@ -4,11 +4,12 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Form, FormField, FormControl, FormItem, FormLabel } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import SettingsChange from '../_components/_settings/settings-change'
+
+import SettingsChange from './settings-change'
 import { useState } from 'react'
 import ovationService from '@/services/ovation.service'
 import { toast } from 'sonner' // Import toast from sonner
+import { useMutation } from '@tanstack/react-query'
 
 const formSchema = z
   .object({
@@ -22,7 +23,7 @@ const formSchema = z
   })
 
 export default function PasswordForm() {
-  const [disabled, setDisabled] = useState<boolean>(true)
+  const [isDisabled, setIsDisabled] = useState<boolean>(true) // Updated variable name
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -33,24 +34,30 @@ export default function PasswordForm() {
     },
   })
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log('Form submitted:', data)
-    try {
-      await ovationService.changeProfilePassword(data.oldPassword, data.newPassword)
+  const { mutate: changePassword } = useMutation({
+    mutationFn: (data: z.infer<typeof formSchema>) =>
+      ovationService.changeProfilePassword(data.oldPassword, data.newPassword),
+    onSuccess: (data) => {
       toast.success('Password changed successfully')
-      form.reset() // Reset form after successful submission
-      setDisabled(true) // Disable the submit button again
-    } catch (error) {
+      console.log(data)
+      form.reset()
+      setIsDisabled(true)
+    },
+    onError: (error) => {
       console.error('Error changing password:', error)
       toast.error('Failed to change password. Please try again.')
-    }
+    },
+  })
+
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    changePassword(data)
   }
 
   return (
     <Form {...form}>
       <form
         className='h-full flex flex-col w-full'
-        onChange={() => setDisabled(false)}
+        onChange={() => setIsDisabled(false)} // Updated variable name
         onSubmit={form.handleSubmit(onSubmit)}>
         <div className='h-full w-full lg:max-w-[637px] flex gap-7 flex-col box-border pb-5 px-4 sm:px-10 2xl:px-20'>
           <FormField
@@ -107,7 +114,7 @@ export default function PasswordForm() {
             )}
           />
         </div>
-        <SettingsChange disabled={disabled} />
+        <SettingsChange disabled={isDisabled} isLoading={form.formState.isSubmitting} />
       </form>
     </Form>
   )

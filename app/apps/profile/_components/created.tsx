@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import Image from 'next/image'
-import { Button } from '@/components/ui/button'
+import type { Button } from '@/components/ui/button'
 import {
   Select,
   SelectContent,
@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import NftCard from '../../_components/_profile/nft-card'
+import NftCard from './nft-card'
 //import LikeIcon from '@/components/icons/likeIcon'
 
 export default function Created({ data }: { data: CreatedNFTData }) {
@@ -34,37 +34,36 @@ export default function Created({ data }: { data: CreatedNFTData }) {
   }*/
 
   return (
-    <div className="w-full py-10 flex items-center justify-center">
-      <Tabs defaultValue="All" className="w-[95%] flex flex-col gap-[34px]">
-        <TabsList className="flex justify-between items-center w-full overflow-x-scroll">
-          <div className="flex items-center gap-1.5">
+    <div className='w-full py-10 flex items-center justify-center'>
+      <Tabs defaultValue='All' className='w-[95%] flex flex-col gap-[34px]'>
+        <TabsList className='flex justify-between items-center w-full overflow-x-scroll'>
+          <div className='flex items-center gap-1.5'>
             {buttons.map((item: Button, index: number) => (
               <TabsTrigger
                 value={item.name}
-                className="bg-[#232227] text-[#999999] p-2.5 rounded-[50px] max-h-fit text-[10px] border-none data-[state=active]:bg-white data-[state=active]:text-[#232227]"
-                key={index}
-              >
+                className='bg-[#232227] text-[#999999] p-2.5 rounded-[50px] max-h-fit text-[10px] border-none data-[state=active]:bg-white data-[state=active]:text-[#232227]'
+                key={index}>
                 {item.name + '(' + item.itemCount + ')'}
               </TabsTrigger>
             ))}
           </div>
 
           <Select>
-            <SelectTrigger className="w-fit rounded-[7px] px-2 py-2.5 otline-none border border-[#333333] text-white text-xs bg-[#232227] h-fit">
-              <SelectValue placeholder="Filters" />
+            <SelectTrigger className='w-fit rounded-[7px] px-2 py-2.5 otline-none border border-[#333333] text-white text-xs bg-[#232227] h-fit'>
+              <SelectValue placeholder='Filters' />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
+              <SelectItem value='light'>Light</SelectItem>
+              <SelectItem value='dark'>Dark</SelectItem>
+              <SelectItem value='system'>System</SelectItem>
             </SelectContent>
           </Select>
         </TabsList>
-        <TabsContent value="All">
-          <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
+        <TabsContent value='All'>
+          <div className='flex flex-wrap gap-x-4 gap-y-[34px]'>
             {data.map((item, index) => (
               <NftCard
-                type="created"
+                type='created'
                 key={index}
                 imgSrc={item.imgSrc}
                 artist={item.artist}
@@ -74,12 +73,12 @@ export default function Created({ data }: { data: CreatedNFTData }) {
             ))}
           </div>
         </TabsContent>
-        <TabsContent value="Complete">
-          <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
+        <TabsContent value='Complete'>
+          <div className='flex flex-wrap gap-x-4 gap-y-[34px]'>
             {data.map((item, index) => (
               <NftCard
                 key={index}
-                type="created"
+                type='created'
                 imgSrc={item.imgSrc}
                 artist={item.artist}
                 price={item.price}
@@ -88,12 +87,12 @@ export default function Created({ data }: { data: CreatedNFTData }) {
             ))}
           </div>
         </TabsContent>
-        <TabsContent value="Domain">
-          <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
+        <TabsContent value='Domain'>
+          <div className='flex flex-wrap gap-x-4 gap-y-[34px]'>
             {data.map((item, index) => (
               <NftCard
                 key={index}
-                type="created"
+                type='created'
                 imgSrc={item.imgSrc}
                 artist={item.artist}
                 price={item.price}
@@ -102,12 +101,12 @@ export default function Created({ data }: { data: CreatedNFTData }) {
             ))}
           </div>
         </TabsContent>
-        <TabsContent value="Collectibles">
-          <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
+        <TabsContent value='Collectibles'>
+          <div className='flex flex-wrap gap-x-4 gap-y-[34px]'>
             {data.map((item, index) => (
               <NftCard
                 key={index}
-                type="created"
+                type='created'
                 imgSrc={item.imgSrc}
                 artist={item.artist}
                 price={item.price}
@@ -116,12 +115,12 @@ export default function Created({ data }: { data: CreatedNFTData }) {
             ))}
           </div>
         </TabsContent>
-        <TabsContent value="Metaverse">
-          <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
+        <TabsContent value='Metaverse'>
+          <div className='flex flex-wrap gap-x-4 gap-y-[34px]'>
             {data.map((item, index) => (
               <NftCard
                 key={index}
-                type="created"
+                type='created'
                 imgSrc={item.imgSrc}
                 artist={item.artist}
                 price={item.price}
@@ -130,12 +129,12 @@ export default function Created({ data }: { data: CreatedNFTData }) {
             ))}
           </div>
         </TabsContent>
-        <TabsContent value="Art">
-          <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
+        <TabsContent value='Art'>
+          <div className='flex flex-wrap gap-x-4 gap-y-[34px]'>
             {data.map((item, index) => (
               <NftCard
                 key={index}
-                type="created"
+                type='created'
                 imgSrc={item.imgSrc}
                 artist={item.artist}
                 price={item.price}

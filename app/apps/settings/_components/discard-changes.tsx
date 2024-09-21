@@ -1,7 +1,10 @@
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
+import { useRouter } from 'next/navigation'
 
-export default function DiscardChanges() {
+export default function DiscardChanges({ saveDraft }: { saveDraft?: () => void }) {
+  const router = useRouter()
+
   return (
     <div className='flex flex-col items-center bg-[#232227] gap-9 p-9 rounded-[24px]'>
       <div className='flex flex-col items-center gap-[33px]'>
@@ -21,10 +24,12 @@ export default function DiscardChanges() {
       <div className='flex flex-col gap-2 w-full'>
         <Button
           variant='outline'
+          onClick={() => router.back()}
           className='text-xs text-[#F8F8FF] font-semibold py-2 w-full border-[#29292F] rounded-full bg-transparent hover:bg-[#29292F] transition-colors'>
           Yes, don&apos;t save my changes
         </Button>
         <Button
+          onClick={saveDraft}
           variant='default'
           className='text-xs text-[#0B0A10] font-semibold py-2 w-full rounded-full hover:opacity-90 transition-opacity'>
           No, I want to save my changes

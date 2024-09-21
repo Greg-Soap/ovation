@@ -2,19 +2,22 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import SearchInput from '../_components/_timeline/search-input'
-import ProfileForm from './profile-form'
-import PasswordForm from './password-form'
-import SocialForm from '../_sections/_settings/social-form'
-import ExperienceForm from '../_sections/_settings/experience-form'
-import WalletForm from '../_sections/_settings/wallet-form'
+import ProfileForm from './_components/profile-form'
+import PasswordForm from './_components/password-form'
+import SocialForm from './_components/social-form'
+import ExperienceForm from './_components/experience-form'
+import WalletForm from './_components/wallet-form'
 import { useState } from 'react'
 import { ArrowLeft } from 'iconsax-react'
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
 import type { ProfileData } from '@/models/all.model'
+import { useTabUrlSync } from '@/lib/use-tab'
 
 export default function Page() {
+  const { currentTab, setTab } = useTabUrlSync('Personal Info')
+
   const [isHidden, setHidden] = useState(true)
   const { data: profileData } = useQuery({
     queryKey: ['profile'],
@@ -60,7 +63,10 @@ export default function Page() {
 
   return (
     <section className='w-full h-full'>
-      <Tabs className='flex h-full w-full overflow-hidden' defaultValue={'Personal Info'}>
+      <Tabs
+        className='flex h-full w-full overflow-hidden'
+        defaultValue={currentTab}
+        onValueChange={setTab}>
         <div
           className={`xl:border-r-[1px] border-[#1A1A1A] min-w-[414px] w-full xl:max-w-[505px] items-center ${isHidden ? 'flex' : 'hidden xl:flex'} flex-col pt-8 overflow-y-scroll`}>
           <h1 className='font-semibold text-[23px] text-[#F8F8FF] mr-auto ml-8 mb-5'>Settings</h1>
@@ -89,7 +95,7 @@ export default function Page() {
             <TabsContent
               key={tab.heading ?? ''}
               value={tab.heading ?? ''}
-              className='pt-8 w-full h-full overflow-y-scroll'>
+              className='pt-8 w-full h-[calc(100%-103px)] overflow-y-scroll'>
               <section className='flex flex-col gap-[42px] w-full'>
                 <div className='relative flex xl:justify-start gap-3 px-4 sm:px-10 2xl:px-20'>
                   <ArrowLeft

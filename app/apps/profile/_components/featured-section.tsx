@@ -1,12 +1,12 @@
 import React from 'react'
 import Link from 'next/link'
-import NftCard from './nft-card'
+import NftCard from '../../profile/_components/nft-card'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import Editicon from '@/components/icons/edit-icon'
 import PlusIcon from '@/components/icons/plus-icon'
 import type { FeaturedItem } from '@/models/all.model'
-import ExternalEmptyState from '../_secondary-profile/empty-state'
+import ExternalEmptyState from '../../profile/_components/empty-state'
 
 interface FeaturedSectionProps {
   featured: FeaturedItem[]

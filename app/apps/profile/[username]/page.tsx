@@ -1,11 +1,11 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import AsideMsgIcon from '@/components/icons/asideMsgIcon'
-import UserProfile from '../../_sections/_profile/user-profile'
+import UserProfile from '../_components/user-profile'
 import ovationService from '@/services/ovation.service'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
-import MainProfileSection from '../../_sections/_profile/main-profile-section'
+import MainProfileSection from '../_components/main-profile-section'
 import type { ProfileData } from '@/models/all.model'
 import { Suspense } from 'react'
 import MiniLoader from '@/components/mini-loader'
@@ -14,14 +14,11 @@ export default function SecondaryProfile() {
   const params = useParams()
   const username = params.username as string
   const secondaryProfile = true
-  const {
-    data: profileData,
-    isLoading
-  } = useQuery({
+  const { data: profileData, isLoading } = useQuery({
     queryKey: ['profile', username],
     queryFn: () => ovationService.getUserProfile(username),
   })
- 
+
   const { data: experienceData } = useQuery({
     queryKey: ['experience', username],
     queryFn: () => ovationService.getExperience(profileData?.userId as string),
@@ -44,7 +41,11 @@ export default function SecondaryProfile() {
 
       <div className='flex flex-col lg:flex-row relative h-auto'>
         <Suspense fallback={<MiniLoader />}>
-          <UserProfile profileData={profileData as ProfileData} experienceData={experienceData?.data?.data || []} isLoading={isLoading} />
+          <UserProfile
+            profileData={profileData as ProfileData}
+            experienceData={experienceData?.data?.data || []}
+            isLoading={isLoading}
+          />
         </Suspense>
         <Suspense fallback={<MiniLoader />}>
           <MainProfileSection

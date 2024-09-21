@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { X } from 'lucide-react'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
-import { FeedbackModal } from '../../_sections/feedback'
+import { FeedbackModal } from '../../feedback'
 import { LocationDiscover, Profile, Setting2, Message, NotificationBing } from 'iconsax-react'
 
 export default function Hamburger() {

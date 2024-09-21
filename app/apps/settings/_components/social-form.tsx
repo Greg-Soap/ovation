@@ -1,27 +1,26 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
-import { ArrowDown2 } from 'iconsax-react'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import SettingsChange from '../../_components/_settings/settings-change'
+import SettingsChange from './settings-change'
 import ovationService from '@/services/ovation.service'
 import { toast } from 'sonner'
-import type { ProfileData, UserSocialsMod } from '@/models/all.model'
+import { useMutation } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 
 const formSchema = z.object({
-  LinkedIn: z.string().url().optional(),
-  Lens: z.string().url().optional(),
-  Farcaster: z.string().url().optional(),
-  Blur: z.string().url().optional(),
-  FoundationApp: z.string().url().optional(),
-  MagicEden: z.string().url().optional(),
-  EthCo: z.string().url().optional(),
+  linkedIn: z.string().url().optional(),
+  lens: z.string().url().optional(),
+  forcaster: z.string().url().optional(),
+  blur: z.string().url().optional(),
+  foundation: z.string().url().optional(),
+  magicEden: z.string().url().optional(),
+  ethico: z.string().url().optional(),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -36,49 +35,45 @@ const socialPlatforms: SocialPlatform[] = [
   { name: 'Lens', imgSrc: '/assets/images/settings/social/lens.png' },
   { name: 'Farcaster', imgSrc: '/assets/images/settings/social/farcaster.png' },
   { name: 'Blur', imgSrc: '/assets/images/settings/social/blur.png' },
-  { name: 'FoundationApp', imgSrc: '/assets/images/settings/social/foundation.png' },
+  { name: 'Foundation', imgSrc: '/assets/images/settings/social/foundation.png' },
   { name: 'MagicEden', imgSrc: '/assets/images/settings/social/m-eden.png' },
   { name: 'EthCo', imgSrc: '/assets/images/settings/social/eth-co.png' },
 ]
 
 export default function SocialForm({ userId }: { userId: string }) {
-  const [disabled, setDisabled] = useState(true)
+  const [isDisabled, setIsDisabled] = useState(true)
+  const { data: socialLinks, isLoading } = useQuery({
+    queryKey: ['socialLinks', userId],
+    queryFn: () => ovationService.getSocialLinks(userId),
+  })
+  const socialLinksData = socialLinks?.data?.data
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    // biome-ignore lint/performance/noAccumulatingSpread: <explanation>
-    defaultValues: socialPlatforms.reduce((acc, platform) => ({ ...acc, [platform.name]: '' }), {}),
+    defaultValues: {
+      linkedIn: socialLinksData?.linkedIn || '',
+      lens: socialLinksData?.lens || '',
+      forcaster: socialLinksData?.forcaster || '',
+      blur: socialLinksData?.blur || '',
+      foundation: socialLinksData?.foundation || '',
+      magicEden: socialLinksData?.magic || '',
+      ethico: socialLinksData?.ethico || '',
+    },
   })
 
-  useEffect(() => {
-    const fetchSocialLinks = async () => {
-      try {
-        const response = await ovationService.getSocialLinks(userId)
-        const socialLinks = response.data
-        const values = socialLinks.reduce(
-          // biome-ignore lint/performance/noAccumulatingSpread: <explanation>
-          (acc: any, link: { platform: any; url: any }) => ({ ...acc, [link.platform]: link.url }),
-          {},
-        )
-        form.reset(values)
-      } catch (error) {
-        console.error('Error fetching social links:', error)
-        toast.error('Failed to fetch social links')
-      }
-    }
-    fetchSocialLinks()
-  }, [userId, form])
-
-  const onSubmit = async (data: FormValues) => {
-    try {
-      console.log(data)
-      await ovationService.updateSocials(data as UserSocialsMod)
+  const { mutate } = useMutation({
+    mutationFn: (data: FormValues) => ovationService.updateSocials(data),
+    onSuccess: () => {
       toast.success('Social links updated successfully')
-      setDisabled(true)
-    } catch (error) {
-      console.error('Error updating social links:', error)
+      setIsDisabled(true)
+    },
+    onError: () => {
       toast.error('Failed to update social links')
-    }
+    },
+  })
+
+  const onSubmit = (data: FormValues) => {
+    mutate(data)
   }
 
   return (
@@ -86,7 +81,7 @@ export default function SocialForm({ userId }: { userId: string }) {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          onChange={() => setDisabled(false)}
+          onChange={() => setIsDisabled(false)}
           className='space-y-[23px] min-h-full'>
           {socialPlatforms.map((platform, index) => (
             <FormField
@@ -111,7 +106,7 @@ export default function SocialForm({ userId }: { userId: string }) {
             />
           ))}
 
-          <SettingsChange disabled={disabled} />
+          <SettingsChange disabled={isDisabled} isLoading={isLoading} />
         </form>
       </Form>
     </section>
