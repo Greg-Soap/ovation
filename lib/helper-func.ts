@@ -98,7 +98,8 @@ const optionValueToBlockchainName: { [optionValue: string]: string } = {
   linea: "Linea",
   moonbeam: "Moonbeam",
   moonriver: "Moonriver",
-  solana: "Solana"
+  solana: "Solana",
+  archway: "Archway"
 };
 
 export interface NotificationMessage {
