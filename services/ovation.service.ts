@@ -107,7 +107,7 @@ class OvationService {
   }
 
   static updateSocials(data: UserSocialsMod) {
-    return api.put('/Profile/socials', data)
+    return api.patch('/Profile/socials', data)
   }
 
   static getSocialLinks(userId: string) {

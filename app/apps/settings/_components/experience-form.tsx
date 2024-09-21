@@ -20,14 +20,18 @@ import ovationService from '@/services/ovation.service'
 import { toast } from 'sonner'
 import { useMutation } from '@tanstack/react-query'
 import { useLocalStorage } from '@/lib/use-local-storage'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Dispatch, SetStateAction } from 'react'
+import { parseISO, format } from 'date-fns'
 
 const formSchema = z.object({
   company: z.string().min(1, 'Company is required'),
   role: z.string().min(1, 'Role is required'),
   department: z.string().min(1, 'Department is required'),
-  startDate: z.date(),
-  endDate: z.date().nullable(),
+  startDate: z.string().transform((str) => new Date(str).toISOString()),
+  endDate: z
+    .string()
+    .nullable()
+    .transform((str) => (str ? new Date(str).toISOString() : null)),
   description: z.string().min(1, 'Description is required'),
   skills: z.array(z.string()),
 })
@@ -37,39 +41,35 @@ type FormValues = z.infer<typeof formSchema>
 export default function ExperienceForm() {
   const [isDisabled, setIsDisabled] = useState<boolean>(true)
   const [isCurrentJob, setIsCurrentJob] = useState<boolean>(false)
-  const { storedValue, setValue } = useLocalStorage('experienceDraft', {})
+  const { storedValue, setValue } = useLocalStorage<Partial<FormValues>>('experienceDraft', {
+    company: '',
+    role: '',
+    department: '',
+    startDate: '',
+    endDate: null,
+    description: '',
+    skills: [],
+  })
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      company: '',
-      role: '',
-      department: '',
-      startDate: new Date(),
-      endDate: null,
-      description: '',
-      skills: [],
+      company: storedValue.company || '',
+      role: storedValue.role || '',
+      department: storedValue.department || '',
+      startDate: storedValue.startDate || '',
+      endDate: storedValue.endDate || null,
+      description: storedValue.description || '',
+      skills: storedValue.skills || [],
     },
   })
 
-  useEffect(() => {
-    if (storedValue) {
-      form.reset(storedValue)
-    }
-  }, [storedValue, form])
-
-  useEffect(() => {
-    if (!isDisabled) {
-      setValue(form.getValues())
-    }
-  }, [form, isDisabled, setValue])
-
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: (data: FormValues) =>
       ovationService.addExperience({
         ...data,
-        startDate: data.startDate.toISOString(),
-        endDate: isCurrentJob ? null : data.endDate?.toISOString(),
+        startDate: data.startDate,
+        endDate: isCurrentJob ? null : data.endDate,
         skill: data.skills.join(', '),
       }),
     onSuccess: () => {
@@ -82,9 +82,22 @@ export default function ExperienceForm() {
     },
   })
 
+  function formatDateForAPI(dateString: string | null): string | null {
+    if (!dateString) return null
+    const date = parseISO(dateString)
+    return format(date, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx")
+  }
+
   async function handleSubmit(data: FormValues) {
-    mutate(data)
-    setValue(data) // Save to local storage on submit
+    const formattedData = {
+      ...data,
+      startDate: formatDateForAPI(data.startDate),
+      endDate: isCurrentJob ? null : formatDateForAPI(data.endDate),
+    }
+    console.log('Formatted data', formattedData)
+    //@ts-ignore
+    mutate(formattedData)
+    setValue(data as Partial<FormValues>) // Save to local storage on submit
   }
 
   return (
@@ -157,7 +170,10 @@ export default function ExperienceForm() {
                     <FormItem className='flex flex-col gap-2'>
                       <FormLabel className='text-sm text-[#B3B3B3]'>Start Date</FormLabel>
                       <FormControl {...field}>
-                        <DatePicker />
+                        <DatePicker
+                          selected={field.value ? parseISO(field.value) : null}
+                          onChange={(date: Date) => field.onChange(date.toISOString())}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -241,7 +257,7 @@ export default function ExperienceForm() {
 
           <SettingsChange
             disabled={isDisabled}
-            isLoading={form.formState.isSubmitting}
+            isLoading={isPending}
             saveDraft={() => setValue(form.getValues())}
           />
         </form>

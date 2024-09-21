@@ -2,7 +2,14 @@
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { Form, FormField, FormControl, FormItem, FormLabel } from '@/components/ui/form'
+import {
+  Form,
+  FormField,
+  FormControl,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 
 import SettingsChange from './settings-change'
@@ -34,7 +41,7 @@ export default function PasswordForm() {
     },
   })
 
-  const { mutate: changePassword } = useMutation({
+  const { mutate: changePassword, isPending } = useMutation({
     mutationFn: (data: z.infer<typeof formSchema>) =>
       ovationService.changeProfilePassword(data.oldPassword, data.newPassword),
     onSuccess: (data) => {
@@ -45,7 +52,12 @@ export default function PasswordForm() {
     },
     onError: (error) => {
       console.error('Error changing password:', error)
-      toast.error('Failed to change password. Please try again.')
+      // @ts-ignore
+      if (error.response.data.message === 'Password incorrect') {
+        toast.error('Invalid old password')
+      } else {
+        toast.error('Failed to change password. Please try again.')
+      }
     },
   })
 
@@ -91,6 +103,7 @@ export default function PasswordForm() {
                     type='password'
                   />
                 </FormControl>
+                <FormMessage className='text-red-500 text-sm' />
               </FormItem>
             )}
           />
@@ -110,11 +123,12 @@ export default function PasswordForm() {
                     type='password'
                   />
                 </FormControl>
+                <FormMessage className='text-red-500 text-sm' />
               </FormItem>
             )}
           />
         </div>
-        <SettingsChange disabled={isDisabled} isLoading={form.formState.isSubmitting} />
+        <SettingsChange disabled={isDisabled} isLoading={isPending} />
       </form>
     </Form>
   )
