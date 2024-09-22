@@ -10,17 +10,15 @@ import type {
   ProfileData,
   UserData,
   Badge,
+  DiscoverUserData,
 } from '../models/all.model'
 import { removeToken } from '@/lib/cookies'
 
 // biome-ignore lint/complexity/noStaticOnlyClass: <explanation>
 class OvationService {
+  // Authentication
   static checkEmail(email: string) {
     return api.get(`/Auth/email/${email}`)
-  }
-
-  static subscribeToNewsletter(email: string) {
-    return api.post('/Newsletter', { subscriberEmail: email })
   }
 
   static checkUsername(username: string) {
@@ -47,10 +45,7 @@ class OvationService {
     return api.patch('/Auth/change-password', { userId, password })
   }
 
-  static changeProfilePassword(oldPassword: string, password: string) {
-    return api.patch('/Profile/change-password', { oldPassword, password })
-  }
-
+  // Profile Management
   static async getProfile() {
     const response = await api.get<{ data: ProfileData; message: string }>('/Profile')
     return response.data
@@ -61,6 +56,64 @@ class OvationService {
     return response.data
   }
 
+  static updatePersonalInfo(data: ProfileMod) {
+    return api.patch('/Profile/personal-info', data)
+  }
+
+  static changeProfilePassword(oldPassword: string, password: string) {
+    return api.patch('/Profile/change-password', { oldPassword, password })
+  }
+
+  // Experience
+  static addExperience(data: UserExperience) {
+    return api.post('/Profile/experience', data)
+  }
+
+  static updateExperience(id: string, data: UserExperience) {
+    return api.put(`/Profile/experience/${id}`, data)
+  }
+
+  static getExperience(userId: string) {
+    return api.get<{ data: UserExperience[]; message: string }>(`/Profile/experience/${userId}`)
+  }
+
+  // Badges and NFTs
+  static getBadges(userId: string) {
+    return api.get<{ data: Badge[]; message: string }>(`/Profile/badge/${userId}?page=1`)
+  }
+
+  static getFavouriteNft(userId: string) {
+    return api.get(`/Profile/fav-nft/${userId}`)
+  }
+
+  static getNfts(userId: string) {
+    return api.get(`/Profile/nft/${userId}?page=1`)
+  }
+
+  // Social Links
+  static updateSocials(data: UserSocialsMod) {
+    return api.patch('/Profile/socials', data)
+  }
+
+  static getSocialLinks(userId: string) {
+    return api.get<{ data: UserSocialsMod; message: string }>(`/Profile/social/${userId}`)
+  }
+
+  // Stats
+  static getStats(userId: string) {
+    return api.get(`/Profile/stat/${userId}`)
+  }
+
+  // Paths and Wallets
+  static getPath() {
+    return api.get<{ data: Path[]; message: string }>('/Path')
+  }
+
+  static getWallets() {
+    return api.get<{ data: Wallet[]; message: string }>('/Wallet')
+  }
+
+  // Feedback and Newsletter
   static async sendFeedback(data: {
     userEmail: string
     satisfactory: string
@@ -74,52 +127,37 @@ class OvationService {
     return api.post('/Feedback', data)
   }
 
-  static updatePersonalInfo(data: ProfileMod) {
-    return api.patch('/Profile/personal-info', data)
+  static subscribeToNewsletter(email: string) {
+    return api.post('/Newsletter', { subscriberEmail: email })
   }
 
-  static addExperience(data: UserExperience) {
-    return api.post('/Profile/experience', data)
+  // Discover endpoints
+  static getTopNft() {
+    return api.get<{ data: any; message: string }>('/Discover/top-nft')
   }
 
-  static updateExperience(id: string, data: UserExperience) {
-    return api.put(`/Profile/experience/${id}`, data)
+  static getBluechip() {
+    return api.get<{ data: any; message: string }>('/Discover/bluechip')
   }
 
-  static getExperience(userId: string) {
-    return api.get<{ data: UserExperience[]; message: string }>(`/Profile/experience/${userId}`)
+  static getNetworth() {
+    return api.get<{ data: any; message: string }>('/Discover/networth')
   }
 
-  static getBadges(userId: string) {
-    return api.get<{ data: Badge[]; message: string }>(`/Profile/badge/${userId}?page=1`)
+  static getContributors() {
+    return api.get<{ data: DiscoverUserData[]; message: string }>('/Discover/contributors')
   }
 
-  static getFavouriteNft(userId: string) {
-    return api.get(`/Profile/fav-nft/${userId}`)
+  static getCreators() {
+    return api.get<{ data: DiscoverUserData[]; message: string }>('/Discover/creators')
   }
 
-  static getNfts(userId: string) {
-    return api.get(`/Profile/nft/${userId}?page=1`)
+  static getFounderNft() {
+    return api.get<{ data: DiscoverUserData[]; message: string }>('/Discover/founder-nft')
   }
 
-  static getStats(userId: string) {
-    return api.get(`/Profile/stat/${userId}`)
-  }
-
-  static updateSocials(data: UserSocialsMod) {
-    return api.patch('/Profile/socials', data)
-  }
-
-  static getSocialLinks(userId: string) {
-    return api.get<{ data: UserSocialsMod; message: string }>(`/Profile/social/${userId}`)
-  }
-
-  static getPath() {
-    return api.get<{ data: Path[]; message: string }>('/Path')
-  }
-
-  static getWallets() {
-    return api.get<{ data: Wallet[]; message: string }>('/Wallet')
+  static getMostViewed() {
+    return api.get<{ data: DiscoverUserData[]; message: string }>('/Discover/most-viewed')
   }
 }
 

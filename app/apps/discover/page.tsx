@@ -1,6 +1,6 @@
 'use client'
 
-import SearchInput from '../_components/_timeline/search-input'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import VerifyIcon from '@/components/icons/verifyIcon'
 import Image from 'next/image'
@@ -11,7 +11,8 @@ import {
   DiscoverFilter,
   type DiscoverHoldersProps,
 } from '@/app/types'
-import { useEffect, useState } from 'react'
+import ovationService from '@/services/ovation.service'
+import { useQuery } from '@tanstack/react-query'
 
 const FeaturedTest: FeaturedUser = {
   displayName: 'Josh.eth',
@@ -24,23 +25,65 @@ const FeaturedTest: FeaturedUser = {
   desc: 'Passionate NFT holder exploring the future of digital ownership. Join me in discovering the limitless possibilities of the NFT ecosystem. #NFTCommunity',
 }
 
-export default function page() {
+function DiscoverPage() {
+  const { data: topNft, isLoading: topNftLoading } = useQuery({
+    queryKey: ['topNft'],
+    queryFn: () => ovationService.getTopNft(),
+  })
+
+  const { data: bluechip, isLoading: bluechipLoading } = useQuery({
+    queryKey: ['bluechip'],
+    queryFn: () => ovationService.getBluechip(),
+  })
+
+  const { data: networth, isLoading: networthLoading } = useQuery({
+    queryKey: ['networth'],
+    queryFn: () => ovationService.getNetworth(),
+  })
+
+  const { data: contributors, isLoading: contributorsLoading } = useQuery({
+    queryKey: ['contributors'],
+    queryFn: () => ovationService.getContributors(),
+  })
+
+  const { data: creators, isLoading: creatorsLoading } = useQuery({
+    queryKey: ['creators'],
+    queryFn: () => ovationService.getCreators(),
+  })
+
+  const { data: founderNft, isLoading: founderNftLoading } = useQuery({
+    queryKey: ['founderNft'],
+    queryFn: () => ovationService.getFounderNft(),
+  })
+
+  const { data: mostViewed, isLoading: mostViewedLoading } = useQuery({
+    queryKey: ['mostViewed'],
+    queryFn: () => ovationService.getMostViewed(),
+  })
+
+  console.log({ topNft, bluechip, networth, contributors, creators, founderNft, mostViewed })
+
   return (
-    <div className='flex flex-col w-full  bg-[#111115] h-fit items-center justify-center'>
-      <div
-        className='h-[250px] w-full g-orange-400 flex items-center justify-center bg-cover shadow px-7'
-        style={{ backgroundImage: `url('/assets/images/discoverBack.svg')` }}>
-        <SearchInput
-          inpClass='bg-white rounded-md w-[880px] border-none'
-          iconClass={{ fill: 'black' }}
-        />
-      </div>
+    <div className='flex flex-col w-full bg-[#111115] h-fit items-center justify-center'>
+      <DiscoverHeader />
       <GetStarted />
-      <div className=' flex flex-col lg:grid lg:grid-cols-3 w-[95%] gap-5'>
+      <div className='flex flex-col lg:grid lg:grid-cols-3 w-[95%] gap-5'>
         <DiscoverLeft />
-        {/* <OtherLinks /> */}
         <DiscoverRight filteredData={TestData} />
       </div>
+    </div>
+  )
+}
+
+function DiscoverHeader() {
+  return (
+    <div
+      className='h-[250px] w-full flex items-center justify-center bg-cover shadow px-7'
+      style={{ backgroundImage: `url('/assets/images/discoverBack.svg')` }}>
+      {/* <SearchInput
+        inpClass='bg-white rounded-md w-[880px] border-none'
+        iconClass={{ fill: 'black' }}
+      /> */}
     </div>
   )
 }
@@ -50,38 +93,11 @@ function GetStarted() {
     <div className='w-[95%] h-fit rounded-[14px] flex flex-col p-6 border border-[#353538] gap-[30px] mt-10'>
       <div className='flex flex-col ga-1'>
         <p className='text-white font-medium'>GET STARTED</p>
-        <p className='text-[#B3B3B3]'>Complete your profile to win rewards!</p>
+        <p className='text-[#B3B3B3]'>Complete your profile to earn the profile complete badge</p>
       </div>
 
       <div className='w-full h-fit flex flex-col gap-4'>
         <div className='flex flex-col lg:flex-row gap-4 bg-[#18181C] border border-[#FFFFFF14] rounded-[10px] items-start lg:items-center justify-between  px-5 py-10'>
-          <div className='flex items-start lg:items-center gap-4 flex-col lg:flex-row'>
-            <div className='flex items-center justify-center rounded-full min-w-11 min-h-11 bg-[#333726]'>
-              <img
-                src='/assets/images/profile/task1.png'
-                alt='wallet icon'
-                className='w-[22px] h-[22px]'
-              />
-            </div>
-            <div className='flex flex-col gap-2'>
-              <p className='text-white font-semibold text-sm'>
-                SEE HOW YOU RANK AGAINST OTHER WEB3 CREATORS
-              </p>
-              <p className='text-xs text-[#999999]'>
-                <span className='text-white'>50 $OVA</span> 50 $OVA for every additional wallet
-                after the first (This wallet must have at least 1 NFT)
-              </p>
-            </div>
-          </div>
-
-          <Button asChild className='transition-all duration-300 mt-2 hover:opacity-80'>
-            <Link href='/apps/profile' className='text-[10px] text-[#111115] font-medium'>
-              Go to profile
-            </Link>
-          </Button>
-        </div>
-
-        <div className='flex flex-col lg:flex-row gap-4  bg-[#18181C] border border-[#FFFFFF14] rounded-[10px] items-start lg:items-center justify-between px-5 py-10'>
           <div className='flex items-start lg:items-center gap-4 flex-col lg:flex-row'>
             <div className='flex items-center justify-center rounded-full min-w-11 min-h-11 bg-[#333726]'>
               <img
@@ -91,18 +107,19 @@ function GetStarted() {
               />
             </div>
             <div className='flex flex-col gap-2'>
-              <p className='text-white font-semibold text-sm'>
-                SEE HOW YOU RANK AGAINST OTHER WEB3 CREATORS
-              </p>
+              <p className='text-white font-semibold text-sm'>ADD BASIC PROFILE INFORMATION</p>
               <p className='text-xs text-[#999999]'>
-                Finish your profile to earn <span className='text-white'>250 $OVA!</span>
+                <span className='text-white'>&quot;Personal info&quot;</span> -
+                Bio,Profile,Picture,Location, etc.
               </p>
             </div>
           </div>
 
           <Button asChild className='transition-all duration-300 mt-2 hover:opacity-80'>
-            <Link href='/apps/profile' className='text-[10px] text-[#111115] font-medium'>
-              Go to profile
+            <Link
+              href='/apps/settings?tab=Personal Info'
+              className='text-[10px] text-[#111115] font-medium'>
+              Add info
             </Link>
           </Button>
         </div>
@@ -117,19 +134,44 @@ function GetStarted() {
               />
             </div>
             <div className='flex flex-col gap-2'>
-              <p className='text-white font-semibold text-sm'>
-                SEE HOW YOU RANK AGAINST OTHER WEB3 CREATORS
-              </p>
+              <p className='text-white font-semibold text-sm'>ADD A LINK</p>
               <p className='text-xs text-[#999999]'>
-                For every user you invite, you get <span className='text-white'>50 $OVA.</span> Send
-                proof to hello@ovation.network or on Twitter ovation_network
+                Link to your Linkedin, twitter, etc. Make Ovation your web3 landing page.
               </p>
             </div>
           </div>
 
           <Button asChild className='transition-all duration-300 mt-2 hover:opacity-80'>
-            <Link href='/login' className='text-[10px] text-[#111115] font-medium'>
-              Copy referral link
+            <Link
+              href='/apps/settings?tab=Socials'
+              className='text-[10px] text-[#111115] font-medium'>
+              Add Socials
+            </Link>
+          </Button>
+        </div>
+
+        <div className='flex flex-col lg:flex-row gap-4  bg-[#18181C] border border-[#FFFFFF14] rounded-[10px] items-start lg:items-center justify-between px-5 py-10'>
+          <div className='flex items-start lg:items-center gap-4 flex-col lg:flex-row'>
+            <div className='flex items-center justify-center rounded-full min-w-11 min-h-11 bg-[#333726]'>
+              <img
+                src='/assets/images/profile/task1.png'
+                alt='wallet icon'
+                className='w-[22px] h-[22px]'
+              />
+            </div>
+            <div className='flex flex-col gap-2'>
+              <p className='text-white font-semibold text-sm'>ADD YOUR EXPERIENCE</p>
+              <p className='text-xs text-[#999999]'>
+                Show the world what you&apos;re contributed to!
+              </p>
+            </div>
+          </div>
+
+          <Button asChild className='transition-all duration-300 mt-2 hover:opacity-80'>
+            <Link
+              href='/apps/settings?tab=Experience'
+              className='text-[10px] text-[#111115] font-medium'>
+              Add Experience
             </Link>
           </Button>
         </div>
@@ -139,11 +181,11 @@ function GetStarted() {
 }
 
 function DiscoverLeft() {
-  const [Filter, setFilter] = useState<DiscoverFilter>(DiscoverFilter.Creators)
+  const [filter, setFilter] = useState<DiscoverFilter>(DiscoverFilter.Creators)
   return (
     <div className='col-span-2 mt-10 mb-[20px] flex flex-col gap-10'>
       <DiscoverFeature {...FeaturedTest} />
-      <DiscoverHolders setFilter={setFilter} Filter={Filter} data={TestData} />
+      <DiscoverHolders setFilter={setFilter} Filter={filter} data={TestData} />
     </div>
   )
 }
@@ -215,34 +257,17 @@ function DiscoverHolders({ setFilter, Filter, data }: DiscoverHoldersProps) {
 
   useEffect(() => {
     const filterData = () => {
-      const newData = [...data] // Create a shallow copy of data to avoid direct mutation
-
-      if (Filter === DiscoverFilter.Contributors) {
-        // Assuming you want to sort the data based on some criteria
-        // Replace `criteria` with the actual property you want to sort by
-        newData.sort((a, b) => a.contributorAmount - b.contributorAmount)
-      } else if (Filter === DiscoverFilter.BlueChipHolders) {
-        // Assuming you want to sort the data based on some criteria
-        // Replace `criteria` with the actual property you want to sort by
-        newData.sort((a, b) => a.blueAmount - b.blueAmount)
-      } else if (Filter === DiscoverFilter.Creators) {
-        // Assuming you want to sort the data based on some criteria
-        // Replace `criteria` with the actual property you want to sort by
-        newData.sort((a, b) => a.creatorAmount - b.creatorAmount)
-      } else if (Filter === DiscoverFilter.FounderHolders) {
-        // Assuming you want to sort the data based on some criteria
-        // Replace `criteria` with the actual property you want to sort by
-        newData.sort((a, b) => a.founderNftAMount - b.founderNftAMount)
-      } else if (Filter === DiscoverFilter.HighestNetWorth) {
-        // Assuming you want to sort the data based on some criteria
-        // Replace `criteria` with the actual property you want to sort by
-        newData.sort((a, b) => a.netWorth - b.netWorth)
-      } else if (Filter === DiscoverFilter.NftHolders) {
-        // Assuming you want to sort the data based on some criteria
-        // Replace `criteria` with the actual property you want to sort by
-        newData.sort((a, b) => a.topHoldersAmount - b.topHoldersAmount)
+      const newData = [...data]
+      const sortCriteria = {
+        [DiscoverFilter.Contributors]: 'contributorAmount',
+        [DiscoverFilter.BlueChipHolders]: 'blueAmount',
+        [DiscoverFilter.Creators]: 'creatorAmount',
+        [DiscoverFilter.FounderHolders]: 'founderNftAMount',
+        [DiscoverFilter.HighestNetWorth]: 'netWorth',
+        [DiscoverFilter.NftHolders]: 'topHoldersAmount',
       }
-
+// @ts-ignore
+      newData.sort((a, b) => a[sortCriteria[Filter]] - b[sortCriteria[Filter]])
       setFilteredData(newData)
     }
 
@@ -452,6 +477,7 @@ function DiscoverHolders({ setFilter, Filter, data }: DiscoverHoldersProps) {
     </div>
   )
 }
+
 interface DiscoverRightProps {
   filteredData: BadgedHolders[]
 }
@@ -706,3 +732,5 @@ const TestData: BadgedHolders[] = [
     blueAmount: 12400,
   },
 ]
+
+export default DiscoverPage

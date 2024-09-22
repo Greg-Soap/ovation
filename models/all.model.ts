@@ -166,3 +166,16 @@ export interface Badge {
   description: string
   earnedAt: string
 }
+
+export interface DiscoverUserData {
+  userId: string
+  username: string
+  email: string
+  displayName: string
+  profileImage: string | null
+  views: number
+  badgesEarned: number
+  location: string | null
+  bio: string | null
+  coverImage: string | null
+}
