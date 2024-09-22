@@ -24,14 +24,7 @@ const FeaturedUser: FeaturedUser = {
   desc: 'Passionate NFT holder exploring the future of digital ownership. Join me in discovering the limitless possibilities of the NFT ecosystem. #NFTCommunity',
 }
 
-export enum DiscoverFilter {
-  Contributors = 'Contributors',
-  Creators = 'Creators',
-  NftHolders = 'NftHolders',
-  BlueChipHolders = 'BlueChipHolders',
-  FounderHolders = 'FounderHolders',
-  HighestNetWorth = 'HighestNetWorth',
-}
+
 
 function DiscoverPage() {
   const mostViewedQuery = useQuery({
