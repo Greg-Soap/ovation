@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { object, z } from 'zod'
 import PathICon from '@/components/icons/pathIcon'
 import { ChevronRight } from 'lucide-react'
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
@@ -17,6 +17,8 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { setToken } from '@/lib/cookies'
 import { useLocalStorage } from '@/lib/use-local-storage'
 import type { UserData } from '@/models/all.model'
+import { optionValueToBlockchainName } from '@/lib/helper-func'
+import { signUp } from '@/lib/firebaseAuthService'
 
 const formSchema = z.object({
   personalInfo: z.object({
@@ -52,6 +54,8 @@ export default function AccountForm({ setOptionalLeft }: Props) {
   const [page, setPage] = useState(1)
   const [active, setActive] = useState('')
   const [isManualWallet, setIsManualWallet] = useState(false)
+  const { storedValue } = useLocalStorage<UserData | null>('userData', null)
+  const user = storedValue
 
   const { setValue } = useLocalStorage<UserData | null>('userData', null)
 
@@ -79,10 +83,12 @@ export default function AccountForm({ setOptionalLeft }: Props) {
 
   const { mutate: createAccount } = useMutation({
     mutationFn: ovationService.register,
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       console.log(data)
       setToken(data.data?.token)
       setValue(data.data?.userData)
+
+      await signUp(user!.userId, user!.email) // for firebase
 
       toast.success('Profile created successfully')
       router.push('/apps/discover')
@@ -305,9 +311,9 @@ export default function AccountForm({ setOptionalLeft }: Props) {
                   {...field}
                   className='w-full h-[46px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full px-4 text-white'>
                   <option value=''>Select a chain</option>
-                  {chains.map((chain) => (
-                    <option key={chain} value={chain} className='text-white bg-transparent'>
-                      {chain}
+                  {Object.entries(optionValueToBlockchainName).map(([value, name]) => (
+                    <option key={value} value={value} className='text-white bg-transparent'>
+                      {name}
                     </option>
                   ))}
                 </select>

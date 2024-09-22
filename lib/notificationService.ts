@@ -17,13 +17,11 @@ export class NotificationService {
           transport: signalR.HttpTransportType.WebSockets
         })
         .withAutomaticReconnect()
-        .configureLogging(signalR.LogLevel.Information)
         .build()
 
       await this.connection.start()
-      console.log('Notification service Connected.')
     } catch (err) {
-      console.error('Error while starting Notification connection: ', err)
+
     }
   }
 
@@ -49,7 +47,6 @@ export class NotificationService {
   public stopConnection = async () => {
     if (this.connection) {
       await this.connection.stop()
-      console.log('Notification Connection stopped.')
     }
   }
 }
