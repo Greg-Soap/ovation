@@ -109,7 +109,15 @@ export default function Aside() {
         })}
       </div>
 
-      <div className='hidden lg:flex flex-col items-center gap-4 w-[90%] sticky bottom-3 px-[5px] pt-5 pb-1.5 bg-[#18181C] border border-[#29292F] rounded-[10px] mb-3'>
+     <FeedbackButton className='hidden lg:flex' />
+    </aside>
+  )
+}
+
+
+export function FeedbackButton({className}: {className?: string}) {
+  return (
+     <div className={`flex flex-col items-center gap-4 w-[90%] sticky bottom-3 px-[5px] pt-5 pb-1.5 bg-[#18181C] border border-[#29292F] rounded-[10px] mb-3 ${className}`}>
         <img
           src='/assets/images/aside-absolute.png'
           alt='Message'
@@ -135,6 +143,5 @@ export default function Aside() {
           </DialogContent>
         </Dialog>
       </div>
-    </aside>
   )
 }
