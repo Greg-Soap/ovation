@@ -16,7 +16,7 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase (ensure it is only initialized once)
-const app = !getApps().length ? initializeApp(firebaseConfig, 'Ovation Technologies') : getApp();
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
 // Firebase services
 export const auth = getAuth(app);
