@@ -64,6 +64,14 @@ class OvationService {
     return api.patch('/Profile/change-password', { oldPassword, password })
   }
 
+  static followUser(userId: string) {
+    return api.post(`/Profile/follow/${userId}`)
+  }
+
+  static unfollowUser(userId: string) {
+    return api.delete(`/Profile/follow/${userId}`)
+  }
+
   // Experience
   static addExperience(data: UserExperience) {
     return api.post('/Profile/experience', data)
