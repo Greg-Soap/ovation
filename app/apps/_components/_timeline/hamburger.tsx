@@ -6,9 +6,10 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import Link from 'next/link'
 import { useState } from 'react'
 import { X } from 'lucide-react'
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
-import { FeedbackModal } from '../../feedback'
 import { LocationDiscover, Profile, Setting2, Message, NotificationBing } from 'iconsax-react'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
+import FeedbackModal from '../../feedback'
+
 
 export default function Hamburger() {
   const [open, setOpen] = useState(false)
@@ -46,29 +47,47 @@ export default function Hamburger() {
                     onClick={handleLinkClick}
                     href={href}
                     className='w-full items-center justify-start flex gap-2'>
-                    <Icon size={24} color='white' variant={isActive ? 'Bold' : 'Outline'} />
+                    <Icon size={24} color='#cff073' variant={isActive ? 'Bold' : 'Outline'} />
                     {label}
                   </Link>
                 )
               })}
             </ul>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button
-                  variant={'default'}
-                  className='text-[#F8F8FF] text-xs font-semibold py-3 h-fit w-full bg-[#4865FC] '>
-                  Submit a feedback
-                </Button>
-              </DialogTrigger>
-              <DialogContent className='flex flex-col items-center justify-center p-0 m-0 w-fit h-fit overflow-auto border-none'>
-                <>
-                  <FeedbackModal />
-                </>
-              </DialogContent>
-            </Dialog>
+           <FeedbackButton className='w-full mb-16' />
           </div>
         </PopoverContent>
       </Popover>
     </div>
+  )
+}
+
+export function FeedbackButton({className}: {className?: string}) {
+  return (
+     <div className={`flex flex-col items-center gap-4 w-[90%] sticky bottom-3 px-[5px] pt-5 pb-1.5 bg-[#18181C] border border-[#29292F] rounded-[10px] mb-3 ${className}`}>
+        <img
+          src='/assets/images/aside-absolute.png'
+          alt='Message'
+          className='absolute -top-4 w-[33px] h-[33px]'
+        />
+        <div className='w-full flex flex-col items-center gap-0.5'>
+          <p className='text-[#F8F8FF] text-xs font-medium'>Help us improve</p>
+          <p className='text-[#B3B3B3] text-[9px] text-center'>
+            Your input will help us improve and create an even better experience for everyone. Thank
+            you for being a part of this journey!
+          </p>
+        </div>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant={'default'}
+              className='text-[#0B0A10] text-xs font-semibold py-2 px-3 w-full h-[30px] bg-[#CFF073] rounded-[8px]'>
+              Submit a feedback
+            </Button>
+          </DialogTrigger>
+          <DialogContent className='flex flex-col items-center justify-center p-0 m-0  overflow-y-scroll border-none'>
+            <FeedbackModal />
+          </DialogContent>
+        </Dialog>
+      </div>
   )
 }

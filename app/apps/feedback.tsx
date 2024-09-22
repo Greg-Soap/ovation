@@ -179,9 +179,9 @@ export default function FeedbackModal() {
               <RadioGroup
                 onValueChange={field.onChange}
                 defaultValue={field.value}
-                className='pt-2'>
+                className='pt-2 w-full grid grid-cols-3 lg:grid-cols-5 gap-2'>
                 {SATISFACTION_OPTIONS.map((option) => (
-                  <RadioGroupItem key={option.value} value={option.value}>
+                  <RadioGroupItem key={option.value} value={option.value} >
                     <span className='text-3xl'>{option.emoji}</span>
                     <span className='text-sm text-[#B3B3B3]'>{option.label}</span>
                   </RadioGroupItem>
@@ -290,7 +290,7 @@ export default function FeedbackModal() {
               <RadioGroup
                 onValueChange={field.onChange}
                 defaultValue={field.value}
-                className='pt-2'>
+                 className='pt-2 w-full grid grid-cols-3 lg:grid-cols-5 gap-2'>
                 {SATISFACTION_OPTIONS.map((option) => (
                   <RadioGroupItem key={option.value} value={option.value}>
                     <span className='text-3xl'>{option.emoji}</span>
@@ -347,10 +347,10 @@ export default function FeedbackModal() {
   )
 
   return (
-    <div className='px-6 py-8 gap-[30px] bg-[#232227] rounded-2xl flex flex-col w-full max-w-[700px] mx-auto'>
+    <div className='px-6 py-8 gap-[30px] bg-[#232227] rounded-2xl flex flex-col  max-w-[700px] mx-auto overflow-y-scroll overflow-x-hidden h-[90vh] w-[90vw]'>
       {renderFormHeader()}
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6'>
+        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-6 w-[80vw] md:w-full'>
           {formPage === 1 ? renderFirstPage() : renderSecondPage()}
           <div className='flex justify-end gap-[10px] w-full'>
             <Button

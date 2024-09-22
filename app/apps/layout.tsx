@@ -57,8 +57,8 @@ export default function AsideLayout({
 
   return (
     <div className='px-0  container flex flex-col items-center justify-center relative'>
-      <TimelineHeader />
       <QueryClientProvider client={queryClient}>
+      <TimelineHeader />
         <div className='flex flex-col lg:flex-row lg:flex-nowrap w-full other-link overflow-y-scroll'>
           <Aside />
           <div id='empty space' className='min-w-[310px]' />
