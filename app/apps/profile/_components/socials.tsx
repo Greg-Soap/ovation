@@ -23,7 +23,7 @@ export default function Socials({ socials }: { socials: UserSocialsMod }) {
           {availableSocials.map(([platform, url]) => (
             <Link key={platform} href={url} target="_blank" rel="noopener noreferrer">
               <Image
-                src={socialIcons[platform as keyof typeof socialIcons]}
+                src={socialIcons[platform as keyof typeof socialIcons] || '/assets/images/profile/link.png'}
                 alt={`${platform} Icon`}
                 width={32}
                 height={32}

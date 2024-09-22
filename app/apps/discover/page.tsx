@@ -26,7 +26,7 @@ const FeaturedUser: FeaturedUser = {
 
 
 
-function DiscoverPage() {
+export default function Page() {
   const mostViewedQuery = useQuery({
     queryKey: ['mostViewed'],
     queryFn: () => ovationService.getMostViewed(),
@@ -442,5 +442,3 @@ function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
 }
 
 
-
-export default DiscoverPage
