@@ -1,10 +1,9 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import * as RadioGroupPrimitive from "@radix-ui/react-radio-group"
-import { Circle } from "lucide-react"
+import * as React from 'react'
+import * as RadioGroupPrimitive from '@radix-ui/react-radio-group'
 
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils'
 
 const RadioGroup = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Root>,
@@ -12,7 +11,7 @@ const RadioGroup = React.forwardRef<
 >(({ className, ...props }, ref) => {
   return (
     <RadioGroupPrimitive.Root
-      className={cn("grid gap-2", className)}
+      className={cn('flex justify-between', className)}
       {...props}
       ref={ref}
     />
@@ -23,19 +22,16 @@ RadioGroup.displayName = RadioGroupPrimitive.Root.displayName
 const RadioGroupItem = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>
->(({ className, ...props }, ref) => {
+>(({ className, children, ...props }, ref) => {
   return (
     <RadioGroupPrimitive.Item
       ref={ref}
       className={cn(
-        "aspect-square h-4 w-4 rounded-full border border-primary text-primary ring-offset-background focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-        className
+        'flex flex-col items-center justify-center gap-2 border border-[#4D4D4D] rounded-[10px] w-[97px] h-[86px] focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-[#29292F]',
+        className,
       )}
-      {...props}
-    >
-      <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
-        <Circle className="h-2.5 w-2.5 fill-current text-current" />
-      </RadioGroupPrimitive.Indicator>
+      {...props}>
+      {children}
     </RadioGroupPrimitive.Item>
   )
 })

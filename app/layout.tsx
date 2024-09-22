@@ -11,9 +11,7 @@ export const metadata: Metadata = {
     title: 'Ovation: Explore and Earn NFTs with Personalized Portfolios',
     description:
       'Discover a unique NFT marketplace where you can explore and earn NFTs through personalized portfolios. Experience the future of digital collectibles with Ovation.',
-    images: [
-      'https://www.ovation.network/assets/images/dashboard-demo.png',
-    ],
+    images: ['https://www.ovation.network/assets/images/dashboard-demo.png'],
     siteName: 'Ovation',
     url: 'https://www.ovation.network',
     type: 'website',
@@ -24,9 +22,7 @@ export const metadata: Metadata = {
     description:
       'Discover a unique NFT marketplace where you can explore and earn NFTs through personalized portfolios. Experience the future of digital collectibles with Ovation.',
     creator: '@EmmanuelGreg',
-    images: [
-      'https://www.ovation.network/assets/images/dashboard-demo.png',
-    ],
+    images: ['https://www.ovation.network/assets/images/dashboard-demo.png'],
   },
   icons: { shortcut: ['/favicon.ico'] },
   keywords:
@@ -39,10 +35,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body
-        className='overflow-x-hidden'
-      >{children}</body>
+    <html lang='en'>
+      <body className='overflow-x-hidden'>{children}</body>
       <Toaster />
     </html>
   )
