@@ -174,7 +174,7 @@ export interface DiscoverUserData {
   displayName: string
   profileImage: string | null
   views: number
-  badgesEarned: number
+  badgeEarned: number
   location: string | null
   bio: string | null
   coverImage: string | null

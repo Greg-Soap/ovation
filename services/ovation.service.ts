@@ -132,32 +132,39 @@ class OvationService {
   }
 
   // Discover endpoints
-  static getTopNft() {
-    return api.get<{ data: any; message: string }>('/Discover/top-nft')
+  static async getTopNft() {
+    const response = await api.get<{ data: any; message: string }>('/Discover/top-nft')
+    return response.data?.data
   }
 
-  static getBluechip() {
-    return api.get<{ data: any; message: string }>('/Discover/bluechip')
+  static async getBlueChipHolders() {
+    const response = await api.get<{ data: any; message: string }>('/Discover/bluechip')
+    return response.data?.data
   }
 
-  static getNetworth() {
-    return api.get<{ data: any; message: string }>('/Discover/networth')
+  static async getHighestNetWorth() {
+    const response = await api.get<{ data: any; message: string }>('/Discover/networth')
+    return response.data?.data
   }
 
-  static getContributors() {
-    return api.get<{ data: DiscoverUserData[]; message: string }>('/Discover/contributors')
+  static async getContributors() {
+    const response = await api.get<{ data: DiscoverUserData[]; message: string }>('/Discover/contributors')
+    return response.data?.data
   }
 
-  static getCreators() {
-    return api.get<{ data: DiscoverUserData[]; message: string }>('/Discover/creators')
+  static async getCreators() {
+    const response = await api.get<{ data: DiscoverUserData[]; message: string }>('/Discover/creators')
+    return response.data?.data
   }
 
-  static getFounderNft() {
-    return api.get<{ data: DiscoverUserData[]; message: string }>('/Discover/founder-nft')
+  static async getFounderHolders() {
+    const response = await api.get<{ data: DiscoverUserData[]; message: string }>('/Discover/founder-nft')
+    return response.data?.data
   }
 
-  static getMostViewed() {
-    return api.get<{ data: DiscoverUserData[]; message: string }>('/Discover/most-viewed')
+  static async getMostViewed() {
+    const response = await api.get<{ data: DiscoverUserData[]; message: string }>('/Discover/most-viewed')
+    return response.data?.data
   }
 }
 
