@@ -88,7 +88,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
       setToken(data.data?.token)
       setValue(data.data?.userData)
 
-      await signUp(user!.userId, user!.email) // for firebase
+      await signUp(user!) // for firebase
 
       toast.success('Profile created successfully')
       router.push('/apps/discover')

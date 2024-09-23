@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Popover } from '@/components/ui/popover'
 import { PopoverContent, PopoverTrigger } from '@radix-ui/react-popover'
 import { ArrowLeft } from 'iconsax-react'
+import {getActiveChatsForUser, sendMessage  } from '@/lib/firebaseChatService'
 
 interface FriendProps {
   friendDisplayPicture: string
@@ -27,6 +28,7 @@ interface FriendProps {
 export default function MessageContainer({ friend, goBack }: any) {
   const [sendStatus, setSendStatus] = useState<boolean>(true)
   const [message, setMessage] = useState<string>('')
+  const [receiverId, setReceiverId] = useState<string>('')
 
   const handleChange = (e: any) => {
     if (e.target.value === '') {
@@ -40,6 +42,10 @@ export default function MessageContainer({ friend, goBack }: any) {
   const handleEmojiSelect = (emojiObject: any) => {
     console.log(emojiObject)
     setMessage((prevMessage) => prevMessage + emojiObject.emoji)
+  }
+
+  const handleSendMessage = async () =>{
+    await sendMessage(receiverId, message)
   }
 
   if (!friend) {
@@ -163,7 +169,7 @@ export default function MessageContainer({ friend, goBack }: any) {
             onChange={handleChange}
           />
 
-          <Button variant={'msgBox'} disabled={sendStatus}>
+          <Button onClick={handleSendMessage} variant={'msgBox'} disabled={sendStatus}>
             <SendIcon className='' />
           </Button>
         </div>

@@ -354,8 +354,8 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
       const offlineSigner = window.leap.getOfflineSigner(chainId)
       const accounts = await offlineSigner.getAccounts()
 
-      const accountAddress = accounts[0].address
-      console.log('Connected account address:', accountAddress)
+      setAccount(accounts[0].address)
+      console.log('Connected account address: ',accounts[0].address)
     } catch (error) {
       console.error('Error connecting to Leap Wallet:', error)
     }
@@ -390,9 +390,8 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
       case 'Wallet Connect':
         await connectWalletConnect()
         break
-      case 'Coinmarketcap':
-        // Implement Coinmarketcap connection if available
-        toast.error('Coinmarketcap connection is not implemented yet.')
+      case 'Leap Wallet':
+        await connectLeap()
         break
       case 'Okx':
         await connectOKXWallet()
