@@ -325,7 +325,7 @@ function DiscoverHolders() {
   return (
     <div className="w-full flex flex-col gap-10">
       <div className="flex justify-between items-center text-base font-medium text-white">
-        <p>TOP BADGED HOLDERS</p>
+        <p>TOP BADGE HOLDERS</p>
         {/* <Button className="bg-white">View all</Button> */}
       </div>
       <div className="p-4 items-center w-full rounded-lg flex flex-col gap-10 border-[#353538] border-[1px]">

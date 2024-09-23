@@ -6,19 +6,35 @@ import { useForm } from 'react-hook-form'
 import { object, z } from 'zod'
 import PathICon from '@/components/icons/pathIcon'
 import { ChevronRight } from 'lucide-react'
-import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import { useEffect, useState } from 'react'
 import WalletConnectComponent from './WalletConnectComponent'
 import ovationService from '@/services/ovation.service'
 import { useMutation, useQuery } from '@tanstack/react-query'
-
+import arrow from '@/public/assets/images/arrow-right.png'
 import { setToken } from '@/lib/cookies'
 import { useLocalStorage } from '@/lib/use-local-storage'
 import type { UserData } from '@/models/all.model'
 import { optionValueToBlockchainName } from '@/lib/helper-func'
 import { signUp } from '@/lib/firebaseAuthService'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import Link from 'next/link'
+import Image from 'next/image'
 
 const formSchema = z.object({
   personalInfo: z.object({
@@ -79,6 +95,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
       },
       type: 'Normal',
     },
+    mode: 'onChange',
   })
 
   const { mutate: createAccount } = useMutation({
@@ -95,11 +112,10 @@ export default function AccountForm({ setOptionalLeft }: Props) {
     },
     onError: (error) => {
       console.log(error)
-      toast.error('Profile creation failed')
+      // @ts-ignore
+      toast.error(error.response.data.message)
     },
   })
-
-  console.log({ formValues: form.getValues(), formErrors: form.formState.errors })
 
   useEffect(() => {
     if (page === 1) {
@@ -124,24 +140,25 @@ export default function AccountForm({ setOptionalLeft }: Props) {
         onSubmit={form.handleSubmit(() => {
           setPage(2)
         })}
-        className='flex flex-col gap-7'>
-        <div className='flex items-center justify-between mb-5'>
-          <span className='w-[46%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]  text-[#C1C0C6]' />
-          <p className='text-[10px] font-medium text-[#C1C0C6]'>OR</p>
-          <span className='w-[46%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]' />
+        className="flex flex-col gap-7"
+      >
+        <div className="flex items-center justify-between mb-5">
+          <span className="w-[46%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]  text-[#C1C0C6]" />
+          <p className="text-[10px] font-medium text-[#C1C0C6]">OR</p>
+          <span className="w-[46%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]" />
         </div>
         <FormField
           control={form.control}
-          name='personalInfo.displayName'
+          name="personalInfo.displayName"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Display name</FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  className='h-[46px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full'
-                  placeholder='kvngCZ'
-                  type='text'
+                  className="h-[46px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
+                  placeholder="kvngCZ"
+                  type="text"
                 />
               </FormControl>
             </FormItem>
@@ -149,16 +166,16 @@ export default function AccountForm({ setOptionalLeft }: Props) {
         />
         <FormField
           control={form.control}
-          name='personalInfo.username'
+          name="personalInfo.username"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Username</FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  className='h-[46px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full'
-                  placeholder='chang_zhao'
-                  type='text'
+                  className="h-[46px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
+                  placeholder="chang_zhao"
+                  type="text"
                 />
               </FormControl>
             </FormItem>
@@ -166,16 +183,16 @@ export default function AccountForm({ setOptionalLeft }: Props) {
         />
         <FormField
           control={form.control}
-          name='personalInfo.email'
+          name="personalInfo.email"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  className='h-[46px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full'
-                  placeholder='cz@blockchain.com'
-                  type='email'
+                  className="h-[46px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
+                  placeholder="cz@blockchain.com"
+                  type="email"
                 />
               </FormControl>
             </FormItem>
@@ -183,30 +200,43 @@ export default function AccountForm({ setOptionalLeft }: Props) {
         />
         <FormField
           control={form.control}
-          name='personalInfo.password'
+          name="personalInfo.password"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  className='h-[46px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full'
-                  placeholder='*********'
-                  type='password'
+                  className="h-[46px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
+                  placeholder="*********"
+                  type="password"
                 />
               </FormControl>
-              <p className='text-xs text-[#B3B3B3] mt-2'>
-                Password must be at least 8 characters long and contain at least one uppercase
-                letter, one lowercase letter, one number, and one special character.
+              <FormMessage />
+              <p className="text-xs text-[#B3B3B3] mt-2">
+                Password must be at least 8 characters long and contain at least
+                one uppercase letter, one lowercase letter, one number, and one
+                special character.
               </p>
             </FormItem>
           )}
         />
         <Button
           onClick={() => setPage(2)}
-          className='w-full h-[52px] hover:scale-95 text-sm font-semibold'>
+          className="w-full h-[52px] hover:scale-95 text-sm font-semibold"
+        >
           Continue
         </Button>
+        <div className="flex items-center justify-center w-full text-xs">
+          <p>
+            {' '}
+            Already have an account?{' '}
+            <Link href="/login" className=" text-[#CFF073]">
+              Login
+            </Link>{' '}
+          </p>
+          <Image alt="arrow" src={arrow} />
+        </div>
       </form>
     )
   }
@@ -221,33 +251,42 @@ export default function AccountForm({ setOptionalLeft }: Props) {
     }
 
     return (
-      <form onSubmit={form.handleSubmit(() => setPage(3))} className='flex flex-col gap-7'>
+      <form
+        onSubmit={form.handleSubmit(() => setPage(3))}
+        className="flex flex-col gap-7"
+      >
         <FormField
           control={form.control}
-          name='userPath.pathId'
+          name="userPath.pathId"
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <div className='flex flex-col md:flex-row items-center flex-wrap w-full gap-4'>
-                  {pathOptions?.data?.data?.length === 0 && <p>No path options available</p>}
+                <div className="flex flex-col md:flex-row items-center flex-wrap w-full gap-4">
+                  {pathOptions?.data?.data?.length === 0 && (
+                    <p>No path options available</p>
+                  )}
                   {pathOptions?.data?.data?.map((option, index) => (
                     <Button
                       key={option.pathId}
                       onClick={() => handleButtonClick(option.pathId)}
-                      type='button'
+                      type="button"
                       className={`${
                         active === option.pathId
                           ? `border-[${pathColors[index % 4]}] scale-95 shadow-lg`
                           : 'border-[#353538]'
-                      } h-[234px] hover:scale-95 max-w-[242px] bg-transparent border-[1px] flex flex-col gap-2 rounded-lg`}>
+                      } h-[234px] hover:scale-95 max-w-[242px] bg-transparent border-[1px] flex flex-col gap-2 rounded-lg`}
+                    >
                       <span
-                        className={`rounded-full mb-5 w-9 h-9 bg-[${pathBackgrounds[index % 4]}] items-center flex justify-center`}>
+                        className={`rounded-full mb-5 w-9 h-9 bg-[${pathBackgrounds[index % 4]}] items-center flex justify-center`}
+                      >
                         <PathICon strokeLine={pathColors[index % 4]} />
                       </span>
-                      <h3 className='font-semibold text-sm text-white'>
+                      <h3 className="font-semibold text-sm text-white">
                         {option.name.toUpperCase()}
                       </h3>
-                      <p className='text-[11px] text-wrap text-[#B3B3B3]'>{option.description}</p>
+                      <p className="text-[11px] text-wrap text-[#B3B3B3]">
+                        {option.description}
+                      </p>
                     </Button>
                   ))}
                 </div>
@@ -255,7 +294,10 @@ export default function AccountForm({ setOptionalLeft }: Props) {
             </FormItem>
           )}
         />
-        <Button type='submit' className='hover:scale-95 w-full h-[52px] text-sm font-semibold'>
+        <Button
+          type="submit"
+          className="hover:scale-95 w-full h-[52px] text-sm font-semibold"
+        >
           Continue
         </Button>
       </form>
@@ -278,22 +320,23 @@ export default function AccountForm({ setOptionalLeft }: Props) {
   }
 
   function renderWalletAndConfirmation() {
-    const chains = ['Ethereum', 'Binance Smart Chain', 'Polygon', 'Avalanche'] // Add more chains as needed
-
     return (
-      <form onSubmit={form.handleSubmit(handleFormSubmit)} className='flex flex-col gap-7'>
+      <form
+        onSubmit={form.handleSubmit(handleFormSubmit)}
+        className="flex flex-col gap-7"
+      >
         <FormField
           control={form.control}
-          name='userWallet.walletAddress'
+          name="userWallet.walletAddress"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Wallet Address</FormLabel>
               <FormControl>
                 <Input
                   {...field}
-                  className='h-[46px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full'
-                  placeholder='Enter your wallet address'
-                  type='text'
+                  className="h-[46px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
+                  placeholder="Enter your wallet address"
+                  type="text"
                 />
               </FormControl>
             </FormItem>
@@ -302,38 +345,47 @@ export default function AccountForm({ setOptionalLeft }: Props) {
 
         <FormField
           control={form.control}
-          name='userWallet.chain'
+          name="userWallet.chain"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Select Chain</FormLabel>
-              <FormControl>
-                <select
-                  {...field}
-                  className='w-full h-[46px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full px-4 text-white'>
-                  <option value=''>Select a chain</option>
-                  {Object.entries(optionValueToBlockchainName).map(([value, name]) => (
-                    <option key={value} value={value} className='text-white bg-transparent'>
-                      {name}
-                    </option>
-                  ))}
-                </select>
-              </FormControl>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger className="rounded-full">
+                    <SelectValue placeholder="Select a chain" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {Object.entries(optionValueToBlockchainName).map(
+                    ([value, name]) => (
+                      <SelectItem
+                        key={value}
+                        value={value}
+                        className="text-black bg-transparent"
+                      >
+                        {name}
+                      </SelectItem>
+                    ),
+                  )}
+                </SelectContent>
+              </Select>
             </FormItem>
           )}
         />
 
         <Button
-          type='submit'
-          className='w-full text-sm font-semibold h-[53px]'
+          type="submit"
+          className="w-full text-sm font-semibold h-[53px]"
           disabled={form.formState.isSubmitting}
           isLoading={form.formState.isSubmitting}
-          loadingText='Creating profile...'>
+          loadingText="Creating profile..."
+        >
           Make my profile
         </Button>
 
-        <p className='text-center mb-4'>
-          By clicking &quot;make my profile&quot; you agree to our privacy terms, code of conduct
-          and Conditions.
+        <p className="text-center mb-4">
+          By clicking &quot;make my profile&quot; you agree to our privacy
+          terms, code of conduct and Conditions.
         </p>
       </form>
     )
@@ -346,41 +398,46 @@ export default function AccountForm({ setOptionalLeft }: Props) {
       case 2:
         return renderPathSelection()
       case 3:
-        return isManualWallet ? renderWalletAndConfirmation() : renderWalletSelection()
+        return isManualWallet
+          ? renderWalletAndConfirmation()
+          : renderWalletSelection()
       default:
         return null
     }
   }
 
   return (
-    <div className='flex flex-col gap-11'>
-      <div className='flex items-center justify-between'>
-        <div className='flex flex-col gap-2'>
-          <h1 className='text-3xl font-semibold text-white items-center justify-between  flex'>
+    <div className="flex flex-col gap-11">
+      <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-3xl font-semibold text-white items-center justify-between  flex">
             <span> Create Account</span>
           </h1>
-          <div className='flex gap-1 items-center justify-start'>
+          <div className="flex gap-1 items-center justify-start">
             <button
-              type='button'
+              type="button"
               onClick={() => setPage(1)}
-              className={`${page >= 1 ? 'text-[#E6E6E6] font-semibold' : ''} text-xs md:text-base  text-center flex gap-0 w-fit cursor-pointer`}>
+              className={`${page >= 1 ? 'text-[#E6E6E6] font-semibold' : ''} text-xs md:text-base  text-center flex gap-0 w-fit cursor-pointer`}
+            >
               Personal info
             </button>
-            <ChevronRight color='#cff073' height={'14px'} width={'14px'} />
+            <ChevronRight color="#cff073" height={'14px'} width={'14px'} />
             <button
-              type='button'
+              type="button"
               onClick={() => setPage(2)}
-              className={`${page >= 2 ? 'text-[#E6E6E6] font-semibold' : ''} text-xs md:text-base  cursor-pointer`}>
+              className={`${page >= 2 ? 'text-[#E6E6E6] font-semibold' : ''} text-xs md:text-base  cursor-pointer`}
+            >
               Choose path
             </button>
-            <ChevronRight color='#cff073' height={'14px'} width={'14px'} />
+            <ChevronRight color="#cff073" height={'14px'} width={'14px'} />
             <button
-              type='button'
+              type="button"
               onClick={() => setPage(3)}
-              className={`${page >= 3 ? 'text-[#E6E6E6] font-semibold' : ''} text-xs md:text-base  cursor-pointer`}>
+              className={`${page >= 3 ? 'text-[#E6E6E6] font-semibold' : ''} text-xs md:text-base  cursor-pointer`}
+            >
               Connect wallet
             </button>
-            <ChevronRight color='#cff073' height={'14px'} width={'14px'} />
+            <ChevronRight color="#cff073" height={'14px'} width={'14px'} />
           </div>
         </div>
       </div>
