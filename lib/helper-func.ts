@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { useLocalStorage } from './use-local-storage'
-import { UserData } from '@/models/all.model'
+import type { UserData } from '@/models/all.model'
 
 function generateRandomString(length = 10) {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -181,8 +181,11 @@ export function parseDate(dateString: string): Date | null {
   return new Date(year, month - 1, day)
 }
 
-// export function getUserId(): string {
-//   const userData = window.localStorage.getItem('userData')
-//   const user = userData ? JSON.parse(userData) : null
-//   return user?.id
-// }
+export function getUserId(): string | undefined {
+  if (typeof window !== 'undefined') {
+    const userData = window.localStorage.getItem('userData')
+    const user = userData ? (JSON.parse(userData) as UserData) : null
+    return user?.userId
+  }
+  return undefined
+}
