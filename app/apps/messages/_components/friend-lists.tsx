@@ -1,10 +1,12 @@
 'use client'
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import SearchInput from '../../_components/_timeline/search-input'
 import MessageContainer from '../../messages/message-container'
 import { Button } from '@/components/ui/button'
-import {ChatData, getActiveChatsForUser  } from '@/lib/firebaseChatService'
+import { ChatData, getActiveChatsForUser, Participant } from '@/lib/firebaseChatService'
+import { auth } from '@/lib/firebase'
+import { User } from 'firebase/auth'
 
 export default function FriendList() {
   interface Friend {
@@ -19,79 +21,36 @@ export default function FriendList() {
     isOpened: boolean
   }
 
-  const [friends, setFriends] = useState<ChatData[]>([
-    {
-      im: '/assets/images/timeline/Oval.png',
-      displayName: 'Pancakeguy',
-      userName: '@Pancakeguy',
-      lastMessage: 'How are you doing?',
-      lastActive: '3mins',
-      biography:
-        'Passionate NFT holder exploring the future of digital ownership. Join me in discovering the limitless possibilities of the NFT ecosystem. ',
-      followingCount: 700,
-      followerCount: 1.65,
-      isOpened: false,
-    },
-    {
-      friendDisplayPicture: '/assets/images/timeline/Shape.png',
-      displayName: 'Stay there',
-      userName: '@RotelOtis',
-      lastMessage: 'Stop heading for the car you gave me',
-      lastActive: '15hrs',
-      biography:
-        'Passionate music listener exploring different music genre"s. Join me as I vibe to Heading for the door by Royel Otis',
-      followingCount: 500,
-      followerCount: 1.55,
-      isOpened: false,
-    },
-    {
-      friendDisplayPicture: '/assets/images/timeline/Oval.png',
-      displayName: 'Nate',
-      userName: '@NF',
-      lastMessage: 'if ever there was time that aint fair',
-      lastActive: '10hrs',
-      biography: 'The end of the world could just be a day',
-      followingCount: 350,
-      followerCount: 1.5,
-      isOpened: false,
-    },
-    {
-      friendDisplayPicture: '/assets/images/timeline/Shape.png',
-      displayName: 'James Arthur',
-      userName: '@Sinner',
-      lastMessage: 'I cant afford to lie',
-      lastActive: '4hrs',
-      biography:
-        'Stop looking for a knife, stop looking through the drawer it aint there, I cant afford to lie, I cant afford to lay the night down. It is just a night..',
-      followingCount: 800,
-      followerCount: 1.95,
-      isOpened: false,
-    },
-    {
-      friendDisplayPicture: '/assets/images/timeline/Oval.png',
-      displayName: 'Sofa King',
-      userName: '@Wait',
-      lastMessage: 'I cant afford to lay the the night down',
-      lastActive: '3s',
-      biography:
-        'Stop heading for the door, , stop heading for the car you gave me, I cant apologise, Im in it for the night, im in it for the night we had here..',
-      followingCount: 764,
-      followerCount: 1.63,
-      isOpened: false,
-    },
-  ])
+  const getChatData = async () => {
+    setFriends(await getActiveChatsForUser('07d8376c-7dfa-4b98-b802-043c300ed78a'));
+  }
 
-  const [clickFriend, setClickedFriend] = useState<Friend | null>(null)
+  useEffect(() => {
+    getChatData()
+  }, [])
+
+  const [friends, setFriends] = useState<ChatData[] | null>()
+
+  const [clickFriend, setClickedFriend] = useState<ChatData | null>(null)
 
   const handleClick = (index: number) => {
-    const updatedList = friends.map((friend, i) => ({
-      ...friend,
-      isOpened: i === index,
-    }))
+    var updatedList = null as ChatData[] | null
+    if (friends != null) {
+      updatedList = friends.map((friend, i) => ({
+        ...friend,
+        isOpened: i === index,
+      }))
+    }
 
     setFriends(updatedList)
-    setClickedFriend(updatedList[index])
+    if (updatedList != null)
+      setClickedFriend(updatedList[index])
+
   }
+
+  const getParticipants = (data: ChatData): Participant | undefined => {
+    return data.participants.find(obj => obj.userId != '07d8376c-7dfa-4b98-b802-043c300ed78a');
+  };
 
   return (
     <>
@@ -103,14 +62,14 @@ export default function FriendList() {
         </div>
 
         <div className='flex flex-col gap-1 w-full'>
-          {friends.map((friend, index) => (
+          {friends?.map((friend, index) => (
             <Button
-              className={`flex justify-between px-5 py-4 cursor-default ${friend.isOpened && 'bg-[#18181C]'}`}
+              className={`flex justify-between px-5 py-4 cursor-default ${true && 'bg-[#18181C]'}`}
               key={index}
               onClick={() => handleClick(index)}>
               <div className='flex items-center gap-3'>
                 <Image
-                  src={friend.friendDisplayPicture}
+                  src={getParticipants(friend)?.image ?? ''}
                   alt='User Display Picture'
                   width={36}
                   height={36}
@@ -118,14 +77,14 @@ export default function FriendList() {
 
                 <div className='flex flex-col gap-1'>
                   <p className='flex text-[#F8F8FF] items-center text-sm font-medium gap-[3px]'>
-                    {friend.displayName}
-                    <span className='text-[#B3B3B3] text-xs font-normal'>{friend.userName}</span>
+                    {getParticipants(friend)?.displayName}
+                    <span className='text-[#B3B3B3] text-xs font-normal'>{getParticipants(friend)?.username}</span>
                   </p>
                   <p className='text-xs text-[#B3B3B3]'>{friend.lastMessage}</p>
                 </div>
               </div>
 
-              <p className='text-[11px] text-[#808080] mt-2'>{friend.lastActive}</p>
+              <p className='text-[11px] text-[#808080] mt-2'>{friend.lastMessageSentAt.toDateString()}</p>
             </Button>
           ))}
         </div>

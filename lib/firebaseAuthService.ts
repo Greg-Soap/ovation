@@ -1,12 +1,12 @@
 import { UserData } from "@/models/all.model";
 import { auth, firestore } from "./firebase";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User, updateProfile } from "firebase/auth";
 import {
   doc,
   setDoc,
-
   serverTimestamp
 } from 'firebase/firestore'
+import { Participant } from "./firebaseChatService";
 
 // Sign up a new user
 export const signUp = async (user: UserData) => {
@@ -15,12 +15,13 @@ export const signUp = async (user: UserData) => {
   const userData = {
     displayName: user.displayName,
     email: user.email,
-    emailVerified: true,
-    photoURL: user.profileImage,
-    providerId: user.userId,
-    phoneNumber: user.username
-  } as User
-  await auth.updateCurrentUser(userData)
+    image: user.profileImage,
+    userId: user.userId,
+    username: user.username,
+    uid: data.user.uid
+  } as Participant
+
+  await signIn(user.userId, user.email)
 
   const userRef = doc(firestore, `auth_users/${user.userId}`);
 
@@ -38,6 +39,6 @@ export const logOut = async () => {
   return await signOut(auth);
 };
 
-const generatePassword = (userId : string) =>{
-    return userId.split('').reverse().join('');
+const generatePassword = (userId: string) => {
+  return userId.split('').reverse().join('');
 }

@@ -46,7 +46,7 @@ export default function MessageContainer({ friend, goBack }: any) {
 
   const handleSendMessage = async () =>{
     //render new bubble
-    await sendMessage(receiverId, message)
+    await sendMessage('49e6a54e-b80c-4960-bb79-5c3c6b0057af', '07d8376c-7dfa-4b98-b802-043c300ed78a', 'Hey there!')
   }
 
   if (!friend) {
@@ -62,6 +62,7 @@ export default function MessageContainer({ friend, goBack }: any) {
           </div>
 
           <Button
+          onClick={handleSendMessage}
             variant={'default'}
             className='px-3 py-2 h-fit rounded-[27px] text-xs text-[#111115] font-semibold transition-all duration-300 hover:opacity-80'>
             New message

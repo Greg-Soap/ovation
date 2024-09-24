@@ -13,7 +13,6 @@ import {
   serverTimestamp
 } from 'firebase/firestore'
 import { firestore, auth } from './firebase'
-import { User } from 'firebase/auth'
 
 /**
  * Sends a message from auth user to another user.
@@ -23,10 +22,10 @@ import { User } from 'firebase/auth'
  * @param messageText - The message content
  */
 export const sendMessage = async (
+  senderId: string,
   receiverId: string,
   messageText: string,
 ): Promise<void> => {
-  const senderId = auth.currentUser!.providerId
   const chatId = getChatId(senderId, receiverId)
 
   const message = {
@@ -40,9 +39,10 @@ export const sendMessage = async (
   const messagesRef = collection(firestore, `chats/${chatId}/messages`)
   await addDoc(messagesRef, message)
 
+  let sender = await getUserDetails(senderId)
   let receiver = await getUserDetails(receiverId)
 
-  await storeChatForUsers(senderId, auth.currentUser!, receiverId, receiver, message.message)
+  await storeChatForUsers(sender!, receiver, message.message)
 }
 
 /**
@@ -55,13 +55,11 @@ export const getChatId = (userAId: string, userBId: string): string => {
 }
 
 export const storeChatForUsers = async (
-  senderId: string,
-  senderDetails: User,
-  receiverId: string,
-  receiverDetails: User,
+  senderDetails: Participant,
+  receiverDetails: Participant,
   lastMessage: string
 ) => {
-  const chatId = getChatId(senderId, receiverId);
+  const chatId = getChatId(senderDetails.userId, receiverDetails.userId);
 
   // Create data for the chat
   const userAChatData: ChatData = {
@@ -74,8 +72,8 @@ export const storeChatForUsers = async (
   const userBChatData: ChatData = { ...userAChatData }; // Same data for userB
 
   // References to both users' activeChats documents
-  const userARef = doc(firestore, `users/${senderId}/activeChats/${chatId}`);
-  const userBRef = doc(firestore, `users/${receiverId}/activeChats/${chatId}`);
+  const userARef = doc(firestore, `users/${senderDetails.userId}/activeChats/${chatId}`);
+  const userBRef = doc(firestore, `users/${receiverDetails.userId}/activeChats/${chatId}`);
 
   // Store chat details for both users (using merge to avoid overwriting)
   await setDoc(userARef, { ...userAChatData, lastMessageSentAt: serverTimestamp() }, { merge: true });
@@ -144,8 +142,7 @@ const getUserDetails = async (userId: string) => {
   const userRef = doc(firestore, `auth_users/${userId}`);
   const userSnapshot = await getDoc(userRef);
   if (userSnapshot.exists()) {
-    console.log(userSnapshot.data())
-    return userSnapshot.data() as User;
+    return userSnapshot.data() as Participant;
   } else {
     throw new Error("User not found");
   }
@@ -164,6 +161,7 @@ export const getActiveChatsForUser = async (userId: string): Promise<ChatData[]>
 
     // Map the query result to a list of ActiveChat objects
     const activeChats: ChatData[] = querySnapshot.docs.map(doc => {
+      
       const data = doc.data();
       return {
         chatId: data.chatId,
@@ -172,8 +170,7 @@ export const getActiveChatsForUser = async (userId: string): Promise<ChatData[]>
         lastMessageSentAt: data.lastMessageSentAt.toDate(), // Convert Firestore Timestamp to JavaScript Date
       };
     });
-
-    console.log(activeChats)
+    // console.log(activeChats)
     return activeChats;
   } catch (error) {
     console.error('Error fetching active chats:', error);
@@ -181,16 +178,18 @@ export const getActiveChatsForUser = async (userId: string): Promise<ChatData[]>
   }
 };
 
-interface Participant {
+export interface Participant {
   userId: string;
   displayName: string;
   username: string;
+  email: string;
+  uid: string;
   image: string | null;
 }
 
 export interface ChatData {
   chatId: string;
-  participants: User[];
+  participants: Participant[];
   lastMessage: string;
   lastMessageSentAt: Date;
 }

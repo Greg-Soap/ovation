@@ -107,7 +107,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
       setToken(data.data?.token)
       setValue(data.data?.userData)
 
-      await signUp(user!) // for firebase
+      await signUp(data.data?.userData) // for firebase
 
       toast.success('Profile created successfully')
       router.push('/apps/discover')
@@ -286,11 +286,10 @@ export default function AccountForm({ setOptionalLeft }: Props) {
                       key={option.pathId}
                       onClick={() => handleButtonClick(option.pathId)}
                       type="button"
-                      className={`${
-                        active === option.pathId
+                      className={`${active === option.pathId
                           ? `border-[${pathColors[index % 4]}] scale-95 shadow-lg`
                           : 'border-[#353538]'
-                      } h-[234px] hover:scale-95 max-w-[242px] bg-transparent border-[1px] flex flex-col gap-2 rounded-lg`}
+                        } h-[234px] hover:scale-95 max-w-[242px] bg-transparent border-[1px] flex flex-col gap-2 rounded-lg`}
                     >
                       <span
                         className={`rounded-full mb-5 w-9 h-9 bg-[${pathBackgrounds[index % 4]}] items-center flex justify-center`}
