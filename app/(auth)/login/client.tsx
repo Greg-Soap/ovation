@@ -5,7 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import Google from '@/public/assets/images/ovationAuthGoogle'
-import Ether from '@/public/assets/images/ovationAuthEthereum'
 import {
   Form,
   FormControl,
@@ -100,7 +99,7 @@ export default function LoginForm() {
       <div className="  flex justify-between mb-4">
         <Button
           onClick={loginGoogle}
-          className="p-4 text-[10px] font-semibold md:text-base w-[48%] bg-white flex gap-4"
+          className="p-4 text-[10px] font-semibold md:text-base w-full bg-white flex gap-4"
         >
           <Google />
           <p>Login with Google</p>

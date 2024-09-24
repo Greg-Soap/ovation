@@ -38,7 +38,7 @@ export default function Page() {
       <GetStarted />
       <div className="flex flex-col lg:grid lg:grid-cols-3 w-[95%] gap-5">
         <div className="col-span-2 mt-10 mb-[20px] flex flex-col gap-10">
-          <DiscoverFeature {...FeaturedUser} />
+          {/* <DiscoverFeature {...FeaturedUser} /> */}
           <DiscoverHolders />
         </div>
         {!mostViewedLoading ? (

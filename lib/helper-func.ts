@@ -162,3 +162,20 @@ export function getGreeting(): string {
   if (hour < 18) return 'Good Afternoon'
   return 'Good Evening'
 }
+
+
+export function formatDate(date: Date): string {
+  const month = date.getMonth() + 1; // Months are zero-based
+  const day = date.getDate();
+  const year = date.getFullYear();
+  return `${month}/${day}/${year}`;
+}
+
+export function parseDate(dateString: string): Date | null {
+  const [month, day, year] = dateString.split('/').map(Number);
+  if (!month || !day || !year) {
+    console.warn('Invalid date format');
+    return null;
+  }
+  return new Date(year, month - 1, day);
+}

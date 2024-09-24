@@ -4,6 +4,7 @@ import type React from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import Image from 'next/image'
 import authAvatar from '@/public/assets/images/ovationAuthAvatar.svg'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 
 interface AuthLayoutProps {
   children: React.ReactNode
@@ -11,6 +12,8 @@ interface AuthLayoutProps {
 }
 
 const queryClient = new QueryClient()
+
+const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string
 
 export default function AuthLayout({
   children,
@@ -38,7 +41,9 @@ export default function AuthLayout({
 
         <div className=" rounded-lg border-1 w-[80vw] h-[80vh] md:w-[500px] md:h-fit p-0">
           <QueryClientProvider client={queryClient}>
-            {children}
+            <GoogleOAuthProvider clientId={clientId}>
+              {children}
+            </GoogleOAuthProvider>
           </QueryClientProvider>
         </div>
       </div>
