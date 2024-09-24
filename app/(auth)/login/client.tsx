@@ -25,6 +25,7 @@ import ovationService from '@/services/ovation.service'
 import { setToken } from '@/lib/cookies'
 import { useLocalStorage } from '@/lib/use-local-storage'
 import type { UserData } from '@/models/all.model'
+import PasswordInput from '@/components/password-input'
 
 const formSchema = z.object({
   userId: z.string(),
@@ -59,7 +60,8 @@ export default function LoginForm() {
     },
     onError: (error) => {
       console.log({ error })
-      toast.error(`Login failed: ${error.message}`)
+      //@ts-ignore
+      toast.error(`Login failed: ${error.response?.data?.message}`)
     },
   })
 
@@ -125,11 +127,12 @@ export default function LoginForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Username</FormLabel>
-                <FormControl {...field}>
+                <FormControl>
                   <Input
                     placeholder="Username101"
-                    className=" h-[46px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
                     type="text"
+                    value={field.value}
+                    onChange={field.onChange}
                   />
                 </FormControl>
               </FormItem>
@@ -141,11 +144,11 @@ export default function LoginForm() {
             render={({ field }) => (
               <FormItem className="flex flex-col end-0">
                 <FormLabel>Password</FormLabel>
-                <FormControl {...field}>
-                  <Input
+                <FormControl>
+                  <PasswordInput
                     placeholder="Enter your password"
-                    className=" h-[46px]  border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
-                    type="password"
+                    value={field.value}
+                    onChange={field.onChange}
                   />
                 </FormControl>
                 <FormMessage className=" ml-auto w-fit">
