@@ -1,18 +1,4 @@
-export type NotificationType =
-  | 'follow'
-  | 'likePost'
-  | 'reply'
-  | 'comment'
-  | 'mention'
-  | 'retweet'
-  | 'clap'
-  | 'likeNft'
-  | 'personalNewBadge'
-  | 'followerNewBadge'
-  | 'personalNewExperience'
-  | 'followerExperience'
-  | 'featureReminder'
-  | 'postReminder'
+export type NotificationType = 'Follow' | 'Badge'
 
 export interface NotificationItem {
   type: NotificationType
