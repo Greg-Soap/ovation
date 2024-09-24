@@ -251,7 +251,9 @@ function DiscoverHolders() {
               id={`no-${index + 1}-user`}
               className="rounded-lg h-[360px] bg-cover flex flex-col justify-end center items-center"
               style={{
-                backgroundImage: `url(${user.coverImage || '/assets/images/pfp1.jpeg'})`,
+                backgroundImage: `url(${
+                  user.coverImage || '/assets/images/default-user.svg'
+                })`,
               }}
             >
               <div className="flex w-[90%] text-white py-5 px-4 bg-[#1A1A1A] rounded-[18px] mb-10 items-center justify-between border border-[#FFFFFF4D]">
@@ -260,7 +262,9 @@ function DiscoverHolders() {
                   <div className="w-[50px] h-[50px] rounded-full overflow-hidden border-2 border-white">
                     <img
                       alt={user.displayName}
-                      src={user.profileImage || '/assets/images/pfp1.jpeg'}
+                      src={
+                        user.profileImage || '/assets/images/default-user.svg'
+                      }
                       width={50}
                       height={50}
                       className="w-full h-full object-cover"
@@ -283,7 +287,7 @@ function DiscoverHolders() {
             </div>
           ))}
         </div>
-        <div id="top-4-10 section" className="flex flex-col gap-5 w-full">
+        <div id="top-4-10 section" className="flex flex-col gap-5 w-full mt-5">
           {sortedData.slice(3, 10).map((user, index) => (
             <div key={index} className="w-full">
               <div className="flex h-[90px] text-white pl-4 pr-4 bg-[#18181C] rounded-[20px] items-center justify-between border border-[#35353880]">
@@ -293,8 +297,7 @@ function DiscoverHolders() {
                     <img
                       alt={user.displayName}
                       src={
-                        user.profileImage ||
-                        '/assets/images/default-profile.jpg'
+                        user.profileImage || '/assets/images/default-user.svg'
                       }
                       width={50}
                       height={50}
@@ -404,14 +407,6 @@ const CTabTrigger = ({
 }
 
 function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
-  const { mutate: followUser } = useMutation({
-    mutationFn: (userId: string) => ovationService.followUser(userId),
-  })
-
-  const { mutate: unfollowUser } = useMutation({
-    mutationFn: (userId: string) => ovationService.unfollowUser(userId),
-  })
-
   return (
     <div className="h-[800px] overflow-scroll mt-10 p-6 mb-5 border border-[#FFFFFF14] rounded-[10px] flex flex-col gap-10 sticky top-1">
       <div className="flex items-center w-full justify-between">
@@ -450,12 +445,12 @@ function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
 
           <Image
             src={
-              mostViewed[0].profileImage || '/assets/images/timeline/Oval.png'
+              mostViewed[0].profileImage || '/assets/images/default-user.svg'
             }
             alt="User Display"
             width={50}
             height={50}
-            className="absolute bottom-[-25px] border-[3px] border-[#0B0A10] rounded-full"
+            className={`${mostViewed[0].profileImage ? 'bg-[#0B0A10]' : 'bg-[#18181C]'} absolute bottom-[-25px] border-[3px] border-[#0B0A10] rounded-full`}
           />
         </div>
 
@@ -472,10 +467,6 @@ function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
                 </p>
               </div>
             </div>
-
-            <Button className="bg-[#CFF073] border-none outline-none font-medium w-fit h-fit text-[#0B0A10] text-[9.6px] transition-all duration-300 hover:opacity-80">
-              Follow
-            </Button>
           </div>
 
           <p className="text-sm text-[#B3B3B3]">
@@ -491,7 +482,7 @@ function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
                 <div className="w-[30px] h-[30px] rounded-full overflow-hidden border-2 border-white">
                   <img
                     alt="imag"
-                    src={`/assets/images/${user.profileImage}`}
+                    src={user.profileImage || '/assets/images/default-user.svg'}
                     className="w-full h-full object-cover"
                   />
                 </div>

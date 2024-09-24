@@ -66,6 +66,14 @@ export default function Aside() {
   const handleLogout = () => {
     ovationService.logout()
     removeValue()
+
+    // Remove all items with 'Draft' in the key
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i)
+      if (key && key.includes('Draft')) {
+        localStorage.removeItem(key)
+      }
+    }
     router.push('/')
   }
 
@@ -102,7 +110,7 @@ export default function Aside() {
             <Button
               variant={'ghost'}
               onClick={handleLogout}
-              className="py-[10px] w-full"
+              className="py-[10px] w-full text-red-500 hover:text-red-600 hover:bg-transparent"
             >
               Logout {user?.username}
             </Button>

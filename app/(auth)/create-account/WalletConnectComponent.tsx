@@ -1,5 +1,5 @@
 import type React from 'react'
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect, Suspense, useMemo } from 'react'
 // import Web3 from 'web3';
 import Web3Modal from 'web3modal'
 import WalletConnectProvider from '@walletconnect/web3-provider'
@@ -13,7 +13,10 @@ import { chainIdToChainName, startCase } from '@/lib/helper-func'
 import { toast } from 'sonner'
 import ovationService from '@/services/ovation.service'
 import { useQuery } from '@tanstack/react-query'
-import { type OfflineSigner, DirectSecp256k1HdWallet } from '@cosmjs/proto-signing'
+import {
+  type OfflineSigner,
+  DirectSecp256k1HdWallet,
+} from '@cosmjs/proto-signing'
 import { StargateClient } from '@cosmjs/stargate'
 import Spinner from '@/components/ui/spinner'
 
@@ -355,7 +358,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
       const accounts = await offlineSigner.getAccounts()
 
       setAccount(accounts[0].address)
-      console.log('Connected account address: ',accounts[0].address)
+      console.log('Connected account address: ', accounts[0].address)
     } catch (error) {
       console.error('Error connecting to Leap Wallet:', error)
     }
@@ -375,6 +378,9 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
   const connectWallet = async (walletName: string) => {
     const formattedWalletName = startCase(walletName)
     switch (formattedWalletName) {
+      case 'Leap Wallet':
+        await connectLeap()
+        break
       case 'Metamask':
         await connectMetaMask()
         break
@@ -390,9 +396,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
       case 'Wallet Connect':
         await connectWalletConnect()
         break
-      case 'Leap Wallet':
-        await connectLeap()
-        break
+
       case 'Okx':
         await connectOKXWallet()
         break
@@ -428,46 +432,61 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
     queryFn: () => ovationService.getWallets(),
   })
 
-  console.log({ wallets })
+  const sortedWallets = useMemo(() => {
+    if (!wallets?.data?.data) return []
+
+    return wallets.data.data.sort((a, b) => {
+      if (a.name.toLowerCase() === 'leap wallet') return -1
+      if (b.name.toLowerCase() === 'leap wallet') return 1
+      return 0
+    })
+  }, [wallets])
 
   return (
     <Suspense fallback={<Spinner />}>
       <div>
         {!account ? (
-          <div className='flex flex-col gap-7'>
+          <div className="flex flex-col gap-7">
             {isLoading ? (
-              <div className='flex justify-center items-center w-full'>
-                <Spinner size='huge' color='#Cff073' />
+              <div className="flex justify-center items-center w-full">
+                <Spinner size="huge" color="#Cff073" />
               </div>
             ) : (
-              <div className='grid grid-cols-2 gap-4'>
-                {wallets?.data?.data?.map((wallet) => (
+              <div className="grid grid-cols-2 gap-4">
+                {sortedWallets?.map((wallet) => (
                   <Button
                     key={wallet.walletId}
-                    className='text-start flex justify-between p-2 md:p-[1rem] h-[58px] w-full md:w-[242px] text-xs md:text-sm font-semibold text-white border-[1px] border-solid bg-transparent border-[#353538]'
-                    onClick={() => connectWallet(wallet.name)}>
+                    className="text-start flex justify-between p-2 md:p-[1rem] h-[58px] w-full md:w-[242px] text-xs md:text-sm font-semibold text-white border-[1px] border-solid bg-transparent border-[#353538]"
+                    onClick={() => connectWallet(wallet.name)}
+                  >
                     <p>{startCase(wallet.name)}</p>
-                    <Image src={wallet.logoUrl} alt={wallet.name} width={20} height={20} />
+                    <Image
+                      src={wallet.logoUrl}
+                      alt={wallet.name}
+                      width={20}
+                      height={20}
+                    />
                   </Button>
                 ))}
               </div>
             )}
 
-            <div className='flex gap-2 items-center justify-center'>
+            <div className="flex gap-2 items-center justify-center">
               <p>Wallet not listed?</p> {''}
               <Link
-                href=''
-                className='h-6 text-[#Cff073]'
-                onClick={() => setIsManualWallet?.(true)}>
+                href=""
+                className="h-6 text-[#Cff073]"
+                onClick={() => setIsManualWallet?.(true)}
+              >
                 Connect manually
               </Link>
-              <Image src={arrow} alt='arrow' />
+              <Image src={arrow} alt="arrow" />
             </div>
           </div>
         ) : (
           <div>
             <p>Connected Account: account</p>
-            <button type='button' onClick={disconnectWallet}>
+            <button type="button" onClick={disconnectWallet}>
               Disconnect Wallet
             </button>
           </div>

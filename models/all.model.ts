@@ -69,6 +69,7 @@ export interface UserSocialsMod {
   foundation?: string | null
   magic?: string | null
   ethico?: string | null
+  twitter?: string | null
 }
 
 export interface WalletAcct {
@@ -110,6 +111,7 @@ export interface ProfileData {
     forcaster: string | null
     foundation: string | null
     blur: string | null
+    twitter: string | null
   } | null
   username: string
   userId: string
@@ -135,6 +137,7 @@ export interface UserData {
     forcaster: string | null
     foundation: string | null
     blur: string | null
+    twitter: string | null
   } | null
   userStats: {
     nftCreated: number

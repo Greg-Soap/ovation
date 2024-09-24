@@ -72,33 +72,42 @@ export default function AccountForm({ setOptionalLeft }: Props) {
   const [page, setPage] = useState(1)
   const [active, setActive] = useState('')
   const [isManualWallet, setIsManualWallet] = useState(false)
-  const { storedValue } = useLocalStorage<UserData | null>('userData', null)
-  const user = storedValue
 
   const { setValue } = useLocalStorage<UserData | null>('userData', null)
+
+  const { storedValue: draft, setValue: setDraft } = useLocalStorage<
+    Partial<z.infer<typeof formSchema>>
+  >('accountDraft', {})
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       personalInfo: {
-        displayName: '',
-        email: '',
-        username: '',
-        password: '',
+        displayName: draft.personalInfo?.displayName || '',
+        email: draft.personalInfo?.email || '',
+        username: draft.personalInfo?.username || '',
+        password: draft.personalInfo?.password || '',
       },
       userPath: {
-        pathId: '',
+        pathId: draft.userPath?.pathId || '',
       },
       userWallet: {
-        walletAddress: '',
-        walletTypeId: null,
-        chain: '',
-        metadata: null,
+        walletAddress: draft.userWallet?.walletAddress || '',
+        walletTypeId: draft.userWallet?.walletTypeId || null,
+        chain: draft.userWallet?.chain || '',
+        metadata: draft.userWallet?.metadata || null,
       },
-      type: 'Normal',
+      type: draft.type || 'Normal',
     },
     mode: 'onChange',
   })
+
+  useEffect(() => {
+    const subscription = form.watch((value) => {
+      setDraft(value as Partial<z.infer<typeof formSchema>>)
+    })
+    return () => subscription.unsubscribe()
+  }, [form, setDraft])
 
   const { mutate: createAccount } = useMutation({
     mutationFn: ovationService.register,
@@ -110,6 +119,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
       await signUp(data.data?.userData) // for firebase
 
       toast.success('Profile created successfully')
+      setDraft({}) // Clear the draft
       router.push('/apps/discover')
     },
     onError: (error) => {
@@ -211,6 +221,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
                   type="email"
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -286,10 +297,11 @@ export default function AccountForm({ setOptionalLeft }: Props) {
                       key={option.pathId}
                       onClick={() => handleButtonClick(option.pathId)}
                       type="button"
-                      className={`${active === option.pathId
+                      className={`${
+                        active === option.pathId
                           ? `border-[${pathColors[index % 4]}] scale-95 shadow-lg`
                           : 'border-[#353538]'
-                        } h-[234px] hover:scale-95 max-w-[242px] bg-transparent border-[1px] flex flex-col gap-2 rounded-lg`}
+                      } h-[234px] hover:scale-95 max-w-[242px] bg-transparent border-[1px] flex flex-col gap-2 rounded-lg`}
                     >
                       <span
                         className={`rounded-full mb-5 w-9 h-9 bg-[${pathBackgrounds[index % 4]}] items-center flex justify-center`}
@@ -376,7 +388,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
                       <SelectItem
                         key={value}
                         value={value}
-                        className="text-black bg-transparent"
+                        className=" bg-transparent"
                       >
                         {name}
                       </SelectItem>

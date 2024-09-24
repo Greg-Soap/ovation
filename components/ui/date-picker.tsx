@@ -45,7 +45,7 @@ export function DatePicker({ disableDate, onChange }: DatePickerProps) {
           variant={'outline'}
           disabled={disableDate}
           className={cn(
-            'w-full justify-start text-left text-[#F8F8FF] font-normal hover:bg-transparent',
+            'w-full justify-start text-left text-[#F8F8FF] font-normal hover:bg-transparent hover:text-[#F8F8FF]',
             !selectedDate && 'text-[#808080]',
           )}
         >

@@ -41,7 +41,9 @@ export default function MainProfileSection({
     {
       value: 'portfolio',
       label: 'Portfolio',
-      content: (nfts) => <Portfolio nfts={nfts?.data?.data || []} isLoading={isNftsLoading} />,
+      content: (nfts) => (
+        <Portfolio nfts={nfts?.data?.data || []} isLoading={isNftsLoading} />
+      ),
     },
     {
       value: 'stat',
@@ -56,26 +58,28 @@ export default function MainProfileSection({
   ]
 
   return (
-    <div className='max-w-[853px] w-full h-full flex flex-col items-center bg-[#111115]'>
-      <FeaturedSection featured={[]} showButtons={true} secondaryProfile={secondaryProfile} />
+    <div className="max-w-[853px] w-full h-full flex flex-col items-center bg-[#111115]">
+      {/* <FeaturedSection featured={[]} showButtons={true} secondaryProfile={secondaryProfile} /> */}
 
       <Tabs
         defaultValue={currentTab}
         value={currentTab}
         onValueChange={setTab}
-        className='w-full my-16'>
-        <TabsList className='items-center rounded-none px-7 pt-5 pb-0 border-y gap-4 border-[#353538] w-full h-fit overflow-x-scroll justify-start'>
+        className="w-full my-16 mt-0"
+      >
+        <TabsList className="items-center rounded-none px-7 pt-5 pb-0 border-y gap-4 border-[#353538] w-full h-fit overflow-x-scroll justify-start">
           {profileTabsData.map(({ value, label }) => (
             <TabsTrigger
               key={value}
               value={value}
-              className='text-xs text-[#999999] px-5 py-[10px] bg-transparent border-b-2 border-transparent font-normal data-[state=active]:bg-transparent data-[state=active]:border-[#CFF073] data-[state=active]:text-[#F8F8FF] transition-all duration-300'>
+              className="text-xs text-[#999999] px-5 py-[10px] bg-transparent border-b-2 border-transparent font-normal data-[state=active]:bg-transparent data-[state=active]:border-[#CFF073] data-[state=active]:text-[#F8F8FF] transition-all duration-300"
+            >
               {label}
             </TabsTrigger>
           ))}
         </TabsList>
         {profileTabsData.map(({ value, content }) => (
-          <TabsContent key={value} value={value} className='w-full px-3 h-full'>
+          <TabsContent key={value} value={value} className="w-full px-3 h-full">
             {content(nfts)}
           </TabsContent>
         ))}

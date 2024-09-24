@@ -88,15 +88,14 @@ export default function ExperienceForm() {
       startDate: formatDate(new Date(data.startDate)),
       endDate: isCurrentJob ? null : formatDate(new Date(data.endDate || '')),
     }
-    // mutate(formattedData)
-    console.log(formattedData)
+    mutate(formattedData)
     setValue(data as Partial<FormValues>) // Save to local storage on submit
   }
 
   return (
     <div className="flex flex-col gap-[23px] h-full">
       <p className="text-lg text-[#E6E6E6] font-medium px-10 2xl:px-20">
-        Experience 1
+        Experience
       </p>
 
       <Form {...form}>
