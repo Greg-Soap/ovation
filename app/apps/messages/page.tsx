@@ -1,3 +1,4 @@
+'use client'
 import { getUserId } from '@/lib/helper-func'
 import FriendList from './_components/friend-lists'
 
