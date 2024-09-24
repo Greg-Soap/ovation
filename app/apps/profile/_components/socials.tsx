@@ -3,7 +3,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 const socialIcons = {
-  linkedin: '/assets/images/profile/linkedIn.png',
+  linkedIn: '/assets/images/settings/social/linked-in.png',
+  lens: '/assets/images/settings/social/lens.png',
+  forcaster: '/assets/images/settings/social/farcaster.png',
+  blur: '/assets/images/settings/social/blur.png',
+  foundation: '/assets/images/settings/social/foundation.png',
+  magic: '/assets/images/settings/social/magic.png',
+  ethico: '/assets/images/settings/social/eth-co.png',
   facebook: '/assets/images/profile/facebook.png',
   twitter: '/assets/images/profile/x.png',
   instagram: '/assets/images/profile/instagram.png',
@@ -21,9 +27,17 @@ export default function Socials({ socials }: { socials: UserSocialsMod }) {
       {hasSocials ? (
         <div className="flex w-full justify-between">
           {availableSocials.map(([platform, url]) => (
-            <Link key={platform} href={url} target="_blank" rel="noopener noreferrer">
+            <Link
+              key={platform}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <Image
-                src={socialIcons[platform as keyof typeof socialIcons] || '/assets/images/profile/link.png'}
+                src={
+                  socialIcons[platform as keyof typeof socialIcons] ||
+                  '/assets/images/profile/link.png'
+                }
                 alt={`${platform} Icon`}
                 width={32}
                 height={32}

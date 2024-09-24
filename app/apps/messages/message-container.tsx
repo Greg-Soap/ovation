@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Popover } from '@/components/ui/popover'
 import { PopoverContent, PopoverTrigger } from '@radix-ui/react-popover'
 import { ArrowLeft } from 'iconsax-react'
+import { sendMessage  } from '@/lib/firebaseChatService'
 
 interface FriendProps {
   friendDisplayPicture: string
@@ -27,6 +28,7 @@ interface FriendProps {
 export default function MessageContainer({ friend, goBack }: any) {
   const [sendStatus, setSendStatus] = useState<boolean>(true)
   const [message, setMessage] = useState<string>('')
+  const [receiverId, setReceiverId] = useState<string>('')
 
   const handleChange = (e: any) => {
     if (e.target.value === '') {
@@ -42,6 +44,11 @@ export default function MessageContainer({ friend, goBack }: any) {
     setMessage((prevMessage) => prevMessage + emojiObject.emoji)
   }
 
+  const handleSendMessage = async () =>{
+    //render new bubble
+    await sendMessage('49e6a54e-b80c-4960-bb79-5c3c6b0057af', receiverId, message)
+  }
+
   if (!friend) {
     return (
       <section
@@ -55,6 +62,7 @@ export default function MessageContainer({ friend, goBack }: any) {
           </div>
 
           <Button
+          onClick={handleSendMessage}
             variant={'default'}
             className='px-3 py-2 h-fit rounded-[27px] text-xs text-[#111115] font-semibold transition-all duration-300 hover:opacity-80'>
             New message
@@ -163,7 +171,7 @@ export default function MessageContainer({ friend, goBack }: any) {
             onChange={handleChange}
           />
 
-          <Button variant={'msgBox'} disabled={sendStatus}>
+          <Button onClick={handleSendMessage} variant={'msgBox'} disabled={sendStatus}>
             <SendIcon className='' />
           </Button>
         </div>

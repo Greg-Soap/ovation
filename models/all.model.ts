@@ -35,7 +35,7 @@ export interface ProfileMod {
   displayName: string
   email: string
   username: string
-  birthDate?: Date
+  birthDate?: string
   location?: string
   bio?: string
   profileImage?: string
