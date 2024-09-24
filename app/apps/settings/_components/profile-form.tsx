@@ -24,6 +24,7 @@ import type { ProfileData } from '@/models/all.model'
 import { useLocalStorage } from '@/lib/use-local-storage'
 import { useMutation } from '@tanstack/react-query'
 import { formatDate } from '@/lib/helper-func'
+import { uploadProfileImage } from '@/lib/firebaseStorageUtils'
 
 const formSchema = z.object({
   displayName: z.string().min(1, 'Display name is required'),
@@ -85,6 +86,10 @@ export default function ProfileForm({
       toast.error('Failed to update profile. Please try again.')
     },
   })
+
+  const getImageUrl = async () => {
+    // return await uploadProfileImage('file blob')
+  }
 
   const onSubmit = async (data: ProfileFormValues) => {
     updateProfile(data)
