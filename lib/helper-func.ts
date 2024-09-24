@@ -1,6 +1,8 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
+import { useLocalStorage } from './use-local-storage'
+import { UserData } from '@/models/all.model'
 
 function generateRandomString(length = 10) {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -65,42 +67,42 @@ export const decodeIdToken = (idToken: string): DecodedToken => {
 }
 
 export const chainIdToChainName: { [key: number]: string } = {
-  1: "eth",
-  137: "polygon",
-  56: "bsc",
-  43114: "avalanche",
-  250: "fantom",
-  11297108109: "palm",
-  25: "cronos",
-  42161: "arbitrum",
-  100: "gnosis",
-  901: "chiliz",
-  8453: "base",
-  10: "optimism",
-  59144: "linea",
-  1284: "moonbeam",
-  1285: "moonriver"
-};
+  1: 'eth',
+  137: 'polygon',
+  56: 'bsc',
+  43114: 'avalanche',
+  250: 'fantom',
+  11297108109: 'palm',
+  25: 'cronos',
+  42161: 'arbitrum',
+  100: 'gnosis',
+  901: 'chiliz',
+  8453: 'base',
+  10: 'optimism',
+  59144: 'linea',
+  1284: 'moonbeam',
+  1285: 'moonriver',
+}
 
 export const optionValueToBlockchainName: { [optionValue: string]: string } = {
-  eth: "Ethereum",
-  polygon: "Polygon",
-  bsc: "Binance Smart Chain",
-  avalanche: "Avalanche",
-  fantom: "Fantom",
-  palm: "Palm",
-  cronos: "Cronos",
-  arbitrum: "Arbitrum One",
-  gnosis: "Gnosis",
-  chiliz: "Chiliz",
-  base: "Base",
-  optimism: "Optimism",
-  linea: "Linea",
-  moonbeam: "Moonbeam",
-  moonriver: "Moonriver",
-  solana: "Solana",
-  archway: "Archway"
-};
+  eth: 'Ethereum',
+  polygon: 'Polygon',
+  bsc: 'Binance Smart Chain',
+  avalanche: 'Avalanche',
+  fantom: 'Fantom',
+  palm: 'Palm',
+  cronos: 'Cronos',
+  arbitrum: 'Arbitrum One',
+  gnosis: 'Gnosis',
+  chiliz: 'Chiliz',
+  base: 'Base',
+  optimism: 'Optimism',
+  linea: 'Linea',
+  moonbeam: 'Moonbeam',
+  moonriver: 'Moonriver',
+  solana: 'Solana',
+  archway: 'Archway',
+}
 
 export interface NotificationMessage {
   reference: string
@@ -163,19 +165,24 @@ export function getGreeting(): string {
   return 'Good Evening'
 }
 
-
 export function formatDate(date: Date): string {
-  const month = date.getMonth() + 1; // Months are zero-based
-  const day = date.getDate();
-  const year = date.getFullYear();
-  return `${month}/${day}/${year}`;
+  const month = date.getMonth() + 1 // Months are zero-based
+  const day = date.getDate()
+  const year = date.getFullYear()
+  return `${month}/${day}/${year}`
 }
 
 export function parseDate(dateString: string): Date | null {
-  const [month, day, year] = dateString.split('/').map(Number);
+  const [month, day, year] = dateString.split('/').map(Number)
   if (!month || !day || !year) {
-    console.warn('Invalid date format');
-    return null;
+    console.warn('Invalid date format')
+    return null
   }
-  return new Date(year, month - 1, day);
+  return new Date(year, month - 1, day)
+}
+
+export function getUserId(): string {
+  const userData = window.localStorage.getItem('userData')
+  const user = userData ? JSON.parse(userData) : null
+  return user?.id
 }

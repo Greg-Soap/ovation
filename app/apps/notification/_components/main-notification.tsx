@@ -6,11 +6,13 @@ import { useQuery } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
 import MiniLoader from '@/components/mini-loader'
 
-const MainNotification: React.FC = () => {
+function MainNotification() {
   const { data, isLoading } = useQuery({
     queryKey: ['notifications'],
     queryFn: () => ovationService.getNotifications(),
   })
+
+  const notifications = data?.data?.data ?? []
 
   return (
     <section className="col-span-3 lg:col-span-2 w-full h-[100vh] flex flex-col border border-[#1A1A1A] other-link overflow-auto">
@@ -19,10 +21,14 @@ const MainNotification: React.FC = () => {
       </h1>
       {isLoading ? (
         <MiniLoader />
-      ) : (
-        data?.data?.data?.map((item: NotificationItem, index: number) => (
+      ) : notifications.length > 0 ? (
+        notifications.map((item: NotificationItem, index: number) => (
           <NotificationFactory key={index} {...item} />
         ))
+      ) : (
+        <div className="flex items-center justify-center h-full">
+          <p className="text-gray-400">No notifications to display</p>
+        </div>
       )}
     </section>
   )
