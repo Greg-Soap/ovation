@@ -181,8 +181,8 @@ export function parseDate(dateString: string): Date | null {
   return new Date(year, month - 1, day)
 }
 
-export function getUserId(): string {
-  const userData = window.localStorage.getItem('userData')
-  const user = userData ? JSON.parse(userData) : null
-  return user?.id
-}
+// export function getUserId(): string {
+//   const userData = window.localStorage.getItem('userData')
+//   const user = userData ? JSON.parse(userData) : null
+//   return user?.id
+// }
