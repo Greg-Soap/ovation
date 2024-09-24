@@ -46,7 +46,7 @@ export default function MessageContainer({ friend, goBack }: any) {
 
   const handleSendMessage = async () =>{
     //render new bubble
-    await sendMessage('49e6a54e-b80c-4960-bb79-5c3c6b0057af', '07d8376c-7dfa-4b98-b802-043c300ed78a', 'Hey there!')
+    await sendMessage('49e6a54e-b80c-4960-bb79-5c3c6b0057af', receiverId, message)
   }
 
   if (!friend) {

@@ -5,8 +5,6 @@ import SearchInput from '../../_components/_timeline/search-input'
 import MessageContainer from '../../messages/message-container'
 import { Button } from '@/components/ui/button'
 import { ChatData, getActiveChatsForUser, Participant } from '@/lib/firebaseChatService'
-import { auth } from '@/lib/firebase'
-import { User } from 'firebase/auth'
 
 export default function FriendList() {
   interface Friend {
