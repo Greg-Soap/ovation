@@ -142,7 +142,7 @@ function NFTCard({ imageUrl, name, metaData }: NFT) {
               {showReadMore && (
                 <Dialog>
                   <DialogTrigger asChild>
-                    <Button className='text-[#CFF073] ml-1 hover:underline focus:outline-none'>
+                    <Button className='text-[#CFF073] p-0 bg-transparent text-xs ml-1 hover:underline focus:outline-none'>
                       Read more
                     </Button>
                   </DialogTrigger>

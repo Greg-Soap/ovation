@@ -19,6 +19,8 @@ export default function SecondaryProfile() {
     queryFn: () => ovationService.getUserProfile(username),
   })
 
+  console.log({profileData})
+
   const { data: experienceData } = useQuery({
     queryKey: ['experience', username],
     queryFn: () => ovationService.getExperience(profileData?.userId as string),

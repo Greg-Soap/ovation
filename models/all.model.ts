@@ -35,7 +35,7 @@ export interface ProfileMod {
   displayName: string
   email: string
   username: string
-  birthDate?: Date
+  birthDate?: string
   location?: string
   bio?: string
   profileImage?: string
@@ -174,7 +174,7 @@ export interface DiscoverUserData {
   displayName: string
   profileImage: string | null
   views: number
-  badgesEarned: number
+  badgeEarned: number
   location: string | null
   bio: string | null
   coverImage: string | null
