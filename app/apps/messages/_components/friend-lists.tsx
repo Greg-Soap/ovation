@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import SearchInput from '../../_components/_timeline/search-input'
 import MessageContainer from '../../messages/message-container'
 import { Button } from '@/components/ui/button'
+import {ChatData, getActiveChatsForUser  } from '@/lib/firebaseChatService'
 
 export default function FriendList() {
   interface Friend {
@@ -18,9 +19,9 @@ export default function FriendList() {
     isOpened: boolean
   }
 
-  const [friends, setFriends] = useState<Friend[]>([
+  const [friends, setFriends] = useState<ChatData[]>([
     {
-      friendDisplayPicture: '/assets/images/timeline/Oval.png',
+      im: '/assets/images/timeline/Oval.png',
       displayName: 'Pancakeguy',
       userName: '@Pancakeguy',
       lastMessage: 'How are you doing?',

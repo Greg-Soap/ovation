@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button'
 import { Popover } from '@/components/ui/popover'
 import { PopoverContent, PopoverTrigger } from '@radix-ui/react-popover'
 import { ArrowLeft } from 'iconsax-react'
-import {getActiveChatsForUser, sendMessage  } from '@/lib/firebaseChatService'
+import { sendMessage  } from '@/lib/firebaseChatService'
 
 interface FriendProps {
   friendDisplayPicture: string
@@ -45,6 +45,7 @@ export default function MessageContainer({ friend, goBack }: any) {
   }
 
   const handleSendMessage = async () =>{
+    //render new bubble
     await sendMessage(receiverId, message)
   }
 

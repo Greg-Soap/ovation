@@ -188,7 +188,7 @@ interface Participant {
   image: string | null;
 }
 
-interface ChatData {
+export interface ChatData {
   chatId: string;
   participants: User[];
   lastMessage: string;
