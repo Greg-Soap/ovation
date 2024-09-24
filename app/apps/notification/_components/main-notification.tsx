@@ -1,10 +1,10 @@
 'use client'
 import type React from 'react'
-import { notificationData } from './sample-data'
 import { NotificationFactory } from './notification-renderer'
 import type { NotificationItem } from './types'
 import { useQuery } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
+import MiniLoader from '@/components/mini-loader'
 
 const MainNotification: React.FC = () => {
   const { data, isLoading } = useQuery({
@@ -17,9 +17,13 @@ const MainNotification: React.FC = () => {
       <h1 className="w-full py-7 px-8 text-[22px] text-[#F8F8FF] font-medium border-b border-[#1A1A1A]">
         Notifications
       </h1>
-      {data?.data?.data?.map((item: NotificationItem, index: number) => (
-        <NotificationFactory key={index} {...item} />
-      ))}
+      {isLoading ? (
+        <MiniLoader />
+      ) : (
+        data?.data?.data?.map((item: NotificationItem, index: number) => (
+          <NotificationFactory key={index} {...item} />
+        ))
+      )}
     </section>
   )
 }
