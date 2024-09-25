@@ -28,14 +28,10 @@ export default function MainProfileSection({
     queryFn: () => ovationService.getNfts(profileData?.userId as string),
   })
 
-  console.log({ nfts })
-
   const { data: experienceData } = useQuery({
     queryKey: ['experience'],
     queryFn: () => ovationService.getExperience(profileData?.userId as string),
   })
-
-  console.log({ experienceData })
 
   const profileTabsData: TabData[] = [
     {

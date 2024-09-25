@@ -12,6 +12,7 @@ import type { DiscoverUserData } from '@/models/all.model'
 import MiniLoader from '@/components/mini-loader'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
+import { formatUsername } from '@/lib/helper-func'
 
 export default function Page() {
   const mostViewedQuery = useQuery({
@@ -161,7 +162,7 @@ function DiscoverFeature(user: FeaturedUser) {
                   <VerifyIcon />
                 </p>
                 <p className="text-xs leading-5 font-medium text-[#B3B3B3]">
-                  @{user.userName}
+                  {formatUsername(user.userName)}
                 </p>
               </div>
             </div>
@@ -205,7 +206,7 @@ function DiscoverHolders() {
 
   const nftHoldersQuery = useQuery({
     queryKey: ['nftHolders'],
-    queryFn: () => ovationService.getFounderHolders(),
+    queryFn: () => ovationService.getTopNft(),
   })
 
   const blueChipHoldersQuery = useQuery({
@@ -223,7 +224,16 @@ function DiscoverHolders() {
     queryFn: () => ovationService.getHighestNetWorth(),
   })
 
-  const renderHoldersList = (data: DiscoverUserData[]) => {
+  const renderHoldersList = (
+    data: DiscoverUserData[],
+    type:
+      | 'contributors'
+      | 'creators'
+      | 'nftHolders'
+      | 'blueChipHolders'
+      | 'founderHolders'
+      | 'highestNetWorth',
+  ) => {
     if (data.length === 0) {
       return (
         <div className="flex flex-col items-center justify-center h-[400px] text-center">
@@ -235,6 +245,19 @@ function DiscoverHolders() {
           </p>
         </div>
       )
+    }
+
+    const typeDisplayMap = {
+      nftHolders: (user: DiscoverUserData) => `${user.totalNft} NFTs`,
+      founderHolders: (user: DiscoverUserData) =>
+        `${user.founderNft} Founder NFTs`,
+      contributors: (user: DiscoverUserData) =>
+        `${user.experiences} Experience`,
+      // blueChipHolders: (user: DiscoverUserData) =>
+      //   `${user.blueChipNft} Blue Chip NFTs`,
+      // highestNetWorth: (user: DiscoverUserData) =>
+      //   `$${user.netWorth.toLocaleString()} Net Worth`,
+      default: (user: DiscoverUserData) => `${user.badgeEarned} Badges`,
     }
 
     const sortedData = [...data].sort((a, b) => b.badgeEarned - a.badgeEarned)
@@ -268,17 +291,26 @@ function DiscoverHolders() {
                     />
                   </div>
                   <div className="flex flex-col">
-                    <p className="2xl:text-xl text-sm font-semibold">
+                    <Link
+                      href={`/apps/profile/${user?.username}`}
+                      className="2xl:text-xl text-sm font-semibold"
+                    >
                       {user?.displayName}
-                    </p>
-                    <p className="flex gap-1 text-xs items-center text-[#E6E6E6]">
-                      <span>@{user?.username} </span>
+                    </Link>
+                    <Link
+                      href={`/apps/profile/${user?.username}`}
+                      className="flex gap-1 text-xs items-center text-[#E6E6E6]"
+                    >
+                      <span>{formatUsername(user?.username)} </span>
                       <VerifyIcon />
-                    </p>
+                    </Link>
                   </div>
                 </div>
                 <div className="bg-white text-[#0B0A10] px-[10px] text-[9px] py-[6px] rounded-3xl">
-                  {user?.badgeEarned} Badges
+                  {(
+                    typeDisplayMap[type as keyof typeof typeDisplayMap] ||
+                    typeDisplayMap.default
+                  )(user)}
                 </div>
               </div>
             </div>
@@ -302,17 +334,26 @@ function DiscoverHolders() {
                     />
                   </div>
                   <div className="flex flex-col">
-                    <p className="2xl:text-xl text-sm font-semibold">
+                    <Link
+                      href={`/apps/profile/${user?.username}`}
+                      className="2xl:text-xl text-sm font-semibold"
+                    >
                       {user?.displayName}
-                    </p>
-                    <p className="flex gap-2 text-xs items-center">
-                      <span>@{user?.username} </span>
+                    </Link>
+                    <Link
+                      href={`/apps/profile/${user?.username}`}
+                      className="flex gap-2 text-xs items-center"
+                    >
+                      <span> {formatUsername(user?.username)} </span>
                       <VerifyIcon />
-                    </p>
+                    </Link>
                   </div>
                 </div>
                 <div className="bg-[#3C3B40] text-[#B3B3B3] px-[10px] py-[6px] text-[9px] rounded-3xl">
-                  {user?.badgeEarned} Badges
+                  {(
+                    typeDisplayMap[type as keyof typeof typeDisplayMap] ||
+                    typeDisplayMap.default
+                  )(user)}
                 </div>
               </div>
             </div>
@@ -342,42 +383,51 @@ function DiscoverHolders() {
             {contributorsQuery.isLoading ? (
               <MiniLoader />
             ) : (
-              renderHoldersList(contributorsQuery.data || [])
+              renderHoldersList(contributorsQuery.data || [], 'contributors')
             )}
           </TabsContent>
           <TabsContent value="creators">
             {creatorsQuery.isLoading ? (
               <MiniLoader />
             ) : (
-              renderHoldersList(creatorsQuery.data || [])
+              renderHoldersList(creatorsQuery.data || [], 'creators')
             )}
           </TabsContent>
           <TabsContent value="nftHolders">
             {nftHoldersQuery.isLoading ? (
               <MiniLoader />
             ) : (
-              renderHoldersList(nftHoldersQuery.data || [])
+              renderHoldersList(nftHoldersQuery.data || [], 'nftHolders')
             )}
           </TabsContent>
           <TabsContent value="blueChipHolders">
             {blueChipHoldersQuery.isLoading ? (
               <MiniLoader />
             ) : (
-              renderHoldersList(blueChipHoldersQuery.data || [])
+              renderHoldersList(
+                blueChipHoldersQuery.data || [],
+                'blueChipHolders',
+              )
             )}
           </TabsContent>
           <TabsContent value="founderHolders">
             {founderHoldersQuery.isLoading ? (
               <MiniLoader />
             ) : (
-              renderHoldersList(founderHoldersQuery.data || [])
+              renderHoldersList(
+                founderHoldersQuery.data || [],
+                'founderHolders',
+              )
             )}
           </TabsContent>
           <TabsContent value="highestNetWorth">
             {highestNetWorthQuery.isLoading ? (
               <MiniLoader />
             ) : (
-              renderHoldersList(highestNetWorthQuery.data || [])
+              renderHoldersList(
+                highestNetWorthQuery.data || [],
+                'highestNetWorth',
+              )
             )}
           </TabsContent>
         </Tabs>
@@ -404,6 +454,20 @@ const CTabTrigger = ({
 }
 
 function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
+  if (mostViewed.length === 0) {
+    return (
+      <div className="h-[800px] mt-10 p-6 mb-5 border border-[#FFFFFF14] rounded-[10px] flex flex-col items-center justify-center sticky top-1 bg-[#18181C]">
+        <p className="text-xl font-semibold text-white mb-2">
+          No Most Viewed Users
+        </p>
+        <p className="text-sm text-[#B3B3B3] text-center">
+          There are currently no most viewed users to display. Check back later
+          for updates.
+        </p>
+      </div>
+    )
+  }
+
   return (
     <div className="h-[800px] overflow-scroll mt-10 p-6 mb-5 border border-[#FFFFFF14] rounded-[10px] flex flex-col gap-10 sticky top-1">
       <div className="flex items-center w-full justify-between">
@@ -455,13 +519,19 @@ function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
           <div className="flex items-center w-full justify-between pb-6 border-b border-[#FFFFFF0D]">
             <div className="flex items-center gap-2">
               <div className="flex flex-col">
-                <p className="flex gap-1 items-center text-base font-semibold leading-5 text-white">
+                <Link
+                  href={`/apps/profile/${mostViewed[0]?.username}`}
+                  className="flex gap-1 items-center text-base font-semibold leading-5 text-white"
+                >
                   {mostViewed[0]?.displayName}
                   <VerifyIcon />
-                </p>
-                <p className="text-xs leading-5 font-medium text-[#B3B3B3]">
-                  @{mostViewed[0]?.username}
-                </p>
+                </Link>
+                <Link
+                  href={`/apps/profile/${mostViewed[0]?.username}`}
+                  className="text-xs leading-5 font-medium text-[#B3B3B3]"
+                >
+                  {formatUsername(mostViewed[0]?.username)}
+                </Link>
               </div>
             </div>
           </div>
@@ -489,7 +559,7 @@ function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
                 <div className="flex flex-col">
                   <p className="text-sm font-semibold">{user?.displayName}</p>
                   <p className="flex gap-1 text-xs text-[#858487] items-center">
-                    <span>@{user?.username} </span>
+                    <span>{formatUsername(user?.username)} </span>
                     <VerifyIcon />
                   </p>
                 </div>

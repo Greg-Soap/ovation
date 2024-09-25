@@ -56,8 +56,8 @@ class OvationService {
   }
 
   static async getUserProfile(username: string) {
-    const response = await api.get(`/Profile/${username}`)
-    return response.data
+    const response = await api.get<{ data: ProfileData; message: string }>(`/Profile/${username}`)
+    return response.data?.data
   }
 
   static updatePersonalInfo(data: ProfileMod) {
@@ -74,6 +74,10 @@ class OvationService {
 
   static unfollowUser(userId: string) {
     return api.delete(`/Profile/follow/${userId}`)
+  }
+
+  static viewProfile(userId: string) {
+    return api.post(`/Profile/view/${userId}`)
   }
 
   // Experience
@@ -145,7 +149,9 @@ class OvationService {
 
   // Discover endpoints
   static async getTopNft() {
-    const response = await api.get<{ data: any; message: string }>('/Discover/top-nft')
+    const response = await api.get<{ data: DiscoverUserData[]; message: string }>(
+      '/Discover/top-nft',
+    )
     return response.data?.data
   }
 

@@ -49,7 +49,7 @@ export default function PasswordForm() {
       ovationService.changeProfilePassword(data.oldPassword, data.newPassword),
     onSuccess: (data) => {
       toast.success('Password changed successfully')
-      console.log(data)
+
       form.reset()
       setIsDisabled(true)
     },

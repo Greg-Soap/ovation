@@ -16,8 +16,6 @@ export default function Badges({ userId }: { userId: string }) {
     queryFn: () => ovationService.getBadges(userId),
   })
 
-  console.log({ badgesData })
-
   const hasBadges = badgesData && badgesData?.data?.data?.length > 0
 
   if (isLoading) {
@@ -25,20 +23,25 @@ export default function Badges({ userId }: { userId: string }) {
   }
 
   return (
-    <div className='flex flex-col bg-[#18181C] rounded-[20px] gap-4 px-5 py-[18px]'>
-      <p className='text-xs font-medium text-[#808080]'>Badges</p>
+    <div className="flex flex-col bg-[#18181C] rounded-[20px] gap-4 px-5 py-[18px]">
+      <p className="text-xs font-medium text-[#808080]">Badges</p>
 
       {hasBadges ? (
-        <div className='flex justify-between'>
+        <div className="flex justify-between">
           {badgesData?.data?.data?.map((badge, index) => (
-            <div className='flex flex-col gap-2 justify-center items-center' key={index}>
+            <div
+              className="flex flex-col gap-2 justify-center items-center"
+              key={index}
+            >
               {/* <CircleProgress value={badge.progress} imgSrc={badge.imgSrc} /> */}
-              <p className='text-[11px] text-[#B3B3B3]'>{startCase(badge.badgeName)}</p>
+              <p className="text-[11px] text-[#B3B3B3]">
+                {startCase(badge.badgeName)}
+              </p>
             </div>
           ))}
         </div>
       ) : (
-        <p className='text-sm text-[#B3B3B3]'>No badges earned yet.</p>
+        <p className="text-sm text-[#B3B3B3]">No badges earned yet.</p>
       )}
     </div>
   )
