@@ -115,6 +115,7 @@ export interface ProfileData {
   } | null
   username: string
   userId: string
+  isFollowing: boolean
 }
 export interface UserData {
   userId: string
@@ -168,6 +169,7 @@ export interface Badge {
   badgeName: string
   description: string
   earnedAt: string
+  imageUrl: string
 }
 
 export interface DiscoverUserData {
@@ -178,7 +180,10 @@ export interface DiscoverUserData {
   profileImage: string | null
   views: number
   badgeEarned: number
-  location: string | null
+  location?: string | null
   bio: string | null
   coverImage: string | null
+  totalNft?: number
+  founderNft?: number
+  experiences?: number
 }

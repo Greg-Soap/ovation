@@ -31,7 +31,7 @@ export default function UserProfile({
             alt="User Display Picture"
             width={131}
             height={131}
-            className={`rounded-full -mt-[75px] ${!profileData?.profile?.profileImage ? 'bg-gray-900' : ''}`}
+            className={`rounded-full -mt-[75px] ${!profileData?.profile?.profileImage ? 'bg-[#18181C]' : ''}`}
           />
         </ErrorBoundary>
 

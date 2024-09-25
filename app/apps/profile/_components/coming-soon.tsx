@@ -34,7 +34,7 @@ export default function ComingSoon() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitted(true)
-    console.log(values)
+
     toast('Thank you for subscribing to our newsletter!')
   }
 

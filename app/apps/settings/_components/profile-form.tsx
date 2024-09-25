@@ -93,7 +93,6 @@ export default function ProfileForm({
 
   const onSubmit = async (data: ProfileFormValues) => {
     updateProfile(data)
-    console.log(data)
   }
 
   return (

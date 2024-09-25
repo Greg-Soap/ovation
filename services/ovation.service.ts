@@ -29,8 +29,18 @@ class OvationService {
     return api.post<{ message: string; token: string; userData: UserData }>('/Auth/register', data)
   }
 
+  static loginGoogle(code: string) {
+    return api.get<{ message: string; token: string; userData: UserData }>(
+      `/Auth/login/google/${code}`,
+    )
+  }
+
   static login(data: Login) {
     return api.post<{ message: string; token: string; userData: UserData }>('/Auth/login', data)
+  }
+
+  static verifyOtp(userId: string, otp: string) {
+    return api.get(`/Auth/verify/otp/${userId}/${otp}`)
   }
 
   static logout() {
@@ -38,7 +48,7 @@ class OvationService {
   }
 
   static forgotPassword(email: string) {
-    return api.get<{ userId: string; otp: string }>(`/Auth/forget-password/${email}`)
+    return api.get<{ data: string; message: string }>(`/Auth/forget-password/${email}`)
   }
 
   static changePassword(userId: string, password: string) {
@@ -56,8 +66,8 @@ class OvationService {
   }
 
   static async getUserProfile(username: string) {
-    const response = await api.get(`/Profile/${username}`)
-    return response.data
+    const response = await api.get<{ data: ProfileData; message: string }>(`/Profile/${username}`)
+    return response.data?.data
   }
 
   static updatePersonalInfo(data: ProfileMod) {
@@ -74,6 +84,14 @@ class OvationService {
 
   static unfollowUser(userId: string) {
     return api.delete(`/Profile/follow/${userId}`)
+  }
+
+  static viewProfile(userId: string) {
+    return api.post(`/Profile/view/${userId}`)
+  }
+
+  static hideNft(data: { nftId: string; public: boolean }) {
+    return api.post('/Profile/nft/privacy', data)
   }
 
   // Experience
@@ -145,7 +163,9 @@ class OvationService {
 
   // Discover endpoints
   static async getTopNft() {
-    const response = await api.get<{ data: any; message: string }>('/Discover/top-nft')
+    const response = await api.get<{ data: DiscoverUserData[]; message: string }>(
+      '/Discover/top-nft',
+    )
     return response.data?.data
   }
 

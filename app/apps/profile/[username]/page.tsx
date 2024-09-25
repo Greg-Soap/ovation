@@ -3,11 +3,11 @@ import { Button } from '@/components/ui/button'
 import AsideMsgIcon from '@/components/icons/asideMsgIcon'
 import UserProfile from '../_components/user-profile'
 import ovationService from '@/services/ovation.service'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useParams } from 'next/navigation'
 import MainProfileSection from '../_components/main-profile-section'
 import type { ProfileData } from '@/models/all.model'
-import { Suspense } from 'react'
+import { Suspense, useEffect } from 'react'
 import MiniLoader from '@/components/mini-loader'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
@@ -15,8 +15,13 @@ import { ErrorFallback } from '@/components/error-boundary'
 export default function SecondaryProfile() {
   const params = useParams()
   const username = params.username as string
+
   const secondaryProfile = true
-  const { data: profileData, isLoading } = useQuery({
+  const {
+    data: profileData,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ['profile', username],
     queryFn: () => ovationService.getUserProfile(username),
   })
@@ -27,6 +32,33 @@ export default function SecondaryProfile() {
     enabled: !!profileData?.userId,
   })
 
+  const { mutate: viewProfile } = useMutation({
+    mutationFn: (userId: string) => ovationService.viewProfile(userId),
+  })
+
+  useEffect(() => {
+    if (profileData?.userId) {
+      viewProfile(profileData.userId)
+    }
+    console.log('viewed')
+  }, [profileData?.userId, viewProfile])
+
+  const { mutate: followUser, isPending: isFollowingPending } = useMutation({
+    mutationFn: (userId: string) => ovationService.followUser(userId),
+    onSuccess: () => {
+      refetch()
+    },
+  })
+
+  const { mutate: unfollowUser, isPending: isUnfollowingPending } = useMutation(
+    {
+      mutationFn: (userId: string) => ovationService.unfollowUser(userId),
+      onSuccess: () => {
+        refetch()
+      },
+    },
+  )
+
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <div className="relative w-full h-[262px] bg-profile-banner bg-contain bg-center">
@@ -35,14 +67,49 @@ export default function SecondaryProfile() {
             <Button
               variant="default"
               className="bg-[#333726] p-[9px] border border-[#507100]"
+              onClick={() => {
+                console.log(profileData?.userId)
+              }}
             >
               <AsideMsgIcon className="w-5 h-5 stroke-black fill-[#CFF073]" />
             </Button>
             <Button
-              variant="default"
-              className="py-[9px] px-[13px] text-[#0B0A10] text-xs font-semibold border border-[#E6E6E64D]"
+              variant={'default'}
+              disabled={isFollowingPending || isUnfollowingPending}
+              isLoading={isFollowingPending || isUnfollowingPending}
+              loadingText={
+                isFollowingPending ? 'Following...' : 'Unfollowing...'
+              }
+              className={`
+                py-[9px] px-[13px] text-xs font-semibold border
+                ${
+                  profileData?.isFollowing
+                    ? 'bg-[#333726] text-white border-[#E6E6E64D] hover:bg-red-900 hover:text-red-200 hover:border-red-700'
+                    : ' text-[#0B0A10] border-[#E6E6E64D]'
+                }
+                transition-colors duration-200
+                ${profileData?.isFollowing ? 'group' : ''}
+              `}
+              onClick={() => {
+                if (profileData?.isFollowing) {
+                  unfollowUser(profileData?.userId as string)
+                } else {
+                  followUser(profileData?.userId as string)
+                }
+              }}
             >
-              Follow
+              <span
+                className={profileData?.isFollowing ? 'group relative' : ''}
+              >
+                {profileData?.isFollowing ? (
+                  <>
+                    <span className="group-hover:hidden">Following</span>
+                    <span className="hidden group-hover:inline">Unfollow</span>
+                  </>
+                ) : (
+                  'Follow'
+                )}
+              </span>
             </Button>
           </div>
         </ErrorBoundary>

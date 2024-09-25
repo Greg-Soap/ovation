@@ -18,7 +18,7 @@ import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer'
 import { useQuery } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
 import Image from 'next/image'
-import { ProfileData, UserData } from '@/models/all.model'
+import type { ProfileData, UserData } from '@/models/all.model'
 import MiniLoader from '@/components/mini-loader'
 import { useLocalStorage } from '@/lib/use-local-storage'
 
@@ -82,7 +82,7 @@ export default function Hamburger() {
                 <Image
                   src={
                     profileData?.profile?.profileImage ||
-                    '/assets/images/profile/image1.png'
+                    '/assets/images/default-user.svg'
                   }
                   alt="User Display Picture"
                   width={131}
