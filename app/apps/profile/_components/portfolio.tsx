@@ -22,6 +22,7 @@ import { toast } from 'sonner'
 interface NFT {
   type: 'eth' | 'Complete' | 'Domain' | 'Collectible' | 'Metaverse' | 'Art'
   isPrivate?: boolean
+  id: string
   imageUrl: string
   description?: string
   metaData?: {
@@ -128,7 +129,7 @@ function NFTCard({
   name,
   description,
   metaData,
-  tokenId,
+  id,
   isPrivate,
   secondaryProfile,
 }: NFT & { secondaryProfile?: boolean }) {
@@ -269,14 +270,14 @@ function NFTCard({
               <PopoverContent className="rounded-[7px] bg-[#232227] flex flex-col w-fit p-0 border-none">
                 <Button
                   variant="ghost"
-                  onClick={() => setFavouriteNft(tokenId)}
+                  onClick={() => setFavouriteNft(id)}
                   className="text-white text-xs justify-start font-medium px-3 py-[10px] w-full h-fit border-b border-[#333333] rounded-none"
                 >
-                  Highlight NFT
+                  Favorite NFT
                 </Button>
                 <Button
                   variant="ghost"
-                  onClick={() => hideNft(tokenId)}
+                  onClick={() => hideNft(id)}
                   className="text-white text-xs justify-start font-medium px-3 py-[10px] w-full h-fit"
                 >
                   Hide NFT
