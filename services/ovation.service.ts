@@ -80,6 +80,10 @@ class OvationService {
     return api.post(`/Profile/view/${userId}`)
   }
 
+  static hideNft(data: { nftId: string; public: boolean }) {
+    return api.post('/Profile/nft/privacy', data)
+  }
+
   // Experience
   static addExperience(data: UserExperience) {
     return api.post('/Profile/experience', data)

@@ -214,13 +214,13 @@ function NFTCard({ imageUrl, name, description, metaData }: NFT) {
                 variant="ghost"
                 className="text-white text-xs justify-start font-medium px-3 py-[10px] w-full h-fit border-b border-[#333333] rounded-none"
               >
-                Feature NFT
+                Highlight NFT
               </Button>
               <Button
                 variant="ghost"
                 className="text-white text-xs justify-start font-medium px-3 py-[10px] w-full h-fit"
               >
-                Make NFT public
+                Hide NFT
               </Button>
             </PopoverContent>
           </Popover>
