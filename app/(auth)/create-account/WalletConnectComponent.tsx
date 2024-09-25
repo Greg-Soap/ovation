@@ -105,6 +105,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
       try {
         const response = await (window as any).solana.connect()
         setAccount(response.publicKey.toString())
+        setChain('solana')
         if (onWalletConnected) onWalletConnected(response.publicKey.toString())
         console.log('Connected with Phantom:', response.publicKey.toString())
       } catch (err) {
@@ -322,7 +323,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
     }
   }
 
-  const chainId = 'cosmoshub-4'
+  const chainId = 'archway-1'
   const connectKeplr = async (): Promise<void> => {
     if (!window.keplr) {
       toast.error('Please install Keplr extension')
@@ -335,8 +336,8 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
       const offlineSigner: OfflineSigner = window.getOfflineSigner(chainId)
 
       const accounts = await offlineSigner.getAccounts()
-      const accountAddress = accounts[0].address
-      console.log('Connected account address:', accountAddress)
+      setAccount(accounts[0].address)
+      setChain('archway')
 
       // const client = await StargateClient.connect("https://rpc.cosmos.network");
       // const balance = await client.getAllBalances(accountAddress);
@@ -353,13 +354,15 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
     }
 
     try {
-      const chainId = 'cosmoshub-4' // chain ID for Cosmos Hub
+      const chainId = 'archway-1' // chain ID for Cosmos Hub
       await window.leap.enable(chainId)
 
       const offlineSigner = window.leap.getOfflineSigner(chainId)
       const accounts = await offlineSigner.getAccounts()
 
       setAccount(accounts[0].address)
+      setChain('archway')
+      
       console.log('Connected account address: ', accounts[0].address)
     } catch (error) {
       console.error('Error connecting to Leap Wallet:', error)
