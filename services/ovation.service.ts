@@ -33,12 +33,16 @@ class OvationService {
     return api.post<{ message: string; token: string; userData: UserData }>('/Auth/login', data)
   }
 
+  static verifyOtp(userId: string, otp: string) {
+    return api.get(`/Auth/verify/otp/${userId}/${otp}`)
+  }
+
   static logout() {
     removeToken()
   }
 
   static forgotPassword(email: string) {
-    return api.get<{ userId: string; otp: string }>(`/Auth/forget-password/${email}`)
+    return api.get<{ data: string; message: string }>(`/Auth/forget-password/${email}`)
   }
 
   static changePassword(userId: string, password: string) {

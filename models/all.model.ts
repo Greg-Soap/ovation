@@ -169,6 +169,7 @@ export interface Badge {
   badgeName: string
   description: string
   earnedAt: string
+  imageUrl: string
 }
 
 export interface DiscoverUserData {
