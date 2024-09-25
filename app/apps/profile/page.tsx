@@ -1,13 +1,13 @@
 'use client'
 import { useQuery } from '@tanstack/react-query'
-
 import { Button } from '@/components/ui/button'
-
 import UserProfile from './_components/user-profile'
 import MainProfileSection from './_components/main-profile-section'
 import ovationService from '@/services/ovation.service'
 import type { ProfileData, UserExperience } from '@/models/all.model'
 import { useRouter } from 'next/navigation'
+import { ErrorBoundary } from 'react-error-boundary'
+import { ErrorFallback } from '@/components/error-boundary'
 
 export default function Page() {
   const router = useRouter()
@@ -18,33 +18,41 @@ export default function Page() {
 
   const { data: experienceData } = useQuery({
     queryKey: ['experience'],
-    queryFn: () => ovationService.getExperience(profileData?.data?.userId as string),
+    queryFn: () =>
+      ovationService.getExperience(profileData?.data?.userId as string),
   })
 
   return (
-    <>
-      <div className='relative w-full h-[262px] bg-profile-banner bg-contain bg-center'>
-        <div className='hidden lg:flex items-end justify-end gap-3 h-[inherit] w-full pr-10 pb-10'>
-          <Button
-            variant='default'
-            onClick={() => {
-              router.push('/apps/settings')
-            }}
-            className='bg-[#333333] py-[11px] px-4 border border-[#E6E6E64D] text-white text-xs'>
-            Edit Profile
-          </Button>
-        </div>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <div className="relative w-full h-[262px] bg-profile-banner bg-contain bg-center">
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <div className="hidden lg:flex items-end justify-end gap-3 h-[inherit] w-full pr-10 pb-10">
+            <Button
+              variant="default"
+              onClick={() => {
+                router.push('/apps/settings')
+              }}
+              className="bg-[#333333] py-[11px] px-4 border border-[#E6E6E64D] text-white text-xs"
+            >
+              Edit Profile
+            </Button>
+          </div>
+        </ErrorBoundary>
       </div>
 
-      <div className='flex flex-col lg:flex-row relative h-auto'>
-        <UserProfile
-          profileData={profileData?.data as ProfileData}
-          experienceData={experienceData?.data?.data as UserExperience[]}
-          isLoading={isLoading}
-        />
+      <div className="flex flex-col lg:flex-row relative h-auto">
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <UserProfile
+            profileData={profileData?.data as ProfileData}
+            experienceData={experienceData?.data?.data as UserExperience[]}
+            isLoading={isLoading}
+          />
+        </ErrorBoundary>
 
-        <MainProfileSection profileData={profileData?.data as ProfileData} />
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <MainProfileSection profileData={profileData?.data as ProfileData} />
+        </ErrorBoundary>
       </div>
-    </>
+    </ErrorBoundary>
   )
 }

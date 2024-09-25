@@ -11,7 +11,9 @@ import { Button } from '@/components/ui/button'
 import { Popover } from '@/components/ui/popover'
 import { PopoverContent, PopoverTrigger } from '@radix-ui/react-popover'
 import { ArrowLeft } from 'iconsax-react'
-import { sendMessage  } from '@/lib/firebaseChatService'
+import { sendMessage } from '@/lib/firebaseChatService'
+import { ErrorBoundary } from 'react-error-boundary'
+import { ErrorFallback } from '@/components/error-boundary'
 
 interface FriendProps {
   friendDisplayPicture: string
@@ -44,138 +46,174 @@ export default function MessageContainer({ friend, goBack }: any) {
     setMessage((prevMessage) => prevMessage + emojiObject.emoji)
   }
 
-  const handleSendMessage = async () =>{
+  const handleSendMessage = async () => {
     //render new bubble
-    await sendMessage('49e6a54e-b80c-4960-bb79-5c3c6b0057af', receiverId, message)
+    await sendMessage(
+      '49e6a54e-b80c-4960-bb79-5c3c6b0057af',
+      receiverId,
+      message,
+    )
   }
 
   if (!friend) {
     return (
-      <section
-        className={`${friend ? 'flex' : 'hidden lg:flex'} w-full h-[100vh] lg:h-full lg:col-span-2 flex-col items-center justify-center bg-[#111115] other-link overflow-auto`}>
-        <div className='flex flex-col items-center gap-[13px]'>
-          <div className='flex flex-col items-center gap-[6px]'>
-            <p className='text-[#F8F8FF] text-xl font-semibold'>Select Message</p>
-            <p className='text-[#E6E6E6] text-[11px]'>
-              Choose from previous conversation or start a new one below
-            </p>
-          </div>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <section
+          className={`${friend ? 'flex' : 'hidden lg:flex'} w-full h-[100vh] lg:h-full lg:col-span-2 flex-col items-center justify-center bg-[#111115] other-link overflow-auto`}
+        >
+          <div className="flex flex-col items-center gap-[13px]">
+            <div className="flex flex-col items-center gap-[6px]">
+              <p className="text-[#F8F8FF] text-xl font-semibold">
+                Select Message
+              </p>
+              <p className="text-[#E6E6E6] text-[11px]">
+                Choose from previous conversation or start a new one below
+              </p>
+            </div>
 
-          <Button
-          onClick={handleSendMessage}
-            variant={'default'}
-            className='px-3 py-2 h-fit rounded-[27px] text-xs text-[#111115] font-semibold transition-all duration-300 hover:opacity-80'>
-            New message
-          </Button>
-        </div>
-      </section>
+            <Button
+              onClick={handleSendMessage}
+              variant={'default'}
+              className="px-3 py-2 h-fit rounded-[27px] text-xs text-[#111115] font-semibold transition-all duration-300 hover:opacity-80"
+            >
+              New message
+            </Button>
+          </div>
+        </section>
+      </ErrorBoundary>
     )
   }
 
   return (
-    <section
-      className={`${friend ? 'flex' : 'hidden lg:flex'} w-full h-[100vh] lg:h-full lg:col-span-2  flex-col items-center justify-center bg-[#111115] other-link overflow-scroll`}>
-      <div className='flex lg:hidden bg-[rgba(17,17,21,0.8)] items-center gap-4 w-full p-5 absolute top-0'>
-        <ArrowLeft color='white' variant='Outline' size={24} onClick={goBack} />
-        <p className='text-sm font-medium text-[#F8F8FF]'>{friend.displayName}</p>
-      </div>
-
-      <div className='w-full border-b border-[#1A1A1A] py-9 flex flex-col items-center gap-4 h-fit mt-0 lg:mt-[250px]'>
-        <Image
-          src={friend.friendDisplayPicture}
-          alt='User Display Picture'
-          width={81}
-          height={81}
-        />
-
-        <div className='flex flex-col gap-1 w-fit items-center'>
-          <p className='text-[#F8F8FF] text-xl font-semibold w-fit leading-[30px] text-center'>
-            {friend.displayName}
-          </p>
-          <p className='text-sm text-[#808080] w-fit'>{friend.userName}</p>
-        </div>
-
-        <p className='text-xs text-[#E6E6E6] text-center max-w-[70%]'>{friend.biography}</p>
-
-        <div className='flex items-center gap-6'>
-          <p className='flex items-center gap-[9px] text-sm text-[#E6E6E6] font-semibold'>
-            {friend.followingCount} <span className='text-[#808080] font-medium'>Following</span>
-          </p>
-
-          <p className='flex items-center gap-[9px] text-sm text-[#E6E6E6] font-semibold'>
-            {`${friend.followerCount}K`}
-            <span className='text-[#808080] font-medium'>Followers</span>
-          </p>
-        </div>
-      </div>
-
-      <div className='w-full flex flex-col px-3 pt-[30px] pb-[100px] md:px-[30px] md:pt-[30px] md:pb-[90px] xir:p-[30px] gap-5 md:gap-[35px]'>
-        <div className='w-full flex flex-col gap-1 items-end'>
-          <p className='px-5 py-[10px] bg-[#1D3E00] rounded-s-[20px] rounded-tr-[20px] text-[#F8F8FF] text-sm font-medium max-w-[85%] lg:max-w-[50%]'>
-            Hello, how are you doing?
-          </p>
-          <p className='text-[11px] text-[#808080]'>08:15 AM</p>
-        </div>
-
-        <div className='w-full flex flex-col gap-1 items-start'>
-          <p className='px-5 py-[10px] bg-[#232227] rounded-e-[20px] rounded-tl-[20px] text-[#F8F8FF] text-sm font-medium max-w-[85%] lg:max-w-[50%]'>
-            Hello, how are you doing?
-          </p>
-          <p className='text-[11px] text-[#808080]'>08:15 AM</p>
-        </div>
-
-        <div className='w-full flex flex-col gap-1 items-end'>
-          <p className='px-5 py-[10px] bg-[#1D3E00] rounded-s-[20px] rounded-tr-[20px] text-[#F8F8FF] text-sm font-medium max-w-[85%] lg:max-w-[50%]'>
-            I have a question about the return policy for a product I purchased.
-          </p>
-          <p className='text-[11px] text-[#808080]'>08:15 AM</p>
-        </div>
-
-        <div className='w-full flex flex-col gap-1 items-start'>
-          <div className='flex items-center h-auto gap-2 px-5 py-[10px] bg-[#232227] rounded-e-[20px] rounded-tl-[20px]'>
-            <div className='bg-[#698A0D] w-3 h-3 rounded-full animate-bounce' />
-            <div className='bg-[#698A0D] w-3 h-3 rounded-full animate-bounce delay-300' />
-            <div className='bg-[#698A0D] w-3 h-3 rounded-full animate-bounce delay-500' />
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <section
+        className={`${friend ? 'flex' : 'hidden lg:flex'} w-full h-[100vh] lg:h-full lg:col-span-2  flex-col items-center justify-center bg-[#111115] other-link overflow-scroll`}
+      >
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <div className="flex lg:hidden bg-[rgba(17,17,21,0.8)] items-center gap-4 w-full p-5 absolute top-0">
+            <ArrowLeft
+              color="white"
+              variant="Outline"
+              size={24}
+              onClick={goBack}
+            />
+            <p className="text-sm font-medium text-[#F8F8FF]">
+              {friend.displayName}
+            </p>
           </div>
-        </div>
-      </div>
+        </ErrorBoundary>
 
-      <div className='w-full p-5 border-t border-[#1A1A1A] absolute lg:sticky bottom-[65px] bg-[#111115]'>
-        <div className='w-full flex items-center bg-[#232227] rounded-[500px] p-2 h-fit'>
-          <div className='flex'>
-            <Button variant={'msgBox'}>
-              <GalleryIcon className='w-6 h-6 mr-[-18px] fill-[#E7F8B9] stroke-[#E7F8B9]' />
-            </Button>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <div className="w-full border-b border-[#1A1A1A] py-9 flex flex-col items-center gap-4 h-fit mt-0 lg:mt-[250px]">
+            <Image
+              src={friend.friendDisplayPicture}
+              alt="User Display Picture"
+              width={81}
+              height={81}
+            />
 
-            <Popover>
-              <PopoverTrigger>
+            <div className="flex flex-col gap-1 w-fit items-center">
+              <p className="text-[#F8F8FF] text-xl font-semibold w-fit leading-[30px] text-center">
+                {friend.displayName}
+              </p>
+              <p className="text-sm text-[#808080] w-fit">{friend.userName}</p>
+            </div>
+
+            <p className="text-xs text-[#E6E6E6] text-center max-w-[70%]">
+              {friend.biography}
+            </p>
+
+            <div className="flex items-center gap-6">
+              <p className="flex items-center gap-[9px] text-sm text-[#E6E6E6] font-semibold">
+                {friend.followingCount}{' '}
+                <span className="text-[#808080] font-medium">Following</span>
+              </p>
+
+              <p className="flex items-center gap-[9px] text-sm text-[#E6E6E6] font-semibold">
+                {`${friend.followerCount}K`}
+                <span className="text-[#808080] font-medium">Followers</span>
+              </p>
+            </div>
+          </div>
+        </ErrorBoundary>
+
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <div className="w-full flex flex-col px-3 pt-[30px] pb-[100px] md:px-[30px] md:pt-[30px] md:pb-[90px] xir:p-[30px] gap-5 md:gap-[35px]">
+            <div className="w-full flex flex-col gap-1 items-end">
+              <p className="px-5 py-[10px] bg-[#1D3E00] rounded-s-[20px] rounded-tr-[20px] text-[#F8F8FF] text-sm font-medium max-w-[85%] lg:max-w-[50%]">
+                Hello, how are you doing?
+              </p>
+              <p className="text-[11px] text-[#808080]">08:15 AM</p>
+            </div>
+
+            <div className="w-full flex flex-col gap-1 items-start">
+              <p className="px-5 py-[10px] bg-[#232227] rounded-e-[20px] rounded-tl-[20px] text-[#F8F8FF] text-sm font-medium max-w-[85%] lg:max-w-[50%]">
+                Hello, how are you doing?
+              </p>
+              <p className="text-[11px] text-[#808080]">08:15 AM</p>
+            </div>
+
+            <div className="w-full flex flex-col gap-1 items-end">
+              <p className="px-5 py-[10px] bg-[#1D3E00] rounded-s-[20px] rounded-tr-[20px] text-[#F8F8FF] text-sm font-medium max-w-[85%] lg:max-w-[50%]">
+                I have a question about the return policy for a product I
+                purchased.
+              </p>
+              <p className="text-[11px] text-[#808080]">08:15 AM</p>
+            </div>
+
+            <div className="w-full flex flex-col gap-1 items-start">
+              <div className="flex items-center h-auto gap-2 px-5 py-[10px] bg-[#232227] rounded-e-[20px] rounded-tl-[20px]">
+                <div className="bg-[#698A0D] w-3 h-3 rounded-full animate-bounce" />
+                <div className="bg-[#698A0D] w-3 h-3 rounded-full animate-bounce delay-300" />
+                <div className="bg-[#698A0D] w-3 h-3 rounded-full animate-bounce delay-500" />
+              </div>
+            </div>
+          </div>
+        </ErrorBoundary>
+
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <div className="w-full p-5 border-t border-[#1A1A1A] absolute lg:sticky bottom-[65px] bg-[#111115]">
+            <div className="w-full flex items-center bg-[#232227] rounded-[500px] p-2 h-fit">
+              <div className="flex">
                 <Button variant={'msgBox'}>
-                  <EmojiIcon className='w-6 h-6' />
+                  <GalleryIcon className="w-6 h-6 mr-[-18px] fill-[#E7F8B9] stroke-[#E7F8B9]" />
                 </Button>
-              </PopoverTrigger>
 
-              <PopoverContent>
-                <EmojiPicker
-                  emojiStyle={EmojiStyle.TWITTER}
-                  theme={Theme.DARK}
-                  onEmojiClick={handleEmojiSelect}
-                />
-              </PopoverContent>
-            </Popover>
+                <Popover>
+                  <PopoverTrigger>
+                    <Button variant={'msgBox'}>
+                      <EmojiIcon className="w-6 h-6" />
+                    </Button>
+                  </PopoverTrigger>
+
+                  <PopoverContent>
+                    <EmojiPicker
+                      emojiStyle={EmojiStyle.TWITTER}
+                      theme={Theme.DARK}
+                      onEmojiClick={handleEmojiSelect}
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+
+              <Input
+                placeholder="Type out a new message..."
+                value={message}
+                className="max-h-[24px] h-auto text-white bg-transparent border-[10rem] border-black outline-none ring-0 focus:outline-none focus-visible:border-none ml-0 py-0"
+                onChange={handleChange}
+              />
+
+              <Button
+                onClick={handleSendMessage}
+                variant={'msgBox'}
+                disabled={sendStatus}
+              >
+                <SendIcon className="" />
+              </Button>
+            </div>
           </div>
-
-          <Input
-            placeholder='Type out a new message...'
-            value={message}
-            className='max-h-[24px] h-auto text-white bg-transparent border-[10rem] border-black outline-none ring-0 focus:outline-none focus-visible:border-none ml-0 py-0'
-            onChange={handleChange}
-          />
-
-          <Button onClick={handleSendMessage} variant={'msgBox'} disabled={sendStatus}>
-            <SendIcon className='' />
-          </Button>
-        </div>
-      </div>
-    </section>
+        </ErrorBoundary>
+      </section>
+    </ErrorBoundary>
   )
 }

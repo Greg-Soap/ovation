@@ -7,7 +7,9 @@ export function ErrorFallback({ error, resetErrorBoundary }) {
 
   return (
     <div className="flex flex-col items-center justify-center p-4 bg-transparent border border-[#FFFFFF14] text-white rounded-lg">
-      <h2 className="text-lg font-semibold mb-2">Oops! Something went wrong</h2>
+      <h2 className="text-lg font-semibold mb-2 text-center">
+        Oops! Something went wrong
+      </h2>
       <p className="text-sm mb-4 text-center">
         We&apos;re working on fixing this. Please try again later.
       </p>
