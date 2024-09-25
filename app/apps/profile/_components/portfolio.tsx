@@ -15,9 +15,14 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Skeleton } from '@/components/ui/skeleton'
+import ovationService from '@/services/ovation.service'
+import { useMutation } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 interface NFT {
   type: 'eth' | 'Complete' | 'Domain' | 'Collectible' | 'Metaverse' | 'Art'
+  isPrivate?: boolean
+  id: string
   imageUrl: string
   description?: string
   metaData?: {
@@ -49,7 +54,17 @@ interface NFT {
   tokenId: string
 }
 
-function Portfolio({ nfts, isLoading }: { nfts: NFT[]; isLoading: boolean }) {
+function Portfolio({
+  nfts,
+  isLoading,
+  secondaryProfile,
+}: {
+  nfts: NFT[]
+  isLoading: boolean
+  secondaryProfile?: boolean
+}) {
+  const filteredNfts = nfts.filter((nft) => !nft.isPrivate)
+  console.log({ nfts })
   return (
     <div className="w-full py-10 flex items-center justify-center">
       <div className="w-full max-w-7xl">
@@ -70,9 +85,21 @@ function Portfolio({ nfts, isLoading }: { nfts: NFT[]; isLoading: boolean }) {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2  xl:grid-cols-3 gap-4">
-            {nfts.map((nft, index) => (
-              <NFTCard key={index} {...nft} />
-            ))}
+            {secondaryProfile
+              ? filteredNfts.map((nft, index) => (
+                  <NFTCard
+                    key={index}
+                    {...nft}
+                    secondaryProfile={secondaryProfile}
+                  />
+                ))
+              : nfts.map((nft, index) => (
+                  <NFTCard
+                    key={index}
+                    {...nft}
+                    secondaryProfile={secondaryProfile}
+                  />
+                ))}
           </div>
         )}
       </div>
@@ -97,7 +124,32 @@ function NFTCardSkeleton() {
   )
 }
 
-function NFTCard({ imageUrl, name, description, metaData }: NFT) {
+function NFTCard({
+  imageUrl,
+  name,
+  description,
+  metaData,
+  id,
+  isPrivate,
+  secondaryProfile,
+}: NFT & { secondaryProfile?: boolean }) {
+  const { mutate: hideNft } = useMutation({
+    mutationFn: (nftId: string) =>
+      ovationService.hideNft({ nftId, public: false }),
+    onSuccess: (data) => {
+      toast.success('NFT hidden successfully')
+      console.log({ hideNft: data })
+    },
+  })
+
+  const { mutate: setFavouriteNft } = useMutation({
+    mutationFn: (nftId: string) => ovationService.setFavouriteNft(nftId),
+    onSuccess: (data) => {
+      toast.success('NFT added to favorites successfully')
+      console.log({ setFavouriteNft: data })
+    },
+  })
+
   const getImageSrc = () => {
     if (imageUrl) {
       if (imageUrl.startsWith('ipfs://')) {
@@ -148,7 +200,12 @@ function NFTCard({ imageUrl, name, description, metaData }: NFT) {
   const showReadMore = tDescription.length > 50
 
   return (
-    <div className="flex flex-col bg-[#18181C] border border-[#FFFFFF14] rounded-[10px] overflow-hidden h-full">
+    <div className="flex flex-col bg-[#18181C] border border-[#FFFFFF14] rounded-[10px] overflow-hidden h-full relative">
+      {isPrivate && (
+        <div className="absolute top-2 left-2 bg-[#232227] text-[#CFF073] text-xs font-medium py-1 px-2 rounded-full z-10">
+          Private
+        </div>
+      )}
       <div className="relative pt-[100%]">
         <Image
           src={getImageSrc()}
@@ -183,47 +240,51 @@ function NFTCard({ imageUrl, name, description, metaData }: NFT) {
               </Dialog>
             )}
           </div>
-          <Popover>
-            <PopoverTrigger>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-white h-8 w-8 p-0"
-              >
-                {/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  aria-label="Icon for options menu"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+          {!secondaryProfile && (
+            <Popover>
+              <PopoverTrigger>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-white h-8 w-8 p-0"
                 >
-                  <circle cx="12" cy="12" r="1" />
-                  <circle cx="12" cy="5" r="1" />
-                  <circle cx="12" cy="19" r="1" />
-                </svg>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="rounded-[7px] bg-[#232227] flex flex-col w-fit p-0 border-none">
-              <Button
-                variant="ghost"
-                className="text-white text-xs justify-start font-medium px-3 py-[10px] w-full h-fit border-b border-[#333333] rounded-none"
-              >
-                Highlight NFT
-              </Button>
-              <Button
-                variant="ghost"
-                className="text-white text-xs justify-start font-medium px-3 py-[10px] w-full h-fit"
-              >
-                Hide NFT
-              </Button>
-            </PopoverContent>
-          </Popover>
+                  {/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    aria-label="Icon for options menu"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="1" />
+                    <circle cx="12" cy="5" r="1" />
+                    <circle cx="12" cy="19" r="1" />
+                  </svg>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="rounded-[7px] bg-[#232227] flex flex-col w-fit p-0 border-none">
+                <Button
+                  variant="ghost"
+                  onClick={() => setFavouriteNft(id)}
+                  className="text-white text-xs justify-start font-medium px-3 py-[10px] w-full h-fit border-b border-[#333333] rounded-none"
+                >
+                  Favorite NFT
+                </Button>
+                <Button
+                  variant="ghost"
+                  onClick={() => hideNft(id)}
+                  className="text-white text-xs justify-start font-medium px-3 py-[10px] w-full h-fit"
+                >
+                  Hide NFT
+                </Button>
+              </PopoverContent>
+            </Popover>
+          )}
         </div>
       </div>
     </div>

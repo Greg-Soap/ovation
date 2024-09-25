@@ -261,6 +261,7 @@ function DiscoverHolders() {
     }
 
     const sortedData = [...data].sort((a, b) => b.badgeEarned - a.badgeEarned)
+    console.log({ sortedData })
 
     return (
       <>

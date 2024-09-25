@@ -38,7 +38,11 @@ export default function MainProfileSection({
       value: 'portfolio',
       label: 'Portfolio',
       content: (nfts) => (
-        <Portfolio nfts={nfts?.data?.data || []} isLoading={isNftsLoading} />
+        <Portfolio
+          nfts={nfts?.data?.data || []}
+          isLoading={isNftsLoading}
+          secondaryProfile={secondaryProfile}
+        />
       ),
     },
     {

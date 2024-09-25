@@ -91,7 +91,7 @@ class OvationService {
   }
 
   static hideNft(data: { nftId: string; public: boolean }) {
-    return api.post('/Profile/nft/privacy', data)
+    return api.patch('/Profile/nft/privacy', data)
   }
 
   // Experience
@@ -113,7 +113,22 @@ class OvationService {
   }
 
   static getFavouriteNft(userId: string) {
-    return api.get(`/Profile/fav-nft/${userId}`)
+    return api.get<{
+      data: {
+        contractAddress: string
+        description: string
+        id: string
+        imageUrl: string
+        type: string
+        name: string
+        tokenId: string
+      }[]
+      message: string
+    }>(`/Profile/fav-nft/${userId}`)
+  }
+
+  static setFavouriteNft(nftId: string) {
+    return api.patch('/Profile/fav-nft', { id: nftId })
   }
 
   static getNfts(userId: string) {

@@ -24,7 +24,9 @@ export default function Page() {
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <div className="relative w-full h-[262px] bg-profile-banner bg-contain bg-center">
+      <div
+        className={`relative w-full h-[262px] ${profileData?.data?.profile?.coverImage ? `url(${profileData?.data?.profile?.coverImage}) bg-contain bg-center` : 'bg-profile-banner bg-contain bg-center'}`}
+      >
         <ErrorBoundary FallbackComponent={ErrorFallback}>
           <div className="hidden lg:flex items-end justify-end gap-3 h-[inherit] w-full pr-10 pb-10">
             <Button

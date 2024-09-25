@@ -12,7 +12,7 @@ import { ArrowLeft } from 'iconsax-react'
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
-import type { ProfileData } from '@/models/all.model'
+import type { ProfileData, UserExperience } from '@/models/all.model'
 import { useTabUrlSync } from '@/lib/use-tab'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
@@ -21,16 +21,26 @@ export default function Page() {
   const { currentTab, setTab } = useTabUrlSync('Personal Info')
 
   const [isHidden, setHidden] = useState(true)
-  const { data: profileData } = useQuery({
+  const { data: profileData, refetch } = useQuery({
     queryKey: ['profile'],
     queryFn: () => ovationService.getProfile(),
   })
+
+  const { data: experienceData } = useQuery({
+    queryKey: ['experience'],
+    queryFn: () =>
+      ovationService.getExperience(profileData?.data?.userId as string),
+  })
+
   const tabComponents = {
-    'Personal Info': (props: { profileData: ProfileData }) => (
-      <ProfileForm {...props} />
-    ),
+    'Personal Info': (props: {
+      profileData: ProfileData
+      refetch: () => void
+    }) => <ProfileForm {...props} />,
     Socials: (props: { userId: string }) => <SocialForm {...props} />,
-    Experience: () => <ExperienceForm />,
+    Experience: (props: { experienceData: UserExperience[] }) => (
+      <ExperienceForm {...props} />
+    ),
     Wallets: () => <WalletForm />,
     Password: () => <PasswordForm />,
   }
@@ -143,6 +153,9 @@ export default function Page() {
                       {tab.heading &&
                         tabComponents[tab.heading as TabHeading]({
                           profileData: profileData?.data as ProfileData,
+                          refetch: refetch,
+                          experienceData: experienceData?.data
+                            ?.data as UserExperience[],
                           userId: profileData?.data?.userId as string,
                         })}
                     </section>

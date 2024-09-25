@@ -3,7 +3,6 @@
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import pfp from '@/public/assets/images/pfp3.jpeg'
 import {
   Form,
   FormControl,
@@ -19,12 +18,16 @@ import SettingsChange from './settings-change'
 import { useState } from 'react'
 import ovationService from '@/services/ovation.service'
 import { toast } from 'sonner'
+import { useRef } from 'react'
 
 import type { ProfileData } from '@/models/all.model'
 import { useLocalStorage } from '@/lib/use-local-storage'
 import { useMutation } from '@tanstack/react-query'
 import { formatDate } from '@/lib/helper-func'
-import { uploadProfileImage } from '@/lib/firebaseStorageUtils'
+import {
+  uploadProfileImage,
+  uploadCoverImage,
+} from '@/lib/firebaseStorageUtils'
 
 const formSchema = z.object({
   displayName: z.string().min(1, 'Display name is required'),
@@ -34,14 +37,17 @@ const formSchema = z.object({
   location: z.string(),
   bio: z.string(),
   profileImage: z.string(),
+  coverImage: z.string(),
 })
 
 type ProfileFormValues = z.infer<typeof formSchema>
 
 export default function ProfileForm({
   profileData,
+  refetch,
 }: {
   profileData: ProfileData
+  refetch: () => void
 }) {
   const [disabled, setDisabled] = useState(true)
 
@@ -55,6 +61,7 @@ export default function ProfileForm({
       location: '',
       bio: '',
       profileImage: '',
+      coverImage: '',
     },
   )
 
@@ -71,6 +78,7 @@ export default function ProfileForm({
       bio: profileData?.profile?.bio || storedValue.bio,
       profileImage:
         profileData?.profile?.profileImage || storedValue.profileImage,
+      coverImage: profileData?.profile?.coverImage || storedValue.coverImage,
     },
   })
 
@@ -79,6 +87,7 @@ export default function ProfileForm({
       ovationService.updatePersonalInfo(data),
     onSuccess: () => {
       toast.success('Profile updated successfully')
+      refetch()
       setDisabled(true)
     },
     onError: (error) => {
@@ -87,8 +96,46 @@ export default function ProfileForm({
     },
   })
 
-  const getImageUrl = async () => {
-    // return await uploadProfileImage('file blob')
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const coverFileInputRef = useRef<HTMLInputElement>(null)
+
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    try {
+      const imageUrl = await uploadProfileImage(file)
+      console.log('imageUrl: ', imageUrl)
+      if (imageUrl) {
+        form.setValue('profileImage', imageUrl)
+        setDisabled(false)
+        toast.success('Profile image uploaded successfully')
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error)
+      toast.error('Failed to upload image. Please try again.')
+    }
+  }
+
+  const handleCoverImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    try {
+      const imageUrl = await uploadCoverImage(file)
+      if (imageUrl) {
+        form.setValue('coverImage', imageUrl)
+        setDisabled(false)
+        toast.success('Cover image uploaded successfully')
+      }
+    } catch (error) {
+      console.error('Error uploading cover image:', error)
+      toast.error('Failed to upload cover image. Please try again.')
+    }
   }
 
   const onSubmit = async (data: ProfileFormValues) => {
@@ -115,20 +162,68 @@ export default function ProfileForm({
                       src={field.value || '/assets/images/default-user.svg'}
                       width={150}
                       height={150}
-                      className="rounded-full w-full h-full text-[#F8F8FF]"
+                      className="rounded-full w-full h-full text-[#F8F8FF] object-cover"
                     />
                   </span>
                   <FormControl>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      className="border-[#353538] rounded-3xl"
-                      onClick={() => {
-                        // Add logic to update profile image
-                      }}
-                    >
-                      Upload image
-                    </Button>
+                    <>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        ref={fileInputRef}
+                        style={{ display: 'none' }}
+                        onChange={handleImageUpload}
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="border-[#353538] rounded-3xl"
+                        onClick={() => fileInputRef.current?.click()}
+                      >
+                        Upload image
+                      </Button>
+                    </>
+                  </FormControl>
+                </div>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="coverImage"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-[#B3B3B3] text-sm">
+                  Cover Image
+                </FormLabel>
+                <div className="flex flex-col gap-4">
+                  <div className="w-full h-[200px] rounded-lg overflow-hidden">
+                    <Image
+                      alt="cover image"
+                      src={field.value || '/assets/images/profile/image8.png'}
+                      width={300}
+                      height={200}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <FormControl>
+                    <>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        ref={coverFileInputRef}
+                        style={{ display: 'none' }}
+                        onChange={handleCoverImageUpload}
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="border-[#353538] rounded-3xl"
+                        onClick={() => coverFileInputRef.current?.click()}
+                      >
+                        Upload cover image
+                      </Button>
+                    </>
                   </FormControl>
                 </div>
               </FormItem>
@@ -202,7 +297,6 @@ export default function ProfileForm({
                 </FormLabel>
                 <FormControl>
                   <DatePicker
-                    disableDate={disabled}
                     onChange={(date) => {
                       if (date) {
                         field.onChange(formatDate(date))
