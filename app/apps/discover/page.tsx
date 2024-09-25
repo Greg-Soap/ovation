@@ -4,23 +4,14 @@ import { Button } from '@/components/ui/button'
 import VerifyIcon from '@/components/icons/verifyIcon'
 import Image from 'next/image'
 import Link from 'next/link'
-import { type FeaturedUser } from '@/app/types'
+import type { FeaturedUser } from '@/app/types'
 import ovationService from '@/services/ovation.service'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import { DiscoverUserData } from '@/models/all.model'
+import type { DiscoverUserData } from '@/models/all.model'
 import MiniLoader from '@/components/mini-loader'
-
-const FeaturedUser: FeaturedUser = {
-  displayName: 'Josh.eth',
-  userName: 'josh2rich',
-  nftCount: 10,
-  ovaToken: 20,
-  archToken: 12,
-  badges: 7,
-  img: '/assets/images/timeline/_other-section/featured.png',
-  desc: 'Passionate NFT holder exploring the future of digital ownership. Join me in discovering the limitless possibilities of the NFT ecosystem. #NFTCommunity',
-}
+import { ErrorBoundary } from 'react-error-boundary'
+import { ErrorFallback } from '@/components/error-boundary'
 
 export default function Page() {
   const mostViewedQuery = useQuery({
@@ -29,24 +20,28 @@ export default function Page() {
   })
 
   const mostViewed = mostViewedQuery.data || []
-  console.log({ mostViewed: mostViewedQuery.data })
   const mostViewedLoading = mostViewedQuery.isLoading
 
   return (
     <div className="flex flex-col w-full bg-[#111115] h-fit items-center justify-center">
-      <DiscoverHeader />
-      <GetStarted />
-      <div className="flex flex-col lg:grid lg:grid-cols-3 w-[95%] gap-5">
-        <div className="col-span-2 mt-10 mb-[20px] flex flex-col gap-10">
-          {/* <DiscoverFeature {...FeaturedUser} /> */}
-          <DiscoverHolders />
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <DiscoverHeader />
+        <GetStarted />
+        <div className="flex flex-col lg:grid lg:grid-cols-3 w-[95%] gap-5">
+          <div className="col-span-2 mt-10 mb-[20px] flex flex-col gap-10">
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <DiscoverHolders />
+            </ErrorBoundary>
+          </div>
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            {!mostViewedLoading ? (
+              <DiscoverRight mostViewed={mostViewed} />
+            ) : (
+              <MiniLoader />
+            )}
+          </ErrorBoundary>
         </div>
-        {!mostViewedLoading ? (
-          <DiscoverRight mostViewed={mostViewed} />
-        ) : (
-          <MiniLoader />
-        )}
-      </div>
+      </ErrorBoundary>
     </div>
   )
 }
@@ -104,14 +99,16 @@ function GetStarted() {
             <div className="flex items-start lg:items-center gap-4 flex-col lg:flex-row">
               <div className="flex items-center justify-center rounded-full min-w-11 min-h-11 bg-[#333726]">
                 <img
-                  src={task.icon}
+                  src={task?.icon}
                   alt="task icon"
                   className="w-[22px] h-[22px]"
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <p className="text-white font-semibold text-sm">{task.title}</p>
-                <p className="text-xs text-[#999999]">{task.description}</p>
+                <p className="text-white font-semibold text-sm">
+                  {task?.title}
+                </p>
+                <p className="text-xs text-[#999999]">{task?.description}</p>
               </div>
             </div>
             <Button
@@ -119,10 +116,10 @@ function GetStarted() {
               className="transition-all duration-300 mt-2 hover:opacity-80"
             >
               <Link
-                href={task.link}
+                href={task?.link}
                 className="text-[10px] text-[#111115] font-medium"
               >
-                {task.buttonText}
+                {task?.buttonText}
               </Link>
             </Button>
           </div>
@@ -252,7 +249,7 @@ function DiscoverHolders() {
               className="rounded-lg h-[360px] bg-cover flex flex-col justify-end center items-center"
               style={{
                 backgroundImage: `url(${
-                  user.coverImage || '/assets/images/default-user.svg'
+                  user?.coverImage || '/assets/images/default-user.svg'
                 })`,
               }}
             >
@@ -261,9 +258,9 @@ function DiscoverHolders() {
                   <span className="font-semibold">{index + 1}</span>
                   <div className="w-[50px] h-[50px] rounded-full overflow-hidden border-2 border-white">
                     <img
-                      alt={user.displayName}
+                      alt={user?.displayName}
                       src={
-                        user.profileImage || '/assets/images/default-user.svg'
+                        user?.profileImage || '/assets/images/default-user.svg'
                       }
                       width={50}
                       height={50}
@@ -272,16 +269,16 @@ function DiscoverHolders() {
                   </div>
                   <div className="flex flex-col">
                     <p className="2xl:text-xl text-sm font-semibold">
-                      {user.displayName}
+                      {user?.displayName}
                     </p>
                     <p className="flex gap-1 text-xs items-center text-[#E6E6E6]">
-                      <span>@{user.username} </span>
+                      <span>@{user?.username} </span>
                       <VerifyIcon />
                     </p>
                   </div>
                 </div>
                 <div className="bg-white text-[#0B0A10] px-[10px] text-[9px] py-[6px] rounded-3xl">
-                  {user.badgeEarned} Badges
+                  {user?.badgeEarned} Badges
                 </div>
               </div>
             </div>
@@ -295,9 +292,9 @@ function DiscoverHolders() {
                   <span className="font-semibold">{index + 4}</span>
                   <div className="w-[50px] h-[50px] rounded-full overflow-hidden border-2 border-white">
                     <img
-                      alt={user.displayName}
+                      alt={user?.displayName}
                       src={
-                        user.profileImage || '/assets/images/default-user.svg'
+                        user?.profileImage || '/assets/images/default-user.svg'
                       }
                       width={50}
                       height={50}
@@ -306,16 +303,16 @@ function DiscoverHolders() {
                   </div>
                   <div className="flex flex-col">
                     <p className="2xl:text-xl text-sm font-semibold">
-                      {user.displayName}
+                      {user?.displayName}
                     </p>
                     <p className="flex gap-2 text-xs items-center">
-                      <span>@{user.username} </span>
+                      <span>@{user?.username} </span>
                       <VerifyIcon />
                     </p>
                   </div>
                 </div>
                 <div className="bg-[#3C3B40] text-[#B3B3B3] px-[10px] py-[6px] text-[9px] rounded-3xl">
-                  {user.badgeEarned} Badges
+                  {user?.badgeEarned} Badges
                 </div>
               </div>
             </div>
@@ -445,12 +442,12 @@ function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
 
           <Image
             src={
-              mostViewed[0].profileImage || '/assets/images/default-user.svg'
+              mostViewed[0]?.profileImage || '/assets/images/default-user.svg'
             }
             alt="User Display"
             width={50}
             height={50}
-            className={`${mostViewed[0].profileImage ? 'bg-[#0B0A10]' : 'bg-[#18181C]'} absolute bottom-[-25px] border-[3px] border-[#0B0A10] rounded-full`}
+            className={`${mostViewed[0]?.profileImage ? 'bg-[#0B0A10]' : 'bg-[#18181C]'} absolute bottom-[-25px] border-[3px] border-[#0B0A10] rounded-full`}
           />
         </div>
 
@@ -459,18 +456,18 @@ function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
             <div className="flex items-center gap-2">
               <div className="flex flex-col">
                 <p className="flex gap-1 items-center text-base font-semibold leading-5 text-white">
-                  {mostViewed[0].displayName}
+                  {mostViewed[0]?.displayName}
                   <VerifyIcon />
                 </p>
                 <p className="text-xs leading-5 font-medium text-[#B3B3B3]">
-                  @{mostViewed[0].username}
+                  @{mostViewed[0]?.username}
                 </p>
               </div>
             </div>
           </div>
 
           <p className="text-sm text-[#B3B3B3]">
-            {mostViewed[0].bio || 'No bio available'}
+            {mostViewed[0]?.bio || 'No bio available'}
           </p>
         </div>
       </div>
@@ -482,23 +479,25 @@ function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
                 <div className="w-[30px] h-[30px] rounded-full overflow-hidden border-2 border-white">
                   <img
                     alt="imag"
-                    src={user.profileImage || '/assets/images/default-user.svg'}
+                    src={
+                      user?.profileImage || '/assets/images/default-user.svg'
+                    }
                     className="w-full h-full object-cover"
                   />
                 </div>
 
                 <div className="flex flex-col">
-                  <p className="text-sm font-semibold">{user.displayName}</p>
+                  <p className="text-sm font-semibold">{user?.displayName}</p>
                   <p className="flex gap-1 text-xs text-[#858487] items-center">
-                    <span>@{user.username} </span>
+                    <span>@{user?.username} </span>
                     <VerifyIcon />
                   </p>
                 </div>
               </div>
               <div className="bg-[#CFF073] text-[10px] font-medium text-black px-[10px] py-2 rounded-3xl">
-                {user.views > 1000
-                  ? `${(user.views / 1000).toFixed(1)}k`
-                  : user.views}{' '}
+                {user?.views > 1000
+                  ? `${(user?.views / 1000).toFixed(1)}k`
+                  : user?.views}{' '}
                 Views
               </div>
             </div>
