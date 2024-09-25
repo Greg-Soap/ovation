@@ -16,7 +16,6 @@ export default function SecondaryProfile() {
   const params = useParams()
   const username = params.username as string
 
-  const secondaryProfile = true
   const {
     data: profileData,
     isLoading,
@@ -40,7 +39,6 @@ export default function SecondaryProfile() {
     if (profileData?.userId) {
       viewProfile(profileData.userId)
     }
-    console.log('viewed')
   }, [profileData?.userId, viewProfile])
 
   const { mutate: followUser, isPending: isFollowingPending } = useMutation({
@@ -129,7 +127,7 @@ export default function SecondaryProfile() {
           <Suspense fallback={<MiniLoader />}>
             <MainProfileSection
               profileData={profileData as ProfileData}
-              secondaryProfile={secondaryProfile}
+              secondaryProfile={true}
             />
           </Suspense>
         </ErrorBoundary>
