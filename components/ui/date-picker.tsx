@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/popover'
 
 interface DatePickerProps {
-  disableDate: boolean
+  disableDate?: boolean
   onChange: (date: Date | undefined) => void
 }
 
