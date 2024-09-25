@@ -21,14 +21,15 @@ export default function Page() {
   const { currentTab, setTab } = useTabUrlSync('Personal Info')
 
   const [isHidden, setHidden] = useState(true)
-  const { data: profileData } = useQuery({
+  const { data: profileData, refetch } = useQuery({
     queryKey: ['profile'],
     queryFn: () => ovationService.getProfile(),
   })
   const tabComponents = {
-    'Personal Info': (props: { profileData: ProfileData }) => (
-      <ProfileForm {...props} />
-    ),
+    'Personal Info': (props: {
+      profileData: ProfileData
+      refetch: () => void
+    }) => <ProfileForm {...props} />,
     Socials: (props: { userId: string }) => <SocialForm {...props} />,
     Experience: () => <ExperienceForm />,
     Wallets: () => <WalletForm />,
@@ -143,6 +144,7 @@ export default function Page() {
                       {tab.heading &&
                         tabComponents[tab.heading as TabHeading]({
                           profileData: profileData?.data as ProfileData,
+                          refetch: refetch,
                           userId: profileData?.data?.userId as string,
                         })}
                     </section>

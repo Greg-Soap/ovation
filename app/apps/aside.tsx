@@ -90,6 +90,7 @@ export default function Aside() {
                 alt="User Display Picture"
                 width={28}
                 height={28}
+                className="rounded-full"
               />
               <div className="flex flex-col">
                 <p className="text-xs font-semibold leading-5 text-white">
