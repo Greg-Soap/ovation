@@ -29,6 +29,12 @@ class OvationService {
     return api.post<{ message: string; token: string; userData: UserData }>('/Auth/register', data)
   }
 
+  static loginGoogle(code: string) {
+    return api.get<{ message: string; token: string; userData: UserData }>(
+      `/Auth/login/google/${code}`,
+    )
+  }
+
   static login(data: Login) {
     return api.post<{ message: string; token: string; userData: UserData }>('/Auth/login', data)
   }

@@ -19,7 +19,6 @@ import Link from 'next/link'
 import arrow from '@/public/assets/images/arrow-right.png'
 import Image from 'next/image'
 import { useGoogleLogin } from '@react-oauth/google'
-import { decodeIdToken } from '@/lib/helper-func'
 import { useMutation } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
 import { setToken } from '@/lib/cookies'
@@ -69,28 +68,41 @@ export default function LoginForm() {
     loginMutation.mutate(values)
   }
 
-  const loginGoogle = useGoogleLogin({
-    onSuccess: (codeResponse) => console.log(codeResponse),
-    flow: 'auth-code',
+  const { mutate: loginG } = useMutation({
+    mutationFn: (code: string) => ovationService.loginGoogle(code),
+    onSuccess: (data) => {
+      console.log({ loginGoogle: data })
+      if (data?.data?.token) {
+        setToken(data?.data?.token)
+        setValue(data?.data?.userData)
+
+        toast.success('Login successful!')
+        router.push('/apps/discover')
+      } else {
+        toast.error('Login failed: No token received')
+      }
+    },
+    onError: (error) => {
+      console.error('Google login error:', error)
+      toast.error('Google login failed. Please try again.')
+    },
   })
 
-  const handleSuccess = async (response: any) => {
-    const { credential } = response
-    if (!credential) {
-      return
-    }
-
-    try {
-      const userInfo = decodeIdToken(credential)
-      console.log('User Info:', userInfo)
-    } catch (error) {
-      console.error('Error decoding ID token:', error)
-    }
-  }
-
-  const handleError = (error: any) => {
-    console.error('Login Failed:', error)
-  }
+  const loginGoogle = useGoogleLogin({
+    onSuccess: async (codeResponse) => {
+      try {
+        loginG(codeResponse.code)
+      } catch (error) {
+        console.error('Google login failed:', error)
+        toast.error('Google login failed. Please try again.')
+      }
+    },
+    onError: (error) => {
+      console.error('Google login error:', error)
+      toast.error('Google login failed. Please try again.')
+    },
+    flow: 'auth-code',
+  })
 
   return (
     <div className="flex flex-col gap-11">
