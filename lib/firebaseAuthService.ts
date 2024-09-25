@@ -21,8 +21,6 @@ export const signUp = async (user: UserData) => {
     uid: data.user.uid
   } as Participant
 
-  await signIn(user.userId, user.email)
-
   const userRef = doc(firestore, `auth_users/${user.userId}`);
 
   // Store chat details for both users (using merge to avoid overwriting)

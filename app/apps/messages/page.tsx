@@ -5,8 +5,6 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
 
 export default function Page() {
-  const userId = getUserId()
-  console.log({ userId })
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <section className="w-full flex lg:grid grid-cols-3 bg-[#111115] other-link">
