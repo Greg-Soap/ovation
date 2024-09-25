@@ -22,6 +22,7 @@ import { useMutation } from '@tanstack/react-query'
 import { useLocalStorage } from '@/lib/use-local-storage'
 import { useState } from 'react'
 import { formatDate } from '@/lib/helper-func'
+import type { UserExperience } from '@/models/all.model'
 
 const formSchema = z.object({
   company: z.string().min(1, 'Company is required'),
@@ -35,7 +36,11 @@ const formSchema = z.object({
 
 interface FormValues extends z.infer<typeof formSchema> {}
 
-export default function ExperienceForm() {
+export default function ExperienceForm({
+  experienceData,
+}: {
+  experienceData: UserExperience[]
+}) {
   const [isDisabled, setIsDisabled] = useState<boolean>(true)
   const [isCurrentJob, setIsCurrentJob] = useState<boolean>(false)
   const { storedValue, setValue } = useLocalStorage<Partial<FormValues>>(
@@ -54,13 +59,14 @@ export default function ExperienceForm() {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      company: storedValue.company || '',
-      role: storedValue.role || '',
-      department: storedValue.department || '',
-      startDate: storedValue.startDate || '',
-      endDate: storedValue.endDate || null,
-      description: storedValue.description || '',
-      skills: storedValue.skills || [],
+      company: experienceData[0]?.company || storedValue.company || '',
+      role: experienceData[0]?.role || storedValue.role || '',
+      department: experienceData[0]?.department || storedValue.department || '',
+      startDate: experienceData[0]?.startDate || storedValue.startDate || '',
+      endDate: experienceData[0]?.endDate || storedValue.endDate || null,
+      description:
+        experienceData[0]?.description || storedValue.description || '',
+      skills: experienceData[0]?.skill.split(',') || storedValue.skills || [],
     },
   })
 
