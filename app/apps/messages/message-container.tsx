@@ -6,14 +6,15 @@ import EmojiIcon from '@/components/icons/emojiIcon'
 import Image from 'next/image'
 import { Input } from '@/components/ui/input'
 import SendIcon from '@/components/icons/sendIcon'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Popover } from '@/components/ui/popover'
 import { PopoverContent, PopoverTrigger } from '@radix-ui/react-popover'
 import { ArrowLeft } from 'iconsax-react'
-import { sendMessage } from '@/lib/firebaseChatService'
+import { getMessagesForChat, sendMessage } from '@/lib/firebaseChatService'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
+import { DocumentData } from 'firebase/firestore'
 
 interface FriendProps {
   friendDisplayPicture: string
@@ -30,6 +31,7 @@ interface FriendProps {
 export default function MessageContainer({ friend, goBack }: any) {
   const [sendStatus, setSendStatus] = useState<boolean>(true)
   const [message, setMessage] = useState<string>('')
+  const [messages, setMessages] = useState<DocumentData>({})
   const [receiverId, setReceiverId] = useState<string>('')
 
   const handleChange = (e: any) => {
@@ -49,11 +51,19 @@ export default function MessageContainer({ friend, goBack }: any) {
   const handleSendMessage = async () => {
     //render new bubble
     await sendMessage(
-      '49e6a54e-b80c-4960-bb79-5c3c6b0057af',
       receiverId,
       message,
     )
   }
+
+  const getMessages = async () =>{
+    const messageDocuments = await getMessagesForChat(receiverId)
+    setMessages(messageDocuments.messages)
+  }
+
+  useEffect(() => {
+    getMessages()
+  }, [])
 
   if (!friend) {
     return (
@@ -72,7 +82,6 @@ export default function MessageContainer({ friend, goBack }: any) {
             </div>
 
             <Button
-              onClick={handleSendMessage}
               variant={'default'}
               className="px-3 py-2 h-fit rounded-[27px] text-xs text-[#111115] font-semibold transition-all duration-300 hover:opacity-80"
             >
@@ -138,6 +147,9 @@ export default function MessageContainer({ friend, goBack }: any) {
         </ErrorBoundary>
 
         <ErrorBoundary FallbackComponent={ErrorFallback}>
+          {/* loop through the messages useState to render the messages it's arranged from the newest to oldest so your looping shold be reverse
+              expected properties userId, timestamp, message
+          */}
           <div className="w-full flex flex-col px-3 pt-[30px] pb-[100px] md:px-[30px] md:pt-[30px] md:pb-[90px] xir:p-[30px] gap-5 md:gap-[35px]">
             <div className="w-full flex flex-col gap-1 items-end">
               <p className="px-5 py-[10px] bg-[#1D3E00] rounded-s-[20px] rounded-tr-[20px] text-[#F8F8FF] text-sm font-medium max-w-[85%] lg:max-w-[50%]">

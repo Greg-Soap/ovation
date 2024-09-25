@@ -10,9 +10,13 @@ import {
   onSnapshot,
   query,
   orderBy,
-  serverTimestamp
+  serverTimestamp,
+  limit,
+  DocumentData,
+  QuerySnapshot
 } from 'firebase/firestore'
 import { firestore, auth } from './firebase'
+import { getUserId } from './helper-func'
 
 /**
  * Sends a message from auth user to another user.
@@ -22,17 +26,20 @@ import { firestore, auth } from './firebase'
  * @param messageText - The message content
  */
 export const sendMessage = async (
-  senderId: string,
   receiverId: string,
   messageText: string,
 ): Promise<void> => {
-  const chatId = getChatId(senderId, receiverId)
+  const senderId = getUserId()
+
+  if(senderId == undefined)
+    return
+  const chatId = getChatId(senderId!, receiverId)
 
   const message = {
     userId: senderId,
-    message: messageText,
+    message: messageText.trim(),
     timestamp: Timestamp.fromDate(new Date()),
-  }
+  } as Message
 
   await checkChatExists(chatId)
 
@@ -148,13 +155,13 @@ const getUserDetails = async (userId: string) => {
   }
 };
 
-export const getActiveChatsForUser = async (userId: string): Promise<ChatData[]> => {
+export const getActiveChatsForUser = async (userId: string, pageSize: number = 100): Promise<ChatData[]> => {
   try {
     // Reference to the user's activeChats subcollection
     const activeChatsRef = collection(firestore, `users/${userId}/activeChats`);
 
     // Query the activeChats, ordered by lastMessageSentAt in descending order
-    const q = query(activeChatsRef, orderBy('lastMessageSentAt', 'desc'));
+    const q = query(activeChatsRef, orderBy('lastMessageSentAt', 'desc'), limit(pageSize));
 
     // Execute the query
     const querySnapshot = await getDocs(q);
@@ -194,6 +201,12 @@ export interface ChatData {
   lastMessageSentAt: Date;
 }
 
+export interface Message {
+  userId: string;
+  message: string;
+  timestamp: Timestamp
+}
+
 const checkChatExists = async (chatId: string) => {
   const chatDocRef = doc(firestore, `chats/${chatId}`);
   const chatDoc = await getDoc(chatDocRef);
@@ -203,18 +216,63 @@ const checkChatExists = async (chatId: string) => {
   }
 };
 
-const isUsersActiveChatExists = async (chatId: string, senderId: string, receiverId: string) => {
-  const senderDocRef = doc(firestore, `users/${senderId}/activeChats/${chatId}`);
-  const senderDoc = await getDoc(senderDocRef);
+/**
+ * Listens for all messages in the active chats for the current user.
+ * Filters messages server-side based on the chatId.
+ */
+export const listenForUserMessages = (callback: (messages: any[]) => void) => {
+  const userId = getUserId()
 
-  if (!senderDoc.exists()) {
-    await setDoc(senderDocRef, { createdAt: new Date() });
+  if (userId === undefined) {
+    return
   }
 
-  const receiverDocRef = doc(firestore, `users/${receiverId}/activeChats/${chatId}`);
-  const receiverDoc = await getDoc(receiverDocRef);
+  const userChatsRef = collection(firestore, `users/${userId}/activeChats`)
 
-  if (!receiverDoc.exists()) {
-    await setDoc(receiverDocRef, { createdAt: new Date() });
-  }
+  return onSnapshot(userChatsRef, (chatSnapshot) => {
+    const allMessages: any[] = []
+
+    for (const chatDoc of chatSnapshot.docs) {
+      const chatId = chatDoc.id
+
+      const messagesRef = collection(firestore, `chats/${chatId}/messages`)
+      const messagesQuery = query(messagesRef)
+
+      onSnapshot(messagesQuery, (messagesSnapshot) => {
+        const chatMessages = messagesSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          chatId,
+          ...doc.data(),
+        }))
+
+        allMessages.push(...chatMessages)
+        callback(allMessages)
+      })
+    }
+  })
+}
+
+export const getMessagesForChat = async (
+  receiverId: string,
+  pageSize: number = 100
+): Promise<{ messages: DocumentData[], lastVisible: DocumentData | null }> => {
+
+  const chatId = getChatId(getUserId()!, receiverId)
+  const messagesRef = collection(firestore, `chats/${chatId}/messages`);
+
+  // Create a query to get messages sorted by 'sentAt' in ascending order (oldest first)
+  let messagesQuery = query(
+    messagesRef,
+    orderBy("timestamp", "desc"),
+    limit(pageSize)
+  );
+
+  // Execute the query to fetch the messages
+  const querySnapshot: QuerySnapshot<DocumentData> = await getDocs(messagesQuery);
+
+  // Extract message data
+  const messages = querySnapshot.docs.map((doc) => doc.data());
+  const newLastVisible = querySnapshot.docs[querySnapshot.docs.length - 1] || null;
+
+  return { messages, lastVisible: newLastVisible };
 };

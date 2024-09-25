@@ -5,6 +5,7 @@ import SearchInput from '../../_components/_timeline/search-input'
 import MessageContainer from '../../messages/message-container'
 import { Button } from '@/components/ui/button'
 import { ChatData, getActiveChatsForUser, Participant } from '@/lib/firebaseChatService'
+import { getUserId } from '@/lib/helper-func'
 
 export default function FriendList() {
   interface Friend {
@@ -20,7 +21,7 @@ export default function FriendList() {
   }
 
   const getChatData = async () => {
-    setFriends(await getActiveChatsForUser('07d8376c-7dfa-4b98-b802-043c300ed78a'));
+    setFriends(await getActiveChatsForUser(getUserId()!));
   }
 
   useEffect(() => {
@@ -47,7 +48,7 @@ export default function FriendList() {
   }
 
   const getParticipants = (data: ChatData): Participant | undefined => {
-    return data.participants.find(obj => obj.userId != '07d8376c-7dfa-4b98-b802-043c300ed78a');
+    return data.participants.find(obj => obj.userId != getUserId());
   };
 
   return (

@@ -11,6 +11,7 @@ import Aside from './aside'
 import { logOut, signIn } from '@/lib/firebaseAuthService'
 import { useLocalStorage } from '@/lib/use-local-storage'
 import { UserData } from "@/models/all.model";
+import { listenForUserMessages } from '@/lib/firebaseChatService'
 
 const queryClient = new QueryClient()
 
@@ -26,11 +27,15 @@ export default function AsideLayout({
   useEffect(() => {
     connectSignalR()
     firebaseSignIn()
+    const unsubscribe = listenForUserMessages((newMessages) => {
+      toast.success(`You have ${newMessages.length} new messages`);
+    });
 
-    // Cleanup function to stop the SignalR connection when component unmounts
     return () => {
       notificationService.stopConnection()
       firebaseSignOut()
+      if(unsubscribe != null)
+          unsubscribe()
     }
   }, [])
 
