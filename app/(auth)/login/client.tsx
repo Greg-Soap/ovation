@@ -91,6 +91,7 @@ export default function LoginForm() {
   const loginGoogle = useGoogleLogin({
     onSuccess: async (codeResponse) => {
       try {
+        // console.log(codeResponse.code)
         loginG(codeResponse.code)
       } catch (error) {
         console.error('Google login failed:', error)
