@@ -196,3 +196,11 @@ export function formatUsername(username?: string): string {
   }
   return username.startsWith('@') ? username : `@${username}`
 }
+
+export function getStoredUser(): UserData | null {
+  if (typeof window !== 'undefined') {
+    const userData = window.localStorage.getItem('userData')
+    return userData ? (JSON.parse(userData) as UserData) : null
+  }
+  return null
+}

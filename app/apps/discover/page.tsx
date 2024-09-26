@@ -8,16 +8,32 @@ import type { FeaturedUser } from '@/app/types'
 import ovationService from '@/services/ovation.service'
 import { useQuery } from '@tanstack/react-query'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import type { DiscoverUserData } from '@/models/all.model'
+import type {
+  DiscoverUserData,
+  UserData,
+  UserExperience,
+  UserSocialsMod,
+} from '@/models/all.model'
 import MiniLoader from '@/components/mini-loader'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
-import { formatUsername } from '@/lib/helper-func'
+import { formatUsername, getStoredUser } from '@/lib/helper-func'
 
 export default function Page() {
+  const user = getStoredUser()
   const mostViewedQuery = useQuery({
     queryKey: ['mostViewed'],
     queryFn: () => ovationService.getMostViewed(),
+  })
+
+  const { data: experiences } = useQuery({
+    queryKey: ['experiences'],
+    queryFn: () => ovationService.getExperience(user?.userId as string),
+  })
+
+  const { data: socials } = useQuery({
+    queryKey: ['socials'],
+    queryFn: () => ovationService.getSocialLinks(user?.userId as string),
   })
 
   const mostViewed = mostViewedQuery.data || []
@@ -26,8 +42,12 @@ export default function Page() {
   return (
     <div className="flex flex-col w-full bg-[#111115] h-fit items-center justify-center">
       <ErrorBoundary FallbackComponent={ErrorFallback}>
-        <DiscoverHeader />
-        <GetStarted />
+        <DiscoverHeader user={user as UserData} />
+        <GetStarted
+          user={user as UserData}
+          socials={socials?.data?.data || {}}
+          experiences={experiences?.data?.data || []}
+        />
         <div className="flex flex-col lg:grid lg:grid-cols-3 w-[95%] gap-5">
           <div className="col-span-2 mt-10 mb-[20px] flex flex-col gap-10">
             <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -47,16 +67,31 @@ export default function Page() {
   )
 }
 
-function DiscoverHeader() {
+function DiscoverHeader({ user }: { user: UserData }) {
   return (
     <div
       className="h-[250px] w-full flex items-center justify-center bg-cover shadow px-7"
-      style={{ backgroundImage: `url('/assets/images/discoverBack.svg')` }}
+      style={{
+        backgroundImage: user?.coverImage
+          ? `url('${user?.coverImage}')`
+          : 'url("/assets/images/profile/image8.png")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+      }}
     />
   )
 }
 
-function GetStarted() {
+function GetStarted({
+  user,
+  socials,
+  experiences,
+}: {
+  user: UserData
+  socials: UserSocialsMod
+  experiences: UserExperience[]
+}) {
   const tasks = [
     {
       title: 'ADD BASIC PROFILE INFORMATION',
@@ -64,6 +99,7 @@ function GetStarted() {
       icon: '/assets/images/profile/task2.png',
       link: '/apps/settings?tab=Personal Info',
       buttonText: 'Add info',
+      isComplete: !!(user.bio && user.location && user.profileImage),
     },
     {
       title: 'ADD A LINK',
@@ -72,6 +108,7 @@ function GetStarted() {
       icon: '/assets/images/profile/task3.png',
       link: '/apps/settings?tab=Socials',
       buttonText: 'Add Socials',
+      isComplete: Object.keys(socials).length > 0,
     },
     {
       title: 'ADD YOUR EXPERIENCE',
@@ -79,8 +116,15 @@ function GetStarted() {
       icon: '/assets/images/profile/task1.png',
       link: '/apps/settings?tab=Experience',
       buttonText: 'Add Experience',
+      isComplete: experiences && experiences.length > 0,
     },
   ]
+
+  const incompleteTasks = tasks.filter((task) => !task.isComplete)
+
+  if (incompleteTasks.length === 0) {
+    return null
+  }
 
   return (
     <div className="w-[95%] h-fit rounded-[14px] flex flex-col p-6 border border-[#353538] gap-[30px] mt-10">
@@ -92,7 +136,7 @@ function GetStarted() {
       </div>
 
       <div className="w-full h-fit flex flex-col gap-4">
-        {tasks.map((task, index) => (
+        {incompleteTasks.map((task, index) => (
           <div
             key={index}
             className="flex flex-col lg:flex-row gap-4 bg-[#18181C] border border-[#FFFFFF14] rounded-[10px] items-start lg:items-center justify-between px-5 py-10"
@@ -100,16 +144,14 @@ function GetStarted() {
             <div className="flex items-start lg:items-center gap-4 flex-col lg:flex-row">
               <div className="flex items-center justify-center rounded-full min-w-11 min-h-11 bg-[#333726]">
                 <img
-                  src={task?.icon}
+                  src={task.icon}
                   alt="task icon"
                   className="w-[22px] h-[22px]"
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <p className="text-white font-semibold text-sm">
-                  {task?.title}
-                </p>
-                <p className="text-xs text-[#999999]">{task?.description}</p>
+                <p className="text-white font-semibold text-sm">{task.title}</p>
+                <p className="text-xs text-[#999999]">{task.description}</p>
               </div>
             </div>
             <Button
@@ -117,10 +159,10 @@ function GetStarted() {
               className="transition-all duration-300 mt-2 hover:opacity-80"
             >
               <Link
-                href={task?.link}
+                href={task.link}
                 className="text-[10px] text-[#111115] font-medium"
               >
-                {task?.buttonText}
+                {task.buttonText}
               </Link>
             </Button>
           </div>
@@ -274,6 +316,9 @@ function DiscoverHolders() {
                 backgroundImage: `url(${
                   user?.coverImage || '/assets/images/default-user.svg'
                 })`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
               }}
             >
               <div className="flex w-[90%] text-white py-5 px-4 bg-[#1A1A1A] rounded-[18px] mb-10 items-center justify-between border border-[#FFFFFF4D]">
