@@ -120,7 +120,7 @@ export default function LoginForm() {
           <p>Login with Google</p>
         </Button>
       </div> */}
-      <div id="login__connect-wallet" className="flex flex-col gap-4">
+      {/* <div id="login__connect-wallet" className="flex flex-col gap-4">
         <span className="flex gap-2 items-center justify-center">
           <span className="w-[47%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]  text-[#C1C0C6]" />
           <p className="text-[10px] font-medium text-[#C1C0C6] text-center">
@@ -128,7 +128,7 @@ export default function LoginForm() {
           </p>
           <span className="w-[47%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]" />
         </span>
-      </div>
+      </div> */}
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(formSubmit)}

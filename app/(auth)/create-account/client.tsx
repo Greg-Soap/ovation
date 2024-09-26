@@ -71,7 +71,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
   const router = useRouter()
   const [page, setPage] = useState(1)
   const [active, setActive] = useState('')
-  const [isManualWallet, setIsManualWallet] = useState(false)
+  const [isManualWallet, setIsManualWallet] = useState(true)
 
   const { setValue } = useLocalStorage<UserData | null>('userData', null)
 
@@ -168,11 +168,11 @@ export default function AccountForm({ setOptionalLeft }: Props) {
             <p>Login with Google</p>
           </Button>
         </div> */}
-        <div className="flex items-center justify-between mb-5">
+        {/* <div className="flex items-center justify-between mb-5">
           <span className="w-[46%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]  text-[#C1C0C6]" />
           <p className="text-[10px] font-medium text-[#C1C0C6]">OR</p>
           <span className="w-[46%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]" />
-        </div>
+        </div> */}
         <FormField
           control={form.control}
           name="personalInfo.displayName"
@@ -425,9 +425,8 @@ export default function AccountForm({ setOptionalLeft }: Props) {
       case 2:
         return renderPathSelection()
       case 3:
-        return isManualWallet
-          ? renderWalletAndConfirmation()
-          : renderWalletSelection()
+        return isManualWallet && renderWalletAndConfirmation() 
+        // : renderWalletSelection()
       default:
         return null
     }
