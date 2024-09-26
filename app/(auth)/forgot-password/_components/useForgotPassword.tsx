@@ -9,7 +9,6 @@ export function useForgotPassword() {
   const sendEmailMutation = useMutation({
     mutationFn: (email: string) => ovationService.forgotPassword(email),
     onSuccess: (data) => {
-      console.log({ data })
       setUserId(data.data.data)
     },
   })

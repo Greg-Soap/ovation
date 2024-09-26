@@ -26,12 +26,12 @@ import type { UserExperience } from '@/models/all.model'
 
 const formSchema = z.object({
   company: z.string().min(1, 'Company is required'),
-  role: z.string().min(1, 'Role is required'),
-  department: z.string().min(1, 'Department is required'),
+  role: z.string().min(1, 'Role is required').optional(),
+  department: z.string().min(1, 'Department is required').optional(),
   startDate: z.string(),
-  endDate: z.string().nullable(),
-  description: z.string().min(1, 'Description is required'),
-  skills: z.array(z.string()),
+  endDate: z.string().nullable().optional(),
+  description: z.string().min(1, 'Description is required').optional(),
+  skills: z.array(z.string()).min(1, 'Skills are required'),
 })
 
 interface FormValues extends z.infer<typeof formSchema> {}
@@ -76,7 +76,10 @@ export default function ExperienceForm({
         ...data,
         startDate: formatDate(new Date(data.startDate)),
         endDate: isCurrentJob ? null : formatDate(new Date(data.endDate || '')),
-        skill: data.skills.join(', '),
+        skill: data.skills?.join(', ') || '',
+        role: data.role || '', // Ensure role is always a string
+        department: data.department || '', // Ensure department is always a string
+        description: data.description || '', // Ensure description is always a string
       }),
     onSuccess: () => {
       toast.success('Experience updated successfully')
@@ -272,7 +275,7 @@ export default function ExperienceForm({
                             .map((skill) => skill.trim()),
                         )
                       }
-                      value={field.value.join(', ')}
+                      value={field.value?.join(', ') || ''}
                       className="h-[47px] text-sm text-[#F8F8FF] border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
                     />
                   </FormControl>

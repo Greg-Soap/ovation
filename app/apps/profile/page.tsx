@@ -22,7 +22,7 @@ export default function Page() {
       ovationService.getExperience(profileData?.data?.userId as string),
   })
 
-  console.log({ profileData: profileData?.data?.profile?.coverImage })
+  console.log({ profileData })
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>

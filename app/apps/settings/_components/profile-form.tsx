@@ -49,8 +49,8 @@ export default function ProfileForm({
   profileData: ProfileData
   refetch: () => void
 }) {
-  const [disabled, setDisabled] = useState(true)
- const [tempFormValues, setTempFormValues] = useState<ProfileFormValues>({
+  const [disabled, setDisabled] = useState(false)
+  const [tempFormValues, setTempFormValues] = useState<ProfileFormValues>({
     displayName: '',
     username: '',
     email: '',
@@ -74,10 +74,12 @@ export default function ProfileForm({
     },
   )
 
-  const { storedValue:userData, setValue:setUserData}= useLocalStorage('userData',{} as UserData)
-  
+  const { storedValue: userData, setValue: setUserData } = useLocalStorage(
+    'userData',
+    {} as UserData,
+  )
 
-  const form = useForm<ProfileFormValues>({ 
+  const form = useForm<ProfileFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       displayName: profileData?.profile?.displayName || storedValue.displayName,
@@ -100,7 +102,7 @@ export default function ProfileForm({
     onSuccess: () => {
       toast.success('Profile updated successfully')
       refetch()
-      setUserData({...userData, ...tempFormValues})
+      setUserData({ ...userData, ...tempFormValues })
       setDisabled(true)
     },
     onError: (error) => {
@@ -120,7 +122,7 @@ export default function ProfileForm({
 
     try {
       const imageUrl = await uploadProfileImage(file)
-     
+
       if (imageUrl) {
         form.setValue('profileImage', imageUrl)
         setDisabled(false)
@@ -140,7 +142,7 @@ export default function ProfileForm({
 
     try {
       const imageUrl = await uploadCoverImage(file)
-      
+
       if (imageUrl) {
         form.setValue('coverImage', imageUrl)
         setDisabled(false)
@@ -154,9 +156,11 @@ export default function ProfileForm({
 
   const onSubmit = async (data: ProfileFormValues) => {
     updateProfile(data)
-    
+
     setTempFormValues(data)
   }
+
+  console.log({ formValues: form.getValues() })
 
   return (
     <Form {...form}>

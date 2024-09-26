@@ -64,7 +64,7 @@ function Portfolio({
   secondaryProfile?: boolean
 }) {
   const filteredNfts = nfts.filter((nft) => !nft.isPrivate)
-  console.log({ nfts })
+
   return (
     <div className="w-full py-10 flex items-center justify-center">
       <div className="w-full max-w-7xl">
@@ -138,7 +138,6 @@ function NFTCard({
       ovationService.hideNft({ nftId, public: false }),
     onSuccess: (data) => {
       toast.success('NFT hidden successfully')
-      console.log({ hideNft: data })
     },
   })
 
@@ -146,7 +145,6 @@ function NFTCard({
     mutationFn: (nftId: string) => ovationService.setFavouriteNft(nftId),
     onSuccess: (data) => {
       toast.success('NFT added to favorites successfully')
-      console.log({ setFavouriteNft: data })
     },
   })
 

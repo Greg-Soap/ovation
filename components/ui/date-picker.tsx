@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { format } from 'date-fns'
+import { format, setMonth, setYear, subYears } from 'date-fns'
 import { Calendar as CalendarIcon } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
@@ -12,6 +12,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 interface DatePickerProps {
   disableDate?: boolean
@@ -20,6 +27,7 @@ interface DatePickerProps {
 
 export function DatePicker({ disableDate, onChange }: DatePickerProps) {
   const [selectedDate, setSelectedDate] = React.useState<Date>()
+  const [currentMonth, setCurrentMonth] = React.useState(new Date())
 
   const handleChange = React.useCallback(
     (date: Date | undefined) => {
@@ -33,6 +41,31 @@ export function DatePicker({ disableDate, onChange }: DatePickerProps) {
   const handleSelectDate = (date: Date | undefined) => {
     setSelectedDate(date)
     handleChange(date)
+  }
+
+  const currentYear = new Date().getFullYear()
+  const years = Array.from({ length: 100 }, (_, i) => currentYear - 99 + i)
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ]
+
+  const handleMonthChange = (month: number) => {
+    setCurrentMonth((prevMonth) => setMonth(prevMonth, month))
+  }
+
+  const handleYearChange = (year: number) => {
+    setCurrentMonth((prevMonth) => setYear(prevMonth, year))
   }
 
   return (
@@ -53,16 +86,52 @@ export function DatePicker({ disableDate, onChange }: DatePickerProps) {
           {selectedDate ? (
             format(selectedDate, 'PPP')
           ) : (
-            <span>Pick a date</span>
+            <span>Pick your date of birth</span>
           )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0 bg-black text-white">
+        <div className="flex justify-between gap-2 px-2 py-1 pt-2">
+          <Select
+            value={currentMonth.getMonth().toString()}
+            onValueChange={(value) => handleMonthChange(Number.parseInt(value))}
+          >
+            <SelectTrigger className="bg-black text-white border-[#353538]">
+              <SelectValue>{months[currentMonth.getMonth()]}</SelectValue>
+            </SelectTrigger>
+            <SelectContent className="bg-black text-white border-[#353538] max-h-[200px]">
+              {months.map((month, index) => (
+                <SelectItem key={month} value={index.toString()}>
+                  {month}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Select
+            value={currentMonth.getFullYear().toString()}
+            onValueChange={(value) => handleYearChange(Number.parseInt(value))}
+          >
+            <SelectTrigger className="bg-black text-white border-[#353538]">
+              <SelectValue>{currentMonth.getFullYear()}</SelectValue>
+            </SelectTrigger>
+            <SelectContent className="bg-black text-white border-[#353538] max-h-[200px]">
+              {years.map((year) => (
+                <SelectItem key={year} value={year.toString()}>
+                  {year}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
         <Calendar
           mode="single"
           selected={selectedDate}
           onSelect={handleSelectDate}
+          month={currentMonth}
+          onMonthChange={setCurrentMonth}
           initialFocus
+          fromYear={currentYear - 99}
+          toYear={currentYear}
         />
       </PopoverContent>
     </Popover>
