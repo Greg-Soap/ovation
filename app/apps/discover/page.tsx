@@ -457,7 +457,7 @@ const CTabTrigger = ({
 function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
   if (mostViewed.length === 0) {
     return (
-      <div className="h-[800px] mt-10 p-6 mb-5 border border-[#FFFFFF14] rounded-[10px] flex flex-col items-center justify-center sticky top-1 bg-[#18181C]">
+      <div className="max-h-[800px] h-full mt-10 p-6 mb-5 border border-[#FFFFFF14] rounded-[10px] flex flex-col items-center justify-center sticky top-1 bg-[#18181C]">
         <p className="text-xl font-semibold text-white mb-2">
           No Most Viewed Users
         </p>
