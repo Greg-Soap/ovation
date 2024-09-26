@@ -59,7 +59,17 @@ export default function SecondaryProfile() {
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <div className="relative w-full h-[262px] bg-profile-banner bg-contain bg-center">
+      <div
+        className="relative w-full h-[262px]"
+        style={{
+          backgroundImage: profileData?.profile?.coverImage
+            ? `url('${profileData?.profile?.coverImage}')`
+            : 'url("/assets/images/profile/image8.png")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
         <ErrorBoundary FallbackComponent={ErrorFallback}>
           <div className="hidden lg:flex items-end justify-end gap-3 h-[inherit] w-full pr-10 pb-10">
             <Button
