@@ -99,7 +99,7 @@ function GetStarted({
       icon: '/assets/images/profile/task2.png',
       link: '/apps/settings?tab=Personal Info',
       buttonText: 'Add info',
-      isComplete: !!(user.bio && user.location && user.profileImage),
+      isComplete: !!(user?.bio && user?.location && user?.profileImage),
     },
     {
       title: 'ADD A LINK',
@@ -108,7 +108,7 @@ function GetStarted({
       icon: '/assets/images/profile/task3.png',
       link: '/apps/settings?tab=Socials',
       buttonText: 'Add Socials',
-      isComplete: Object.keys(socials).length > 0,
+      isComplete: Object.keys(socials || {}).length > 0,
     },
     {
       title: 'ADD YOUR EXPERIENCE',
@@ -116,7 +116,7 @@ function GetStarted({
       icon: '/assets/images/profile/task1.png',
       link: '/apps/settings?tab=Experience',
       buttonText: 'Add Experience',
-      isComplete: experiences && experiences.length > 0,
+      isComplete: experiences?.length > 0,
     },
   ]
 
