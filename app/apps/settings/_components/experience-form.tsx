@@ -31,7 +31,7 @@ const formSchema = z.object({
   startDate: z.string(),
   endDate: z.string().nullable().optional(),
   description: z.string().min(1, 'Description is required').optional(),
-  skills: z.array(z.string()).min(1, 'Skills are required'),
+  skills: z.array(z.string()).optional(),
 })
 
 interface FormValues extends z.infer<typeof formSchema> {}
@@ -77,9 +77,9 @@ export default function ExperienceForm({
         startDate: formatDate(new Date(data.startDate)),
         endDate: isCurrentJob ? null : formatDate(new Date(data.endDate || '')),
         skill: data.skills?.join(', ') || '',
-        role: data.role || '', // Ensure role is always a string
-        department: data.department || '', // Ensure department is always a string
-        description: data.description || '', // Ensure description is always a string
+        role: data.role || '', 
+        department: data.department || '', 
+        description: data.description || '', 
       }),
     onSuccess: () => {
       toast.success('Experience updated successfully')
@@ -184,6 +184,7 @@ export default function ExperienceForm({
                       <FormControl>
                         <DatePicker
                           disableDate={false}
+                          placeholder="Select Start Date"
                           onChange={(date) =>
                             field.onChange(formatDate(date || new Date()))
                           }
@@ -204,6 +205,7 @@ export default function ExperienceForm({
                       <FormControl>
                         <DatePicker
                           disableDate={isCurrentJob}
+                          placeholder="Select Finish Date"
                           onChange={(date) =>
                             field.onChange(formatDate(date || new Date()))
                           }

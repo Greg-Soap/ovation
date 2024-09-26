@@ -54,6 +54,12 @@ const formSchema = z.object({
     .refine((val) => !val || val.includes('x.com/'), {
       message: "Twitter URL should include 'x.com/'",
     }),
+  website: z
+    .string()
+    .optional()
+    .refine((val) => urlRefinement(val, 'Invalid Website URL'), {
+      message: "Please enter a valid Website URL (e.g., 'www.example.com')",
+    }),
   lens: z
     .string()
     .optional()
@@ -115,6 +121,7 @@ interface SocialPlatform {
 const socialPlatforms: SocialPlatform[] = [
   { name: 'LinkedIn', imgSrc: '/assets/images/settings/social/linked-in.png' },
   { name: 'Twitter', imgSrc: '/assets/images/settings/social/x.png' },
+  { name: 'Website/Portfolio', imgSrc: '/assets/images/profile/link.png' },
   { name: 'Lens', imgSrc: '/assets/images/settings/social/lens.png' },
   { name: 'Farcaster', imgSrc: '/assets/images/settings/social/farcaster.png' }, // Changed from 'Forcaster' to 'Farcaster'
   { name: 'Blur', imgSrc: '/assets/images/settings/social/blur.png' },
@@ -139,6 +146,7 @@ export default function SocialForm({ userId }: { userId: string }) {
     defaultValues: {
       linkedin: socialLinksData?.linkedIn || '',
       twitter: socialLinksData?.twitter || '',
+      website: socialLinksData?.website || '',
       lens: socialLinksData?.lens || '',
       farcaster: socialLinksData?.forcaster || '',
       blur: socialLinksData?.blur || '',
@@ -164,6 +172,7 @@ export default function SocialForm({ userId }: { userId: string }) {
       blur: data.blur || '',
       foundation: data.foundation || '',
       twitter: data.twitter || '',
+      website: data.website || '',
       linkedIn: data.linkedin || '',
       lens: data.lens || '',
       forcaster: data.farcaster || '',

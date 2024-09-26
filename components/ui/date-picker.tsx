@@ -23,9 +23,10 @@ import {
 interface DatePickerProps {
   disableDate?: boolean
   onChange: (date: Date | undefined) => void
+  placeholder?: string
 }
 
-export function DatePicker({ disableDate, onChange }: DatePickerProps) {
+export function DatePicker({ disableDate, onChange, placeholder }: DatePickerProps) {
   const [selectedDate, setSelectedDate] = React.useState<Date>()
   const [currentMonth, setCurrentMonth] = React.useState(new Date())
 
@@ -86,7 +87,7 @@ export function DatePicker({ disableDate, onChange }: DatePickerProps) {
           {selectedDate ? (
             format(selectedDate, 'PPP')
           ) : (
-            <span>Pick your date of birth</span>
+            <span>{placeholder || 'Pick your date of birth'}</span>
           )}
         </Button>
       </PopoverTrigger>

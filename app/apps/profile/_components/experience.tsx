@@ -14,15 +14,17 @@ export default function Experience({ data }: { data: UserExperience[] }) {
           Experience
         </p>
 
-        <div className="flex items-center gap-3">
-          <Button
-            variant="ghost"
-            className="hover:bg-transparent"
-            onClick={() => router.push('/apps/settings?tab=Experience')}
-          >
-            <PlusIcon className="w-[14px] h-[14px] stroke-[#CFF073]" />
-          </Button>
-        </div>
+        {data.length === 0 && (
+          <div className="flex items-center gap-3">
+            <Button
+              variant="ghost"
+              className="hover:bg-transparent"
+              onClick={() => router.push('/apps/settings?tab=Experience')}
+            >
+              <PlusIcon className="w-[14px] h-[14px] stroke-[#CFF073]" />
+            </Button>
+          </div>
+        )}
       </div>
 
       {data.length === 0 ? (

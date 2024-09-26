@@ -70,6 +70,7 @@ export interface UserSocialsMod {
   magic?: string | null
   ethico?: string | null
   twitter?: string | null
+  website?: string | null
 }
 
 export interface WalletAcct {
