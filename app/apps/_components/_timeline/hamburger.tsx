@@ -13,7 +13,6 @@ import {
   NotificationBing,
 } from 'iconsax-react'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
-import FeedbackModal from '../../feedback'
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer'
 import { useQuery } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
@@ -21,6 +20,7 @@ import Image from 'next/image'
 import type { ProfileData, UserData } from '@/models/all.model'
 import MiniLoader from '@/components/mini-loader'
 import { useLocalStorage } from '@/lib/use-local-storage'
+import FeedbackModal from '../../_feedback/feedback'
 
 export default function Hamburger() {
   const [open, setOpen] = useState(false)

@@ -20,9 +20,10 @@ import {
 import { useLocalStorage } from '@/lib/use-local-storage'
 import type { UserData } from '@/models/all.model'
 import ovationService from '@/services/ovation.service'
-import FeedbackModal from './feedback'
+// import FeedbackModal from './feedback'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
+import FeedbackModal from './_feedback/feedback'
 
 const menuItems = [
   {
@@ -189,6 +190,7 @@ export function FeedbackButton({ className }: { className?: string }) {
             </Button>
           </DialogTrigger>
           <DialogContent className="flex flex-col items-center justify-center p-0 m-0 w-fit h-fit overflow-auto border-none">
+            {/* <FeedbackModal /> */}
             <FeedbackModal />
           </DialogContent>
         </Dialog>
