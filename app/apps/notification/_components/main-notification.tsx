@@ -1,10 +1,10 @@
 'use client'
 import type React from 'react'
-import { NotificationFactory } from './notification-renderer'
 import type { NotificationItem } from './types'
 import { useQuery } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
 import MiniLoader from '@/components/mini-loader'
+import NotificationCard from './notification-card'
 
 function MainNotification() {
   const { data, isLoading } = useQuery({
@@ -23,7 +23,7 @@ function MainNotification() {
         <MiniLoader />
       ) : notifications.length > 0 ? (
         notifications.map((item: NotificationItem, index: number) => (
-          <NotificationFactory key={index} {...item} />
+          <NotificationCard key={index} {...item} />
         ))
       ) : (
         <div className="flex items-center justify-center h-full">

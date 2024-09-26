@@ -159,7 +159,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
         })}
         className="flex flex-col gap-7"
       >
-        <div className="  flex justify-between mb-4">
+        {/* <div className="  flex justify-between mb-4">
           <Button
             onClick={loginGoogle}
             className="p-4 text-[10px] font-semibold md:text-base w-full bg-white flex gap-4"
@@ -167,7 +167,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
             <Google />
             <p>Login with Google</p>
           </Button>
-        </div>
+        </div> */}
         <div className="flex items-center justify-between mb-5">
           <span className="w-[46%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]  text-[#C1C0C6]" />
           <p className="text-[10px] font-medium text-[#C1C0C6]">OR</p>
