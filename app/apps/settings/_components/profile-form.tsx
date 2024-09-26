@@ -20,7 +20,7 @@ import ovationService from '@/services/ovation.service'
 import { toast } from 'sonner'
 import { useRef } from 'react'
 
-import type { ProfileData } from '@/models/all.model'
+import type { ProfileData, UserData } from '@/models/all.model'
 import { useLocalStorage } from '@/lib/use-local-storage'
 import { useMutation } from '@tanstack/react-query'
 import { formatDate } from '@/lib/helper-func'
@@ -50,7 +50,16 @@ export default function ProfileForm({
   refetch: () => void
 }) {
   const [disabled, setDisabled] = useState(true)
-
+ const [tempFormValues, setTempFormValues] = useState<ProfileFormValues>({
+    displayName: '',
+    username: '',
+    email: '',
+    birthDate: formatDate(new Date()),
+    location: '',
+    bio: '',
+    profileImage: '',
+    coverImage: '',
+  })
   const { storedValue, setValue } = useLocalStorage<ProfileFormValues>(
     'profileDraft',
     {
@@ -65,7 +74,10 @@ export default function ProfileForm({
     },
   )
 
-  const form = useForm<ProfileFormValues>({
+  const { storedValue:userData, setValue:setUserData}= useLocalStorage('userData',{} as UserData)
+  
+
+  const form = useForm<ProfileFormValues>({ 
     resolver: zodResolver(formSchema),
     defaultValues: {
       displayName: profileData?.profile?.displayName || storedValue.displayName,
@@ -82,12 +94,13 @@ export default function ProfileForm({
     },
   })
 
-  const { mutate: updateProfile } = useMutation({
+  const { mutate: updateProfile, isPending } = useMutation({
     mutationFn: (data: ProfileFormValues) =>
       ovationService.updatePersonalInfo(data),
     onSuccess: () => {
       toast.success('Profile updated successfully')
       refetch()
+      setUserData({...userData, ...tempFormValues})
       setDisabled(true)
     },
     onError: (error) => {
@@ -107,7 +120,7 @@ export default function ProfileForm({
 
     try {
       const imageUrl = await uploadProfileImage(file)
-      console.log('imageUrl: ', imageUrl)
+     
       if (imageUrl) {
         form.setValue('profileImage', imageUrl)
         setDisabled(false)
@@ -127,6 +140,7 @@ export default function ProfileForm({
 
     try {
       const imageUrl = await uploadCoverImage(file)
+      
       if (imageUrl) {
         form.setValue('coverImage', imageUrl)
         setDisabled(false)
@@ -140,6 +154,8 @@ export default function ProfileForm({
 
   const onSubmit = async (data: ProfileFormValues) => {
     updateProfile(data)
+    
+    setTempFormValues(data)
   }
 
   return (
@@ -344,7 +360,7 @@ export default function ProfileForm({
         </div>
         <SettingsChange
           disabled={disabled}
-          isLoading={form.formState.isSubmitting}
+          isLoading={isPending}
           saveDraft={() => setValue(form.getValues())}
         />
       </form>
