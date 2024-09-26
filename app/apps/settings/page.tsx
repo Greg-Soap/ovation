@@ -41,7 +41,7 @@ export default function Page() {
     Experience: (props: { experienceData: UserExperience[] }) => (
       <ExperienceForm {...props} />
     ),
-    Wallets: () => <WalletForm />,
+    // Wallets: () => <WalletForm />,
     Password: () => <PasswordForm />,
   }
 
@@ -67,11 +67,11 @@ export default function Page() {
       heading: 'Experience',
       subtitle: 'Set your work profile to build trust and security',
     },
-    {
-      imgSrc: '/assets/images/settings/tab-list/four.png',
-      heading: 'Wallets',
-      subtitle: 'Update your wallet info and details here',
-    },
+    // {
+    //   imgSrc: '/assets/images/settings/tab-list/four.png',
+    //   heading: 'Wallets',
+    //   subtitle: 'Update your wallet info and details here',
+    // },
     {
       imgSrc: '/assets/images/settings/tab-list/five.png',
       heading: 'Password',
