@@ -131,6 +131,10 @@ class OvationService {
     return api.patch('/Profile/fav-nft', { id: nftId })
   }
 
+  static removeFavouriteNft(nftId: string) {
+    return api.delete(`/Profile/fav-nft/${nftId}`)
+  }
+
   static getNfts(userId: string) {
     return api.get(`/Profile/nft/${userId}?page=1`)
   }

@@ -14,9 +14,10 @@ export default function FavouriteNft({ userId }: { userId: string }) {
     queryFn: () => ovationService.getFavouriteNft(userId),
   })
 
+
   return (
     <div className="flex flex-col bg-[#18181C] rounded-[20px] gap-4 px-5 py-[18px]">
-      <p className="text-xs font-medium text-[#808080]">Favourite NFT</p>
+      <p className="text-xs font-medium text-[#808080]">Favorite NFT</p>
       {isLoading ? (
         <div className="grid grid-cols-3 gap-[6px]">
           {[...Array(3)].map((_, index) => (
@@ -44,7 +45,7 @@ export default function FavouriteNft({ userId }: { userId: string }) {
           ))}
         </div>
       ) : (
-        <p className="text-sm text-gray-400">No favourite NFTs found</p>
+        <p className="text-sm text-gray-400">No favorite NFTs found</p>
       )}
     </div>
   )

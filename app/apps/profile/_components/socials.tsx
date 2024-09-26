@@ -25,7 +25,7 @@ export default function Socials({ socials }: { socials: UserSocialsMod }) {
       <p className="text-xs font-medium text-[#808080]">Socials</p>
 
       {hasSocials ? (
-        <div className="flex w-full justify-between">
+        <div className="flex w-full gap-2">
           {availableSocials.map(([platform, url]) => (
             <Link
               key={platform}

@@ -16,8 +16,9 @@ import {
 } from '@/components/ui/dialog'
 import { Skeleton } from '@/components/ui/skeleton'
 import ovationService from '@/services/ovation.service'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { getUserId } from '@/lib/helper-func'
 
 interface NFT {
   type: 'eth' | 'Complete' | 'Domain' | 'Collectible' | 'Metaverse' | 'Art'
@@ -58,11 +59,16 @@ function Portfolio({
   nfts,
   isLoading,
   secondaryProfile,
+ 
 }: {
   nfts: NFT[]
   isLoading: boolean
   secondaryProfile?: boolean
+ 
+
 }) {
+
+  
   const filteredNfts = nfts.filter((nft) => !nft.isPrivate)
 
   return (
@@ -91,6 +97,7 @@ function Portfolio({
                     key={index}
                     {...nft}
                     secondaryProfile={secondaryProfile}
+                    
                   />
                 ))
               : nfts.map((nft, index) => (
@@ -98,6 +105,7 @@ function Portfolio({
                     key={index}
                     {...nft}
                     secondaryProfile={secondaryProfile}
+                   
                   />
                 ))}
           </div>
@@ -132,20 +140,51 @@ function NFTCard({
   id,
   isPrivate,
   secondaryProfile,
-}: NFT & { secondaryProfile?: boolean }) {
+ 
+}: NFT & { secondaryProfile?: boolean, }) {
+const queryClient = useQueryClient()
+const userId = getUserId()
+
+const {data: favouriteNfts} = useQuery({
+  queryKey: ['favouriteNft', userId],
+  queryFn: () => ovationService.getFavouriteNft(userId as string),
+})
+const isNftFavorite = favouriteNfts?.data?.data?.some((favNft: any) => favNft.id === id)
+
+
   const { mutate: hideNft } = useMutation({
-    mutationFn: (nftId: string) =>
-      ovationService.hideNft({ nftId, public: false }),
-    onSuccess: (data) => {
-      toast.success('NFT hidden successfully')
+    mutationFn: ({nftId, isPublic}:{nftId: string, isPublic: boolean}) =>
+      ovationService.hideNft({ nftId, public: isPublic }),
+    onSuccess: async (data) => {
+    
+    await queryClient.invalidateQueries({queryKey: ['nfts', userId]})
+      toast.success('NFT ' + (isPrivate ? 'shown' : 'hidden') + ' successfully')
     },
   })
 
-  const { mutate: setFavouriteNft } = useMutation({
-    mutationFn: (nftId: string) => ovationService.setFavouriteNft(nftId),
-    onSuccess: (data) => {
-      toast.success('NFT added to favorites successfully')
+    const { mutate: toggleFavoriteNft } = useMutation({
+    mutationFn: (nftId: string) => 
+      isNftFavorite 
+        ? ovationService.removeFavouriteNft(nftId)
+        : ovationService.setFavouriteNft(nftId),
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({ queryKey: ['favouriteNft', userId] })
+      toast.success(isNftFavorite 
+        ? 'NFT removed from favorites successfully'
+        : 'NFT added to favorites successfully'
+      )
     },
+    onError: (error) => {
+      //@ts-ignore
+      if (error.response?.data?.message === 'Only 3 NFTs can be stored') {
+        toast.error('Only 3 NFTs can be made favorite')
+      } else {
+        toast.error(isNftFavorite
+          ? 'Failed to remove NFT from favorites'
+          : 'Failed to add NFT to favorites'
+        )
+      }
+    }
   })
 
   const getImageSrc = () => {
@@ -268,17 +307,17 @@ function NFTCard({
               <PopoverContent className="rounded-[7px] bg-[#232227] flex flex-col w-fit p-0 border-none">
                 <Button
                   variant="ghost"
-                  onClick={() => setFavouriteNft(id)}
+                  onClick={() => toggleFavoriteNft(id)}
                   className="text-white text-xs justify-start font-medium px-3 py-[10px] w-full h-fit border-b border-[#333333] rounded-none"
                 >
-                  Favorite NFT
+                {isNftFavorite ? 'Remove from Favorite NFTs' : 'Add to Favorite NFTs'}
                 </Button>
                 <Button
                   variant="ghost"
-                  onClick={() => hideNft(id)}
+                  onClick={() => hideNft({nftId: id, isPublic: isPrivate? true: false})}
                   className="text-white text-xs justify-start font-medium px-3 py-[10px] w-full h-fit"
                 >
-                  Hide NFT
+                  {isPrivate ? 'Show NFT' : 'Hide NFT'}
                 </Button>
               </PopoverContent>
             </Popover>
