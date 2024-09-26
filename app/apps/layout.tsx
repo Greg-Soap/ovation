@@ -31,6 +31,13 @@ export default function AsideLayout({
       toast.success(`You have ${newMessages.length} new messages`);
     });
 
+    // Listen for incoming notifications
+    notificationService.onMessage('ReceivedNotification', (notification: NotificationMessage) => {
+      toast.success(`${notification.title}\n${notification.message}`)
+
+      setNotifications((prev) => [...prev, notification])
+    })
+
     return () => {
       notificationService.stopConnection()
       firebaseSignOut()
@@ -43,13 +50,6 @@ export default function AsideLayout({
 
   const connectSignalR = async () => {
     await notificationService.startConnection()
-
-    // Listen for incoming notifications
-    notificationService.onMessage('ReceiveNotification', (notification: NotificationMessage) => {
-      toast.success(`${notification.title}\n${notification.message}`)
-
-      setNotifications((prev) => [...prev, notification])
-    })
   }
 
   const firebaseSignIn = async () => {
