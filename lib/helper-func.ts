@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { useLocalStorage } from './use-local-storage'
 import type { UserData } from '@/models/all.model'
+import { FriendProps } from '@/app/apps/messages/message-container'
 
 function generateRandomString(length = 10) {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -188,6 +189,17 @@ export function getUserId(): string | undefined {
     return user?.userId
   }
   return undefined
+}
+
+export function getReceiver(): FriendProps | null {
+  if (typeof window !== 'undefined') {
+    const receiver = window.localStorage.getItem('receiver')
+    const receiverData = receiver ? (JSON.parse(receiver) as FriendProps) : null
+    if(receiverData == null)
+      return null
+    return receiverData
+  }
+  return null
 }
 
 export function formatUsername(username?: string): string {

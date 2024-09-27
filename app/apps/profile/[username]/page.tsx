@@ -11,10 +11,13 @@ import { Suspense, useEffect } from 'react'
 import MiniLoader from '@/components/mini-loader'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
+import { useLocalStorage } from '@/lib/use-local-storage'
+import { FriendProps } from '../../messages/message-container'
 
 export default function SecondaryProfile() {
   const params = useParams()
   const username = params.username as string
+  const {storedValue, setValue} = useLocalStorage<FriendProps | null>('receiver', null)
 
   const {
     data: profileData,
@@ -57,6 +60,22 @@ export default function SecondaryProfile() {
     },
   )
 
+  const openDM = () => {
+    setValue({
+      displayName: profileData?.profile?.displayName!,
+      followerCount: profileData?.userStats?.followers! | 0,
+      followingCount: profileData?.userStats?.following! | 0,
+      friendDisplayPicture: profileData?.profile?.profileImage!,
+      isOpened: true,
+      lastActive: '',
+      userId: profileData?.userId!,
+      biography: profileData?.profile?.bio!,
+      userName: profileData?.username!,
+      lastMessage: ''
+    })
+    //handle the dm page render
+  }
+
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <div
@@ -75,9 +94,7 @@ export default function SecondaryProfile() {
             <Button
               variant="default"
               className="bg-[#333726] p-[9px] border border-[#507100]"
-              onClick={() => {
-                console.log(profileData?.userId)
-              }}
+              onClick={openDM}
             >
               <AsideMsgIcon className="w-5 h-5 stroke-black fill-[#CFF073]" />
             </Button>
