@@ -11,9 +11,10 @@ import Aside from './aside'
 import { logOut, signIn } from '@/lib/firebaseAuthService'
 import { useLocalStorage } from '@/lib/use-local-storage'
 import { UserData } from "@/models/all.model";
-import { listenForUserMessages } from '@/lib/firebaseChatService'
 
 const queryClient = new QueryClient()
+
+export const notificationServices = new NotificationService()
 
 export default function AsideLayout({
   children,
@@ -27,29 +28,32 @@ export default function AsideLayout({
   useEffect(() => {
     connectSignalR()
     firebaseSignIn()
-    const unsubscribe = listenForUserMessages((newMessages) => {
-      // toast.success(`You have ${newMessages.length} new messages`);
-    });
+    // const unsubscribe = listenForUserMessages((newMessages) => {
+    //   // toast.success(`You have ${newMessages.length} new messages`);
+    // });
 
     // Listen for incoming notifications
-    notificationService.onMessage('ReceivedNotification', (notification: NotificationMessage) => {
+    notificationServices.onMessage('ReceivedNotification', (notification: NotificationMessage) => {
       toast.success(`${notification.title}\n${notification.message}`)
 
       setNotifications((prev) => [...prev, notification])
     })
 
+    notificationServices.onMessage('MessageNotification', (notification: string) => {
+      toast.success(`${notification}`)
+
+    })
+
     return () => {
-      notificationService.stopConnection()
+      notificationServices.stopConnection()
       firebaseSignOut()
-      if(unsubscribe != null)
-          unsubscribe()
+      // if(unsubscribe != null)
+      //     unsubscribe()
     }
   }, [])
 
-  const notificationService = new NotificationService()
-
   const connectSignalR = async () => {
-    await notificationService.startConnection()
+    await notificationServices.startConnection()
   }
 
   const firebaseSignIn = async () => {

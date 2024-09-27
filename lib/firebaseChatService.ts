@@ -17,6 +17,7 @@ import {
 } from 'firebase/firestore'
 import { firestore, auth } from './firebase'
 import { getUserId } from './helper-func'
+import { notificationServices } from '@/app/apps/layout'
 
 /**
  * Sends a message from auth user to another user.
@@ -49,6 +50,7 @@ export const sendMessage = async (
   let sender = await getUserDetails(senderId)
   let receiver = await getUserDetails(receiverId)
 
+  notificationServices.sendMessageNotification('MessageNotification', `@${sender.username}: ${messageText}`)
   await storeChatForUsers(sender!, receiver, message.message)
 }
 
@@ -168,7 +170,7 @@ export const getActiveChatsForUser = async (userId: string, pageSize: number = 1
 
     // Map the query result to a list of ActiveChat objects
     const activeChats: ChatData[] = querySnapshot.docs.map(doc => {
-      
+
       const data = doc.data();
       return {
         chatId: data.chatId,
@@ -191,6 +193,13 @@ export interface Participant {
   username: string;
   email: string;
   uid: string;
+  image: string | null;
+}
+
+export interface ParticipantMod {
+  displayName: string;
+  username: string;
+  email: string;
   image: string | null;
 }
 

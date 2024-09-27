@@ -24,6 +24,7 @@ import SendIcon from '@/components/icons/sendIcon'
 import { getReceiver, getUserId } from '@/lib/helper-func'
 import type { Timestamp } from 'firebase/firestore'
 import Spinner from '@/components/ui/spinner'
+import { notificationServices } from '../layout'
 
 export interface FriendProps {
   friendDisplayPicture: string
