@@ -116,21 +116,55 @@ type FormValues = z.infer<typeof formSchema>
 interface SocialPlatform {
   name: string
   imgSrc: string
+  label: string
 }
 
 const socialPlatforms: SocialPlatform[] = [
-  { name: 'LinkedIn', imgSrc: '/assets/images/settings/social/linked-in.png' },
-  { name: 'Twitter', imgSrc: '/assets/images/settings/social/x.png' },
-  { name: 'Website/Portfolio', imgSrc: '/assets/images/profile/link.png' },
-  { name: 'Lens', imgSrc: '/assets/images/settings/social/lens.png' },
-  { name: 'Farcaster', imgSrc: '/assets/images/settings/social/farcaster.png' }, // Changed from 'Forcaster' to 'Farcaster'
-  { name: 'Blur', imgSrc: '/assets/images/settings/social/blur.png' },
   {
-    name: 'Foundation',
-    imgSrc: '/assets/images/settings/social/foundation.png',
+    name: 'linkedin',
+    imgSrc: '/assets/images/settings/social/linked-in.png',
+    label: 'LinkedIn',
   },
-  { name: 'MagicEden', imgSrc: '/assets/images/settings/social/m-eden.png' },
-  { name: 'EthCo', imgSrc: '/assets/images/settings/social/eth-co.png' }, // Changed from 'EthCo' to 'EthCo'
+  {
+    name: 'twitter',
+    imgSrc: '/assets/images/settings/social/x.png',
+    label: 'Twitter',
+  },
+  {
+    name: 'website',
+    imgSrc: '/assets/images/profile/link.png',
+    label: 'Website/Portfolio',
+  },
+  {
+    name: 'lens',
+    imgSrc: '/assets/images/settings/social/lens.png',
+    label: 'Lens',
+  },
+  {
+    name: 'farcaster',
+    imgSrc: '/assets/images/settings/social/farcaster.png',
+    label: 'Farcaster',
+  },
+  {
+    name: 'blur',
+    imgSrc: '/assets/images/settings/social/blur.png',
+    label: 'Blur',
+  },
+  {
+    name: 'foundation',
+    imgSrc: '/assets/images/settings/social/foundation.png',
+    label: 'Foundation',
+  },
+  {
+    name: 'magiceden',
+    imgSrc: '/assets/images/settings/social/m-eden.png',
+    label: 'MagicEden',
+  },
+  {
+    name: 'ethco',
+    imgSrc: '/assets/images/settings/social/eth-co.png',
+    label: 'EthCo',
+  },
 ]
 
 export default function SocialForm({ userId }: { userId: string }) {
@@ -191,26 +225,26 @@ export default function SocialForm({ userId }: { userId: string }) {
           onChange={() => setIsDisabled(false)}
           className="space-y-[23px] min-h-full"
         >
-          {socialPlatforms.map((platform, index) => (
+          {socialPlatforms.map((platform) => (
             <FormField
-              key={index}
+              key={platform.name}
               control={form.control}
-              name={platform.name.toLowerCase() as keyof FormValues}
+              name={platform.name as keyof FormValues}
               render={({ field }) => (
                 <FormItem className="w-full flex flex-col gap-2 px-10 2xl:pl-20">
                   <FormLabel className="text-sm text-[#B3B3B3]">
-                    {platform.name}
+                    {platform.label}
                   </FormLabel>
                   <FormControl>
                     <div className="h-[47px] flex items-center border border-[#4D4D4D] rounded-full px-3 py-2 gap-2">
                       <Image
                         src={platform.imgSrc}
-                        alt={platform.name}
+                        alt={platform.label}
                         width={25}
                         height={25}
                       />
                       <Input
-                        placeholder={`Enter ${platform.name} link here`}
+                        placeholder={`Enter ${platform.label} link here`}
                         {...field}
                         className="focus:border-none focus:outline-none focus:ring-0 focus-visible:ring-0 border-none h-fit px-0 py-2 text-sm text-[#F8F8FF]"
                       />
