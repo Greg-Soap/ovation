@@ -18,6 +18,7 @@ import { optionValueToBlockchainName } from '@/lib/helper-func'
 export default function RenderWalletAndConfirmation({
   form,
   handleFormSubmit,
+  isPending,
 }: any) {
   return (
     <form
@@ -75,8 +76,8 @@ export default function RenderWalletAndConfirmation({
       <Button
         type="submit"
         className="w-full text-sm font-semibold h-[53px]"
-        disabled={form.formState.isSubmitting}
-        isLoading={form.formState.isSubmitting}
+        disabled={isPending}
+        isLoading={isPending}
         loadingText="Creating profile..."
       >
         Make my profile

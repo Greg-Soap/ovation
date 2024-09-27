@@ -110,7 +110,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
     return () => subscription.unsubscribe()
   }, [form, setDraft])
 
-  const { mutate: createAccount } = useMutation({
+  const { mutate: createAccount, isPending } = useMutation({
     mutationFn: ovationService.register,
     onSuccess: async (data) => {
       console.log(data)
@@ -359,6 +359,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
             <RenderWalletAndConfirmation
               form={form}
               handleFormSubmit={handleFormSubmit}
+              isPending={isPending}
             />
           )
         )
