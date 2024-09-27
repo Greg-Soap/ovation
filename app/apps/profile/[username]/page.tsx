@@ -4,7 +4,7 @@ import AsideMsgIcon from '@/components/icons/asideMsgIcon'
 import UserProfile from '../_components/user-profile'
 import ovationService from '@/services/ovation.service'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import MainProfileSection from '../_components/main-profile-section'
 import type { ProfileData } from '@/models/all.model'
 import { Suspense, useEffect } from 'react'
@@ -17,7 +17,8 @@ import { FriendProps } from '../../messages/message-container'
 export default function SecondaryProfile() {
   const params = useParams()
   const username = params.username as string
-  const {storedValue, setValue} = useLocalStorage<FriendProps | null>('receiver', null)
+  const router = useRouter()
+  const {setValue} = useLocalStorage<FriendProps | null>('receiver', null)
 
   const {
     data: profileData,
@@ -60,21 +61,23 @@ export default function SecondaryProfile() {
     },
   )
 
-  const openDM = () => {
-    setValue({
-      displayName: profileData?.profile?.displayName!,
-      followerCount: profileData?.userStats?.followers! | 0,
-      followingCount: profileData?.userStats?.following! | 0,
-      friendDisplayPicture: profileData?.profile?.profileImage!,
-      isOpened: true,
-      lastActive: '',
-      userId: profileData?.userId!,
-      biography: profileData?.profile?.bio!,
-      userName: profileData?.username!,
-      lastMessage: ''
-    })
-    //handle the dm page render
-    window.location.href = "/apps/messages"
+ const openDM = () => {
+    if (profileData) {
+      const receiver: FriendProps = {
+        displayName: profileData.profile?.displayName!,
+        followerCount: profileData.userStats?.followers! || 0,
+        followingCount: profileData.userStats?.following! || 0,
+        friendDisplayPicture: profileData.profile?.profileImage!,
+        isOpened: true,
+        lastActive: '',
+        userId: profileData.userId!,
+        biography: profileData.profile?.bio!,
+        userName: profileData.username!,
+        lastMessage: ''
+      }
+      setValue(receiver)
+      router.push('/apps/messages')
+    }
   }
 
   return (

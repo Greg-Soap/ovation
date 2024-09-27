@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import React, { useState, useEffect } from 'react'
 import SearchInput from '../../_components/_timeline/search-input'
-import MessageContainer from '../../messages/message-container'
+import MessageContainer, { FriendProps } from '../../messages/message-container'
 import { Button } from '@/components/ui/button'
 import {
   type ChatData,
@@ -11,15 +11,36 @@ import {
   type Participant,
 } from '@/lib/firebaseChatService'
 import { getUserId } from '@/lib/helper-func'
+import { useLocalStorage } from '@/lib/use-local-storage'
 
 export default function FriendList() {
   const [friends, setFriends] = useState<ChatData[]>([])
   const [selectedFriend, setSelectedFriend] = useState<ChatData | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [storedReceiver, setStoredReceiver] = useState<FriendProps | null>(null)
+
 
   useEffect(() => {
     fetchChatData()
+    const receiver = localStorage.getItem('receiver')
+   if (receiver) {
+      const parsedReceiver = JSON.parse(receiver) as FriendProps
+      setStoredReceiver(parsedReceiver)
+      localStorage.removeItem('receiver') 
+    }
   }, [])
+
+   // Function to get the friend object, either from selectedFriend or storedReceiver
+  const getFriendObject = (): FriendProps | null => {
+    if (selectedFriend) {
+      //@ts-ignore
+      return getOtherParticipant(selectedFriend)
+    }
+    if (storedReceiver) {
+      return storedReceiver
+    }
+    return null
+  }
 
   const fetchChatData = async () => {
     setIsLoading(true)
@@ -84,7 +105,7 @@ export default function FriendList() {
           {/* <SearchInput width="full" /> */}
         </div>
 
-        <div className="flex flex-col gap-1 w-full">
+        <div className="flex flex-col gap-4 w-full">
           {isLoading ? (
             <div className="flex justify-center items-center h-64">
               <p className="text-[#F8F8FF]">Loading chats...</p>
@@ -96,7 +117,6 @@ export default function FriendList() {
           ) : (
             friends.map((friend, index) => {
               const otherParticipant = getOtherParticipant(friend)
-
               return (
                 <Button
                   className={`flex rounded-none justify-between px-5 py-4 cursor-pointer w-full hover:bg-[#18181C] ${
@@ -140,15 +160,14 @@ export default function FriendList() {
       </div>
 
       <div
-        className={`w-full  lg:col-span-2 ${selectedFriend ? 'block' : 'hidden lg:block'}`}
+        className={`w-full h-[100vh]  lg:col-span-2 ${getFriendObject() ? 'block' : 'hidden lg:block'}`}
       >
         <MessageContainer
           //@ts-ignore
-          friend={
-            selectedFriend ? getOtherParticipant(selectedFriend) ?? null : null
-          }
+          friend={getFriendObject()}
           goBack={() => {
             setSelectedFriend(null)
+            setStoredReceiver(null)
           }}
         />
       </div>

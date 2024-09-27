@@ -68,6 +68,13 @@ export default function MessageContainer({
     setMessage(e.target.value)
   }
 
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      handleSendMessage()
+    }
+  }
+
   const handleEmojiSelect = (emojiData: EmojiClickData) => {
     setMessage((prevMessage) => prevMessage + emojiData.emoji)
   }
@@ -122,25 +129,18 @@ export default function MessageContainer({
   }, [friend, message])
 
   if (!friend) {
-    console.log('No friend selected')
     return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <section className="w-full h-[100vh] lg:h-full lg:col-span-2 flex flex-col items-center justify-center bg-[#111115] other-link overflow-auto">
           <div className="flex flex-col items-center gap-[13px]">
             <div className="flex flex-col items-center gap-[6px]">
               <p className="text-[#F8F8FF] text-xl font-semibold">
-                Select Message
+                No Conversation Selected
               </p>
-              <p className="text-[#E6E6E6] text-[11px]">
-                Choose from previous conversation or start a new one below
+              <p className="text-[#E6E6E6] text-center text-sm max-w-[280px]">
+                To start a new conversation, visit a user&apos;s profile and click the message button.
               </p>
             </div>
-            <Button
-              variant={'default'}
-              className="px-3 py-2 h-fit rounded-[27px] text-xs text-[#111115] font-semibold transition-all duration-300 hover:opacity-80"
-            >
-              New message
-            </Button>
           </div>
         </section>
       </ErrorBoundary>
@@ -150,7 +150,7 @@ export default function MessageContainer({
   console.log({ friend })
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <section className="w-full h-[100vh] lg:h-full lg:col-span-2 flex flex-col bg-[#111115] other-link overflow-hidden">
+      <section className="w-full h-[100vh] lg:h-full lg:col-span-2 flex flex-col bg-[#111115] other-link overflow-scroll">
         <ErrorBoundary FallbackComponent={ErrorFallback}>
           <div className="flex lg:hidden bg-[rgba(17,17,21,0.8)] items-center gap-4 w-full p-5 sticky top-0 z-10">
             <ArrowLeft
@@ -174,6 +174,7 @@ export default function MessageContainer({
               alt="User Display Picture"
               width={81}
               height={81}
+              className='rounded-full w-[81px] h-[81px] object-cover'
             />
             <div className="flex flex-col gap-1 w-fit items-center">
               <p className="text-[#F8F8FF] text-xl font-semibold w-fit leading-[30px] text-center">
@@ -221,9 +222,9 @@ export default function MessageContainer({
           <div className="w-full p-5 border-t border-[#1A1A1A] sticky bottom-0 bg-[#111115]">
             <div className="w-full flex items-center bg-[#232227] rounded-[500px] p-2 h-[50px]">
               <div className="flex">
-                <Button variant={'msgBox'}>
+                {/* <Button variant={'msgBox'}>
                   <GalleryIcon className="w-6 h-6 mr-[-18px] fill-[#E7F8B9] stroke-[#E7F8B9]" />
-                </Button>
+                </Button> */}
                 <Popover>
                   <PopoverTrigger>
                     <Button variant={'msgBox'}>
@@ -244,6 +245,7 @@ export default function MessageContainer({
                 value={message}
                 className="h-[24px] text-white bg-transparent border-none  outline-none ring-0 focus:outline-none focus-visible:border-none ml-0 py-"
                 onChange={handleChange}
+                onKeyPress={handleKeyPress}
                 disabled={isSending}
               />
               <Button
