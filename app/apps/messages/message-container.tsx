@@ -21,11 +21,11 @@ import { getMessagesForChat, sendMessage } from '@/lib/firebaseChatService'
 import GalleryIcon from '@/components/icons/galleryIcon'
 import EmojiIcon from '@/components/icons/emojiIcon'
 import SendIcon from '@/components/icons/sendIcon'
-import { getUserId } from '@/lib/helper-func'
+import { getReceiver, getUserId } from '@/lib/helper-func'
 import type { Timestamp } from 'firebase/firestore'
 import Spinner from '@/components/ui/spinner'
 
-interface FriendProps {
+export interface FriendProps {
   friendDisplayPicture: string
   displayName: string
   userName: string
@@ -50,7 +50,7 @@ function formatMessageTime(timestamp: Timestamp | Date): string {
 }
 
 export default function MessageContainer({
-  friend,
+  friend = getReceiver(),
   goBack,
 }: {
   friend: FriendProps | null
