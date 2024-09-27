@@ -30,7 +30,7 @@ const formSchema = z.object({
   department: z.string().min(1, 'Department is required').optional(),
   startDate: z.string(),
   endDate: z.string().nullable().optional(),
-  description: z.string().min(1, 'Description is required').optional(),
+  description: z.string().optional(),
   skills: z.array(z.string()).optional(),
 })
 
@@ -77,9 +77,9 @@ export default function ExperienceForm({
         startDate: formatDate(new Date(data.startDate)),
         endDate: isCurrentJob ? null : formatDate(new Date(data.endDate || '')),
         skill: data.skills?.join(', ') || '',
-        role: data.role || '', 
-        department: data.department || '', 
-        description: data.description || '', 
+        role: data.role || '',
+        department: data.department || '',
+        description: data.description || '',
       }),
     onSuccess: () => {
       toast.success('Experience updated successfully')
