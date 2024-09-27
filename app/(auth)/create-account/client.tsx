@@ -37,6 +37,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import Google from '@/public/assets/images/ovationAuthGoogle'
 import { useGoogleLogin } from '@react-oauth/google'
+import RenderWalletAndConfirmation from './manual-wallect'
 
 const formSchema = z.object({
   personalInfo: z.object({
@@ -346,78 +347,6 @@ export default function AccountForm({ setOptionalLeft }: Props) {
     )
   }
 
-  function renderWalletAndConfirmation() {
-    return (
-      <form
-        onSubmit={form.handleSubmit(handleFormSubmit)}
-        className="flex flex-col gap-7"
-      >
-        <FormField
-          control={form.control}
-          name="userWallet.walletAddress"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Wallet Address</FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                  className="h-[46px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
-                  placeholder="Enter your wallet address"
-                  type="text"
-                />
-              </FormControl>
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="userWallet.chain"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Select Chain</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <SelectTrigger className="rounded-full">
-                    <SelectValue placeholder="Select a chain" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {Object.entries(optionValueToBlockchainName).map(
-                    ([value, name]) => (
-                      <SelectItem
-                        key={value}
-                        value={value}
-                        className=" bg-transparent"
-                      >
-                        {name}
-                      </SelectItem>
-                    ),
-                  )}
-                </SelectContent>
-              </Select>
-            </FormItem>
-          )}
-        />
-
-        <Button
-          type="submit"
-          className="w-full text-sm font-semibold h-[53px]"
-          disabled={form.formState.isSubmitting}
-          isLoading={form.formState.isSubmitting}
-          loadingText="Creating profile..."
-        >
-          Make my profile
-        </Button>
-
-        <p className="text-center mb-4">
-          By clicking &quot;make my profile&quot; you agree to our privacy
-          terms, code of conduct and Conditions.
-        </p>
-      </form>
-    )
-  }
-
   function renderCurrentForm() {
     switch (page) {
       case 1:
@@ -425,8 +354,15 @@ export default function AccountForm({ setOptionalLeft }: Props) {
       case 2:
         return renderPathSelection()
       case 3:
-        return isManualWallet && renderWalletAndConfirmation() 
-        // : renderWalletSelection()
+        return (
+          isManualWallet && (
+            <RenderWalletAndConfirmation
+              form={form}
+              handleFormSubmit={handleFormSubmit}
+            />
+          )
+        )
+      // : renderWalletSelection()
       default:
         return null
     }
