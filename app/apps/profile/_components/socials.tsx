@@ -1,4 +1,4 @@
-import { UserSocialsMod } from '@/models/all.model'
+import type { UserSocialsMod } from '@/models/all.model'
 import Image from 'next/image'
 import Link from 'next/link'
 

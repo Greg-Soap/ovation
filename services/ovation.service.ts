@@ -100,7 +100,7 @@ class OvationService {
   }
 
   static updateExperience(id: string, data: UserExperience) {
-    return api.put(`/Profile/experience/${id}`, data)
+    return api.patch(`/Profile/experience/${id}`, data)
   }
 
   static getExperience(userId: string) {

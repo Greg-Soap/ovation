@@ -24,11 +24,25 @@ interface DatePickerProps {
   disableDate?: boolean
   onChange: (date: Date | undefined) => void
   placeholder?: string
+  value?: string // Add this line to accept an initial value
 }
 
-export function DatePicker({ disableDate, onChange, placeholder }: DatePickerProps) {
-  const [selectedDate, setSelectedDate] = React.useState<Date>()
-  const [currentMonth, setCurrentMonth] = React.useState(new Date())
+export function DatePicker({
+  disableDate,
+  onChange,
+  placeholder,
+  value,
+}: DatePickerProps) {
+  const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(
+    () => {
+      // Initialize selectedDate with the provided value, if it exists
+      return value ? new Date(value) : undefined
+    },
+  )
+  const [currentMonth, setCurrentMonth] = React.useState(() => {
+    // Initialize currentMonth with the provided value or current date
+    return value ? new Date(value) : new Date()
+  })
 
   const handleChange = React.useCallback(
     (date: Date | undefined) => {
@@ -68,6 +82,14 @@ export function DatePicker({ disableDate, onChange, placeholder }: DatePickerPro
   const handleYearChange = (year: number) => {
     setCurrentMonth((prevMonth) => setYear(prevMonth, year))
   }
+
+  React.useEffect(() => {
+    // Update selectedDate when value prop changes
+    if (value) {
+      setSelectedDate(new Date(value))
+      setCurrentMonth(new Date(value))
+    }
+  }, [value])
 
   return (
     <Popover>

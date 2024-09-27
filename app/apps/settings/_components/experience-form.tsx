@@ -20,7 +20,7 @@ import ovationService from '@/services/ovation.service'
 import { toast } from 'sonner'
 import { useMutation } from '@tanstack/react-query'
 import { useLocalStorage } from '@/lib/use-local-storage'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { formatDate } from '@/lib/helper-func'
 import type { UserExperience } from '@/models/all.model'
 
@@ -43,6 +43,7 @@ export default function ExperienceForm({
 }) {
   const [isDisabled, setIsDisabled] = useState<boolean>(true)
   const [isCurrentJob, setIsCurrentJob] = useState<boolean>(false)
+  const [isUpdating, setIsUpdating] = useState<boolean>(false)
   const { storedValue, setValue } = useLocalStorage<Partial<FormValues>>(
     'experienceDraft',
     {
@@ -55,6 +56,10 @@ export default function ExperienceForm({
       skills: [],
     },
   )
+
+  useEffect(() => {
+    setIsUpdating(experienceData.length > 0)
+  }, [experienceData])
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -72,22 +77,43 @@ export default function ExperienceForm({
 
   const { mutate, isPending } = useMutation({
     mutationFn: (data: FormValues) =>
-      ovationService.addExperience({
-        ...data,
-        startDate: formatDate(new Date(data.startDate)),
-        endDate: isCurrentJob ? null : formatDate(new Date(data.endDate || '')),
-        skill: data.skills?.join(', ') || '',
-        role: data.role || '',
-        department: data.department || '',
-        description: data.description || '',
-      }),
+      isUpdating
+        ? ovationService.updateExperience(experienceData[0]?.id ?? '', {
+            ...data,
+            startDate: formatDate(new Date(data.startDate)),
+            endDate: isCurrentJob
+              ? null
+              : formatDate(new Date(data.endDate || '')),
+            skill: data.skills?.join(', ') || '',
+            role: data.role || '',
+            department: data.department || '',
+            description: data.description || '',
+          })
+        : ovationService.addExperience({
+            ...data,
+            startDate: formatDate(new Date(data.startDate)),
+            endDate: isCurrentJob
+              ? null
+              : formatDate(new Date(data.endDate || '')),
+            skill: data.skills?.join(', ') || '',
+            role: data.role || '',
+            department: data.department || '',
+            description: data.description || '',
+          }),
     onSuccess: () => {
-      toast.success('Experience updated successfully')
+      toast.success(
+        `Experience ${isUpdating ? 'updated' : 'added'} successfully`,
+      )
       setIsDisabled(true)
     },
     onError: (error) => {
-      console.error('Failed to update experience:', error)
-      toast.error('Failed to update experience. Please try again later.')
+      console.error(
+        `Failed to ${isUpdating ? 'update' : 'add'} experience:`,
+        error,
+      )
+      toast.error(
+        `Failed to ${isUpdating ? 'update' : 'add'} experience. Please try again later.`,
+      )
     },
   })
 
@@ -183,6 +209,7 @@ export default function ExperienceForm({
                       </FormLabel>
                       <FormControl>
                         <DatePicker
+                          value={field.value}
                           disableDate={false}
                           placeholder="Select Start Date"
                           onChange={(date) =>
@@ -205,6 +232,7 @@ export default function ExperienceForm({
                       <FormControl>
                         <DatePicker
                           disableDate={isCurrentJob}
+                          value={field.value || ''}
                           placeholder="Select Finish Date"
                           onChange={(date) =>
                             field.onChange(formatDate(date || new Date()))
@@ -288,7 +316,7 @@ export default function ExperienceForm({
           </div>
 
           <SettingsChange
-            disabled={isDisabled}
+            disabled={false}
             isLoading={isPending}
             saveDraft={() => setValue(form.getValues())}
           />

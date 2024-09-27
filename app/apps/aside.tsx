@@ -91,7 +91,7 @@ export default function Aside() {
                 alt="User Display Picture"
                 width={28}
                 height={28}
-                className="rounded-full"
+                className="rounded-full object-cover w-[28px] h-[28px]"
               />
               <div className="flex flex-col">
                 <p className="text-xs font-semibold leading-5 text-white">
@@ -171,7 +171,7 @@ export function FeedbackButton({ className }: { className?: string }) {
         <img
           src="/assets/images/aside-absolute.png"
           alt="Message"
-          className="absolute -top-4 w-[33px] h-[33px]"
+          className="absolute -top-4 w-[33px] h-[33px] "
         />
         <div className="w-full flex flex-col items-center gap-0.5">
           <p className="text-[#F8F8FF] text-xs font-medium">Help us improve</p>

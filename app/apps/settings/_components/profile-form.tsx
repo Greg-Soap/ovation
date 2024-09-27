@@ -317,6 +317,7 @@ export default function ProfileForm({
                 </FormLabel>
                 <FormControl>
                   <DatePicker
+                    value={field.value}
                     onChange={(date) => {
                       if (date) {
                         field.onChange(formatDate(date))

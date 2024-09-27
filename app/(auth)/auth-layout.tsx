@@ -25,7 +25,7 @@ export default function AuthLayout({
       style={{ backgroundImage: `url('/assets/images/ovationAuthBack.png')` }}
     >
       <Header />
-      <div className="w-full h-full flex items-center lg:items-start mt-8 lg:mt-32 gap-40 justify-center">
+      <div className="w-full h-full flex items-center lg:items-center mt-8 lg:mt-32 gap-40 justify-center">
         {showAuthLeftOptional && (
           <div
             id="auth-left-optional"
