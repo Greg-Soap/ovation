@@ -28,7 +28,7 @@ export default function AsideLayout({
     connectSignalR()
     firebaseSignIn()
     const unsubscribe = listenForUserMessages((newMessages) => {
-      toast.success(`You have ${newMessages.length} new messages`);
+      // toast.success(`You have ${newMessages.length} new messages`);
     });
 
     // Listen for incoming notifications
