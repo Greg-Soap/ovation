@@ -143,6 +143,7 @@ export default function FriendList() {
         className={`w-full  lg:col-span-2 ${selectedFriend ? 'block' : 'hidden lg:block'}`}
       >
         <MessageContainer
+          //@ts-ignore
           friend={
             selectedFriend ? getOtherParticipant(selectedFriend) ?? null : null
           }
