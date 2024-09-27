@@ -7,6 +7,7 @@ import type { ProfileData, UserExperience } from '@/models/all.model'
 import MiniLoader from '@/components/mini-loader'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
+import LocationIcon from '@/public/assets/images/ovationLocationIcon'
 
 export default function UserProfile({
   profileData,
@@ -107,7 +108,14 @@ export default function UserProfile({
                   </p>
                 </div>
 
-                <div className="flex flex-col  justify-between">
+                <div className="flex flex-col gap-3  justify-between">
+                  {latestExperience?.skill && (
+                    <div className="flex items-center gap-1.5">
+                      <p className="text-xs text-[#B3B3B3]">
+                        <strong>Skills: </strong> {latestExperience.skill}
+                      </p>
+                    </div>
+                  )}
                   {latestExperience?.department && (
                     <div className="flex items-center gap-1.5">
                       <Image
@@ -122,25 +130,32 @@ export default function UserProfile({
                       </p>
                     </div>
                   )}
-                  {latestExperience?.skill && (
+                  <div className="flex items-center gap-1.5">
+                    {latestExperience?.startDate && (
+                      <div className="flex items-center gap-1.5">
+                        <EventIcon className="w-[13px] h-[13px] stroke-[#B3B3B3]" />
+                        <p className="text-xs text-[#B3B3B3]">
+                          {latestExperience.startDate}
+                        </p>
+                      </div>
+                    )}
+                    {latestExperience?.endDate && (
+                      <>
+                        <p>-</p>
+                        <div className="flex items-center gap-1.5">
+                          <EventIcon className="w-[13px] h-[13px] stroke-[#B3B3B3]" />
+                          <p className="text-xs text-[#B3B3B3]">
+                            {latestExperience.endDate}
+                          </p>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  {profileData.profile?.location && (
                     <div className="flex items-center gap-1.5">
-                      <Image
-                        src="/assets/images/profile/location.png"
-                        alt="Skill Icon"
-                        width={13}
-                        height={13}
-                        className="rounded-full"
-                      />
+                      <LocationIcon className="w-[13px] h-[13px] stroke-[#B3B3B3]" />
                       <p className="text-xs text-[#B3B3B3]">
-                        {latestExperience.skill}
-                      </p>
-                    </div>
-                  )}
-                  {latestExperience?.startDate && (
-                    <div className="flex items-center gap-1.5">
-                      <EventIcon className="w-[13px] h-[13px] stroke-[#B3B3B3]" />
-                      <p className="text-xs text-[#B3B3B3]">
-                        {latestExperience.startDate}
+                        {profileData.profile.location}
                       </p>
                     </div>
                   )}

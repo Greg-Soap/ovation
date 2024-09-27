@@ -7,7 +7,7 @@ import MiniLoader from '@/components/mini-loader'
 import NotificationCard from './notification-card'
 
 function MainNotification() {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ['notifications'],
     queryFn: () => ovationService.getNotifications(),
   })
@@ -23,7 +23,7 @@ function MainNotification() {
         <MiniLoader />
       ) : notifications.length > 0 ? (
         notifications.map((item: NotificationItem, index: number) => (
-          <NotificationCard key={index} {...item} />
+          <NotificationCard key={index} {...item} refetch={refetch} />
         ))
       ) : (
         <div className="flex items-center justify-center h-full">

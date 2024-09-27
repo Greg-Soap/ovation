@@ -28,7 +28,7 @@ export function Header({ navLinks = links }: HeaderProps) {
   const user = getStoredUser()
   const [showButton, setShowButton] = useState(false)
 
-  const showButtonTime = '2024 09 27 : 21 00'
+  const showButtonTime = '2024 10 11 : 21 00'
 
   const isoShowButtonTime = showButtonTime.includes(' : ')
     ? convertToISOString(showButtonTime)

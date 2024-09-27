@@ -24,6 +24,7 @@ import ovationService from '@/services/ovation.service'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
 import FeedbackModal from './_feedback/feedback'
+import { getStoredUser } from '@/lib/helper-func'
 
 const menuItems = [
   {
@@ -56,11 +57,8 @@ const menuItems = [
 export default function Aside() {
   const router = useRouter()
   const currentPath = usePathname()
-  const { storedValue, removeValue } = useLocalStorage<UserData | null>(
-    'userData',
-    null,
-  )
-  const user = storedValue
+  const { removeValue } = useLocalStorage<UserData | null>('userData', null)
+  const user = getStoredUser()
 
   const handleClick = (path: string) => {
     router.push(path)

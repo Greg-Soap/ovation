@@ -38,7 +38,7 @@ export default function Page() {
         }}
       >
         <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <div className="hidden lg:flex items-end justify-end gap-3 h-[inherit] w-full pr-10 pb-10">
+          <div className="flex items-end justify-end gap-3 h-[inherit] w-full pr-10 pb-10">
             <Button
               variant="default"
               onClick={() => {

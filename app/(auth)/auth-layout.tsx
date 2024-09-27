@@ -34,7 +34,7 @@ export default function AuthLayout({
             Experience the Next-Generation NFT Social Platform
             <div className="flex gap-3 font-normal opacity-70 w-full  text-lg  ">
               <Image src={authAvatar} alt="profile avatars" />
-              <p>Join over 40,000 users</p>
+              <p>Join over 10,000 users</p>
             </div>
           </div>
         )}
