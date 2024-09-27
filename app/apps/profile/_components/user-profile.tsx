@@ -139,14 +139,16 @@ export default function UserProfile({
                         </p>
                       </div>
                     )}
-                    <p>-</p>
                     {latestExperience?.endDate && (
-                      <div className="flex items-center gap-1.5">
-                        <EventIcon className="w-[13px] h-[13px] stroke-[#B3B3B3]" />
-                        <p className="text-xs text-[#B3B3B3]">
-                          {latestExperience.endDate}
-                        </p>
-                      </div>
+                      <>
+                        <p>-</p>
+                        <div className="flex items-center gap-1.5">
+                          <EventIcon className="w-[13px] h-[13px] stroke-[#B3B3B3]" />
+                          <p className="text-xs text-[#B3B3B3]">
+                            {latestExperience.endDate}
+                          </p>
+                        </div>
+                      </>
                     )}
                   </div>
                   {profileData.profile?.location && (

@@ -71,7 +71,7 @@ export default function SecondaryProfile() {
         }}
       >
         <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <div className="hidden lg:flex items-end justify-end gap-3 h-[inherit] w-full pr-10 pb-10">
+          <div className="flex items-end justify-end gap-3 h-[inherit] w-full pr-10 pb-10">
             <Button
               variant="default"
               className="bg-[#333726] p-[9px] border border-[#507100]"
