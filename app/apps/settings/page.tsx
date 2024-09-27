@@ -94,7 +94,7 @@ export default function Page() {
               <h1 className="font-semibold text-[23px] text-[#F8F8FF] mr-auto ml-8 mb-5">
                 Settings
               </h1>
-              <SearchInput inpClass="w-[90%] md:w-[70%] mr-auto ml-6 lg:ml-0 lg:mr-0 lg:w-[90%] mb-10" />
+              {/* <SearchInput inpClass="w-[90%] md:w-[70%] mr-auto ml-6 lg:ml-0 lg:mr-0 lg:w-[90%] mb-10" /> */}
               <TabsList
                 aria-orientation="vertical"
                 className="flex flex-col justify-none gap-[15px] w-full"

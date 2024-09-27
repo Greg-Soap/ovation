@@ -37,6 +37,7 @@ export default function Page() {
   })
 
   const mostViewed = mostViewedQuery.data || []
+  console.log({ mostViewed })
   const mostViewedLoading = mostViewedQuery.isLoading
 
   return (
