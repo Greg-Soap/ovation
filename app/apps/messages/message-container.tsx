@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import Image from 'next/image'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -23,6 +23,7 @@ import EmojiIcon from '@/components/icons/emojiIcon'
 import SendIcon from '@/components/icons/sendIcon'
 import { getUserId } from '@/lib/helper-func'
 import type { Timestamp } from 'firebase/firestore'
+import Spinner from '@/components/ui/spinner'
 
 interface FriendProps {
   friendDisplayPicture: string
@@ -59,6 +60,7 @@ export default function MessageContainer({
   const [messages, setMessages] = useState<MessageProps[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const messagesEndRef = useRef<null | HTMLDivElement>(null)
+  const [isSending, setIsSending] = useState(false)
 
   const currentUserId = getUserId()
 
@@ -68,14 +70,6 @@ export default function MessageContainer({
 
   const handleEmojiSelect = (emojiData: EmojiClickData) => {
     setMessage((prevMessage) => prevMessage + emojiData.emoji)
-  }
-
-  const handleSendMessage = async () => {
-    if (!friend || !message.trim()) return
-
-    await sendMessage(friend.userId, message)
-    setMessage('')
-    await fetchMessages()
   }
 
   const fetchMessages = async () => {
@@ -110,6 +104,22 @@ export default function MessageContainer({
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
+
+  const handleSendMessage = useCallback(async () => {
+    if (!friend || !message.trim()) return
+
+    setIsSending(true)
+    try {
+      await sendMessage(friend.userId, message)
+      setMessage('')
+      await fetchMessages()
+    } catch (error) {
+      console.error('Error sending message:', error)
+      // Optionally, show an error toast here
+    } finally {
+      setIsSending(false)
+    }
+  }, [friend, message])
 
   if (!friend) {
     console.log('No friend selected')
@@ -234,13 +244,18 @@ export default function MessageContainer({
                 value={message}
                 className="h-[24px] text-white bg-transparent border-none  outline-none ring-0 focus:outline-none focus-visible:border-none ml-0 py-"
                 onChange={handleChange}
+                disabled={isSending}
               />
               <Button
                 onClick={handleSendMessage}
                 variant={'msgBox'}
-                disabled={!message.trim()}
+                disabled={!message.trim() || isSending}
               >
-                <SendIcon className="" />
+                {isSending ? (
+                  <Spinner size="small" />
+                ) : (
+                  <SendIcon className="" />
+                )}
               </Button>
             </div>
           </div>
