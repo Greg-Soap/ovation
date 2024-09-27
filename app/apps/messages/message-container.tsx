@@ -1,20 +1,28 @@
 'use client'
 
-import EmojiPicker, { EmojiStyle, Theme } from 'emoji-picker-react'
-import GalleryIcon from '@/components/icons/galleryIcon'
-import EmojiIcon from '@/components/icons/emojiIcon'
+import { useEffect, useState, useRef } from 'react'
 import Image from 'next/image'
 import { Input } from '@/components/ui/input'
-import SendIcon from '@/components/icons/sendIcon'
-import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Popover } from '@/components/ui/popover'
-import { PopoverContent, PopoverTrigger } from '@radix-ui/react-popover'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
 import { ArrowLeft } from 'iconsax-react'
-import { getMessagesForChat, sendMessage } from '@/lib/firebaseChatService'
+import EmojiPicker, {
+  type EmojiClickData,
+  EmojiStyle,
+  Theme,
+} from 'emoji-picker-react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
-import { DocumentData } from 'firebase/firestore'
+import { getMessagesForChat, sendMessage } from '@/lib/firebaseChatService'
+import GalleryIcon from '@/components/icons/galleryIcon'
+import EmojiIcon from '@/components/icons/emojiIcon'
+import SendIcon from '@/components/icons/sendIcon'
+import { getUserId } from '@/lib/helper-func'
+import type { Timestamp } from 'firebase/firestore'
 
 interface FriendProps {
   friendDisplayPicture: string
@@ -26,51 +34,88 @@ interface FriendProps {
   followingCount: number
   followerCount: number
   isOpened: boolean
+  userId: string
 }
 
-export default function MessageContainer({ friend, goBack }: any) {
-  const [sendStatus, setSendStatus] = useState<boolean>(true)
+interface MessageProps {
+  userId: string
+  message: string
+  timestamp: Date
+}
+
+function formatMessageTime(timestamp: Timestamp | Date): string {
+  const date = timestamp instanceof Date ? timestamp : timestamp.toDate()
+  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+}
+
+export default function MessageContainer({
+  friend,
+  goBack,
+}: {
+  friend: FriendProps | null
+  goBack: () => void
+}) {
   const [message, setMessage] = useState<string>('')
-  const [messages, setMessages] = useState<DocumentData>({})
-  const [receiverId, setReceiverId] = useState<string>('')
+  const [messages, setMessages] = useState<MessageProps[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+  const messagesEndRef = useRef<null | HTMLDivElement>(null)
 
-  const handleChange = (e: any) => {
-    if (e.target.value === '') {
-      setSendStatus(true)
-    } else {
-      setSendStatus(false)
-    }
+  const currentUserId = getUserId()
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value)
   }
-  const handleEmojiSelect = (emojiObject: any) => {
-    console.log(emojiObject)
-    setMessage((prevMessage) => prevMessage + emojiObject.emoji)
+
+  const handleEmojiSelect = (emojiData: EmojiClickData) => {
+    setMessage((prevMessage) => prevMessage + emojiData.emoji)
   }
 
   const handleSendMessage = async () => {
-    //render new bubble
-    await sendMessage(
-      receiverId,
-      message,
-    )
+    if (!friend || !message.trim()) return
+
+    await sendMessage(friend.userId, message)
+    setMessage('')
+    await fetchMessages()
   }
 
-  const getMessages = async () =>{
-    const messageDocuments = await getMessagesForChat(receiverId)
-    setMessages(messageDocuments.messages)
+  const fetchMessages = async () => {
+    if (!friend) return
+
+    setLoading(true)
+
+    try {
+      const messageDocuments = await getMessagesForChat(friend.userId)
+      setMessages(
+        messageDocuments.messages.reverse().map(
+          (doc): MessageProps => ({
+            userId: doc.userId,
+            message: doc.message,
+            timestamp: doc.timestamp,
+          }),
+        ),
+      )
+    } catch (error) {
+      console.error('Error fetching messages:', error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
-    getMessages()
-  }, [])
+    if (friend) {
+      fetchMessages()
+    }
+  }, [friend])
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages])
 
   if (!friend) {
+    console.log('No friend selected')
     return (
       <ErrorBoundary FallbackComponent={ErrorFallback}>
-        <section
-          className={`${friend ? 'flex' : 'hidden lg:flex'} w-full h-[100vh] lg:h-full lg:col-span-2 flex-col items-center justify-center bg-[#111115] other-link overflow-auto`}
-        >
+        <section className="w-full h-[100vh] lg:h-full lg:col-span-2 flex flex-col items-center justify-center bg-[#111115] other-link overflow-auto">
           <div className="flex flex-col items-center gap-[13px]">
             <div className="flex flex-col items-center gap-[6px]">
               <p className="text-[#F8F8FF] text-xl font-semibold">
@@ -80,7 +125,6 @@ export default function MessageContainer({ friend, goBack }: any) {
                 Choose from previous conversation or start a new one below
               </p>
             </div>
-
             <Button
               variant={'default'}
               className="px-3 py-2 h-fit rounded-[27px] text-xs text-[#111115] font-semibold transition-all duration-300 hover:opacity-80"
@@ -93,13 +137,12 @@ export default function MessageContainer({ friend, goBack }: any) {
     )
   }
 
+  console.log({ friend })
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <section
-        className={`${friend ? 'flex' : 'hidden lg:flex'} w-full h-[100vh] lg:h-full lg:col-span-2  flex-col items-center justify-center bg-[#111115] other-link overflow-scroll`}
-      >
+      <section className="w-full h-[100vh] lg:h-full lg:col-span-2 flex flex-col bg-[#111115] other-link overflow-hidden">
         <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <div className="flex lg:hidden bg-[rgba(17,17,21,0.8)] items-center gap-4 w-full p-5 absolute top-0">
+          <div className="flex lg:hidden bg-[rgba(17,17,21,0.8)] items-center gap-4 w-full p-5 sticky top-0 z-10">
             <ArrowLeft
               color="white"
               variant="Outline"
@@ -113,91 +156,70 @@ export default function MessageContainer({ friend, goBack }: any) {
         </ErrorBoundary>
 
         <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <div className="w-full border-b border-[#1A1A1A] py-9 flex flex-col items-center gap-4 h-fit mt-0 lg:mt-[250px]">
+          <div className="w-full border-b border-[#1A1A1A] py-9 flex flex-col items-center gap-4 h-fit">
             <Image
-              src={friend.friendDisplayPicture}
+              src={
+                friend.friendDisplayPicture ?? '/assets/images/default-user.svg'
+              }
               alt="User Display Picture"
               width={81}
               height={81}
             />
-
             <div className="flex flex-col gap-1 w-fit items-center">
               <p className="text-[#F8F8FF] text-xl font-semibold w-fit leading-[30px] text-center">
                 {friend.displayName}
               </p>
               <p className="text-sm text-[#808080] w-fit">{friend.userName}</p>
             </div>
-
-            <p className="text-xs text-[#E6E6E6] text-center max-w-[70%]">
-              {friend.biography}
-            </p>
-
-            <div className="flex items-center gap-6">
-              <p className="flex items-center gap-[9px] text-sm text-[#E6E6E6] font-semibold">
-                {friend.followingCount}{' '}
-                <span className="text-[#808080] font-medium">Following</span>
-              </p>
-
-              <p className="flex items-center gap-[9px] text-sm text-[#E6E6E6] font-semibold">
-                {`${friend.followerCount}K`}
-                <span className="text-[#808080] font-medium">Followers</span>
-              </p>
-            </div>
           </div>
         </ErrorBoundary>
 
         <ErrorBoundary FallbackComponent={ErrorFallback}>
-          {/* loop through the messages useState to render the messages it's arranged from the newest to oldest so your looping shold be reverse
-              expected properties userId, timestamp, message
-          */}
-          <div className="w-full flex flex-col px-3 pt-[30px] pb-[100px] md:px-[30px] md:pt-[30px] md:pb-[90px] xir:p-[30px] gap-5 md:gap-[35px]">
-            <div className="w-full flex flex-col gap-1 items-end">
-              <p className="px-5 py-[10px] bg-[#1D3E00] rounded-s-[20px] rounded-tr-[20px] text-[#F8F8FF] text-sm font-medium max-w-[85%] lg:max-w-[50%]">
-                Hello, how are you doing?
-              </p>
-              <p className="text-[11px] text-[#808080]">08:15 AM</p>
-            </div>
-
-            <div className="w-full flex flex-col gap-1 items-start">
-              <p className="px-5 py-[10px] bg-[#232227] rounded-e-[20px] rounded-tl-[20px] text-[#F8F8FF] text-sm font-medium max-w-[85%] lg:max-w-[50%]">
-                Hello, how are you doing?
-              </p>
-              <p className="text-[11px] text-[#808080]">08:15 AM</p>
-            </div>
-
-            <div className="w-full flex flex-col gap-1 items-end">
-              <p className="px-5 py-[10px] bg-[#1D3E00] rounded-s-[20px] rounded-tr-[20px] text-[#F8F8FF] text-sm font-medium max-w-[85%] lg:max-w-[50%]">
-                I have a question about the return policy for a product I
-                purchased.
-              </p>
-              <p className="text-[11px] text-[#808080]">08:15 AM</p>
-            </div>
-
-            <div className="w-full flex flex-col gap-1 items-start">
-              <div className="flex items-center h-auto gap-2 px-5 py-[10px] bg-[#232227] rounded-e-[20px] rounded-tl-[20px]">
-                <div className="bg-[#698A0D] w-3 h-3 rounded-full animate-bounce" />
-                <div className="bg-[#698A0D] w-3 h-3 rounded-full animate-bounce delay-300" />
-                <div className="bg-[#698A0D] w-3 h-3 rounded-full animate-bounce delay-500" />
+          <div className="flex-grow overflow-y-auto px-3 pt-[30px] pb-[100px] md:px-[30px] md:pt-[30px] md:pb-[90px] xir:p-[30px]">
+            {loading ? (
+              <div className="flex justify-center items-center h-full">
+                <p className="text-[#F8F8FF]">Loading messages...</p>
               </div>
-            </div>
+            ) : (
+              messages.map((msg, index) => (
+                <div
+                  key={index}
+                  className={`w-full flex flex-col gap-1 ${
+                    msg.userId === currentUserId ? 'items-end' : 'items-start'
+                  } mb-5`}
+                >
+                  <p
+                    className={`px-5 py-[10px] rounded-[20px] text-[#F8F8FF] text-sm font-medium max-w-[85%] lg:max-w-[50%] ${
+                      msg.userId === currentUserId
+                        ? 'bg-[#1D3E00] rounded-tr-[20px]'
+                        : 'bg-[#232227] rounded-tl-[20px]'
+                    }`}
+                  >
+                    {msg.message}
+                  </p>
+                  <span className="text-xs text-gray-500">
+                    {formatMessageTime(msg.timestamp)}
+                  </span>
+                </div>
+              ))
+            )}
+            <div ref={messagesEndRef} />
           </div>
         </ErrorBoundary>
 
         <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <div className="w-full p-5 border-t border-[#1A1A1A] absolute lg:sticky bottom-[65px] bg-[#111115]">
-            <div className="w-full flex items-center bg-[#232227] rounded-[500px] p-2 h-fit">
+          <div className="w-full p-5 border-t border-[#1A1A1A] sticky bottom-0 bg-[#111115]">
+            <div className="w-full flex items-center bg-[#232227] rounded-[500px] p-2 h-[50px]">
               <div className="flex">
                 <Button variant={'msgBox'}>
                   <GalleryIcon className="w-6 h-6 mr-[-18px] fill-[#E7F8B9] stroke-[#E7F8B9]" />
                 </Button>
-
                 <Popover>
                   <PopoverTrigger>
                     <Button variant={'msgBox'}>
                       <EmojiIcon className="w-6 h-6" />
                     </Button>
                   </PopoverTrigger>
-
                   <PopoverContent>
                     <EmojiPicker
                       emojiStyle={EmojiStyle.TWITTER}
@@ -207,18 +229,16 @@ export default function MessageContainer({ friend, goBack }: any) {
                   </PopoverContent>
                 </Popover>
               </div>
-
               <Input
                 placeholder="Type out a new message..."
                 value={message}
-                className="max-h-[24px] h-auto text-white bg-transparent border-[10rem] border-black outline-none ring-0 focus:outline-none focus-visible:border-none ml-0 py-0"
+                className="h-[24px] text-white bg-transparent border-none  outline-none ring-0 focus:outline-none focus-visible:border-none ml-0 py-"
                 onChange={handleChange}
               />
-
               <Button
                 onClick={handleSendMessage}
                 variant={'msgBox'}
-                disabled={sendStatus}
+                disabled={!message.trim()}
               >
                 <SendIcon className="" />
               </Button>
