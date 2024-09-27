@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { useMutation } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
 import Link from 'next/link'
+import { startCase } from '@/lib/helper-func'
 
 export default function NotificationCard({
   id,
@@ -86,7 +87,7 @@ export default function NotificationCard({
           <div>
             <p className="font-semibold text-sm text-white">{title}</p>
             <p className="text-sm text-gray-300">
-              {message} - {referenceId}
+              {message} - {startCase(referenceId)}
             </p>
           </div>
         )

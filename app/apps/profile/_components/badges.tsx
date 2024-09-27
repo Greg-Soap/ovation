@@ -28,7 +28,7 @@ export default function Badges({ userId }: { userId: string }) {
       <p className="text-xs font-medium text-[#808080]">Badges</p>
 
       {hasBadges ? (
-        <div className="flex justify-between">
+        <div className="flex flex-wrap gap-2">
           {badgesData?.data?.data?.map((badge, index) => (
             <div
               className="flex flex-col gap-2 justify-center items-center"
