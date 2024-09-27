@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -19,6 +19,7 @@ import ovationService from '@/services/ovation.service'
 import { toast } from 'sonner'
 import { useMutation } from '@tanstack/react-query'
 import { useQuery } from '@tanstack/react-query'
+import SavingOverlay from '@/components/saving-overlay'
 
 const urlRefinement = (val: string | undefined, errorMessage: string) => {
   if (!val) return true // Allow empty strings (optional fields)
@@ -169,7 +170,7 @@ const socialPlatforms: SocialPlatform[] = [
 
 export default function SocialForm({ userId }: { userId: string }) {
   const [isDisabled, setIsDisabled] = useState(true)
-  const { data: socialLinks } = useQuery({
+  const { data: socialLinks, isLoading: isSocialLinksLoading } = useQuery({
     queryKey: ['socialLinks', userId],
     queryFn: () => ovationService.getSocialLinks(userId),
   })
@@ -178,18 +179,33 @@ export default function SocialForm({ userId }: { userId: string }) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      linkedin: socialLinksData?.linkedIn || '',
-      twitter: socialLinksData?.twitter || '',
-      website: socialLinksData?.website || '',
-      lens: socialLinksData?.lens || '',
-      farcaster: socialLinksData?.forcaster || '',
-      blur: socialLinksData?.blur || '',
-      foundation: socialLinksData?.foundation || '',
-      magiceden: socialLinksData?.magic || '',
-      ethco: socialLinksData?.ethico || '',
+      linkedin: '',
+      twitter: '',
+      website: '',
+      lens: '',
+      farcaster: '',
+      blur: '',
+      foundation: '',
+      magiceden: '',
+      ethco: '',
     },
   })
 
+  useEffect(() => {
+    if (socialLinksData) {
+      form.reset({
+        linkedin: socialLinksData.linkedIn || '',
+        twitter: socialLinksData.twitter || '',
+        website: socialLinksData.website || '',
+        lens: socialLinksData.lens || '',
+        farcaster: socialLinksData.forcaster || '',
+        blur: socialLinksData.blur || '',
+        foundation: socialLinksData.foundation || '',
+        magiceden: socialLinksData.magic || '',
+        ethco: socialLinksData.ethico || '',
+      })
+    }
+  }, [socialLinksData, form])
   const { mutate, isPending } = useMutation({
     mutationFn: (data: FormValues) => ovationService.updateSocials(data),
     onSuccess: () => {
@@ -219,6 +235,10 @@ export default function SocialForm({ userId }: { userId: string }) {
 
   return (
     <section className="w-full h-full flex flex-col gap-[23px] pb-5">
+      <SavingOverlay
+        isLoading={isSocialLinksLoading}
+        loadingText={'Loading your social links...'}
+      />
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
