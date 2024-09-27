@@ -87,7 +87,7 @@ export default function Hamburger() {
                   alt="User Display Picture"
                   width={131}
                   height={131}
-                  className="rounded-full "
+                  className="rounded-full w-[131px] h-[131px] object-cover"
                 />
 
                 <div className="flex flex-col gap-9">

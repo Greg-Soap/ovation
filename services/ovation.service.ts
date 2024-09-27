@@ -166,7 +166,7 @@ class OvationService {
   static async sendFeedback(data: {
     userEmail: string
     satisfactory: string
-    usefulFeature: string[]
+    usefulFeature: string
     improvement: string
     confusion?: string
     likelyRecommend?: string

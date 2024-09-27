@@ -104,7 +104,7 @@ export default function FeedbackModal() {
   })
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (data: FormData) => ovationService.sendFeedback(data),
+    mutationFn: (data: any) => ovationService.sendFeedback(data),
     onSuccess: () => {
       toast('Thank you for your feedback!')
       methods.reset()
@@ -116,7 +116,11 @@ export default function FeedbackModal() {
   })
 
   const onSubmit = (data: FormData) => {
-    mutate(data)
+    const transformedData = {
+      ...data,
+      usefulFeature: data.usefulFeature.join(','),
+    }
+    mutate(transformedData)
   }
 
   const handleNextClick = async () => {
@@ -151,7 +155,7 @@ export default function FeedbackModal() {
   )
 
   return (
-    <div className="px-6 py-8 gap-[30px] bg-[#232227] rounded-2xl flex flex-col max-w-[700px] mx-auto overflow-y-scroll overflow-x-hidden h-[90vh] md:h-full w-[90vw]">
+    <div className="px-6 py-8 gap-[30px] bg-[#232227] rounded-2xl flex flex-col max-w-[700px] mx-auto overflow-y-scroll overflow-x-hidden h-[90vh] w-fit sm:w-full">
       {renderFormHeader()}
       <FormProvider {...methods}>
         <form
