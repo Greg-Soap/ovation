@@ -74,6 +74,7 @@ export default function SecondaryProfile() {
       lastMessage: ''
     })
     //handle the dm page render
+    window.location.href = "/apps/messages"
   }
 
   return (
