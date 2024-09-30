@@ -607,11 +607,20 @@ function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
                 </div>
 
                 <div className="flex flex-col">
-                  <p className="text-sm font-semibold">{user?.displayName}</p>
-                  <p className="flex gap-1 text-xs text-[#858487] items-center">
+                   <Link
+                      href={`/apps/profile/${user?.username}`}
+                      className="text-sm font-semibold"
+                    >
+                      {user?.displayName}
+                    </Link>
+                 
+                  <Link
+                      href={`/apps/profile/${user?.username}`}
+                      className="flex gap-1 text-xs text-[#858487] items-center"
+                    >
                     <span>{formatUsername(user?.username)} </span>
                     <VerifyIcon />
-                  </p>
+                  </Link>
                 </div>
               </div>
               <div className="bg-[#CFF073] text-[10px] font-medium text-black px-[10px] py-2 rounded-3xl">
