@@ -24,15 +24,7 @@ import arrow from '@/public/assets/images/arrow-right.png'
 import { setToken } from '@/lib/cookies'
 import { useLocalStorage } from '@/lib/use-local-storage'
 import type { UserData } from '@/models/all.model'
-import { optionValueToBlockchainName } from '@/lib/helper-func'
 import { signUp } from '@/lib/firebaseAuthService'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import Link from 'next/link'
 import Image from 'next/image'
 import Google from '@/public/assets/images/ovationAuthGoogle'
@@ -43,7 +35,9 @@ const formSchema = z.object({
   personalInfo: z.object({
     displayName: z.string(),
     email: z.string().email('Input a valid email address'),
-    username: z.string(),
+    username: z
+      .string()
+      .regex(/^\S+$/, 'Username must be a single word without spaces'),
     password: z
       .string()
       .min(8, 'Password must be at least 8 characters long')
@@ -205,6 +199,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
                   type="text"
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
