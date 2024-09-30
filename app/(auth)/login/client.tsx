@@ -52,7 +52,15 @@ export default function LoginForm() {
         setValue(data?.data?.userData)
 
         toast.success('Login successful!')
-        router.push('/apps/discover')
+
+        // Check for stored destination
+        const intendedDestination = localStorage.getItem('intendedDestination')
+        if (intendedDestination) {
+          localStorage.removeItem('intendedDestination')
+          router.push(intendedDestination)
+        } else {
+          router.push('/apps/discover')
+        }
       } else {
         toast.error('Login failed: No token received')
       }
