@@ -37,7 +37,7 @@ export default function Page() {
   })
 
   const mostViewed = mostViewedQuery.data || []
-  console.log({ mostViewed })
+
   const mostViewedLoading = mostViewedQuery.isLoading
 
   return (
@@ -303,12 +303,10 @@ function DiscoverHolders() {
       default: (user: DiscoverUserData) => `${user.badgeEarned} Badges`,
     }
 
-    const sortedData = [...data].sort((a, b) => b.badgeEarned - a.badgeEarned)
-
     return (
       <>
         <div id="top-3 section" className="w-full flex flex-col gap-10">
-          {sortedData.slice(0, 3).map((user, index) => (
+          {data.slice(0, 3).map((user, index) => (
             <div
               key={index}
               id={`no-${index + 1}-user`}
@@ -363,7 +361,7 @@ function DiscoverHolders() {
           ))}
         </div>
         <div id="top-4-10 section" className="flex flex-col gap-5 w-full mt-5">
-          {sortedData.slice(3, 10).map((user, index) => (
+          {data.slice(3, 10).map((user, index) => (
             <div key={index} className="w-full">
               <div className="flex h-[90px] text-white pl-4 pr-4 bg-[#18181C] rounded-[20px] items-center justify-between border border-[#35353880]">
                 <div className="flex items-center gap-2">
@@ -557,13 +555,13 @@ function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
             alt="User Display"
             width={50}
             height={50}
-            className={`${mostViewed[0]?.profileImage ? 'bg-[#0B0A10]' : 'bg-[#18181C]'} absolute bottom-[-25px] border-[3px] border-[#0B0A10] rounded-full`}
+            className={`${mostViewed[0]?.profileImage ? 'bg-[#0B0A10]' : 'bg-[#18181C]'} absolute bottom-[-25px] border-[3px] w-12 h-12 object-cover border-[#0B0A10] rounded-full`}
           />
         </div>
 
         <div className="flex flex-col w-full gap-4">
           <div className="flex items-center w-full justify-between pb-6 border-b border-[#FFFFFF0D]">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between w-full gap-2">
               <div className="flex flex-col">
                 <Link
                   href={`/apps/profile/${mostViewed[0]?.username}`}
@@ -578,6 +576,12 @@ function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
                 >
                   {formatUsername(mostViewed[0]?.username)}
                 </Link>
+              </div>
+              <div className="bg-[#CFF073] text-[10px] font-medium text-black px-[10px] py-2 w-fit rounded-3xl">
+                {mostViewed[0]?.views > 1000
+                  ? `${(mostViewed[0]?.views / 1000).toFixed(1)}k`
+                  : mostViewed[0]?.views}{' '}
+                Views
               </div>
             </div>
           </div>
