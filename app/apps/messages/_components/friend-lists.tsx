@@ -95,42 +95,51 @@ export default function FriendList() {
   return (
     <>
       <div
-        className={`${clickFriend ? 'hidden lg:flex' : 'flex'} w-full h-[100vh] lg:h-full lg:col-span-1 flex-col other-link border-r border-[#1A1A1A] overflow-auto`}>
-        <div className='flex flex-col gap-5 px-[30px] py-8'>
-          <p className='text-[22px] text-[#F8F8FF] font-semibold'>Messages</p>
-          <SearchInput width='full' />
+        className={`${clickFriend ? 'hidden lg:flex' : 'flex'} w-full h-[100vh] lg:h-full lg:col-span-1 flex-col other-link border-r border-sectionBorder overflow-auto`}
+      >
+        <div className="flex flex-col gap-5 px-[30px] py-8">
+          <p className="text-[22px] text-white100 font-semibold">Messages</p>
+          <SearchInput width="full" />
         </div>
 
-        <div className='flex flex-col gap-1 w-full'>
+        <div className="flex flex-col gap-1 w-full">
           {friends.map((friend, index) => (
             <Button
-              className={`flex justify-between px-5 py-4 cursor-default ${friend.isOpened && 'bg-[#18181C]'}`}
+              className={`flex justify-between px-5 py-4 cursor-default ${friend.isOpened && 'bg-secondaryBg'}`}
               key={index}
-              onClick={() => handleClick(index)}>
-              <div className='flex items-center gap-3'>
+              onClick={() => handleClick(index)}
+            >
+              <div className="flex items-center gap-3">
                 <Image
                   src={friend.friendDisplayPicture}
-                  alt='User Display Picture'
+                  alt="User Display Picture"
                   width={36}
                   height={36}
                 />
 
-                <div className='flex flex-col gap-1'>
-                  <p className='flex text-[#F8F8FF] items-center text-sm font-medium gap-[3px]'>
+                <div className="flex flex-col gap-1">
+                  <p className="flex text-white100 items-center text-sm font-medium gap-[3px]">
                     {friend.displayName}
-                    <span className='text-[#B3B3B3] text-xs font-normal'>{friend.userName}</span>
+                    <span className="text-white70 text-xs font-normal">
+                      {friend.userName}
+                    </span>
                   </p>
-                  <p className='text-xs text-[#B3B3B3]'>{friend.lastMessage}</p>
+                  <p className="text-xs text-white70">{friend.lastMessage}</p>
                 </div>
               </div>
 
-              <p className='text-[11px] text-[#808080] mt-2'>{friend.lastActive}</p>
+              <p className="text-[11px] text-white50 mt-2">
+                {friend.lastActive}
+              </p>
             </Button>
           ))}
         </div>
       </div>
 
-      <MessageContainer friend={clickFriend} goBack={() => setClickedFriend(null)} />
+      <MessageContainer
+        friend={clickFriend}
+        goBack={() => setClickedFriend(null)}
+      />
     </>
   )
 }

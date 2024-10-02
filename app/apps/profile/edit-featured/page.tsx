@@ -14,7 +14,7 @@ export default function EditFeatured() {
 
   return (
     <section className="other-link w-full flex flex-col items-center">
-      <div className="w-full flex items-center justify-between border-b border-[#1A1A1A] px-6 py-8">
+      <div className="w-full flex items-center justify-between border-b border-sectionBorder px-6 py-8">
         <div className="flex items-center gap-1">
           <Button className="p-1 h-fit rounded-none bg-transparent">
             <ArrowLeft
@@ -25,21 +25,21 @@ export default function EditFeatured() {
             />
           </Button>
 
-          <p className="text-[23px] text-[#F8F8FF] font-semibold">Featured</p>
+          <p className="text-[23px] text-white100 font-semibold">Featured</p>
         </div>
 
         <Popover>
-          <PopoverTrigger className="text-[10px] font-semibold text-[#111115] px-3 py-2 rounded-[24px] h-fit bg-[#CFF073]">
+          <PopoverTrigger className="text-[10px] font-semibold text-primaryBg px-3 py-2 rounded-[24px] h-fit bg-button">
             Add featured
           </PopoverTrigger>
-          <PopoverContent className="max-w-[104px] flex flex-col rounded-[6px] bg-[#232227] p-0 border-none">
-            <Button className="bg-[#232227] px-2 py-2.5 text-[11px] text-[#F8F8FF] rounded-none w-full h-fit rounded-t-[6px] flex justify-start">
+          <PopoverContent className="max-w-[104px] flex flex-col rounded-[6px] bg-popBg p-0 border-none">
+            <Button className="bg-popBg px-2 py-2.5 text-[11px] text-white100 rounded-none w-full h-fit rounded-t-[6px] flex justify-start">
               Event
             </Button>
-            <Button className="bg-[#232227] px-2 py-2.5 text-[11px] text-[#F8F8FF] rounded-none w-full h-fit border-t border-[#333333] flex justify-start">
+            <Button className="bg-popBg px-2 py-2.5 text-[11px] text-white100 rounded-none w-full h-fit border-t border-white20 flex justify-start">
               NFT
             </Button>
-            <Button className="bg-[#232227] px-2 py-2.5 text-[11px] text-[#F8F8FF] rounded-none w-full h-fit border-t border-[#333333] rounded-b-[6px] flex justify-start">
+            <Button className="bg-popBg px-2 py-2.5 text-[11px] text-white100 rounded-none w-full h-fit border-t white20 rounded-b-[6px] flex justify-start">
               Article
             </Button>
           </PopoverContent>
@@ -58,8 +58,6 @@ export default function EditFeatured() {
             price={item.price}
             location={item.location}
             date={item.date}
-            isNft={item.isNft}
-            isEvent={item.isEvent}
           />
         ))}
       </div>
@@ -76,16 +74,16 @@ function FeaturedCard({
   price,
   location,
   date,
-  isNft,
-  isEvent,
-}: any) {
+}: FeaturedList) {
   return (
     <div className="w-full flex flex-row gap-3 items-center">
       <Button className="px-0 py-1 rounded-none h-fit bg-transparent gap-1 flex flex-col">
-        <DragIndicator />
+        {Array.from({ length: 5 }, (_, index) => (
+          <div key={index} className="h-[1px] w-3 bg-black60" />
+        ))}
       </Button>
 
-      <div className="w-full flex items-center bg-[#18181C] rounded-[8px] border border-[#FFFFFF14] pl-3 py-3 gap-5">
+      <div className="w-full flex items-center bg-secondaryBg rounded-[8px] border border-white08 pl-3 py-3 gap-5">
         <div className="max-w-[325px] h-full flex">
           <img
             src={imgSrc}
@@ -96,31 +94,31 @@ function FeaturedCard({
 
         <div className="flex flex-col gap-10">
           <div className="flex flex-col gap-2">
-            <p className="text-[11px] text-[#E7F7B9]">{type}</p>
-            <p className="text-[17px] font-semibold text-[#F8F8FF]">
-              {isEvent ? eventName : creator}
+            <p className="text-[11px] text-primary50">{type}</p>
+            <p className="text-[17px] font-semibold text-white100">
+              {type === 'EVENT' ? eventName : creator}
             </p>
             <p
-              className={`${isEvent ? 'hidden' : 'flex'} text-[#999999] text-[13px] w-[80%] max-w-[798px]`}
+              className={`${type === 'EVENT' ? 'hidden' : 'flex'} text-white60 text-[13px] w-[80%] max-w-[798px]`}
             >
-              {isNft ? price : description}
+              {type === 'NFT' ? price : description}
             </p>
 
             <div
-              className={`${isEvent ? 'flex' : 'hidden'} items-center gap-[5px]`}
+              className={`${type === 'EVENT' ? 'flex' : 'hidden'} items-center gap-[5px]`}
             >
-              <p className="text-[#999999] text-[13px]">{date}</p>
+              <p className="text-white60 text-[13px]">{date}</p>
             </div>
             <div
-              className={`${isEvent ? 'flex' : 'hidden'} items-center gap-[5px]`}
+              className={`${type === 'EVENT' ? 'flex' : 'hidden'} items-center gap-[5px]`}
             >
-              <p className="text-[#999999] text-[13px] underline">{location}</p>
+              <p className="text-white60 text-[13px] underline">{location}</p>
             </div>
           </div>
 
           <Button
             variant={`outline`}
-            className="border-[#E2F6AB] px-[13px] py-2 h-fit bg-transparent w-fit rounded-[41px] text-xs text-[#E2F6AB] hover:bg-transparent hover:text-[#E2F6AB]"
+            className="border-primary60 px-[13px] py-2 h-fit bg-transparent w-fit rounded-[41px] text-xs text-primary60 hover:bg-transparent hover:text-primary60"
           >
             Remove from featured
           </Button>
@@ -130,79 +128,42 @@ function FeaturedCard({
   )
 }
 
-function DragIndicator() {
-  return (
-    <>
-      <div className="h-[1px] w-3 bg-[#6D6C70]"></div>
-      <div className="h-[1px] w-3 bg-[#6D6C70]"></div>
-      <div className="h-[1px] w-3 bg-[#6D6C70]"></div>
-      <div className="h-[1px] w-3 bg-[#6D6C70]"></div>
-      <div className="h-[1px] w-3 bg-[#6D6C70]"></div>
-      <div className="h-[1px] w-3 bg-[#6D6C70]"></div>
-    </>
-  )
-}
+const featuredList: FeaturedList[] = [
+  {
+    imgSrc: '/assets/images/profile/featuredNFT.png',
+    type: 'NFT',
+    creator: 'Bored Ape',
+    price: '144 ETH',
+  },
+  {
+    imgSrc: '/assets/images/profile/featuredNFT.png',
+    type: 'PROJECT',
+    creator: 'MAD LADS',
+    description: `NFT stands for Non-Fungible Token. It's a type of digital asset that, NFT stands for Non-Fungible Token. It's a type of digital asset that, NFT stands for Non-Fungible Token. It's a type of digital asset that, NFT stands for Non-Fungible Token. It's a type of digital asset that, NFT stands for Non-Fungible Token. It's a type of digital asset that`,
+  },
+  {
+    imgSrc: '/assets/images/profile/featuredNFT.png',
+    type: 'ARTICLE',
+    creator: 'WHAT IS NFT',
+    price: '144 ETH',
+    description: `NFT stands for Non-Fungible Token. It's a type of digital asset that represents ownership or proof of authenticity of a unique item or piece of content using blockchain technology. Unlike cryptocurrencies such as Bitcoin or Ethereum, which are fungible and can be exchanged on a one-to-one basis, NFTs are indivisible, exchanged on a one-to-one basis, N.....more`,
+  },
+  {
+    imgSrc: '/assets/images/profile/featuredNFT.png',
+    type: 'EVENT',
+    eventName: 'MINT DAY',
+    location: 'Virtual event',
+    date: 'Wed, 24 Jan, 15:00 - 20:00',
+  },
+]
 
 interface FeaturedList {
-  imgSrc?: string
-  type?: string
+  imgSrc: string
+  type: 'EVENT' | 'NFT' | 'ARTICLE' | 'PROJECT'
   eventName?: string
   creator?: string
   price?: string
   description?: string
   location?: string
   date?: string
-  isNft?: boolean
-  isEvent?: boolean
 }
-
-const featuredList: FeaturedList[] = [
-  {
-    imgSrc: '/assets/images/profile/featuredNFT.png',
-    type: 'NFT',
-    eventName: '',
-    creator: 'Bored Ape',
-    price: '144 ETH',
-    description: '',
-    location: '',
-    date: '',
-    isNft: true,
-    isEvent: false,
-  },
-  {
-    imgSrc: '/assets/images/profile/featuredNFT.png',
-    type: 'PROJECT',
-    eventName: '',
-    creator: 'MAD LADS',
-    price: '',
-    description: `NFT stands for Non-Fungible Token. It's a type of digital asset that, NFT stands for Non-Fungible Token. It's a type of digital asset that, NFT stands for Non-Fungible Token. It's a type of digital asset that, NFT stands for Non-Fungible Token. It's a type of digital asset that, NFT stands for Non-Fungible Token. It's a type of digital asset that`,
-    location: '',
-    date: '',
-    isNft: false,
-    isEvent: false,
-  },
-  {
-    imgSrc: '/assets/images/profile/featuredNFT.png',
-    type: 'ARTICLE',
-    eventName: '',
-    creator: 'WHAT IS NFT',
-    price: '144 ETH',
-    description: `NFT stands for Non-Fungible Token. It's a type of digital asset that represents ownership or proof of authenticity of a unique item or piece of content using blockchain technology. Unlike cryptocurrencies such as Bitcoin or Ethereum, which are fungible and can be exchanged on a one-to-one basis, NFTs are indivisible, exchanged on a one-to-one basis, N.....more`,
-    location: '',
-    date: '',
-    isNft: false,
-    isEvent: false,
-  },
-  {
-    imgSrc: '/assets/images/profile/featuredNFT.png',
-    type: 'EVENT',
-    eventName: 'MINT DAY',
-    creator: '',
-    price: '',
-    description: '',
-    location: 'Virtual event',
-    date: 'Wed, 24 Jan, 15:00 - 20:00',
-    isNft: false,
-    isEvent: true,
-  },
-]

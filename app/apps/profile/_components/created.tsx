@@ -34,115 +34,66 @@ export default function Created({ data }: { data: CreatedNFTData }) {
   }*/
 
   return (
-    <div className='w-full py-10 flex items-center justify-center'>
-      <Tabs defaultValue='All' className='w-[95%] flex flex-col gap-[34px]'>
-        <TabsList className='flex justify-between items-center w-full overflow-x-scroll'>
-          <div className='flex items-center gap-1.5'>
+    <div className="w-full py-10 flex items-center justify-center">
+      <Tabs defaultValue="All" className="w-[95%] flex flex-col gap-[34px]">
+        <TabsList className="flex justify-between items-center w-full overflow-x-scroll">
+          <div className="flex items-center gap-1.5">
             {buttons.map((item: Button, index: number) => (
               <TabsTrigger
                 value={item.name}
-                className='bg-[#232227] text-[#999999] p-2.5 rounded-[50px] max-h-fit text-[10px] border-none data-[state=active]:bg-white data-[state=active]:text-[#232227]'
-                key={index}>
-                {item.name + '(' + item.itemCount + ')'}
+                className="bg-popBg text-white60 p-2.5 rounded-[50px] max-h-fit text-[10px] border-none data-[state=active]:bg-white100 data-[state=active]:text-popBg"
+                key={index}
+              >
+                {item.name + ' (' + item.itemCount + ')'}
               </TabsTrigger>
             ))}
           </div>
 
           <Select>
-            <SelectTrigger className='w-fit rounded-[7px] px-2 py-2.5 otline-none border border-[#333333] text-white text-xs bg-[#232227] h-fit'>
-              <SelectValue placeholder='Filters' />
+            <SelectTrigger className="w-fit rounded-[7px] px-2 py-2.5 outline-none border border-white20 text-white100 text-xs bg-popBg h-fit">
+              <SelectValue placeholder="Filters" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value='light'>Light</SelectItem>
-              <SelectItem value='dark'>Dark</SelectItem>
-              <SelectItem value='system'>System</SelectItem>
+              <SelectItem value="light">Light</SelectItem>
+              <SelectItem value="dark">Dark</SelectItem>
+              <SelectItem value="system">System</SelectItem>
             </SelectContent>
           </Select>
         </TabsList>
-        <TabsContent value='All'>
-          <div className='flex flex-wrap gap-x-4 gap-y-[34px]'>
-            {data.map((item, index) => (
-              <NftCard
-                type='created'
-                key={index}
-                imgSrc={item.imgSrc}
-                artist={item.artist}
-                price={item.price}
-                className={`flex`}
-              />
-            ))}
-          </div>
-        </TabsContent>
-        <TabsContent value='Complete'>
-          <div className='flex flex-wrap gap-x-4 gap-y-[34px]'>
-            {data.map((item, index) => (
-              <NftCard
-                key={index}
-                type='created'
-                imgSrc={item.imgSrc}
-                artist={item.artist}
-                price={item.price}
-                className={`${item.type === 'isComplete' ? 'flex' : 'hidden'}`}
-              />
-            ))}
-          </div>
-        </TabsContent>
-        <TabsContent value='Domain'>
-          <div className='flex flex-wrap gap-x-4 gap-y-[34px]'>
-            {data.map((item, index) => (
-              <NftCard
-                key={index}
-                type='created'
-                imgSrc={item.imgSrc}
-                artist={item.artist}
-                price={item.price}
-                className={`${item.type === 'isDomain' ? 'flex' : 'hidden'}`}
-              />
-            ))}
-          </div>
-        </TabsContent>
-        <TabsContent value='Collectibles'>
-          <div className='flex flex-wrap gap-x-4 gap-y-[34px]'>
-            {data.map((item, index) => (
-              <NftCard
-                key={index}
-                type='created'
-                imgSrc={item.imgSrc}
-                artist={item.artist}
-                price={item.price}
-                className={`${item.type === 'isCollectible' ? 'flex' : 'hidden'}`}
-              />
-            ))}
-          </div>
-        </TabsContent>
-        <TabsContent value='Metaverse'>
-          <div className='flex flex-wrap gap-x-4 gap-y-[34px]'>
-            {data.map((item, index) => (
-              <NftCard
-                key={index}
-                type='created'
-                imgSrc={item.imgSrc}
-                artist={item.artist}
-                price={item.price}
-                className={`${item.type === 'isMetaverse' ? 'flex' : 'hidden'}`}
-              />
-            ))}
-          </div>
-        </TabsContent>
-        <TabsContent value='Art'>
-          <div className='flex flex-wrap gap-x-4 gap-y-[34px]'>
-            {data.map((item, index) => (
-              <NftCard
-                key={index}
-                type='created'
-                imgSrc={item.imgSrc}
-                artist={item.artist}
-                price={item.price}
-                className={`${item.type === 'isArt' ? 'flex' : 'hidden'}`}
-              />
-            ))}
-          </div>
-        </TabsContent>
+
+        {/* Define categories for filtering */}
+        {[
+          { value: 'All', filter: () => true },
+          {
+            value: 'Complete',
+            filter: (item: any) => item.type === 'isComplete',
+          },
+          { value: 'Domain', filter: (item: any) => item.type === 'isDomain' },
+          {
+            value: 'Collectibles',
+            filter: (item: any) => item.type === 'isCollectible',
+          },
+          {
+            value: 'Metaverse',
+            filter: (item: any) => item.type === 'isMetaverse',
+          },
+          { value: 'Art', filter: (item: any) => item.type === 'isArt' },
+        ].map(({ value, filter }, index) => (
+          <TabsContent value={value} key={index}>
+            <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
+              {data.filter(filter).map((item, index) => (
+                <NftCard
+                  key={index}
+                  type="created"
+                  imgSrc={item.imgSrc}
+                  artist={item.artist}
+                  price={item.price}
+                  className="flex"
+                />
+              ))}
+            </div>
+          </TabsContent>
+        ))}
       </Tabs>
     </div>
   )
@@ -172,7 +123,122 @@ const buttons: Button[] = [
   { name: 'Art', itemCount: 4 },
 ]
 
-/*the entire card  just incase they'll implement any of the feature later on
+/*
+
+<Tabs defaultValue="All" className="w-[95%] flex flex-col gap-[34px]">
+        <TabsList className="flex justify-between items-center w-full overflow-x-scroll">
+          <div className="flex items-center gap-1.5">
+            {buttons.map((item: Button, index: number) => (
+              <TabsTrigger
+                value={item.name}
+                className="bg-popBg text-white60 p-2.5 rounded-[50px] max-h-fit text-[10px] border-none data-[state=active]:bg-white100 data-[state=active]:text-popBg"
+                key={index}
+              >
+                {item.name + '(' + item.itemCount + ')'}
+              </TabsTrigger>
+            ))}
+          </div>
+
+          <Select>
+            <SelectTrigger className="w-fit rounded-[7px] px-2 py-2.5 otline-none border border-white20 text-white100 text-xs bg-popBg h-fit">
+              <SelectValue placeholder="Filters" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="light">Light</SelectItem>
+              <SelectItem value="dark">Dark</SelectItem>
+              <SelectItem value="system">System</SelectItem>
+            </SelectContent>
+          </Select>
+        </TabsList>
+        <TabsContent value="All">
+          <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
+            {data.map((item, index) => (
+              <NftCard
+                type="created"
+                key={index}
+                imgSrc={item.imgSrc}
+                artist={item.artist}
+                price={item.price}
+                className={`flex`}
+              />
+            ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="Complete">
+          <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
+            {data.map((item, index) => (
+              <NftCard
+                key={index}
+                type="created"
+                imgSrc={item.imgSrc}
+                artist={item.artist}
+                price={item.price}
+                className={`${item.type === 'isComplete' ? 'flex' : 'hidden'}`}
+              />
+            ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="Domain">
+          <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
+            {data.map((item, index) => (
+              <NftCard
+                key={index}
+                type="created"
+                imgSrc={item.imgSrc}
+                artist={item.artist}
+                price={item.price}
+                className={`${item.type === 'isDomain' ? 'flex' : 'hidden'}`}
+              />
+            ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="Collectibles">
+          <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
+            {data.map((item, index) => (
+              <NftCard
+                key={index}
+                type="created"
+                imgSrc={item.imgSrc}
+                artist={item.artist}
+                price={item.price}
+                className={`${item.type === 'isCollectible' ? 'flex' : 'hidden'}`}
+              />
+            ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="Metaverse">
+          <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
+            {data.map((item, index) => (
+              <NftCard
+                key={index}
+                type="created"
+                imgSrc={item.imgSrc}
+                artist={item.artist}
+                price={item.price}
+                className={`${item.type === 'isMetaverse' ? 'flex' : 'hidden'}`}
+              />
+            ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="Art">
+          <div className="flex flex-wrap gap-x-4 gap-y-[34px]">
+            {data.map((item, index) => (
+              <NftCard
+                key={index}
+                type="created"
+                imgSrc={item.imgSrc}
+                artist={item.artist}
+                price={item.price}
+                className={`${item.type === 'isArt' ? 'flex' : 'hidden'}`}
+              />
+            ))}
+          </div>
+        </TabsContent>
+      </Tabs>
+
+*/
+
+/*the entire card  just incase they'll implement any of the features later on
 function CreatedCard({
   index,
   isLiked,

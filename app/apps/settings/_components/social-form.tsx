@@ -39,7 +39,8 @@ const formSchema = z.object({
     .string()
     .optional()
     .refine((val) => urlRefinement(val, 'Invalid LinkedIn URL'), {
-      message: "Please enter a valid LinkedIn URL (e.g., 'www.linkedin.com/in/username')",
+      message:
+        "Please enter a valid LinkedIn URL (e.g., 'www.linkedin.com/in/username')",
     })
     .refine((val) => !val || val.includes('linkedin.com/in/'), {
       message: "LinkedIn URL should include 'linkedin.com/in/'",
@@ -72,7 +73,8 @@ const formSchema = z.object({
     .string()
     .optional()
     .refine((val) => urlRefinement(val, 'Invalid Foundation URL'), {
-      message: "Please enter a valid Foundation URL (e.g., 'foundation.app/@username')",
+      message:
+        "Please enter a valid Foundation URL (e.g., 'foundation.app/@username')",
     })
     .refine((val) => !val || val.includes('foundation.app/@'), {
       message: "Foundation URL should include 'foundation.app/@'",
@@ -81,7 +83,8 @@ const formSchema = z.object({
     .string()
     .optional()
     .refine((val) => urlRefinement(val, 'Invalid Magic Eden URL'), {
-      message: "Please enter a valid Magic Eden URL (e.g., 'magiceden.io/u/username')",
+      message:
+        "Please enter a valid Magic Eden URL (e.g., 'magiceden.io/u/username')",
     })
     .refine((val) => !val || val.includes('magiceden.io/u/'), {
       message: "Magic Eden URL should include 'magiceden.io/u/'",
@@ -105,7 +108,10 @@ const socialPlatforms: SocialPlatform[] = [
   { name: 'Lens', imgSrc: '/assets/images/settings/social/lens.png' },
   { name: 'Farcaster', imgSrc: '/assets/images/settings/social/farcaster.png' }, // Changed from 'Forcaster' to 'Farcaster'
   { name: 'Blur', imgSrc: '/assets/images/settings/social/blur.png' },
-  { name: 'Foundation', imgSrc: '/assets/images/settings/social/foundation.png' },
+  {
+    name: 'Foundation',
+    imgSrc: '/assets/images/settings/social/foundation.png',
+  },
   { name: 'MagicEden', imgSrc: '/assets/images/settings/social/m-eden.png' },
   { name: 'EthCo', imgSrc: '/assets/images/settings/social/eth-co.png' }, // Changed from 'EthCo' to 'EthCo'
 ]
@@ -160,31 +166,39 @@ export default function SocialForm({ userId }: { userId: string }) {
   console.log(form.getValues())
 
   return (
-    <section className='w-full h-full flex flex-col gap-[23px] pb-5'>
+    <section className="w-full h-full flex flex-col gap-[23px] pb-5">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           onChange={() => setIsDisabled(false)}
-          className='space-y-[23px] min-h-full'>
+          className="space-y-[23px] min-h-full"
+        >
           {socialPlatforms.map((platform, index) => (
             <FormField
               key={index}
               control={form.control}
               name={platform.name.toLowerCase() as keyof FormValues}
               render={({ field }) => (
-                <FormItem className='w-full flex flex-col gap-2 px-10 2xl:pl-20'>
-                  <FormLabel className='text-sm text-[#B3B3B3]'>{platform.name}</FormLabel>
+                <FormItem className="w-full flex flex-col gap-2 px-10 2xl:pl-20">
+                  <FormLabel className="text-sm text-white70">
+                    {platform.name}
+                  </FormLabel>
                   <FormControl>
-                    <div className='h-[47px] flex items-center border border-[#4D4D4D] rounded-full px-3 py-2 gap-2'>
-                      <Image src={platform.imgSrc} alt={platform.name} width={25} height={25} />
+                    <div className="h-[47px] flex items-center border border-white30 rounded-full px-3 py-2 gap-2">
+                      <Image
+                        src={platform.imgSrc}
+                        alt={platform.name}
+                        width={25}
+                        height={25}
+                      />
                       <Input
                         placeholder={`Enter ${platform.name} link here`}
                         {...field}
-                        className='h-fit px-0 py-2 text-sm text-[#F8F8FF]'
+                        className="h-fit px-0 py-2 text-sm text-white100"
                       />
                     </div>
                   </FormControl>
-                  <FormMessage className='text-xs text-red-500' />
+                  <FormMessage className="text-xs text-red-500" />
                 </FormItem>
               )}
             />

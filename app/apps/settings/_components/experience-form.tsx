@@ -41,15 +41,18 @@ type FormValues = z.infer<typeof formSchema>
 export default function ExperienceForm() {
   const [isDisabled, setIsDisabled] = useState<boolean>(true)
   const [isCurrentJob, setIsCurrentJob] = useState<boolean>(false)
-  const { storedValue, setValue } = useLocalStorage<Partial<FormValues>>('experienceDraft', {
-    company: '',
-    role: '',
-    department: '',
-    startDate: '',
-    endDate: null,
-    description: '',
-    skills: [],
-  })
+  const { storedValue, setValue } = useLocalStorage<Partial<FormValues>>(
+    'experienceDraft',
+    {
+      company: '',
+      role: '',
+      department: '',
+      startDate: '',
+      endDate: null,
+      description: '',
+      skills: [],
+    },
+  )
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -101,23 +104,30 @@ export default function ExperienceForm() {
   }
 
   return (
-    <div className='flex flex-col gap-[23px] h-full'>
-      <p className='text-lg text-[#E6E6E6] font-medium px-10 2xl:px-20'>Experience 1</p>
+    <div className="flex flex-col gap-[23px] h-full">
+      <p className="text-lg text-white90 font-medium px-10 2xl:px-20">
+        Experience 1
+      </p>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)} onChange={() => setIsDisabled(false)}>
-          <div className='flex gap-7 flex-col px-4 sm:px-10 2xl:px-20 pb-5'>
+        <form
+          onSubmit={form.handleSubmit(handleSubmit)}
+          onChange={() => setIsDisabled(false)}
+        >
+          <div className="flex gap-7 flex-col px-4 sm:px-10 2xl:px-20 pb-5">
             <FormField
               control={form.control}
-              name='company'
+              name="company"
               render={({ field }) => (
-                <FormItem className='flex flex-col gap-2'>
-                  <FormLabel className='text-sm text-[#B3B3B3]'>Company</FormLabel>
+                <FormItem className="flex flex-col gap-2">
+                  <FormLabel className="text-sm text-white70">
+                    Company
+                  </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder='ex. Google'
+                      placeholder="ex. Google"
                       {...field}
-                      className='h-[47px] text-sm text-[#F8F8FF] border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]'
+                      className="h-[47px] text-sm text-white70 border border-solid border-white30 focus:border-solid focus:border-[1px] focus:border-white30"
                     />
                   </FormControl>
                   <FormMessage />
@@ -127,15 +137,15 @@ export default function ExperienceForm() {
 
             <FormField
               control={form.control}
-              name='role'
+              name="role"
               render={({ field }) => (
-                <FormItem className='flex flex-col gap-2'>
-                  <FormLabel className='text-sm text-[#B3B3B3]'>Role</FormLabel>
+                <FormItem className="flex flex-col gap-2">
+                  <FormLabel className="text-sm text-white70">Role</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder='ex. CEO'
+                      placeholder="ex. CEO"
                       {...field}
-                      className='h-[47px] text-sm text-[#F8F8FF] border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]'
+                      className="h-[47px] text-sm text-white100 border border-solid border-white30 focus:border-solid focus:border-[1px] focus:border-white30"
                     />
                   </FormControl>
                   <FormMessage />
@@ -145,15 +155,17 @@ export default function ExperienceForm() {
 
             <FormField
               control={form.control}
-              name='department'
+              name="department"
               render={({ field }) => (
-                <FormItem className='flex flex-col gap-2'>
-                  <FormLabel className='text-sm text-[#B3B3B3]'>Department</FormLabel>
+                <FormItem className="flex flex-col gap-2">
+                  <FormLabel className="text-sm text-white70">
+                    Department
+                  </FormLabel>
                   <FormControl>
                     <Input
-                      placeholder='ex. Engineering'
+                      placeholder="ex. Engineering"
                       {...field}
-                      className='h-[47px] text-sm text-[#F8F8FF] border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]'
+                      className="h-[47px] text-sm text-white100 border border-solid border-white30 focus:border-solid focus:border-[1px] focus:border-white30"
                     />
                   </FormControl>
                   <FormMessage />
@@ -161,18 +173,22 @@ export default function ExperienceForm() {
               )}
             />
 
-            <div className='flex flex-col gap-[13px]'>
-              <div className='grid grid-cols-2 gap-[33px]'>
+            <div className="flex flex-col gap-[13px]">
+              <div className="grid grid-cols-2 gap-[33px]">
                 <FormField
                   control={form.control}
-                  name='startDate'
+                  name="startDate"
                   render={({ field }) => (
-                    <FormItem className='flex flex-col gap-2'>
-                      <FormLabel className='text-sm text-[#B3B3B3]'>Start Date</FormLabel>
+                    <FormItem className="flex flex-col gap-2">
+                      <FormLabel className="text-sm text-white70">
+                        Start Date
+                      </FormLabel>
                       <FormControl {...field}>
                         <DatePicker
                           selected={field.value ? parseISO(field.value) : null}
-                          onChange={(date: Date) => field.onChange(date.toISOString())}
+                          onChange={(date: Date) =>
+                            field.onChange(date.toISOString())
+                          }
                         />
                       </FormControl>
                       <FormMessage />
@@ -181,10 +197,12 @@ export default function ExperienceForm() {
                 />
                 <FormField
                   control={form.control}
-                  name='endDate'
+                  name="endDate"
                   render={({ field }) => (
-                    <FormItem className='flex flex-col gap-2'>
-                      <FormLabel className='text-sm text-[#B3B3B3]'>Finish Date</FormLabel>
+                    <FormItem className="flex flex-col gap-2">
+                      <FormLabel className="text-sm text-white70">
+                        Finish Date
+                      </FormLabel>
                       <FormControl {...field}>
                         <DatePicker disabled={isCurrentJob} />
                       </FormControl>
@@ -194,9 +212,9 @@ export default function ExperienceForm() {
                 />
               </div>
 
-              <div className='flex items-center gap-[7px] mt-[13px]'>
+              <div className="flex items-center gap-[7px] mt-[13px]">
                 <Checkbox
-                  id='work'
+                  id="work"
                   checked={isCurrentJob}
                   onCheckedChange={(checked) => {
                     setIsCurrentJob(checked as boolean)
@@ -204,11 +222,12 @@ export default function ExperienceForm() {
                       form.setValue('endDate', null)
                     }
                   }}
-                  className='border-[#CFF073] data-[state=checked]:bg-[#CFF073] data-[state=checked]:text-[#0B0A10]'
+                  className="border-button data-[state=checked]:bg-button data-[state=checked]:text-buttonTextColor"
                 />
                 <label
-                  htmlFor='work'
-                  className='text-xs text-[#CCCDD7] leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                  htmlFor="work"
+                  className="text-xs text-[#CCCDD7] leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
                   I still work here
                 </label>
               </div>
@@ -216,15 +235,17 @@ export default function ExperienceForm() {
 
             <FormField
               control={form.control}
-              name='description'
+              name="description"
               render={({ field }) => (
-                <FormItem className='flex flex-col gap-2'>
-                  <FormLabel className='text-sm text-[#B3B3B3]'>Description</FormLabel>
+                <FormItem className="flex flex-col gap-2">
+                  <FormLabel className="text-sm text-white70">
+                    Description
+                  </FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder='ex. CEO'
+                      placeholder="ex. CEO"
                       {...field}
-                      className='text-sm text-[#F8F8FF] min-h-[150px] border border-solid border-[#4D4D4D] rounded-[16px] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]'
+                      className="text-sm text-white100 min-h-[150px] border border-solid border-white30 rounded-[16px] focus:border-solid focus:border-[1px] focus:border-white30"
                     />
                   </FormControl>
                   <FormMessage />
@@ -234,19 +255,23 @@ export default function ExperienceForm() {
 
             <FormField
               control={form.control}
-              name='skills'
+              name="skills"
               render={({ field }) => (
-                <FormItem className='flex flex-col gap-2'>
-                  <FormLabel className='text-sm text-[#B3B3B3]'>Skills</FormLabel>
+                <FormItem className="flex flex-col gap-2">
+                  <FormLabel className="text-sm text-white70">Skills</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder='ex. JavaScript, React, Node.js'
+                      placeholder="ex. JavaScript, React, Node.js"
                       {...field}
                       onChange={(e) =>
-                        field.onChange(e.target.value.split(',').map((skill) => skill.trim()))
+                        field.onChange(
+                          e.target.value
+                            .split(',')
+                            .map((skill) => skill.trim()),
+                        )
                       }
                       value={field.value.join(', ')}
-                      className='h-[47px] text-sm text-[#F8F8FF] border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]'
+                      className="h-[47px] text-sm text-white100 border border-solid border-white30 focus:border-solid focus:border-[1px] focus:border-white30"
                     />
                   </FormControl>
                   <FormMessage />

@@ -18,25 +18,27 @@ export default function Page() {
 
   const { data: experienceData } = useQuery({
     queryKey: ['experience'],
-    queryFn: () => ovationService.getExperience(profileData?.data?.userId as string),
+    queryFn: () =>
+      ovationService.getExperience(profileData?.data?.userId as string),
   })
 
   return (
     <>
-      <div className='relative w-full h-[262px] bg-profile-banner bg-contain bg-center'>
-        <div className='hidden lg:flex items-end justify-end gap-3 h-[inherit] w-full pr-10 pb-10'>
+      <div className="relative w-full h-[262px] bg-profile-banner bg-contain bg-center">
+        <div className="hidden lg:flex items-end justify-end gap-3 h-[inherit] w-full pr-10 pb-10">
           <Button
-            variant='default'
+            variant="default"
             onClick={() => {
               router.push('/apps/settings')
             }}
-            className='bg-[#333333] py-[11px] px-4 border border-[#E6E6E64D] text-white text-xs'>
+            className="bg-white20 py-[11px] px-4 border border-[#E6E6E64D] text-white100 text-xs"
+          >
             Edit Profile
           </Button>
         </div>
       </div>
 
-      <div className='flex flex-col lg:flex-row relative h-auto'>
+      <div className="flex flex-col lg:flex-row relative h-auto">
         <UserProfile
           profileData={profileData?.data as ProfileData}
           experienceData={experienceData?.data?.data as UserExperience[]}

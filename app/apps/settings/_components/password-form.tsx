@@ -21,7 +21,9 @@ import { useMutation } from '@tanstack/react-query'
 const formSchema = z
   .object({
     oldPassword: z.string().min(1, 'Old password is required'),
-    newPassword: z.string().min(8, 'New password must be at least 8 characters'),
+    newPassword: z
+      .string()
+      .min(8, 'New password must be at least 8 characters'),
     confirmPassword: z.string().min(1, 'Please confirm your new password'),
   })
   .refine((data) => data.newPassword === data.confirmPassword, {
@@ -68,62 +70,67 @@ export default function PasswordForm() {
   return (
     <Form {...form}>
       <form
-        className='h-full flex flex-col w-full'
+        className="h-full flex flex-col w-full"
         onChange={() => setIsDisabled(false)} // Updated variable name
-        onSubmit={form.handleSubmit(onSubmit)}>
-        <div className='h-full w-full lg:max-w-[637px] flex gap-7 flex-col box-border pb-5 px-4 sm:px-10 2xl:px-20'>
+        onSubmit={form.handleSubmit(onSubmit)}
+      >
+        <div className="h-full w-full lg:max-w-[637px] flex gap-7 flex-col box-border pb-5 px-4 sm:px-10 2xl:px-20">
           <FormField
-            name='oldPassword'
+            name="oldPassword"
             control={form.control}
             render={({ field }) => (
-              <FormItem className='flex flex-col gap-1'>
-                <FormLabel className='text-sm text-[#B3B3B3]'>Old Password</FormLabel>
+              <FormItem className="flex flex-col gap-1">
+                <FormLabel className="text-sm text-white70">
+                  Old Password
+                </FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    placeholder='Input your old password'
-                    className='h-[47px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full'
-                    type='password'
+                    placeholder="Input your old password"
+                    className="h-[47px] bg-transparent border-white30 border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-white30 rounded-full"
+                    type="password"
                   />
                 </FormControl>
               </FormItem>
             )}
           />
           <FormField
-            name='newPassword'
+            name="newPassword"
             control={form.control}
             render={({ field }) => (
-              <FormItem className='flex flex-col gap-1'>
-                <FormLabel className='text-sm text-[#B3B3B3] max-w-[637px]'>New password</FormLabel>
+              <FormItem className="flex flex-col gap-1">
+                <FormLabel className="text-sm text-white70 max-w-[637px]">
+                  New password
+                </FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    placeholder='Input your new password'
-                    className='h-[47px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full'
-                    type='password'
+                    placeholder="Input your new password"
+                    className="h-[47px] bg-transparent border-white30 border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-white30 rounded-full"
+                    type="password"
                   />
                 </FormControl>
-                <FormMessage className='text-red-500 text-sm' />
+                <FormMessage className="text-red-500 text-sm" />
               </FormItem>
             )}
           />
           <FormField
-            name='confirmPassword'
+            name="confirmPassword"
             control={form.control}
             render={({ field }) => (
-              <FormItem className='flex flex-col gap-1'>
-                <FormLabel className='text-sm text-[#B3B3B3] max-w-[637px]'>
+              <FormItem className="flex flex-col gap-1">
+                <FormLabel className="text-sm text-white70 max-w-[637px]">
                   Confirm new password
                 </FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    placeholder='Confirm your new password'
-                    className='h-[47px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full'
-                    type='password'
+                    placeholder="Confirm your new password"
+                    className="h-[47px] bg-transparent border-white30 border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-white30 rounded-full"
+                    type="password"
                   />
                 </FormControl>
-                <FormMessage className='text-red-500 text-sm' />
+                <FormMessage className="text-red-500 text-sm" />
               </FormItem>
             )}
           />

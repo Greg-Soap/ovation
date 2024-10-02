@@ -41,7 +41,7 @@ export default function ComingSoon() {
   return (
     <div className="w-full flex items-center justify-center mt-12">
       <div className="flex flex-col items-center justify-center px-11 py-7 rounded-[20px] gap-[52px]">
-        <p className="text-lg text-[#F8F8FF] font-semibold">COMING SOON.....</p>
+        <p className="text-lg text-white100 font-semibold">COMING SOON.....</p>
 
         <Image
           src="/assets/images/profile/soon.png"
@@ -52,14 +52,14 @@ export default function ComingSoon() {
 
         <div className="flex flex-col gap-4 items-center">
           <p
-            className={`${isSubmitted ? 'hidden' : 'flex'} text-center text-[#E6E6E6]`}
+            className={`${isSubmitted ? 'hidden' : 'flex'} text-center text-white90`}
           >
             Subscribe below to be notified of when it goes live
           </p>
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className={`${isSubmitted ? 'hidden' : ''} space-y-4 w-full border border-[#FFFFFF33] rounded-[500px] bg-[#FFFFFF0D]`}
+              className={`${isSubmitted ? 'hidden' : ''} space-y-4 w-full border border-[#FFFFFF33] rounded-[500px] bg-white05`}
             >
               <FormField
                 control={form.control}
@@ -74,7 +74,7 @@ export default function ComingSoon() {
                           className="text-sm h-fit p-4"
                         />
                         <Button
-                          className="text-[10px] font-semibold text-[#111115] px-3 py-2 h-fit"
+                          className="text-[10px] font-semibold text-primaryBg px-3 py-2 h-fit"
                           type="submit"
                         >
                           Subscribe
@@ -87,7 +87,7 @@ export default function ComingSoon() {
               />
             </form>
           </Form>
-          <p className="text-xs text-[#999999] text-center">
+          <p className="text-xs text-white60 text-center">
             {isSubmitted
               ? 'Your response has been recorded, we will notify you when we go live'
               : 'Be among the special ones to get early notification when we launch'}
