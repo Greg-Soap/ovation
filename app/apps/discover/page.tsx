@@ -43,7 +43,7 @@ export default function Page() {
   return (
     <div className="flex flex-col w-full bg-[#111115] h-fit items-center justify-center">
       <ErrorBoundary FallbackComponent={ErrorFallback}>
-        <DiscoverHeader user={user as UserData} />
+        <DiscoverHeader  />
         <GetStarted
           user={user as UserData}
           socials={socials?.data?.data || {}}
@@ -68,14 +68,12 @@ export default function Page() {
   )
 }
 
-function DiscoverHeader({ user }: { user: UserData }) {
+function DiscoverHeader() {
   return (
     <div
       className="h-[250px] w-full flex items-center justify-center bg-cover shadow px-7"
       style={{
-        backgroundImage: user?.coverImage
-          ? `url('${user?.coverImage}')`
-          : 'url("/assets/images/profile/image8.png")',
+        backgroundImage:  'url("/assets/images/profile/image8.png")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -237,35 +235,34 @@ function DiscoverFeature(user: FeaturedUser) {
 }
 
 function DiscoverHolders() {
-  const contributorsQuery = useQuery({
-    queryKey: ['contributors'],
-    queryFn: () => ovationService.getContributors(),
-  })
-
+  
   const creatorsQuery = useQuery({
     queryKey: ['creators'],
     queryFn: () => ovationService.getCreators(),
   })
-
+  
   const nftHoldersQuery = useQuery({
     queryKey: ['nftHolders'],
     queryFn: () => ovationService.getTopNft(),
   })
-
-  const blueChipHoldersQuery = useQuery({
-    queryKey: ['blueChipHolders'],
-    queryFn: () => ovationService.getBlueChipHolders(),
-  })
-
+  
   const founderHoldersQuery = useQuery({
     queryKey: ['founderHolders'],
     queryFn: () => ovationService.getFounderHolders(),
   })
-
-  const highestNetWorthQuery = useQuery({
-    queryKey: ['highestNetWorth'],
-    queryFn: () => ovationService.getHighestNetWorth(),
-  })
+  
+  // const contributorsQuery = useQuery({
+  //   queryKey: ['contributors'],
+  //   queryFn: () => ovationService.getContributors(),
+  // })
+  // const blueChipHoldersQuery = useQuery({
+    //   queryKey: ['blueChipHolders'],
+  //   queryFn: () => ovationService.getBlueChipHolders(),
+  // })
+  // const highestNetWorthQuery = useQuery({
+  //   queryKey: ['highestNetWorth'],
+  //   queryFn: () => ovationService.getHighestNetWorth(),
+  // })
 
   const renderHoldersList = (
     data: DiscoverUserData[],
@@ -416,20 +413,14 @@ function DiscoverHolders() {
       <div className="p-4 items-center w-full rounded-lg flex flex-col gap-10 border-[#353538] border-[1px]">
         <Tabs defaultValue="contributors" className="w-full">
           <TabsList className="w-full flex gap-2 overflow-auto pb-1">
-            <CTabTrigger value="contributors">Top Contributors</CTabTrigger>
-            <CTabTrigger value="creators">Top Creators</CTabTrigger>
             <CTabTrigger value="nftHolders">Top NFT Holders</CTabTrigger>
-            <CTabTrigger value="blueChipHolders">Blue Chip Holders</CTabTrigger>
+            <CTabTrigger value="creators">Top Creators</CTabTrigger>
             <CTabTrigger value="founderHolders">Founder Holders</CTabTrigger>
-            <CTabTrigger value="highestNetWorth">Highest Net Worth</CTabTrigger>
+            {/* <CTabTrigger value="blueChipHolders">Blue Chip Holders</CTabTrigger> */}
+            {/* <CTabTrigger value="contributors">Top Contributors</CTabTrigger> */}
+            {/* <CTabTrigger value="highestNetWorth">Highest Net Worth</CTabTrigger> */}
           </TabsList>
-          <TabsContent value="contributors">
-            {contributorsQuery.isLoading ? (
-              <MiniLoader />
-            ) : (
-              renderHoldersList(contributorsQuery.data || [], 'contributors')
-            )}
-          </TabsContent>
+          
           <TabsContent value="creators">
             {creatorsQuery.isLoading ? (
               <MiniLoader />
@@ -444,16 +435,6 @@ function DiscoverHolders() {
               renderHoldersList(nftHoldersQuery.data || [], 'nftHolders')
             )}
           </TabsContent>
-          <TabsContent value="blueChipHolders">
-            {blueChipHoldersQuery.isLoading ? (
-              <MiniLoader />
-            ) : (
-              renderHoldersList(
-                blueChipHoldersQuery.data || [],
-                'blueChipHolders',
-              )
-            )}
-          </TabsContent>
           <TabsContent value="founderHolders">
             {founderHoldersQuery.isLoading ? (
               <MiniLoader />
@@ -464,7 +445,24 @@ function DiscoverHolders() {
               )
             )}
           </TabsContent>
-          <TabsContent value="highestNetWorth">
+          {/* <TabsContent value="blueChipHolders">
+            {blueChipHoldersQuery.isLoading ? (
+              <MiniLoader />
+            ) : (
+              renderHoldersList(
+                blueChipHoldersQuery.data || [],
+                'blueChipHolders',
+              )
+            )}
+          </TabsContent> */}
+          {/* <TabsContent value="contributors">
+            {contributorsQuery.isLoading ? (
+              <MiniLoader />
+            ) : (
+              renderHoldersList(contributorsQuery.data || [], 'contributors')
+            )}
+          </TabsContent> */}
+          {/* <TabsContent value="highestNetWorth">
             {highestNetWorthQuery.isLoading ? (
               <MiniLoader />
             ) : (
@@ -473,7 +471,7 @@ function DiscoverHolders() {
                 'highestNetWorth',
               )
             )}
-          </TabsContent>
+          </TabsContent> */}
         </Tabs>
       </div>
     </div>
