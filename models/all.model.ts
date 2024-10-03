@@ -86,6 +86,7 @@ export interface Wallet {
   walletId: string
 }
 export interface ProfileData {
+  createdDate: string
   email: string
   profile: {
     displayName: string

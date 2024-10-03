@@ -8,6 +8,18 @@ import MiniLoader from '@/components/mini-loader'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
 import LocationIcon from '@/public/assets/images/ovationLocationIcon'
+import { format, parseISO } from 'date-fns'
+import { Calendar, Calendar2 } from 'iconsax-react'
+
+function formatJoinedDate(dateString: string): string {
+  try {
+    const date = parseISO(dateString)
+    return `Joined ${format(date, 'MMMM yyyy')}`
+  } catch (error) {
+    console.error('Error parsing date:', error)
+    return 'Join date unavailable'
+  }
+}
 
 export default function UserProfile({
   profileData,
@@ -90,6 +102,13 @@ export default function UserProfile({
                   >
                     Add a bio
                   </a>
+                )}
+
+                {profileData?.createdDate && (
+                  <p className="font-normal text-[#808080] text-sm flex items-center gap-1">
+                    <Calendar2 className="w-[13px] h-[13px] stroke-[#808080]" />
+                    <span>{formatJoinedDate(profileData?.createdDate)}</span>
+                  </p>
                 )}
 
                 <div className="flex items-center gap-6">

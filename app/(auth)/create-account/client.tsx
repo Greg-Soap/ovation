@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { object, z } from 'zod'
 import PathICon from '@/components/icons/pathIcon'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, AlertCircle } from 'lucide-react'
 import {
   Form,
   FormControl,
@@ -30,6 +30,7 @@ import Image from 'next/image'
 import Google from '@/public/assets/images/ovationAuthGoogle'
 import { useGoogleLogin } from '@react-oauth/google'
 import RenderWalletAndConfirmation from './manual-wallect'
+import PasswordInput from '@/components/password-input'
 
 const formSchema = z.object({
   personalInfo: z.object({
@@ -107,7 +108,6 @@ export default function AccountForm({ setOptionalLeft }: Props) {
   const { mutate: createAccount, isPending } = useMutation({
     mutationFn: ovationService.register,
     onSuccess: async (data) => {
-      console.log(data)
       setToken(data.data?.token)
       setValue(data.data?.userData)
 
@@ -144,6 +144,55 @@ export default function AccountForm({ setOptionalLeft }: Props) {
 
   const handleFormSubmit = (data: z.infer<typeof formSchema>) => {
     createAccount(data)
+  }
+
+  const formErrors = form.formState.errors
+
+  function startCase(str: string): string {
+    return str
+      .split('.')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ')
+  }
+
+  function renderErrorSummary() {
+    const errorCount = Object.keys(form.formState.errors).length
+    if (errorCount === 0) return null
+
+    function getNestedErrors(
+      errors: any,
+      prefix = '',
+    ): Array<[string, string]> {
+      return Object.entries(errors).flatMap(([key, value]) => {
+        if (value && typeof value === 'object' && 'message' in value) {
+          return [[`${prefix}${key}`, value.message as string]]
+        }
+        if (value && typeof value === 'object') {
+          return getNestedErrors(value, `${prefix}${key}.`)
+        }
+        return []
+      })
+    }
+
+    const allErrors = getNestedErrors(form.formState.errors)
+
+    return (
+      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
+        <div className="flex items-center">
+          <AlertCircle className="w-5 h-5 mr-2" />
+          <span className="font-bold">
+            {errorCount} error{errorCount > 1 ? 's' : ''} in the form
+          </span>
+        </div>
+        <ul className="list-disc list-inside mt-2">
+          {allErrors.map(([field, message]) => (
+            <li key={field}>
+              {startCase(field)}: {message}
+            </li>
+          ))}
+        </ul>
+      </div>
+    )
   }
 
   function renderPersonalInfoForm() {
@@ -228,12 +277,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input
-                  {...field}
-                  className="h-[46px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
-                  placeholder="*********"
-                  type="password"
-                />
+                <PasswordInput placeholder="*********" {...field} />
               </FormControl>
               <FormMessage />
               <p className="text-xs text-[#B3B3B3] mt-2">
@@ -399,7 +443,10 @@ export default function AccountForm({ setOptionalLeft }: Props) {
           </div>
         </div>
       </div>
-      <Form {...form}>{renderCurrentForm()}</Form>
+      <Form {...form}>
+        {renderErrorSummary()}
+        {renderCurrentForm()}
+      </Form>
     </div>
   )
 }

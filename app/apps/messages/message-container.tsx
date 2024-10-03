@@ -138,7 +138,8 @@ export default function MessageContainer({
                 No Conversation Selected
               </p>
               <p className="text-[#E6E6E6] text-center text-sm max-w-[280px]">
-                To start a new conversation, visit a user&apos;s profile and click the message button.
+                To start a new conversation, visit a user&apos;s profile and
+                click the message button.
               </p>
             </div>
           </div>
@@ -147,7 +148,6 @@ export default function MessageContainer({
     )
   }
 
-  console.log({ friend })
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <section className="w-full h-[100vh] lg:h-full lg:col-span-2 flex flex-col bg-[#111115] other-link overflow-scroll">
@@ -174,7 +174,7 @@ export default function MessageContainer({
               alt="User Display Picture"
               width={81}
               height={81}
-              className='rounded-full w-[81px] h-[81px] object-cover'
+              className="rounded-full w-[81px] h-[81px] object-cover"
             />
             <div className="flex flex-col gap-1 w-fit items-center">
               <p className="text-[#F8F8FF] text-xl font-semibold w-fit leading-[30px] text-center">

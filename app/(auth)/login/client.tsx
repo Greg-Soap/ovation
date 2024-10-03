@@ -46,7 +46,6 @@ export default function LoginForm() {
   const loginMutation = useMutation({
     mutationFn: ovationService.login,
     onSuccess: (data) => {
-      console.log({ login: data })
       if (data?.data?.token) {
         setToken(data?.data?.token)
         setValue(data?.data?.userData)

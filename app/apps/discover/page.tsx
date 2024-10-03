@@ -43,7 +43,7 @@ export default function Page() {
   return (
     <div className="flex flex-col w-full bg-[#111115] h-fit items-center justify-center">
       <ErrorBoundary FallbackComponent={ErrorFallback}>
-        <DiscoverHeader  />
+        <DiscoverHeader />
         <GetStarted
           user={user as UserData}
           socials={socials?.data?.data || {}}
@@ -73,7 +73,7 @@ function DiscoverHeader() {
     <div
       className="h-[250px] w-full flex items-center justify-center bg-cover shadow px-7"
       style={{
-        backgroundImage:  'url("/assets/images/profile/image8.png")',
+        backgroundImage: 'url("/assets/images/profile/image8.png")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -235,28 +235,27 @@ function DiscoverFeature(user: FeaturedUser) {
 }
 
 function DiscoverHolders() {
-  
   const creatorsQuery = useQuery({
     queryKey: ['creators'],
     queryFn: () => ovationService.getCreators(),
   })
-  
+
   const nftHoldersQuery = useQuery({
     queryKey: ['nftHolders'],
     queryFn: () => ovationService.getTopNft(),
   })
-  
+
   const founderHoldersQuery = useQuery({
     queryKey: ['founderHolders'],
     queryFn: () => ovationService.getFounderHolders(),
   })
-  
+
   // const contributorsQuery = useQuery({
   //   queryKey: ['contributors'],
   //   queryFn: () => ovationService.getContributors(),
   // })
   // const blueChipHoldersQuery = useQuery({
-    //   queryKey: ['blueChipHolders'],
+  //   queryKey: ['blueChipHolders'],
   //   queryFn: () => ovationService.getBlueChipHolders(),
   // })
   // const highestNetWorthQuery = useQuery({
@@ -307,7 +306,7 @@ function DiscoverHolders() {
             <div
               key={index}
               id={`no-${index + 1}-user`}
-              className="rounded-lg h-[360px] bg-cover flex flex-col justify-end center items-center"
+              className="rounded-lg border border-[#353538] h-[360px] bg-cover flex flex-col justify-end center items-center"
               style={{
                 backgroundImage: `url(${
                   user?.coverImage || '/assets/images/default-user.svg'
@@ -411,8 +410,8 @@ function DiscoverHolders() {
         {/* <Button className="bg-white">View all</Button> */}
       </div>
       <div className="p-4 items-center w-full rounded-lg flex flex-col gap-10 border-[#353538] border-[1px]">
-        <Tabs defaultValue="contributors" className="w-full">
-          <TabsList className="w-full flex gap-2 overflow-auto pb-1">
+        <Tabs defaultValue="nftHolders" className="w-full">
+          <TabsList className="w-full flex gap-2 justify-start overflow-auto pb-1">
             <CTabTrigger value="nftHolders">Top NFT Holders</CTabTrigger>
             <CTabTrigger value="creators">Top Creators</CTabTrigger>
             <CTabTrigger value="founderHolders">Founder Holders</CTabTrigger>
@@ -420,7 +419,7 @@ function DiscoverHolders() {
             {/* <CTabTrigger value="contributors">Top Contributors</CTabTrigger> */}
             {/* <CTabTrigger value="highestNetWorth">Highest Net Worth</CTabTrigger> */}
           </TabsList>
-          
+
           <TabsContent value="creators">
             {creatorsQuery.isLoading ? (
               <MiniLoader />
@@ -526,23 +525,13 @@ function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
         }
       >
         <div className="flex flex-col items-center justify-center relative">
-          <div className="grid grid-cols-4 gap-[9px]">
+          <div className="w-full h-[150px] rounded-[10px] overflow-hidden">
             <img
-              src="/assets/images/profile/bnnr1.png"
+              src={
+                mostViewed[0]?.coverImage || '/assets/images/profile/image8.png'
+              }
               alt="User alt"
-              className="col-span-1 h-full rounded-[10px]"
-            />
-
-            <img
-              src="/assets/images/profile/bnnr2.png"
-              alt="User alt"
-              className="col-span-2 h-full rounded-[10px]"
-            />
-
-            <img
-              src="/assets/images/profile/bnnr3.png"
-              alt="User alt"
-              className="col-span-1 h-full rounded-[10px]"
+              className=" h-full rounded-[10px] object-cover w-full"
             />
           </div>
 
@@ -592,7 +581,7 @@ function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
       <div id="top-4-10 section" className="flex flex-col gap-4 w-full pt-4">
         {mostViewed.slice(3).map((user, index) => (
           <div key={index} className="w-full">
-            <div className="flex  h-[80px] text-white pl-4 pr-4 bg-[#18181C] rounded-[20px] items-center justify-between border border-[#35353880]">
+            <div className="flex flex-wrap gap-4 py-4 text-white pl-4 pr-4 bg-[#18181C] rounded-[20px] items-center justify-between border border-[#35353880]">
               <div className="flex items-center gap-2">
                 <div className="w-[30px] h-[30px] rounded-full overflow-hidden border-2 border-white">
                   <img
@@ -605,23 +594,23 @@ function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
                 </div>
 
                 <div className="flex flex-col">
-                   <Link
-                      href={`/apps/profile/${user?.username}`}
-                      className="text-sm font-semibold"
-                    >
-                      {user?.displayName}
-                    </Link>
-                 
                   <Link
-                      href={`/apps/profile/${user?.username}`}
-                      className="flex gap-1 text-xs text-[#858487] items-center"
-                    >
+                    href={`/apps/profile/${user?.username}`}
+                    className="text-sm font-semibold"
+                  >
+                    {user?.displayName}
+                  </Link>
+
+                  <Link
+                    href={`/apps/profile/${user?.username}`}
+                    className="flex gap-1 text-xs text-[#858487] items-center"
+                  >
                     <span>{formatUsername(user?.username)} </span>
                     <VerifyIcon />
                   </Link>
                 </div>
               </div>
-              <div className="bg-[#CFF073] text-[10px] font-medium text-black px-[10px] py-2 rounded-3xl">
+              <div className="bg-[#CFF073] ml-auto text-[10px] font-medium text-black px-[10px] py-2 rounded-3xl">
                 {user?.views > 1000
                   ? `${(user?.views / 1000).toFixed(1)}k`
                   : user?.views}{' '}
