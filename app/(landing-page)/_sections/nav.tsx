@@ -48,8 +48,6 @@ export function Header({ navLinks = links }: HeaderProps) {
     return () => clearInterval(timer)
   }, [isoShowButtonTime])
 
-  console.log(`Button visibility state: ${showButton}`)
-
   return (
     <header className="relative border-b border-[#FFFFFF33] bg-transparent">
       <nav className="container mx-auto  flex w-full items-center justify-between  px-4 md:px-6 py-6">

@@ -44,7 +44,7 @@ export interface ProfileMod {
 export interface Register {
   personalInfo: PersonalInfo
   userPath?: Paths
-  userWallet: WalletAcct
+  userWallet: WalletAcct | null
   type: 'Normal' | 'Google'
 }
 
@@ -86,6 +86,7 @@ export interface Wallet {
   walletId: string
 }
 export interface ProfileData {
+  createdDate: string
   email: string
   profile: {
     displayName: string
@@ -152,7 +153,7 @@ export interface UserData {
   featured: FeaturedItem[]
   wallets: {
     id: string
-    walletAddress: string
+    walletAddress: string | null
     name: string
     metadata: ModelObject
     logoUrl: string

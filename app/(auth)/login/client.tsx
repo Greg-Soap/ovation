@@ -46,13 +46,20 @@ export default function LoginForm() {
   const loginMutation = useMutation({
     mutationFn: ovationService.login,
     onSuccess: (data) => {
-      console.log({ login: data })
       if (data?.data?.token) {
         setToken(data?.data?.token)
         setValue(data?.data?.userData)
 
         toast.success('Login successful!')
-        router.push('/apps/discover')
+
+        // Check for stored destination
+        const intendedDestination = localStorage.getItem('intendedDestination')
+        if (intendedDestination) {
+          localStorage.removeItem('intendedDestination')
+          router.push(intendedDestination)
+        } else {
+          router.push('/apps/discover')
+        }
       } else {
         toast.error('Login failed: No token received')
       }

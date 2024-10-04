@@ -1,9 +1,6 @@
 import { getToken } from '@/lib/cookies'
 import axios from 'axios'
 
-console.log('process.env.NODE_ENV', process.env.NODE_ENV)
-console.log('NEXT_PUBLIC_API_URL', process.env.NEXT_PUBLIC_API_URL)
-
 export const multipartHeaders = {
   headers: { 'Content-Type': 'multipart/form-data' },
 }

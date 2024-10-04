@@ -137,8 +137,6 @@ export default function FeedbackModal() {
 
   const handleSubmit = methods.handleSubmit(onSubmit)
 
-  console.log({ formValues: methods.getValues() })
-
   const renderFormHeader = () => (
     <div className="flex flex-col gap-2 mb-6">
       <p className="text-sm text-[#E7F7B9]">{formPage}/2</p>

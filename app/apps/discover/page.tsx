@@ -37,13 +37,13 @@ export default function Page() {
   })
 
   const mostViewed = mostViewedQuery.data || []
-  console.log({ mostViewed })
+
   const mostViewedLoading = mostViewedQuery.isLoading
 
   return (
     <div className="flex flex-col w-full bg-[#111115] h-fit items-center justify-center">
       <ErrorBoundary FallbackComponent={ErrorFallback}>
-        <DiscoverHeader user={user as UserData} />
+        <DiscoverHeader />
         <GetStarted
           user={user as UserData}
           socials={socials?.data?.data || {}}
@@ -68,14 +68,12 @@ export default function Page() {
   )
 }
 
-function DiscoverHeader({ user }: { user: UserData }) {
+function DiscoverHeader() {
   return (
     <div
       className="h-[250px] w-full flex items-center justify-center bg-cover shadow px-7"
       style={{
-        backgroundImage: user?.coverImage
-          ? `url('${user?.coverImage}')`
-          : 'url("/assets/images/profile/image8.png")',
+        backgroundImage: 'url("/assets/images/profile/image8.png")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -237,11 +235,6 @@ function DiscoverFeature(user: FeaturedUser) {
 }
 
 function DiscoverHolders() {
-  const contributorsQuery = useQuery({
-    queryKey: ['contributors'],
-    queryFn: () => ovationService.getContributors(),
-  })
-
   const creatorsQuery = useQuery({
     queryKey: ['creators'],
     queryFn: () => ovationService.getCreators(),
@@ -252,20 +245,23 @@ function DiscoverHolders() {
     queryFn: () => ovationService.getTopNft(),
   })
 
-  const blueChipHoldersQuery = useQuery({
-    queryKey: ['blueChipHolders'],
-    queryFn: () => ovationService.getBlueChipHolders(),
-  })
-
   const founderHoldersQuery = useQuery({
     queryKey: ['founderHolders'],
     queryFn: () => ovationService.getFounderHolders(),
   })
 
-  const highestNetWorthQuery = useQuery({
-    queryKey: ['highestNetWorth'],
-    queryFn: () => ovationService.getHighestNetWorth(),
-  })
+  // const contributorsQuery = useQuery({
+  //   queryKey: ['contributors'],
+  //   queryFn: () => ovationService.getContributors(),
+  // })
+  // const blueChipHoldersQuery = useQuery({
+  //   queryKey: ['blueChipHolders'],
+  //   queryFn: () => ovationService.getBlueChipHolders(),
+  // })
+  // const highestNetWorthQuery = useQuery({
+  //   queryKey: ['highestNetWorth'],
+  //   queryFn: () => ovationService.getHighestNetWorth(),
+  // })
 
   const renderHoldersList = (
     data: DiscoverUserData[],
@@ -303,16 +299,14 @@ function DiscoverHolders() {
       default: (user: DiscoverUserData) => `${user.badgeEarned} Badges`,
     }
 
-    const sortedData = [...data].sort((a, b) => b.badgeEarned - a.badgeEarned)
-
     return (
       <>
         <div id="top-3 section" className="w-full flex flex-col gap-10">
-          {sortedData.slice(0, 3).map((user, index) => (
+          {data.slice(0, 3).map((user, index) => (
             <div
               key={index}
               id={`no-${index + 1}-user`}
-              className="rounded-lg h-[360px] bg-cover flex flex-col justify-end center items-center"
+              className="rounded-lg border border-[#353538] h-[360px] bg-cover flex flex-col justify-end center items-center"
               style={{
                 backgroundImage: `url(${
                   user?.coverImage || '/assets/images/default-user.svg'
@@ -363,7 +357,7 @@ function DiscoverHolders() {
           ))}
         </div>
         <div id="top-4-10 section" className="flex flex-col gap-5 w-full mt-5">
-          {sortedData.slice(3, 10).map((user, index) => (
+          {data.slice(3, 10).map((user, index) => (
             <div key={index} className="w-full">
               <div className="flex h-[90px] text-white pl-4 pr-4 bg-[#18181C] rounded-[20px] items-center justify-between border border-[#35353880]">
                 <div className="flex items-center gap-2">
@@ -416,22 +410,16 @@ function DiscoverHolders() {
         {/* <Button className="bg-white">View all</Button> */}
       </div>
       <div className="p-4 items-center w-full rounded-lg flex flex-col gap-10 border-[#353538] border-[1px]">
-        <Tabs defaultValue="contributors" className="w-full">
-          <TabsList className="w-full flex gap-2 overflow-auto pb-1">
-            <CTabTrigger value="contributors">Top Contributors</CTabTrigger>
-            <CTabTrigger value="creators">Top Creators</CTabTrigger>
+        <Tabs defaultValue="nftHolders" className="w-full">
+          <TabsList className="w-full flex gap-2 justify-start overflow-auto pb-1">
             <CTabTrigger value="nftHolders">Top NFT Holders</CTabTrigger>
-            <CTabTrigger value="blueChipHolders">Blue Chip Holders</CTabTrigger>
+            <CTabTrigger value="creators">Top Creators</CTabTrigger>
             <CTabTrigger value="founderHolders">Founder Holders</CTabTrigger>
-            <CTabTrigger value="highestNetWorth">Highest Net Worth</CTabTrigger>
+            {/* <CTabTrigger value="blueChipHolders">Blue Chip Holders</CTabTrigger> */}
+            {/* <CTabTrigger value="contributors">Top Contributors</CTabTrigger> */}
+            {/* <CTabTrigger value="highestNetWorth">Highest Net Worth</CTabTrigger> */}
           </TabsList>
-          <TabsContent value="contributors">
-            {contributorsQuery.isLoading ? (
-              <MiniLoader />
-            ) : (
-              renderHoldersList(contributorsQuery.data || [], 'contributors')
-            )}
-          </TabsContent>
+
           <TabsContent value="creators">
             {creatorsQuery.isLoading ? (
               <MiniLoader />
@@ -446,16 +434,6 @@ function DiscoverHolders() {
               renderHoldersList(nftHoldersQuery.data || [], 'nftHolders')
             )}
           </TabsContent>
-          <TabsContent value="blueChipHolders">
-            {blueChipHoldersQuery.isLoading ? (
-              <MiniLoader />
-            ) : (
-              renderHoldersList(
-                blueChipHoldersQuery.data || [],
-                'blueChipHolders',
-              )
-            )}
-          </TabsContent>
           <TabsContent value="founderHolders">
             {founderHoldersQuery.isLoading ? (
               <MiniLoader />
@@ -466,7 +444,24 @@ function DiscoverHolders() {
               )
             )}
           </TabsContent>
-          <TabsContent value="highestNetWorth">
+          {/* <TabsContent value="blueChipHolders">
+            {blueChipHoldersQuery.isLoading ? (
+              <MiniLoader />
+            ) : (
+              renderHoldersList(
+                blueChipHoldersQuery.data || [],
+                'blueChipHolders',
+              )
+            )}
+          </TabsContent> */}
+          {/* <TabsContent value="contributors">
+            {contributorsQuery.isLoading ? (
+              <MiniLoader />
+            ) : (
+              renderHoldersList(contributorsQuery.data || [], 'contributors')
+            )}
+          </TabsContent> */}
+          {/* <TabsContent value="highestNetWorth">
             {highestNetWorthQuery.isLoading ? (
               <MiniLoader />
             ) : (
@@ -475,7 +470,7 @@ function DiscoverHolders() {
                 'highestNetWorth',
               )
             )}
-          </TabsContent>
+          </TabsContent> */}
         </Tabs>
       </div>
     </div>
@@ -530,23 +525,13 @@ function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
         }
       >
         <div className="flex flex-col items-center justify-center relative">
-          <div className="grid grid-cols-4 gap-[9px]">
+          <div className="w-full h-[150px] rounded-[10px] overflow-hidden">
             <img
-              src="/assets/images/profile/bnnr1.png"
+              src={
+                mostViewed[0]?.coverImage || '/assets/images/profile/image8.png'
+              }
               alt="User alt"
-              className="col-span-1 h-full rounded-[10px]"
-            />
-
-            <img
-              src="/assets/images/profile/bnnr2.png"
-              alt="User alt"
-              className="col-span-2 h-full rounded-[10px]"
-            />
-
-            <img
-              src="/assets/images/profile/bnnr3.png"
-              alt="User alt"
-              className="col-span-1 h-full rounded-[10px]"
+              className=" h-full rounded-[10px] object-cover w-full"
             />
           </div>
 
@@ -557,13 +542,13 @@ function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
             alt="User Display"
             width={50}
             height={50}
-            className={`${mostViewed[0]?.profileImage ? 'bg-[#0B0A10]' : 'bg-[#18181C]'} absolute bottom-[-25px] border-[3px] border-[#0B0A10] rounded-full`}
+            className={`${mostViewed[0]?.profileImage ? 'bg-[#0B0A10]' : 'bg-[#18181C]'} absolute bottom-[-25px] border-[3px] w-12 h-12 object-cover border-[#0B0A10] rounded-full`}
           />
         </div>
 
         <div className="flex flex-col w-full gap-4">
           <div className="flex items-center w-full justify-between pb-6 border-b border-[#FFFFFF0D]">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-between w-full gap-2">
               <div className="flex flex-col">
                 <Link
                   href={`/apps/profile/${mostViewed[0]?.username}`}
@@ -579,6 +564,12 @@ function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
                   {formatUsername(mostViewed[0]?.username)}
                 </Link>
               </div>
+              <div className="bg-[#CFF073] text-[10px] font-medium text-black px-[10px] py-2 w-fit rounded-3xl">
+                {mostViewed[0]?.views > 1000
+                  ? `${(mostViewed[0]?.views / 1000).toFixed(1)}k`
+                  : mostViewed[0]?.views}{' '}
+                Views
+              </div>
             </div>
           </div>
 
@@ -590,7 +581,7 @@ function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
       <div id="top-4-10 section" className="flex flex-col gap-4 w-full pt-4">
         {mostViewed.slice(3).map((user, index) => (
           <div key={index} className="w-full">
-            <div className="flex  h-[80px] text-white pl-4 pr-4 bg-[#18181C] rounded-[20px] items-center justify-between border border-[#35353880]">
+            <div className="flex flex-wrap gap-4 py-4 text-white pl-4 pr-4 bg-[#18181C] rounded-[20px] items-center justify-between border border-[#35353880]">
               <div className="flex items-center gap-2">
                 <div className="w-[30px] h-[30px] rounded-full overflow-hidden border-2 border-white">
                   <img
@@ -603,14 +594,23 @@ function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
                 </div>
 
                 <div className="flex flex-col">
-                  <p className="text-sm font-semibold">{user?.displayName}</p>
-                  <p className="flex gap-1 text-xs text-[#858487] items-center">
+                  <Link
+                    href={`/apps/profile/${user?.username}`}
+                    className="text-sm font-semibold"
+                  >
+                    {user?.displayName}
+                  </Link>
+
+                  <Link
+                    href={`/apps/profile/${user?.username}`}
+                    className="flex gap-1 text-xs text-[#858487] items-center"
+                  >
                     <span>{formatUsername(user?.username)} </span>
                     <VerifyIcon />
-                  </p>
+                  </Link>
                 </div>
               </div>
-              <div className="bg-[#CFF073] text-[10px] font-medium text-black px-[10px] py-2 rounded-3xl">
+              <div className="bg-[#CFF073] ml-auto text-[10px] font-medium text-black px-[10px] py-2 rounded-3xl">
                 {user?.views > 1000
                   ? `${(user?.views / 1000).toFixed(1)}k`
                   : user?.views}{' '}

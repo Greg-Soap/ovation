@@ -29,8 +29,7 @@ import {
   uploadCoverImage,
 } from '@/lib/firebaseStorageUtils'
 import SavingOverlay from '@/components/saving-overlay'
-import { updateUserData } from '@/lib/firebaseAuthService'
-import { Participant, ParticipantMod } from '@/lib/firebaseChatService'
+import { Progress } from '@/components/ui/progress'
 
 const formSchema = z.object({
   displayName: z.string().min(1, 'Display name is required'),
@@ -89,6 +88,14 @@ export default function ProfileForm({
     {} as UserData,
   )
 
+  const [uploadProgress, setUploadProgress] = useState<{
+    profile: number
+    cover: number
+  }>({
+    profile: 0,
+    cover: 0,
+  })
+
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -110,11 +117,21 @@ export default function ProfileForm({
     mutationFn: async (data: ProfileFormValues) => {
       // Upload images if selected
       if (selectedProfileImage) {
-        const profileImageUrl = await uploadProfileImage(selectedProfileImage)
+        const profileImageUrl = await uploadProfileImage(
+          selectedProfileImage,
+          (progress) => {
+            setUploadProgress((prev) => ({ ...prev, profile: progress }))
+          },
+        )
         data.profileImage = profileImageUrl
       }
       if (selectedCoverImage) {
-        const coverImageUrl = await uploadCoverImage(selectedCoverImage)
+        const coverImageUrl = await uploadCoverImage(
+          selectedCoverImage,
+          (progress) => {
+            setUploadProgress((prev) => ({ ...prev, cover: progress }))
+          },
+        )
         data.coverImage = coverImageUrl
       }
       // Update profile with new data
@@ -136,6 +153,7 @@ export default function ProfileForm({
       // Reset selected images
       setSelectedProfileImage(null)
       setSelectedCoverImage(null)
+      setUploadProgress({ profile: 0, cover: 0 })
     },
     onError: (error) => {
       console.error('Error updating profile:', error)
@@ -221,6 +239,18 @@ export default function ProfileForm({
                       </>
                     </FormControl>
                   </div>
+                  {uploadProgress.profile > 0 &&
+                    uploadProgress.profile < 100 && (
+                      <div className="mt-2">
+                        <Progress
+                          value={uploadProgress.profile}
+                          className="w-[200px]"
+                        />
+                        <p className="text-sm text-[#B3B3B3] mt-1">
+                          Uploading: {uploadProgress.profile.toFixed(0)}%
+                        </p>
+                      </div>
+                    )}
                 </FormItem>
               )}
             />
@@ -262,6 +292,17 @@ export default function ProfileForm({
                       </>
                     </FormControl>
                   </div>
+                  {uploadProgress.cover > 0 && uploadProgress.cover < 100 && (
+                    <div className="mt-2">
+                      <Progress
+                        value={uploadProgress.cover}
+                        className="w-[200px]"
+                      />
+                      <p className="text-sm text-[#B3B3B3] mt-1">
+                        Uploading: {uploadProgress.cover.toFixed(0)}%
+                      </p>
+                    </div>
+                  )}
                 </FormItem>
               )}
             />
