@@ -25,6 +25,7 @@ import { setToken } from '@/lib/cookies'
 import { useLocalStorage } from '@/lib/use-local-storage'
 import type { UserData } from '@/models/all.model'
 import PasswordInput from '@/components/password-input'
+import { signInOrSignUp } from '@/lib/firebaseAuthService'
 
 const formSchema = z.object({
   userId: z.string(),
@@ -45,13 +46,14 @@ export default function LoginForm() {
 
   const loginMutation = useMutation({
     mutationFn: ovationService.login,
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       if (data?.data?.token) {
         setToken(data?.data?.token)
         setValue(data?.data?.userData)
 
         toast.success('Login successful!')
 
+        await signInOrSignUp(data?.data?.userData)
         // Check for stored destination
         const intendedDestination = localStorage.getItem('intendedDestination')
         if (intendedDestination) {

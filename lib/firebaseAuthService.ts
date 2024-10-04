@@ -26,12 +26,19 @@ export const signUp = async (user: UserData) => {
 };
 
 // Sign in a user
-export const signIn = async (userId: string, email: string) => {
+export const signInOrSignUp = async (user: UserData) => {
   try {
-    var user = await signInWithEmailAndPassword(auth, email, generatePassword(userId));
-    console.log(user);
+    await signInWithEmailAndPassword(auth, user.email, generatePassword(user.userId));
   } catch (error : any) {
-    console.log(error);
+    await signUp(user)
+  }
+};
+
+export const signIn = async (email: string, userId: string) => {
+  try {
+    var userr = await signInWithEmailAndPassword(auth, email, generatePassword(userId));
+  } catch (error : any) {
+
   }
 };
 
