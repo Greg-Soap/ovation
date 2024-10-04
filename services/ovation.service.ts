@@ -11,6 +11,7 @@ import type {
   UserData,
   Badge,
   DiscoverUserData,
+  WalletAcct,
 } from '../models/all.model'
 import { removeToken } from '@/lib/cookies'
 
@@ -93,6 +94,13 @@ class OvationService {
   static hideNft(data: { nftId: string; public: boolean }) {
     return api.patch('/Profile/nft/privacy', data)
   }
+  static addWallet(data: WalletAcct) {
+    return api.post<{ message: string; data: WalletAcct[] }>('/Profile/wallet', data)
+  }
+
+  static getUserWallets() {
+    return api.get<{ data: WalletAcct[]; message: string }>('/Profile/wallet')
+  }
 
   // Experience
   static addExperience(data: UserExperience) {
@@ -161,6 +169,8 @@ class OvationService {
   static getWallets() {
     return api.get<{ data: Wallet[]; message: string }>('/Wallet')
   }
+
+  
 
   // Feedback and Newsletter
   static async sendFeedback(data: {

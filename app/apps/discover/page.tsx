@@ -510,8 +510,8 @@ function DiscoverRight({ mostViewed }: { mostViewed: DiscoverUserData[] }) {
   }
 
   return (
-    <div className="h-[800px] overflow-scroll mt-10 p-6 mb-5 border border-[#FFFFFF14] rounded-[10px] flex flex-col gap-10 sticky top-1">
-      <div className="flex items-center w-full justify-between">
+    <div className="h-[800px] overflow-scroll mt-10 p-6 mb-5 border border-[#FFFFFF14] rounded-[10px] flex flex-col gap-10 sticky top-1 ">
+      <div className="flex items-center w-full justify-between ">
         <p className="text-base font-medium text-white">MOST VIEWED</p>
 
         {/* <Button className='bg-white text-[#0B0A10] font-semibold border-none outline-none px-4 py-[10px] rounded-[400px] w-fit h-fit text-xs transition-all duration-300 hover:opacity-80'>

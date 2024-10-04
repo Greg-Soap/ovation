@@ -8,7 +8,7 @@ const socialIcons = {
   forcaster: '/assets/images/settings/social/farcaster.png',
   blur: '/assets/images/settings/social/blur.png',
   foundation: '/assets/images/settings/social/foundation.png',
-  magic: '/assets/images/settings/social/magic.png',
+  magic: '/assets/images/settings/social/m-eden.png',
   ethico: '/assets/images/settings/social/eth-co.png',
   facebook: '/assets/images/profile/facebook.png',
   twitter: '/assets/images/profile/x.png',
@@ -20,6 +20,10 @@ export default function Socials({ socials }: { socials: UserSocialsMod }) {
   const availableSocials = Object.entries(socials).filter(([_, url]) => url)
   const hasSocials = availableSocials.length > 0
 
+  const formatUrl = (url: string) => {
+    return url.startsWith('https://') ? url : `https://${url}`
+  }
+
   return (
     <div className="flex flex-col bg-[#18181C] rounded-[20px] gap-4 px-5 py-[18px]">
       <p className="text-xs font-medium text-[#808080]">Socials</p>
@@ -29,7 +33,7 @@ export default function Socials({ socials }: { socials: UserSocialsMod }) {
           {availableSocials.map(([platform, url]) => (
             <Link
               key={platform}
-              href={url}
+              href={formatUrl(url)}
               target="_blank"
               rel="noopener noreferrer"
             >

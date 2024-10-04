@@ -12,7 +12,11 @@ import { ArrowLeft } from 'iconsax-react'
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
-import type { ProfileData, UserExperience } from '@/models/all.model'
+import type {
+  ProfileData,
+  UserExperience,
+  WalletAcct,
+} from '@/models/all.model'
 import { useTabUrlSync } from '@/lib/use-tab'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'

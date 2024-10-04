@@ -84,6 +84,7 @@ export interface Wallet {
   name: string
   logoUrl: string
   walletId: string
+  
 }
 export interface ProfileData {
   createdDate: string

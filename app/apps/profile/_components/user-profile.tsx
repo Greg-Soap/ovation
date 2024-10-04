@@ -58,15 +58,6 @@ export default function UserProfile({
                   <p className="text-[#F8F8FF] text-[22px] font-semibold">
                     {profileData?.profile?.displayName || 'Anonymous User'}
                   </p>
-                  {/* {profileData?.profile?.isVerified && (
-                  <Image
-                    src='/assets/images/profile/Rectangle1.png'
-                    alt='Verified User'
-                    width={21}
-                    height={21}
-                    className='bg-white rounded-full'
-                  />
-                )} */}
                 </div>
 
                 <p className="flex items-center gap-1 text-base text-[#B3B3B3]">
@@ -158,14 +149,20 @@ export default function UserProfile({
                         </p>
                       </div>
                     )}
-                    {latestExperience?.endDate && (
+                    {latestExperience?.startDate && (
                       <>
-                        <p>-</p>
+                        <p className="text-xs text-[#B3B3B3]">-</p>
                         <div className="flex items-center gap-1.5">
-                          <EventIcon className="w-[13px] h-[13px] stroke-[#B3B3B3]" />
-                          <p className="text-xs text-[#B3B3B3]">
-                            {latestExperience.endDate}
-                          </p>
+                          {latestExperience.endDate ? (
+                            <>
+                              <EventIcon className="w-[13px] h-[13px] stroke-[#B3B3B3]" />
+                              <p className="text-xs text-[#B3B3B3]">
+                                {latestExperience.endDate}
+                              </p>
+                            </>
+                          ) : (
+                            <p className="text-xs text-[#B3B3B3]">Present</p>
+                          )}
                         </div>
                       </>
                     )}
