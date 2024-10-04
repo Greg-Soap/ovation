@@ -17,6 +17,7 @@ import { useState } from 'react'
 import ovationService from '@/services/ovation.service'
 import { toast } from 'sonner' // Import toast from sonner
 import { useMutation } from '@tanstack/react-query'
+import PasswordInput from '@/components/password-input'
 
 const formSchema = z
   .object({
@@ -48,7 +49,7 @@ export default function PasswordForm() {
       ovationService.changeProfilePassword(data.oldPassword, data.newPassword),
     onSuccess: (data) => {
       toast.success('Password changed successfully')
-      console.log(data)
+
       form.reset()
       setIsDisabled(true)
     },
@@ -84,11 +85,10 @@ export default function PasswordForm() {
                   Old Password
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    {...field}
+                  <PasswordInput
                     placeholder="Input your old password"
-                    className="h-[47px] bg-transparent border-white30 border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-white30 rounded-full"
-                    type="password"
+                    value={field.value}
+                    onChange={field.onChange}
                   />
                 </FormControl>
               </FormItem>
@@ -103,11 +103,10 @@ export default function PasswordForm() {
                   New password
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    {...field}
+                  <PasswordInput
                     placeholder="Input your new password"
-                    className="h-[47px] bg-transparent border-white30 border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-white30 rounded-full"
-                    type="password"
+                    value={field.value}
+                    onChange={field.onChange}
                   />
                 </FormControl>
                 <FormMessage className="text-red-500 text-sm" />
@@ -123,11 +122,10 @@ export default function PasswordForm() {
                   Confirm new password
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    {...field}
+                  <PasswordInput
                     placeholder="Confirm your new password"
-                    className="h-[47px] bg-transparent border-white30 border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-white30 rounded-full"
-                    type="password"
+                    value={field.value}
+                    onChange={field.onChange}
                   />
                 </FormControl>
                 <FormMessage className="text-red-500 text-sm" />

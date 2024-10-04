@@ -29,8 +29,18 @@ class OvationService {
     return api.post<{ message: string; token: string; userData: UserData }>('/Auth/register', data)
   }
 
+  static loginGoogle(code: string) {
+    return api.get<{ message: string; token: string; userData: UserData }>(
+      `/Auth/login/google/${code}`,
+    )
+  }
+
   static login(data: Login) {
     return api.post<{ message: string; token: string; userData: UserData }>('/Auth/login', data)
+  }
+
+  static verifyOtp(userId: string, otp: string) {
+    return api.get(`/Auth/verify/otp/${userId}/${otp}`)
   }
 
   static logout() {
@@ -38,11 +48,15 @@ class OvationService {
   }
 
   static forgotPassword(email: string) {
-    return api.get<{ userId: string; otp: string }>(`/Auth/forget-password/${email}`)
+    return api.get<{ data: string; message: string }>(`/Auth/forget-password/${email}`)
   }
 
   static changePassword(userId: string, password: string) {
     return api.patch('/Auth/change-password', { userId, password })
+  }
+
+  static getNotifications() {
+    return api.get('/Notification')
   }
 
   // Profile Management
@@ -52,8 +66,8 @@ class OvationService {
   }
 
   static async getUserProfile(username: string) {
-    const response = await api.get(`/Profile/${username}`)
-    return response.data
+    const response = await api.get<{ data: ProfileData; message: string }>(`/Profile/${username}`)
+    return response.data?.data
   }
 
   static updatePersonalInfo(data: ProfileMod) {
@@ -64,13 +78,29 @@ class OvationService {
     return api.patch('/Profile/change-password', { oldPassword, password })
   }
 
+  static followUser(userId: string) {
+    return api.post(`/Profile/follow/${userId}`)
+  }
+
+  static unfollowUser(userId: string) {
+    return api.delete(`/Profile/follow/${userId}`)
+  }
+
+  static viewProfile(userId: string) {
+    return api.post(`/Profile/view/${userId}`)
+  }
+
+  static hideNft(data: { nftId: string; public: boolean }) {
+    return api.patch('/Profile/nft/privacy', data)
+  }
+
   // Experience
   static addExperience(data: UserExperience) {
     return api.post('/Profile/experience', data)
   }
 
   static updateExperience(id: string, data: UserExperience) {
-    return api.put(`/Profile/experience/${id}`, data)
+    return api.patch(`/Profile/experience/${id}`, data)
   }
 
   static getExperience(userId: string) {
@@ -83,7 +113,26 @@ class OvationService {
   }
 
   static getFavouriteNft(userId: string) {
-    return api.get(`/Profile/fav-nft/${userId}`)
+    return api.get<{
+      data: {
+        contractAddress: string
+        description: string
+        id: string
+        imageUrl: string
+        type: string
+        name: string
+        tokenId: string
+      }[]
+      message: string
+    }>(`/Profile/fav-nft/${userId}`)
+  }
+
+  static setFavouriteNft(nftId: string) {
+    return api.patch('/Profile/fav-nft', { id: nftId })
+  }
+
+  static removeFavouriteNft(nftId: string) {
+    return api.delete(`/Profile/fav-nft/${nftId}`)
   }
 
   static getNfts(userId: string) {
@@ -117,7 +166,7 @@ class OvationService {
   static async sendFeedback(data: {
     userEmail: string
     satisfactory: string
-    usefulFeature: string[]
+    usefulFeature: string
     improvement: string
     confusion?: string
     likelyRecommend?: string
@@ -133,7 +182,9 @@ class OvationService {
 
   // Discover endpoints
   static async getTopNft() {
-    const response = await api.get<{ data: any; message: string }>('/Discover/top-nft')
+    const response = await api.get<{ data: DiscoverUserData[]; message: string }>(
+      '/Discover/top-nft',
+    )
     return response.data?.data
   }
 
@@ -148,22 +199,30 @@ class OvationService {
   }
 
   static async getContributors() {
-    const response = await api.get<{ data: DiscoverUserData[]; message: string }>('/Discover/contributors')
+    const response = await api.get<{ data: DiscoverUserData[]; message: string }>(
+      '/Discover/contributors',
+    )
     return response.data?.data
   }
 
   static async getCreators() {
-    const response = await api.get<{ data: DiscoverUserData[]; message: string }>('/Discover/creators')
+    const response = await api.get<{ data: DiscoverUserData[]; message: string }>(
+      '/Discover/creators',
+    )
     return response.data?.data
   }
 
   static async getFounderHolders() {
-    const response = await api.get<{ data: DiscoverUserData[]; message: string }>('/Discover/founder-nft')
+    const response = await api.get<{ data: DiscoverUserData[]; message: string }>(
+      '/Discover/founder-nft',
+    )
     return response.data?.data
   }
 
   static async getMostViewed() {
-    const response = await api.get<{ data: DiscoverUserData[]; message: string }>('/Discover/most-viewed')
+    const response = await api.get<{ data: DiscoverUserData[]; message: string }>(
+      '/Discover/most-viewed',
+    )
     return response.data?.data
   }
 }

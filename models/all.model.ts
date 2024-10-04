@@ -35,7 +35,7 @@ export interface ProfileMod {
   displayName: string
   email: string
   username: string
-  birthDate?: Date
+  birthDate?: string
   location?: string
   bio?: string
   profileImage?: string
@@ -44,7 +44,7 @@ export interface ProfileMod {
 export interface Register {
   personalInfo: PersonalInfo
   userPath?: Paths
-  userWallet: WalletAcct
+  userWallet: WalletAcct | null
   type: 'Normal' | 'Google'
 }
 
@@ -69,6 +69,8 @@ export interface UserSocialsMod {
   foundation?: string | null
   magic?: string | null
   ethico?: string | null
+  twitter?: string | null
+  website?: string | null
 }
 
 export interface WalletAcct {
@@ -84,6 +86,7 @@ export interface Wallet {
   walletId: string
 }
 export interface ProfileData {
+  createdDate: string
   email: string
   profile: {
     displayName: string
@@ -110,9 +113,11 @@ export interface ProfileData {
     forcaster: string | null
     foundation: string | null
     blur: string | null
+    twitter: string | null
   } | null
   username: string
   userId: string
+  isFollowing: boolean
 }
 export interface UserData {
   userId: string
@@ -135,6 +140,7 @@ export interface UserData {
     forcaster: string | null
     foundation: string | null
     blur: string | null
+    twitter: string | null
   } | null
   userStats: {
     nftCreated: number
@@ -147,7 +153,7 @@ export interface UserData {
   featured: FeaturedItem[]
   wallets: {
     id: string
-    walletAddress: string
+    walletAddress: string | null
     name: string
     metadata: ModelObject
     logoUrl: string
@@ -165,6 +171,7 @@ export interface Badge {
   badgeName: string
   description: string
   earnedAt: string
+  imageUrl: string
 }
 
 export interface DiscoverUserData {
@@ -175,7 +182,10 @@ export interface DiscoverUserData {
   profileImage: string | null
   views: number
   badgeEarned: number
-  location: string | null
+  location?: string | null
   bio: string | null
   coverImage: string | null
+  totalNft?: number
+  founderNft?: number
+  experiences?: number
 }

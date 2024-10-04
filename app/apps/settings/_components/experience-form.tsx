@@ -20,27 +20,32 @@ import ovationService from '@/services/ovation.service'
 import { toast } from 'sonner'
 import { useMutation } from '@tanstack/react-query'
 import { useLocalStorage } from '@/lib/use-local-storage'
-import { useEffect, useState, Dispatch, SetStateAction } from 'react'
-import { parseISO, format } from 'date-fns'
+import { useState, useEffect } from 'react'
+import { formatDate } from '@/lib/helper-func'
+import type { UserExperience } from '@/models/all.model'
 
 const formSchema = z.object({
   company: z.string().min(1, 'Company is required'),
-  role: z.string().min(1, 'Role is required'),
-  department: z.string().min(1, 'Department is required'),
-  startDate: z.string().transform((str) => new Date(str).toISOString()),
-  endDate: z
-    .string()
-    .nullable()
-    .transform((str) => (str ? new Date(str).toISOString() : null)),
-  description: z.string().min(1, 'Description is required'),
-  skills: z.array(z.string()),
+  role: z.string().min(1, 'Role is required').optional(),
+  department: z.string().min(1, 'Department is required').optional(),
+  startDate: z.string(),
+  endDate: z.string().nullable().optional(),
+  description: z.string().optional(),
+  skills: z.string().optional(),
 })
 
-type FormValues = z.infer<typeof formSchema>
+interface FormValues extends z.infer<typeof formSchema> {}
 
-export default function ExperienceForm() {
+export default function ExperienceForm({
+  experienceData,
+}: {
+  experienceData: UserExperience[]
+}) {
   const [isDisabled, setIsDisabled] = useState<boolean>(true)
-  const [isCurrentJob, setIsCurrentJob] = useState<boolean>(false)
+  const [isCurrentJob, setIsCurrentJob] = useState<boolean>(
+    !experienceData[0]?.endDate,
+  )
+  const [isUpdating, setIsUpdating] = useState<boolean>(false)
   const { storedValue, setValue } = useLocalStorage<Partial<FormValues>>(
     'experienceDraft',
     {
@@ -50,63 +55,84 @@ export default function ExperienceForm() {
       startDate: '',
       endDate: null,
       description: '',
-      skills: [],
+      skills: '',
     },
   )
+
+  useEffect(() => {
+    setIsUpdating(experienceData.length > 0)
+  }, [experienceData])
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      company: storedValue.company || '',
-      role: storedValue.role || '',
-      department: storedValue.department || '',
-      startDate: storedValue.startDate || '',
-      endDate: storedValue.endDate || null,
-      description: storedValue.description || '',
-      skills: storedValue.skills || [],
+      company: experienceData[0]?.company || storedValue.company || '',
+      role: experienceData[0]?.role || storedValue.role || '',
+      department: experienceData[0]?.department || storedValue.department || '',
+      startDate: experienceData[0]?.startDate || storedValue.startDate || '',
+      endDate: experienceData[0]?.endDate || storedValue.endDate || null,
+      description:
+        experienceData[0]?.description || storedValue.description || '',
+      skills: experienceData[0]?.skill || storedValue.skills || '',
     },
   })
 
   const { mutate, isPending } = useMutation({
     mutationFn: (data: FormValues) =>
-      ovationService.addExperience({
-        ...data,
-        startDate: data.startDate,
-        endDate: isCurrentJob ? null : data.endDate,
-        skill: data.skills.join(', '),
-      }),
+      isUpdating
+        ? ovationService.updateExperience(experienceData[0]?.id ?? '', {
+            ...data,
+            startDate: formatDate(new Date(data.startDate)),
+            endDate: isCurrentJob
+              ? null
+              : formatDate(new Date(data.endDate || '')),
+            skill: data.skills || '',
+            role: data.role || '',
+            department: data.department || '',
+            description: data.description || '',
+          })
+        : ovationService.addExperience({
+            ...data,
+            startDate: formatDate(new Date(data.startDate)),
+            endDate: isCurrentJob
+              ? null
+              : formatDate(new Date(data.endDate || '')),
+            skill: data.skills || '',
+            role: data.role || '',
+            department: data.department || '',
+            description: data.description || '',
+          }),
     onSuccess: () => {
-      toast.success('Experience updated successfully')
+      toast.success(
+        `Experience ${isUpdating ? 'updated' : 'added'} successfully`,
+      )
       setIsDisabled(true)
     },
     onError: (error) => {
-      console.error('Failed to update experience:', error)
-      toast.error('Failed to update experience. Please try again later.')
+      console.error(
+        `Failed to ${isUpdating ? 'update' : 'add'} experience:`,
+        error,
+      )
+      toast.error(
+        `Failed to ${isUpdating ? 'update' : 'add'} experience. Please try again later.`,
+      )
     },
   })
 
-  function formatDateForAPI(dateString: string | null): string | null {
-    if (!dateString) return null
-    const date = parseISO(dateString)
-    return format(date, "yyyy-MM-dd'T'HH:mm:ss.SSSxxx")
-  }
-
-  async function handleSubmit(data: FormValues) {
+  function handleSubmit(data: FormValues) {
     const formattedData = {
       ...data,
-      startDate: formatDateForAPI(data.startDate),
-      endDate: isCurrentJob ? null : formatDateForAPI(data.endDate),
+      startDate: formatDate(new Date(data.startDate)),
+      endDate: isCurrentJob ? null : formatDate(new Date(data.endDate || '')),
     }
-    console.log('Formatted data', formattedData)
-    //@ts-ignore
     mutate(formattedData)
-    setValue(data as Partial<FormValues>) // Save to local storage on submit
+    setValue(data as Partial<FormValues>)
   }
 
   return (
     <div className="flex flex-col gap-[23px] h-full">
       <p className="text-lg text-white90 font-medium px-10 2xl:px-20">
-        Experience 1
+        Experience
       </p>
 
       <Form {...form}>
@@ -127,7 +153,7 @@ export default function ExperienceForm() {
                     <Input
                       placeholder="ex. Google"
                       {...field}
-                      className="h-[47px] text-sm text-white70 border border-solid border-white30 focus:border-solid focus:border-[1px] focus:border-white30"
+                      className="h-[47px] text-sm text-white100 border border-solid border-white30 focus:border-solid focus:border-[1px] focus:border-white30"
                     />
                   </FormControl>
                   <FormMessage />
@@ -183,11 +209,13 @@ export default function ExperienceForm() {
                       <FormLabel className="text-sm text-white70">
                         Start Date
                       </FormLabel>
-                      <FormControl {...field}>
+                      <FormControl>
                         <DatePicker
-                          selected={field.value ? parseISO(field.value) : null}
-                          onChange={(date: Date) =>
-                            field.onChange(date.toISOString())
+                          value={field.value}
+                          disableDate={false}
+                          placeholder="Select Start Date"
+                          onChange={(date) =>
+                            field.onChange(formatDate(date || new Date()))
                           }
                         />
                       </FormControl>
@@ -203,8 +231,15 @@ export default function ExperienceForm() {
                       <FormLabel className="text-sm text-white70">
                         Finish Date
                       </FormLabel>
-                      <FormControl {...field}>
-                        <DatePicker disabled={isCurrentJob} />
+                      <FormControl>
+                        <DatePicker
+                          disableDate={isCurrentJob}
+                          value={field.value || ''}
+                          placeholder="Select Finish Date"
+                          onChange={(date) =>
+                            field.onChange(formatDate(date || new Date()))
+                          }
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -263,15 +298,7 @@ export default function ExperienceForm() {
                     <Input
                       placeholder="ex. JavaScript, React, Node.js"
                       {...field}
-                      onChange={(e) =>
-                        field.onChange(
-                          e.target.value
-                            .split(',')
-                            .map((skill) => skill.trim()),
-                        )
-                      }
-                      value={field.value.join(', ')}
-                      className="h-[47px] text-sm text-white100 border border-solid border-white30 focus:border-solid focus:border-[1px] focus:border-white30"
+                      className="h-[47px] text-sm text-[#F8F8FF] border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -281,7 +308,7 @@ export default function ExperienceForm() {
           </div>
 
           <SettingsChange
-            disabled={isDisabled}
+            disabled={false}
             isLoading={isPending}
             saveDraft={() => setValue(form.getValues())}
           />

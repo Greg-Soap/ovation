@@ -1,27 +1,16 @@
-export type NotificationType =
-  | 'follow'
-  | 'likePost'
-  | 'reply'
-  | 'comment'
-  | 'mention'
-  | 'retweet'
-  | 'clap'
-  | 'likeNft'
-  | 'personalNewBadge'
-  | 'followerNewBadge'
-  | 'personalNewExperience'
-  | 'followerExperience'
-  | 'featureReminder'
-  | 'postReminder'
+export type NotificationType = 'Follow' | 'Badge'
 
 export interface NotificationItem {
-  type: NotificationType
-  userProfilePicture: string
-  notificationTypeImg: string
-  userDisplayName: string
-  userName: string
-  post?: string
-  comment?: string
-  nftImage?: string
-  nftName?: string
+  id: number
+  initiator?: {
+    displayName: string
+    username: string
+    profileImage: string
+    initiatorId: string
+  }
+  isFollowing: boolean
+  message: string
+  reference: NotificationType
+  referenceId: string
+  title: string
 }

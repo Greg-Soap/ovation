@@ -29,13 +29,13 @@ export default function Stats({ userId }: { userId: string }) {
         <div className="px-7 py-6 rounded-[14px] border border-white15 flex flex-col gap-[34px]">
           <p className="text-white100 font-medium uppercase">Overview</p>
 
-          <div className="grid grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5">
             {[
               { label: 'NFT CREATED', value: stats?.nftCreated },
               { label: 'NFT COLLECTED', value: stats?.nftCollected },
               { label: 'TOTAL NFT COUNT', value: stats?.totalNft },
               { label: 'NFT COLLECTIONS', value: stats?.nftCollections },
-              { label: 'NETWORTH', value: formatUSD(stats?.networth) },
+
               { label: 'VIEWS', value: stats?.views },
               { label: 'BADGES EARNED', value: stats?.badgeEarned },
             ].map((item, index) => (

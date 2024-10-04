@@ -1,5 +1,5 @@
 'use client'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
@@ -13,17 +13,30 @@ import {
   NotificationBing,
 } from 'iconsax-react'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
-import FeedbackModal from '../../feedback'
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer'
 import { useQuery } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
 import Image from 'next/image'
-import { ProfileData } from '@/models/all.model'
+import type { ProfileData, UserData } from '@/models/all.model'
 import MiniLoader from '@/components/mini-loader'
+import { useLocalStorage } from '@/lib/use-local-storage'
+import FeedbackModal from '../../_feedback/feedback'
 
 export default function Hamburger() {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
+  const router = useRouter()
+  const { storedValue, removeValue } = useLocalStorage<UserData | null>(
+    'userData',
+    null,
+  )
+  const user = storedValue
+
+  const handleLogout = () => {
+    ovationService.logout()
+    removeValue()
+    router.push('/')
+  }
 
   const handleLinkClick = () => {
     setOpen(false)
@@ -69,12 +82,12 @@ export default function Hamburger() {
                 <Image
                   src={
                     profileData?.profile?.profileImage ||
-                    '/assets/images/profile/image1.png'
+                    '/assets/images/default-user.svg'
                   }
                   alt="User Display Picture"
                   width={131}
                   height={131}
-                  className="rounded-full "
+                  className="rounded-full w-[131px] h-[131px] object-cover"
                 />
 
                 <div className="flex flex-col gap-9">
@@ -119,7 +132,16 @@ export default function Hamburger() {
                 })}
               </ul>
             </div>
-            <FeedbackButton className="w-full mb-16" />
+            <div className="flex flex-col gap-4">
+              <FeedbackButton className="w-full mb-4" />
+              <Button
+                variant={'ghost'}
+                onClick={handleLogout}
+                className="py-[10px] w-full text-red-500"
+              >
+                Logout {user?.username}
+              </Button>
+            </div>
           </div>
         </DrawerContent>
       </Drawer>

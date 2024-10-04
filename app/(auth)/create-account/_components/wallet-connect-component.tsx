@@ -1,10 +1,10 @@
 import type React from 'react'
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect, Suspense, useMemo } from 'react'
 // import Web3 from 'web3';
 import Web3Modal from 'web3modal'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import { BrowserProvider } from 'ethers'
-import walletData from './_data'
+import walletData from '../_data'
 import Image from 'next/image'
 import Link from 'next/link'
 import arrow from '@/public/assets/images/arrow-right.png'
@@ -13,9 +13,14 @@ import { chainIdToChainName, startCase } from '@/lib/helper-func'
 import { toast } from 'sonner'
 import ovationService from '@/services/ovation.service'
 import { useQuery } from '@tanstack/react-query'
-import { type OfflineSigner, DirectSecp256k1HdWallet } from '@cosmjs/proto-signing'
+import {
+  type OfflineSigner,
+  DirectSecp256k1HdWallet,
+} from '@cosmjs/proto-signing'
 import { StargateClient } from '@cosmjs/stargate'
 import Spinner from '@/components/ui/spinner'
+import { ErrorBoundary } from 'react-error-boundary'
+import { ErrorFallback } from '@/components/error-boundary'
 
 interface WalletConnectComponentProps {
   onWalletConnected?: (account: string) => void
@@ -100,6 +105,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
       try {
         const response = await (window as any).solana.connect()
         setAccount(response.publicKey.toString())
+        setChain('solana')
         if (onWalletConnected) onWalletConnected(response.publicKey.toString())
         console.log('Connected with Phantom:', response.publicKey.toString())
       } catch (err) {
@@ -317,7 +323,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
     }
   }
 
-  const chainId = 'cosmoshub-4'
+  const chainId = 'archway-1'
   const connectKeplr = async (): Promise<void> => {
     if (!window.keplr) {
       toast.error('Please install Keplr extension')
@@ -330,8 +336,8 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
       const offlineSigner: OfflineSigner = window.getOfflineSigner(chainId)
 
       const accounts = await offlineSigner.getAccounts()
-      const accountAddress = accounts[0].address
-      console.log('Connected account address:', accountAddress)
+      setAccount(accounts[0].address)
+      setChain('archway')
 
       // const client = await StargateClient.connect("https://rpc.cosmos.network");
       // const balance = await client.getAllBalances(accountAddress);
@@ -348,14 +354,16 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
     }
 
     try {
-      const chainId = 'cosmoshub-4' // chain ID for Cosmos Hub
+      const chainId = 'archway-1' // chain ID for Cosmos Hub
       await window.leap.enable(chainId)
 
       const offlineSigner = window.leap.getOfflineSigner(chainId)
       const accounts = await offlineSigner.getAccounts()
 
-      const accountAddress = accounts[0].address
-      console.log('Connected account address:', accountAddress)
+      setAccount(accounts[0].address)
+      setChain('archway')
+
+      console.log('Connected account address: ', accounts[0].address)
     } catch (error) {
       console.error('Error connecting to Leap Wallet:', error)
     }
@@ -375,6 +383,9 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
   const connectWallet = async (walletName: string) => {
     const formattedWalletName = startCase(walletName)
     switch (formattedWalletName) {
+      case 'Leap Wallet':
+        await connectLeap()
+        break
       case 'Metamask':
         await connectMetaMask()
         break
@@ -390,10 +401,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
       case 'Wallet Connect':
         await connectWalletConnect()
         break
-      case 'Coinmarketcap':
-        // Implement Coinmarketcap connection if available
-        toast.error('Coinmarketcap connection is not implemented yet.')
-        break
+
       case 'Okx':
         await connectOKXWallet()
         break
@@ -429,52 +437,81 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
     queryFn: () => ovationService.getWallets(),
   })
 
-  console.log({ wallets })
+  const sortedWallets = useMemo(() => {
+    if (!wallets?.data?.data) return []
+
+    return wallets.data.data.sort((a, b) => {
+      if (a.name.toLowerCase() === 'leap wallet') return -1
+      if (b.name.toLowerCase() === 'leap wallet') return 1
+      return 0
+    })
+  }, [wallets])
 
   return (
-    <Suspense fallback={<Spinner />}>
-      <div>
-        {!account ? (
-          <div className='flex flex-col gap-7'>
-            {isLoading ? (
-              <div className='flex justify-center items-center w-full'>
-                <Spinner size='huge' color='#Cff073' />
-              </div>
-            ) : (
-              <div className='grid grid-cols-2 gap-4'>
-                {wallets?.data?.data?.map((wallet) => (
-                  <Button
-                    key={wallet.walletId}
-                    className='text-start flex justify-between p-2 md:p-[1rem] h-[58px] w-full md:w-[242px] text-xs md:text-sm font-semibold text-white border-[1px] border-solid bg-transparent border-[#353538]'
-                    onClick={() => connectWallet(wallet.name)}>
-                    <p>{startCase(wallet.name)}</p>
-                    <Image src={wallet.logoUrl} alt={wallet.name} width={20} height={20} />
-                  </Button>
-                ))}
-              </div>
-            )}
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <Suspense fallback={<Spinner />}>
+        <div>
+          {!account ? (
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <div className="flex flex-col gap-7">
+                {isLoading ? (
+                  <div className="flex justify-center items-center w-full">
+                    <Spinner size="huge" color="#Cff073" />
+                  </div>
+                ) : (
+                  <ErrorBoundary FallbackComponent={ErrorFallback}>
+                    <div className="grid grid-cols-2 gap-4">
+                      {sortedWallets?.map((wallet) => (
+                        <ErrorBoundary
+                          key={wallet.walletId}
+                          FallbackComponent={ErrorFallback}
+                        >
+                          <Button
+                            className="text-start flex justify-between p-2 md:p-[1rem] h-[58px] w-full md:w-[242px] text-xs md:text-sm font-semibold text-white border-[1px] border-solid bg-transparent border-[#353538]"
+                            onClick={() => connectWallet(wallet.name)}
+                          >
+                            <p>{startCase(wallet.name)}</p>
+                            <Image
+                              src={wallet.logoUrl}
+                              alt={wallet.name}
+                              width={20}
+                              height={20}
+                            />
+                          </Button>
+                        </ErrorBoundary>
+                      ))}
+                    </div>
+                  </ErrorBoundary>
+                )}
 
-            <div className='flex gap-2 items-center justify-center'>
-              <p>Wallet not listed?</p> {''}
-              <Link
-                href=''
-                className='h-6 text-[#Cff073]'
-                onClick={() => setIsManualWallet?.(true)}>
-                Connect manually
-              </Link>
-              <Image src={arrow} alt='arrow' />
-            </div>
-          </div>
-        ) : (
-          <div>
-            <p>Connected Account: account</p>
-            <button type='button' onClick={disconnectWallet}>
-              Disconnect Wallet
-            </button>
-          </div>
-        )}
-      </div>
-    </Suspense>
+                <ErrorBoundary FallbackComponent={ErrorFallback}>
+                  <div className="flex gap-2 items-center justify-center">
+                    <p>Wallet not listed?</p> {''}
+                    <Link
+                      href=""
+                      className="h-6 text-[#Cff073]"
+                      onClick={() => setIsManualWallet?.(true)}
+                    >
+                      Connect manually
+                    </Link>
+                    <Image src={arrow} alt="arrow" />
+                  </div>
+                </ErrorBoundary>
+              </div>
+            </ErrorBoundary>
+          ) : (
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <div>
+                <p>Connected Account: {account}</p>
+                <button type="button" onClick={disconnectWallet}>
+                  Disconnect Wallet
+                </button>
+              </div>
+            </ErrorBoundary>
+          )}
+        </div>
+      </Suspense>
+    </ErrorBoundary>
   )
 }
 

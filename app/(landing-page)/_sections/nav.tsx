@@ -1,19 +1,70 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import Link from 'next/link'
+import { getStoredUser } from '@/lib/helper-func'
+
+function convertToISOString(dateString: string): string {
+  // Expected format: "YYYY MM DD : HH mm"
+  const [datePart, timePart] = dateString.split(' : ')
+  const [year, month, day] = datePart.split(' ')
+  const [hour, minute] = timePart.split(' ')
+
+  const date = new Date(
+    Number.parseInt(year),
+    Number.parseInt(month) - 1,
+    Number.parseInt(day),
+    Number.parseInt(hour),
+    Number.parseInt(minute),
+  )
+
+  const isoString = date.toISOString()
+  return isoString
+}
 
 export function Header({ navLinks = links }: HeaderProps) {
+  const user = getStoredUser()
+  const [showButton, setShowButton] = useState(false)
+
+  const showButtonTime = '2024 10 11 : 21 00'
+
+  const isoShowButtonTime = showButtonTime.includes(' : ')
+    ? convertToISOString(showButtonTime)
+    : showButtonTime
+
+  useEffect(() => {
+    const checkTime = () => {
+      const currentTime = new Date()
+      const targetTime = new Date(isoShowButtonTime)
+      const shouldShow = currentTime >= targetTime
+      setShowButton(shouldShow)
+    }
+
+    checkTime()
+    const timer = setInterval(checkTime, 10000)
+
+    return () => clearInterval(timer)
+  }, [isoShowButtonTime])
+
   return (
-    <header className='relative border-b border-[#FFFFFF33] bg-transparent'>
-      <nav className='container mx-auto  flex w-full items-center justify-between  px-4 md:px-6 py-6'>
-        <a href='/'>
+    <header className="relative border-b border-[#FFFFFF33] bg-transparent">
+      <nav className="container mx-auto  flex w-full items-center justify-between  px-4 md:px-6 py-6">
+        <a href="/">
           <Logo />
         </a>
         <Navigation navLinks={navLinks} />
         <Navigation mobile navLinks={navLinks} />
+        {showButton && (
+          <Button variant={'default'}>
+            {user ? (
+              <Link href={'/apps/discover'}>Dashboard</Link>
+            ) : (
+              <Link href={'/login'}>Login</Link>
+            )}
+          </Button>
+        )}
       </nav>
     </header>
   )
@@ -22,11 +73,11 @@ export function Header({ navLinks = links }: HeaderProps) {
 function Logo() {
   return (
     <Image
-      src='/assets/images/logo/logo.png'
+      src="/assets/images/logo/logo.png"
       width={200}
       height={40}
-      alt='logo'
-      className='-ml-[15%] sm:ml-0'
+      alt="logo"
+      className="-ml-[15%] sm:ml-0"
     />
   )
 }
@@ -48,7 +99,7 @@ const links: NavLink[] = [
 function Navigation({ mobile = false, navLinks = [] }: NavigationProps) {
   const [mobileNavigationOpened, setMobileNavigationOpened] = useState(false)
 
-  const navClassName = ` flex justify-between items-center w-full text-lg text-primary-foreground space-x-2
+  const navClassName = ` flex justify-between items-center  text-lg text-primary-foreground space-x-2 w-auto
     ${
       mobile
         ? `transition flex-col transform -right-full absolute top-[90px] z-20 py-4 pb-7 w-full overflow-y-auto sm:hidden backdrop-filter backdrop-blur-md ${
@@ -75,19 +126,20 @@ function Navigation({ mobile = false, navLinks = [] }: NavigationProps) {
   return (
     <>
       {mobile && (
-        <div className='flex gap-2 md:hidden '>
+        <div className="flex gap-2 md:hidden ">
           <Button
-            className='block bg-transparent sm:hidden'
+            className="block bg-transparent sm:hidden"
             onClick={() => setMobileNavigationOpened(true)}
-            title='Open navigation menu'>
-            <HamburgerMenuIcon height={'15px'} width={'20px'} color='#CFF073' />
+            title="Open navigation menu"
+          >
+            <HamburgerMenuIcon height={'15px'} width={'20px'} color="#CFF073" />
           </Button>
         </div>
       )}
 
       {mobile && mobileNavigationOpened && (
         <Button
-          className='fixed right-0 top-0 z-10 h-full w-full opacity-0 sm:hidden'
+          className="fixed right-0 top-0 z-10 h-full w-full opacity-0 sm:hidden"
           onClick={closeMobileNavigation}
         />
       )}
@@ -101,13 +153,18 @@ function Navigation({ mobile = false, navLinks = [] }: NavigationProps) {
               key={href}
               onClick={closeMobileNavigation}
               onKeyUp={() => {}}
-              onKeyDown={() => {}}>
+              onKeyDown={() => {}}
+            >
               {button ? (
                 <Button variant={'default'} className={` ${mobile && 'mx-4'}`}>
                   <Link href={href}>{title}</Link>
                 </Button>
               ) : (
-                <NavLink className={navListLinkClassName} mobile={mobile} href={href}>
+                <NavLink
+                  className={navListLinkClassName}
+                  mobile={mobile}
+                  href={href}
+                >
                   {title}
                 </NavLink>
               )}
@@ -121,7 +178,7 @@ function Navigation({ mobile = false, navLinks = [] }: NavigationProps) {
 
 function NavLink({ children, className, mobile, href }: NavLinkProps) {
   return (
-    <Button variant={'ghost'} size={'tiny'} className='hover:bg-transparent '>
+    <Button variant={'ghost'} size={'tiny'} className="hover:bg-transparent ">
       <Link
         className={`
         block whitespace-nowrap  text-lg text-primary-foreground no-underline transition hover:text-[#CFF073]
@@ -129,7 +186,8 @@ function NavLink({ children, className, mobile, href }: NavLinkProps) {
         ${className}
         `}
         aria-disabled
-        href={`${href}`}>
+        href={`${href}`}
+      >
         {children}
       </Link>
     </Button>

@@ -1,6 +1,20 @@
-import { UserSocialsMod } from '@/models/all.model'
+import type { UserSocialsMod } from '@/models/all.model'
 import Image from 'next/image'
 import Link from 'next/link'
+
+const socialIcons = {
+  linkedIn: '/assets/images/settings/social/linked-in.png',
+  lens: '/assets/images/settings/social/lens.png',
+  forcaster: '/assets/images/settings/social/farcaster.png',
+  blur: '/assets/images/settings/social/blur.png',
+  foundation: '/assets/images/settings/social/foundation.png',
+  magic: '/assets/images/settings/social/magic.png',
+  ethico: '/assets/images/settings/social/eth-co.png',
+  facebook: '/assets/images/profile/facebook.png',
+  twitter: '/assets/images/profile/x.png',
+  instagram: '/assets/images/profile/instagram.png',
+  website: '/assets/images/profile/link.png',
+}
 
 export default function Socials({ socials }: { socials: UserSocialsMod }) {
   const availableSocials = Object.entries(socials).filter(([_, url]) => url)
@@ -11,7 +25,7 @@ export default function Socials({ socials }: { socials: UserSocialsMod }) {
       <p className="text-xs font-medium text-white50">Socials</p>
 
       {hasSocials ? (
-        <div className="flex w-full justify-between">
+        <div className="flex w-full gap-2">
           {availableSocials.map(([platform, url]) => (
             <Link
               key={platform}
@@ -36,20 +50,4 @@ export default function Socials({ socials }: { socials: UserSocialsMod }) {
       )}
     </div>
   )
-}
-
-const socialIcons: Socials = {
-  linkedin: '/assets/images/profile/linkedIn.png',
-  facebook: '/assets/images/profile/facebook.png',
-  twitter: '/assets/images/profile/x.png',
-  instagram: '/assets/images/profile/instagram.png',
-  website: '/assets/images/profile/link.png',
-}
-
-interface Socials {
-  linkedin: string
-  facebook: string
-  twitter: string
-  instagram: string
-  website: string
 }

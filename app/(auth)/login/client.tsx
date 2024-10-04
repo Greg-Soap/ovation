@@ -5,7 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import Google from '@/public/assets/images/ovationAuthGoogle'
-import Ether from '@/public/assets/images/ovationAuthEthereum'
 import {
   Form,
   FormControl,
@@ -20,12 +19,12 @@ import Link from 'next/link'
 import arrow from '@/public/assets/images/arrow-right.png'
 import Image from 'next/image'
 import { useGoogleLogin } from '@react-oauth/google'
-import { decodeIdToken } from '@/lib/helper-func'
 import { useMutation } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
 import { setToken } from '@/lib/cookies'
 import { useLocalStorage } from '@/lib/use-local-storage'
 import type { UserData } from '@/models/all.model'
+import PasswordInput from '@/components/password-input'
 
 const formSchema = z.object({
   userId: z.string(),
@@ -47,7 +46,39 @@ export default function LoginForm() {
   const loginMutation = useMutation({
     mutationFn: ovationService.login,
     onSuccess: (data) => {
-      console.log({ login: data })
+      if (data?.data?.token) {
+        setToken(data?.data?.token)
+        setValue(data?.data?.userData)
+
+        toast.success('Login successful!')
+
+        // Check for stored destination
+        const intendedDestination = localStorage.getItem('intendedDestination')
+        if (intendedDestination) {
+          localStorage.removeItem('intendedDestination')
+          router.push(intendedDestination)
+        } else {
+          router.push('/apps/discover')
+        }
+      } else {
+        toast.error('Login failed: No token received')
+      }
+    },
+    onError: (error) => {
+      console.log({ error })
+      //@ts-ignore
+      toast.error(`Login failed: ${error.response?.data?.message}`)
+    },
+  })
+
+  function formSubmit(values: z.infer<typeof formSchema>) {
+    loginMutation.mutate(values)
+  }
+
+  const { mutate: loginG } = useMutation({
+    mutationFn: (code: string) => ovationService.loginGoogle(code),
+    onSuccess: (data) => {
+      console.log({ loginGoogle: data })
       if (data?.data?.token) {
         setToken(data?.data?.token)
         setValue(data?.data?.userData)
@@ -59,77 +90,69 @@ export default function LoginForm() {
       }
     },
     onError: (error) => {
-      console.log({ error })
-      toast.error(`Login failed: ${error.message}`)
+      console.error('Google login error:', error)
+      toast.error('Google login failed. Please try again.')
     },
   })
 
-  function formSubmit(values: z.infer<typeof formSchema>) {
-    loginMutation.mutate(values)
-  }
-
   const loginGoogle = useGoogleLogin({
-    onSuccess: (codeResponse) => console.log(codeResponse),
+    onSuccess: async (codeResponse) => {
+      try {
+        // console.log(codeResponse.code)
+        loginG(codeResponse.code)
+      } catch (error) {
+        console.error('Google login failed:', error)
+        toast.error('Google login failed. Please try again.')
+      }
+    },
+    onError: (error) => {
+      console.error('Google login error:', error)
+      toast.error('Google login failed. Please try again.')
+    },
     flow: 'auth-code',
   })
 
-  const handleSuccess = async (response: any) => {
-    const { credential } = response
-    if (!credential) {
-      return
-    }
-
-    try {
-      const userInfo = decodeIdToken(credential)
-      console.log('User Info:', userInfo)
-    } catch (error) {
-      console.error('Error decoding ID token:', error)
-    }
-  }
-
-  const handleError = (error: any) => {
-    console.error('Login Failed:', error)
-  }
-
   return (
-    <div className='flex flex-col gap-11'>
-      <div id='login__header'>
-        <h1 className='text-3xl font-semibold text-white'>Login</h1>
-        <p className='text-sm'> Hi, Welcome back ✋</p>
+    <div className="flex flex-col gap-11">
+      <div id="login__header">
+        <h1 className="text-3xl font-semibold text-white">Login</h1>
+        <p className="text-sm"> Hi, Welcome back ✋</p>
       </div>
-      <div className='  flex justify-between mb-4'>
-        <Button className='text-[10px] font-semibold p-4 md:text-base w-[48%] bg-white flex gap-4'>
-          <Ether />
-          <p>Login with Wallet</p>
-        </Button>
-
+      {/* <div className="  flex justify-between mb-4">
         <Button
           onClick={loginGoogle}
-          className='p-4 text-[10px] font-semibold md:text-base w-[48%] bg-white flex gap-4'>
+          className="p-4 text-[10px] font-semibold md:text-base w-full bg-white flex gap-4"
+        >
           <Google />
           <p>Login with Google</p>
         </Button>
-      </div>
-      <div id='login__connect-wallet' className='flex flex-col gap-4'>
-        <span className='flex gap-2 items-center justify-center'>
-          <span className='w-[47%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]  text-[#C1C0C6]' />
-          <p className='text-[10px] font-medium text-[#C1C0C6] text-center'>OR</p>
-          <span className='w-[47%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]' />
+      </div> */}
+      {/* <div id="login__connect-wallet" className="flex flex-col gap-4">
+        <span className="flex gap-2 items-center justify-center">
+          <span className="w-[47%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]  text-[#C1C0C6]" />
+          <p className="text-[10px] font-medium text-[#C1C0C6] text-center">
+            OR
+          </p>
+          <span className="w-[47%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]" />
         </span>
-      </div>
+      </div> */}
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(formSubmit)} className='flex flex-col gap-6'>
+        <form
+          onSubmit={form.handleSubmit(formSubmit)}
+          className="flex flex-col gap-6"
+        >
           <FormField
             control={form.control}
-            name='userId'
+            name="userId"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Username</FormLabel>
-                <FormControl {...field}>
+                <FormControl>
                   <Input
-                    placeholder='Username101'
-                    className=' h-[46px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full'
-                    type='text'
+                    placeholder="Username101"
+                    type="text"
+                    value={field.value}
+                    onChange={field.onChange}
                   />
                 </FormControl>
               </FormItem>
@@ -137,19 +160,19 @@ export default function LoginForm() {
           />
           <FormField
             control={form.control}
-            name='password'
+            name="password"
             render={({ field }) => (
-              <FormItem className='flex flex-col end-0'>
+              <FormItem className="flex flex-col end-0">
                 <FormLabel>Password</FormLabel>
-                <FormControl {...field}>
-                  <Input
-                    placeholder='Enter your password'
-                    className=' h-[46px]  border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full'
-                    type='password'
+                <FormControl>
+                  <PasswordInput
+                    placeholder="Enter your password"
+                    value={field.value}
+                    onChange={field.onChange}
                   />
                 </FormControl>
-                <FormMessage className=' ml-auto w-fit'>
-                  <Link href='/forgot-password' className='text-[#CFF073]'>
+                <FormMessage className=" ml-auto w-fit">
+                  <Link href="/forgot-password" className="text-[#CFF073]">
                     Forgot Password
                   </Link>
                 </FormMessage>
@@ -157,23 +180,24 @@ export default function LoginForm() {
             )}
           />
           <Button
-            className='w-full hover:scale-105 h-[52px] text-sm font-semibold'
+            className="w-full hover:scale-105 h-[52px] text-sm font-semibold"
             variant={'default'}
-            type='submit'
-            disabled={loginMutation.isPending}>
+            type="submit"
+            disabled={loginMutation.isPending}
+          >
             {loginMutation.isPending ? 'Logging in...' : 'Login'}
           </Button>
         </form>
 
-        <div className='flex items-center justify-center w-full text-xs'>
+        <div className="flex items-center justify-center w-full text-xs">
           <p>
             {' '}
             Not registered yet?{' '}
-            <Link href='/create-account' className=' text-[#CFF073]'>
+            <Link href="/create-account" className=" text-[#CFF073]">
               Create Account
             </Link>{' '}
           </p>
-          <Image alt='arrow' src={arrow} />
+          <Image alt="arrow" src={arrow} />
         </div>
       </Form>
     </div>

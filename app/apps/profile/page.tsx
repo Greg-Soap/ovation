@@ -1,13 +1,16 @@
 'use client'
 import { useQuery } from '@tanstack/react-query'
-
 import { Button } from '@/components/ui/button'
-
 import UserProfile from './_components/user-profile'
 import MainProfileSection from './_components/main-profile-section'
 import ovationService from '@/services/ovation.service'
 import type { ProfileData, UserExperience } from '@/models/all.model'
 import { useRouter } from 'next/navigation'
+import { ErrorBoundary } from 'react-error-boundary'
+import { ErrorFallback } from '@/components/error-boundary'
+import { useState } from 'react'
+import { usePathname } from 'next/navigation'
+import { toast } from 'sonner'
 
 export default function Page() {
   const router = useRouter()
@@ -22,31 +25,75 @@ export default function Page() {
       ovationService.getExperience(profileData?.data?.userId as string),
   })
 
+  const [isCopying, setIsCopying] = useState(false)
+  const pathname = usePathname()
+
+  const copyProfileLinkToClipboard = async () => {
+    if (!profileData?.data?.username) return
+
+    setIsCopying(true)
+    try {
+      const username = profileData.data.username
+      const profileLink = `${window.location.origin}/apps/profile/${username}?tab=portfolio`
+      await navigator.clipboard.writeText(profileLink)
+      toast.success('Profile link copied!')
+    } catch (err) {
+      console.error('Failed to copy profile link:', err)
+      toast.error('Copy failed')
+    } finally {
+      setIsCopying(false)
+    }
+  }
+
   return (
-    <>
-      <div className="relative w-full h-[262px] bg-profile-banner bg-contain bg-center">
-        <div className="hidden lg:flex items-end justify-end gap-3 h-[inherit] w-full pr-10 pb-10">
-          <Button
-            variant="default"
-            onClick={() => {
-              router.push('/apps/settings')
-            }}
-            className="bg-white20 py-[11px] px-4 border border-[#E6E6E64D] text-white100 text-xs"
-          >
-            Edit Profile
-          </Button>
-        </div>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <div
+        className="relative w-full h-[262px]"
+        style={{
+          backgroundImage: profileData?.data?.profile?.coverImage
+            ? `url('${profileData?.data?.profile?.coverImage}')`
+            : 'url("/assets/images/profile/image8.png")',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <div className="flex flex-col-reverse sm:flex-row items-end justify-start sm:justify-end gap-3 h-[inherit] w-full pb-4 pr-4 md:pr-10 md:pb-10">
+            <Button
+              variant="secondary"
+              onClick={copyProfileLinkToClipboard}
+              disabled={isCopying}
+              className=" rounded-full py-[11px] px-4 border border-[#E6E6E64D] text-whiet20 text-xs"
+            >
+              {isCopying ? 'Copying...' : 'Copy Profile Link'}
+            </Button>
+            <Button
+              variant="default"
+              onClick={() => {
+                router.push('/apps/settings')
+              }}
+              className="bg-white20 py-[11px] px-4 border border-[#E6E6E64D] text-white100 text-xs"
+            >
+              Edit Profile
+            </Button>
+          </div>
+        </ErrorBoundary>
       </div>
 
       <div className="flex flex-col lg:flex-row relative h-auto">
-        <UserProfile
-          profileData={profileData?.data as ProfileData}
-          experienceData={experienceData?.data?.data as UserExperience[]}
-          isLoading={isLoading}
-        />
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <UserProfile
+            profileData={profileData?.data as ProfileData}
+            experienceData={experienceData?.data?.data as UserExperience[]}
+            isLoading={isLoading}
+          />
+        </ErrorBoundary>
 
-        <MainProfileSection profileData={profileData?.data as ProfileData} />
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <MainProfileSection profileData={profileData?.data as ProfileData} />
+        </ErrorBoundary>
       </div>
-    </>
+    </ErrorBoundary>
   )
 }

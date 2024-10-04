@@ -1,82 +1,108 @@
-import type React from 'react'
-import Link from 'next/link'
-import MoreIcon from '@/components/icons/moreIcon'
+import React from 'react'
 import { Button } from '@/components/ui/button'
+import type { NotificationItem } from './types'
+import Image from 'next/image'
+import { useMutation } from '@tanstack/react-query'
+import ovationService from '@/services/ovation.service'
+import Link from 'next/link'
+import { startCase } from '@/lib/helper-func'
 
-interface NotificationCardProps {
-  userProfilePicture: string
-  notificationTypeImg?: string
-  userDisplayName?: string
-  userName?: string
-  content?: string
-  secondaryContent?: string
-  actionLabel?: string
-  onAction?: () => void
-  href?: string
-  className?: string
-}
+export default function NotificationCard({
+  id,
+  isFollowing,
+  message,
+  reference,
+  referenceId,
+  title,
+  initiator,
+  refetch,
+}: NotificationItem & { refetch: () => void }) {
+  const { mutate: followUser, isPending: isFollowingPending } = useMutation({
+    mutationFn: (userId: string) => ovationService.followUser(userId),
+    onSuccess: () => {
+      refetch()
+    },
+  })
 
-const NotificationCard: React.FC<NotificationCardProps> = ({
-  userProfilePicture,
-  notificationTypeImg,
-  userDisplayName,
-  userName,
-  content,
-  secondaryContent,
-  actionLabel,
-  onAction,
-  href,
-  className,
-}) => {
-  const CardWrapper = href ? Link : 'div'
+  const { mutate: unfollowUser, isPending: isUnfollowingPending } = useMutation(
+    {
+      mutationFn: (userId: string) => ovationService.unfollowUser(userId),
+      onSuccess: () => {
+        refetch()
+      },
+    },
+  )
+
+  const renderNotificationContent = () => {
+    switch (reference) {
+      case 'Follow':
+        return (
+          <div className="flex gap-3 justify-between items-center">
+            <div className="flex gap-3 items-center">
+              <Image
+                src={
+                  initiator?.profileImage || '/assets/images/default-user.svg'
+                }
+                alt="Department Icon"
+                width={36}
+                height={36}
+                className="rounded-full w-[36px] h-[36px]"
+              />
+              <div className="flex flex-col gap-1">
+                <Link href={`/apps/profile/${initiator?.username}`}>
+                  <p className="font-semibold text-sm text-white">{title}</p>
+                </Link>
+                <p className="text-sm text-gray-300">{message}</p>
+              </div>
+            </div>
+            {isFollowing ? (
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={isUnfollowingPending}
+                isLoading={isUnfollowingPending}
+                loadingText="Unfollowing..."
+                className="mt-2 rounded-full"
+                onClick={() => unfollowUser(initiator?.initiatorId as string)}
+              >
+                Following
+              </Button>
+            ) : (
+              <Button
+                variant="secondary"
+                size="sm"
+                className="mt-2 rounded-full"
+                disabled={isFollowingPending}
+                isLoading={isFollowingPending}
+                loadingText="Following..."
+                onClick={() => followUser(initiator?.initiatorId as string)}
+              >
+                Follow Back
+              </Button>
+            )}
+          </div>
+        )
+      case 'Badge':
+        return (
+          <div>
+            <p className="font-semibold text-sm text-white">{title}</p>
+            <p className="text-sm text-gray-300">
+              {message} - {startCase(referenceId)}
+            </p>
+          </div>
+        )
+      default:
+        return (
+          <div>
+            <p className="text-sm text-gray-300">{message}</p>
+          </div>
+        )
+    }
+  }
 
   return (
-    <CardWrapper
-      href={href || '#'}
-      className={`${className} w-full flex items-center justify-between px-5 py-4 md:py-7 md:px-8 border-b border-sectionBorder`}
-    >
-      <div className="flex items-center gap-4 w-fit">
-        <div className="flex h-fit relative">
-          <img
-            src={userProfilePicture}
-            alt="User Display Img"
-            className="w-[30px] h-[30px] md:w-[44px] md:h-[44px]"
-          />
-          {notificationTypeImg && (
-            <img
-              src={notificationTypeImg}
-              alt="Notification Type"
-              width={16}
-              height={16}
-              className="absolute bottom-0 right-[-3px] w-2 h-2 md:w-4 md:h-4"
-            />
-          )}
-        </div>
-        <div className="w-[90%] md:w-[500px]">
-          <p className="text-sm md:text-lg text-white font-medium w-fit">
-            {content}
-          </p>
-          {secondaryContent && (
-            <p className="text-white70 text-xs">{secondaryContent}</p>
-          )}
-        </div>
-      </div>
-
-      {actionLabel ? (
-        <Button
-          variant="default"
-          onClick={onAction}
-          className="bg-white uppercase text-[10px] text-buttonTextColor px-2 py-[6px] border-none outline-none h-fit transition-all duration-300 hover:bg-white70"
-        >
-          {actionLabel}
-        </Button>
-      ) : (
-        <div className="p-1">
-          <MoreIcon />
-        </div>
-      )}
-    </CardWrapper>
+    <div className="w-full flex items-center justify-between px-5 py-4 md:py-7 md:px-8 border-b border-[#1A1A1A]">
+      <div className="flex-grow">{renderNotificationContent()}</div>
+    </div>
   )
 }
-
-export default NotificationCard

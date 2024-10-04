@@ -3,7 +3,13 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import { BorderBeam } from '@/components/animations/border-beam'
@@ -41,7 +47,9 @@ export function Newsletter() {
             toast.error("This email doesn't exist")
             break
           case 500:
-            toast.error('System: Our system is down temporarily, please try again later')
+            toast.error(
+              'System: Our system is down temporarily, please try again later',
+            )
             break
           default:
             toast.error('An unknown error occurred. Please try again later.')
@@ -54,34 +62,44 @@ export function Newsletter() {
     }
   }
   return (
-    <section className='pt-[60px] md:pt-[120px] pb-[40px] md:pb-[80px] container flex items-center gap-6 md:gap-12 flex-col md:flex-row '>
-      <div className='w-full'>
-        <h2 className='text-2xl font-heading uppercase text-primary-foreground font-bold'>
+    <section className="pt-[60px] md:pt-[120px] pb-[40px] md:pb-[80px] container flex items-center gap-6 md:gap-12 flex-col md:flex-row ">
+      <div className="w-full">
+        <h2 className="text-2xl font-heading uppercase text-primary-foreground font-bold">
           subscribe
         </h2>
-        <p className='text-base md:text-lg'>
+        <p className="text-base md:text-lg">
           Learn about the Ovation alpha launch and other important updates.
         </p>
       </div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8 w-full '>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-8 w-full "
+        >
           <FormField
             control={form.control}
-            name='subscriberEmail'
+            name="subscriberEmail"
             render={({ field }) => (
-              <FormItem className='relative'>
+              <FormItem className="relative">
                 <FormControl>
-                  <div className='relative border border-[#FFFFFF33] bg-[#FFFFFF0D] rounded-full'>
-                    <Input placeholder='Your email address' {...field} />
-                    <Button className='absolute top-[20%] right-[15px]' type='submit'>
+                  <div className="relative border border-[#FFFFFF33] bg-[#FFFFFF0D] rounded-full">
+                    <Input
+                      placeholder="Your email address"
+                      {...field}
+                      className="h-[65px]"
+                    />
+                    <Button
+                      className="absolute top-[20%] right-[15px]"
+                      type="submit"
+                    >
                       Subscribe
                     </Button>
                     <BorderBeam
                       size={125}
                       duration={8}
                       anchor={90}
-                      colorFrom='#C1FE17'
-                      colorTo='#bbff00'
+                      colorFrom="#C1FE17"
+                      colorTo="#bbff00"
                     />
                   </div>
                 </FormControl>

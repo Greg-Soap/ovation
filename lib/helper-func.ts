@@ -1,6 +1,9 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
+import { useLocalStorage } from './use-local-storage'
+import type { UserData } from '@/models/all.model'
+import type { FriendProps } from '@/app/apps/messages/message-container'
 
 function generateRandomString(length = 10) {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -65,42 +68,42 @@ export const decodeIdToken = (idToken: string): DecodedToken => {
 }
 
 export const chainIdToChainName: { [key: number]: string } = {
-  1: "eth",
-  137: "polygon",
-  56: "bsc",
-  43114: "avalanche",
-  250: "fantom",
-  11297108109: "palm",
-  25: "cronos",
-  42161: "arbitrum",
-  100: "gnosis",
-  901: "chiliz",
-  8453: "base",
-  10: "optimism",
-  59144: "linea",
-  1284: "moonbeam",
-  1285: "moonriver"
-};
+  1: 'eth',
+  137: 'polygon',
+  56: 'bsc',
+  43114: 'avalanche',
+  250: 'fantom',
+  11297108109: 'palm',
+  25: 'cronos',
+  42161: 'arbitrum',
+  100: 'gnosis',
+  901: 'chiliz',
+  8453: 'base',
+  10: 'optimism',
+  59144: 'linea',
+  1284: 'moonbeam',
+  1285: 'moonriver',
+}
 
 export const optionValueToBlockchainName: { [optionValue: string]: string } = {
-  eth: "Ethereum",
-  polygon: "Polygon",
-  bsc: "Binance Smart Chain",
-  avalanche: "Avalanche",
-  fantom: "Fantom",
-  palm: "Palm",
-  cronos: "Cronos",
-  arbitrum: "Arbitrum One",
-  gnosis: "Gnosis",
-  chiliz: "Chiliz",
-  base: "Base",
-  optimism: "Optimism",
-  linea: "Linea",
-  moonbeam: "Moonbeam",
-  moonriver: "Moonriver",
-  solana: "Solana",
-  archway: "Archway"
-};
+  eth: 'Ethereum',
+  polygon: 'Polygon',
+  bsc: 'Binance Smart Chain',
+  avalanche: 'Avalanche',
+  fantom: 'Fantom',
+  palm: 'Palm',
+  cronos: 'Cronos',
+  arbitrum: 'Arbitrum One',
+  gnosis: 'Gnosis',
+  chiliz: 'Chiliz',
+  base: 'Base',
+  optimism: 'Optimism',
+  linea: 'Linea',
+  moonbeam: 'Moonbeam',
+  moonriver: 'Moonriver',
+  solana: 'Solana',
+  archway: 'Archway',
+}
 
 export interface NotificationMessage {
   reference: string
@@ -161,4 +164,71 @@ export function getGreeting(): string {
   if (hour < 12) return 'Good Morning'
   if (hour < 18) return 'Good Afternoon'
   return 'Good Evening'
+}
+
+export function formatDate(date: Date): string {
+  const month = date.getMonth() + 1 // Months are zero-based
+  const day = date.getDate()
+  const year = date.getFullYear()
+  return `${month}/${day}/${year}`
+}
+
+export function parseDate(dateString: string): Date | null {
+  const [month, day, year] = dateString.split('/').map(Number)
+  if (!month || !day || !year) {
+    console.warn('Invalid date format')
+    return null
+  }
+  return new Date(year, month - 1, day)
+}
+
+export function getUserId(): string | undefined {
+  if (typeof window !== 'undefined') {
+    const userData = window.localStorage.getItem('userData')
+    const user = userData ? (JSON.parse(userData) as UserData) : null
+    return user?.userId
+  }
+  return undefined
+}
+
+export function getReceiver(): FriendProps | null {
+  if (typeof window !== 'undefined') {
+    const receiver = window.localStorage.getItem('receiver')
+    const receiverData = receiver ? (JSON.parse(receiver) as FriendProps) : null
+    if (receiverData == null) return null
+    return receiverData
+  }
+  return null
+}
+
+export function formatUsername(username?: string): string {
+  if (!username) {
+    return ''
+  }
+  return username.startsWith('@') ? username : `@${username}`
+}
+
+export function getStoredUser(): UserData | null {
+  if (typeof window !== 'undefined') {
+    const userData = window.localStorage.getItem('userData')
+    return userData ? (JSON.parse(userData) as UserData) : null
+  }
+  return null
+}
+
+export function debounce<T extends (...args: any[]) => any>(
+  func: T,
+  wait: number,
+): (...args: Parameters<T>) => void {
+  let timeout: NodeJS.Timeout | null = null
+
+  return function (this: any, ...args: Parameters<T>) {
+    if (timeout !== null) {
+      clearTimeout(timeout)
+    }
+
+    timeout = setTimeout(() => {
+      func.apply(this, args)
+    }, wait)
+  }
 }

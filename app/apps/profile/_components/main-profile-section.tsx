@@ -28,21 +28,21 @@ export default function MainProfileSection({
     queryFn: () => ovationService.getNfts(profileData?.userId as string),
   })
 
-  console.log({ nfts })
-
   const { data: experienceData } = useQuery({
     queryKey: ['experience'],
     queryFn: () => ovationService.getExperience(profileData?.userId as string),
   })
-
-  console.log({ experienceData })
 
   const profileTabsData: TabData[] = [
     {
       value: 'portfolio',
       label: 'Portfolio',
       content: (nfts) => (
-        <Portfolio nfts={nfts?.data?.data || []} isLoading={isNftsLoading} />
+        <Portfolio
+          nfts={nfts?.data?.data || []}
+          isLoading={isNftsLoading}
+          secondaryProfile={secondaryProfile}
+        />
       ),
     },
     {
@@ -59,17 +59,13 @@ export default function MainProfileSection({
 
   return (
     <div className="max-w-[853px] w-full h-full flex flex-col items-center bg-primaryBg">
-      <FeaturedSection
-        featured={[]}
-        showButtons={true}
-        secondaryProfile={secondaryProfile}
-      />
+      {/* <FeaturedSection featured={[]} showButtons={true} secondaryProfile={secondaryProfile} /> */}
 
       <Tabs
         defaultValue={currentTab}
         value={currentTab}
         onValueChange={setTab}
-        className="w-full my-16"
+        className="w-full my-16 mt-0"
       >
         <TabsList className="items-center rounded-none px-7 pt-5 pb-0 border-y gap-4 border-white15 w-full h-fit overflow-x-scroll justify-start">
           {profileTabsData.map(({ value, label }) => (

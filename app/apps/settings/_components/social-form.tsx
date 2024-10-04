@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -19,6 +19,7 @@ import ovationService from '@/services/ovation.service'
 import { toast } from 'sonner'
 import { useMutation } from '@tanstack/react-query'
 import { useQuery } from '@tanstack/react-query'
+import SavingOverlay from '@/components/saving-overlay'
 
 const urlRefinement = (val: string | undefined, errorMessage: string) => {
   if (!val) return true // Allow empty strings (optional fields)
@@ -44,6 +45,21 @@ const formSchema = z.object({
     })
     .refine((val) => !val || val.includes('linkedin.com/in/'), {
       message: "LinkedIn URL should include 'linkedin.com/in/'",
+    }),
+  twitter: z
+    .string()
+    .optional()
+    .refine((val) => urlRefinement(val, 'Invalid Twitter URL'), {
+      message: "Please enter a valid Twitter URL (e.g., 'x.com/username')",
+    })
+    .refine((val) => !val || val.includes('x.com/'), {
+      message: "Twitter URL should include 'x.com/'",
+    }),
+  website: z
+    .string()
+    .optional()
+    .refine((val) => urlRefinement(val, 'Invalid Website URL'), {
+      message: "Please enter a valid Website URL (e.g., 'www.example.com')",
     }),
   lens: z
     .string()
@@ -101,24 +117,60 @@ type FormValues = z.infer<typeof formSchema>
 interface SocialPlatform {
   name: string
   imgSrc: string
+  label: string
 }
 
 const socialPlatforms: SocialPlatform[] = [
-  { name: 'LinkedIn', imgSrc: '/assets/images/settings/social/linked-in.png' },
-  { name: 'Lens', imgSrc: '/assets/images/settings/social/lens.png' },
-  { name: 'Farcaster', imgSrc: '/assets/images/settings/social/farcaster.png' }, // Changed from 'Forcaster' to 'Farcaster'
-  { name: 'Blur', imgSrc: '/assets/images/settings/social/blur.png' },
   {
-    name: 'Foundation',
-    imgSrc: '/assets/images/settings/social/foundation.png',
+    name: 'linkedin',
+    imgSrc: '/assets/images/settings/social/linked-in.png',
+    label: 'LinkedIn',
   },
-  { name: 'MagicEden', imgSrc: '/assets/images/settings/social/m-eden.png' },
-  { name: 'EthCo', imgSrc: '/assets/images/settings/social/eth-co.png' }, // Changed from 'EthCo' to 'EthCo'
+  {
+    name: 'twitter',
+    imgSrc: '/assets/images/settings/social/x.png',
+    label: 'Twitter',
+  },
+  {
+    name: 'website',
+    imgSrc: '/assets/images/profile/link.png',
+    label: 'Website/Portfolio',
+  },
+  {
+    name: 'lens',
+    imgSrc: '/assets/images/settings/social/lens.png',
+    label: 'Lens',
+  },
+  {
+    name: 'farcaster',
+    imgSrc: '/assets/images/settings/social/farcaster.png',
+    label: 'Farcaster',
+  },
+  {
+    name: 'blur',
+    imgSrc: '/assets/images/settings/social/blur.png',
+    label: 'Blur',
+  },
+  {
+    name: 'foundation',
+    imgSrc: '/assets/images/settings/social/foundation.png',
+    label: 'Foundation',
+  },
+  {
+    name: 'magiceden',
+    imgSrc: '/assets/images/settings/social/m-eden.png',
+    label: 'MagicEden',
+  },
+  {
+    name: 'ethco',
+    imgSrc: '/assets/images/settings/social/eth-co.png',
+    label: 'EthCo',
+  },
 ]
 
 export default function SocialForm({ userId }: { userId: string }) {
   const [isDisabled, setIsDisabled] = useState(true)
-  const { data: socialLinks } = useQuery({
+  const { data: socialLinks, isLoading: isSocialLinksLoading } = useQuery({
     queryKey: ['socialLinks', userId],
     queryFn: () => ovationService.getSocialLinks(userId),
   })
@@ -127,16 +179,33 @@ export default function SocialForm({ userId }: { userId: string }) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      linkedin: socialLinksData?.linkedIn || '',
-      lens: socialLinksData?.lens || '',
-      farcaster: socialLinksData?.forcaster || '',
-      blur: socialLinksData?.blur || '',
-      foundation: socialLinksData?.foundation || '',
-      magiceden: socialLinksData?.magic || '',
-      ethco: socialLinksData?.ethico || '',
+      linkedin: '',
+      twitter: '',
+      website: '',
+      lens: '',
+      farcaster: '',
+      blur: '',
+      foundation: '',
+      magiceden: '',
+      ethco: '',
     },
   })
 
+  useEffect(() => {
+    if (socialLinksData) {
+      form.reset({
+        linkedin: socialLinksData.linkedIn || '',
+        twitter: socialLinksData.twitter || '',
+        website: socialLinksData.website || '',
+        lens: socialLinksData.lens || '',
+        farcaster: socialLinksData.forcaster || '',
+        blur: socialLinksData.blur || '',
+        foundation: socialLinksData.foundation || '',
+        magiceden: socialLinksData.magic || '',
+        ethco: socialLinksData.ethico || '',
+      })
+    }
+  }, [socialLinksData, form])
   const { mutate, isPending } = useMutation({
     mutationFn: (data: FormValues) => ovationService.updateSocials(data),
     onSuccess: () => {
@@ -152,6 +221,8 @@ export default function SocialForm({ userId }: { userId: string }) {
     const formattedData = {
       blur: data.blur || '',
       foundation: data.foundation || '',
+      twitter: data.twitter || '',
+      website: data.website || '',
       linkedIn: data.linkedin || '',
       lens: data.lens || '',
       forcaster: data.farcaster || '',
@@ -162,22 +233,23 @@ export default function SocialForm({ userId }: { userId: string }) {
     mutate(formattedData)
   }
 
-  console.log(form.formState.errors)
-  console.log(form.getValues())
-
   return (
     <section className="w-full h-full flex flex-col gap-[23px] pb-5">
+      <SavingOverlay
+        isLoading={isSocialLinksLoading}
+        loadingText={'Loading your social links...'}
+      />
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           onChange={() => setIsDisabled(false)}
           className="space-y-[23px] min-h-full"
         >
-          {socialPlatforms.map((platform, index) => (
+          {socialPlatforms.map((platform) => (
             <FormField
-              key={index}
+              key={platform.name}
               control={form.control}
-              name={platform.name.toLowerCase() as keyof FormValues}
+              name={platform.name as keyof FormValues}
               render={({ field }) => (
                 <FormItem className="w-full flex flex-col gap-2 px-10 2xl:pl-20">
                   <FormLabel className="text-sm text-white70">
@@ -192,9 +264,9 @@ export default function SocialForm({ userId }: { userId: string }) {
                         height={25}
                       />
                       <Input
-                        placeholder={`Enter ${platform.name} link here`}
+                        placeholder={`Enter ${platform.label} link here`}
                         {...field}
-                        className="h-fit px-0 py-2 text-sm text-white100"
+                        className="focus:border-none focus:outline-none focus:ring-0 focus-visible:ring-0 border-none h-fit px-0 py-2 text-sm text-white100"
                       />
                     </div>
                   </FormControl>
