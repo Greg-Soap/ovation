@@ -1,6 +1,6 @@
 import { UserData } from "@/models/all.model";
 import { auth, firestore } from "./firebase";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import {
   doc,
   setDoc,
@@ -27,7 +27,12 @@ export const signUp = async (user: UserData) => {
 
 // Sign in a user
 export const signIn = async (userId: string, email: string) => {
-  return await signInWithEmailAndPassword(auth, email, generatePassword(userId));
+  try {
+    var user = await signInWithEmailAndPassword(auth, email, generatePassword(userId));
+    console.log(user);
+  } catch (error : any) {
+    console.log(error);
+  }
 };
 
 // Log out the user

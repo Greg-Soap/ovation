@@ -117,9 +117,8 @@ export default function AccountForm({ setOptionalLeft }: Props) {
       setToken(data.data?.token)
       setValue(data.data?.userData)
 
-      await signUp(data.data?.userData) // for firebase
-
       toast.success('Profile created successfully')
+      await signUp(data.data?.userData) // for firebase
       setDraft({}) // Clear the draft
       router.push('/apps/discover')
     },
