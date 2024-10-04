@@ -4,7 +4,7 @@ import { useState, useEffect, Suspense, useMemo } from 'react'
 import Web3Modal from 'web3modal'
 import WalletConnectProvider from '@walletconnect/web3-provider'
 import { BrowserProvider } from 'ethers'
-import walletData from './_data'
+import walletData from '../_data'
 import Image from 'next/image'
 import Link from 'next/link'
 import arrow from '@/public/assets/images/arrow-right.png'
@@ -362,7 +362,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
 
       setAccount(accounts[0].address)
       setChain('archway')
-      
+
       console.log('Connected account address: ', accounts[0].address)
     } catch (error) {
       console.error('Error connecting to Leap Wallet:', error)
