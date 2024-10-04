@@ -26,15 +26,15 @@ export class NotificationService {
   }
 
   // Send a message to the server
-  // public sendMessage = async (method: string, ...args: any[]) => {
-  //     if (this.connection) {
-  //         try {
-  //             await this.connection.invoke(method, ...args);
-  //         } catch (err) {
-  //             console.error("Error sending message: ", err);
-  //         }
-  //     }
-  // };
+  public sendMessageNotification = async (method: string, ...args: any) => {
+      if (this.connection) {
+          try {
+              await this.connection.invoke(method, ...args);
+          } catch (err) {
+              console.error("Error sending message: ", err);
+          }
+      }
+  };
 
   // Listen for messages from the server
   public onMessage = (method: string, callback: (...args: any[]) => void) => {

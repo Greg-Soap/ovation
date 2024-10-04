@@ -16,6 +16,8 @@ import { AuthMiddleware } from './auth-middleware'
 
 const queryClient = new QueryClient()
 
+export const notificationServices = new NotificationService()
+
 export default function AsideLayout({
   children,
 }: {
@@ -33,7 +35,7 @@ export default function AsideLayout({
     })
 
     // Listen for incoming notifications
-    notificationService.onMessage(
+    notificationServices.onMessage(
       'ReceivedNotification',
       (notification: NotificationMessage) => {
         toast.success(`${notification.title}\n${notification.message}`)
@@ -43,16 +45,14 @@ export default function AsideLayout({
     )
 
     return () => {
-      notificationService.stopConnection()
+      notificationServices.stopConnection()
       firebaseSignOut()
       if (unsubscribe != null) unsubscribe()
     }
   }, [])
 
-  const notificationService = new NotificationService()
-
   const connectSignalR = async () => {
-    await notificationService.startConnection()
+    await notificationServices.startConnection()
   }
 
   const firebaseSignIn = async () => {

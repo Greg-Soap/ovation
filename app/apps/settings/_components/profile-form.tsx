@@ -30,6 +30,8 @@ import {
 } from '@/lib/firebaseStorageUtils'
 import SavingOverlay from '@/components/saving-overlay'
 import { Progress } from '@/components/ui/progress'
+import { updateUserData } from '@/lib/firebaseAuthService'
+import { Participant, ParticipantMod } from '@/lib/firebaseChatService'
 
 const formSchema = z.object({
   displayName: z.string().min(1, 'Display name is required'),
@@ -137,7 +139,14 @@ export default function ProfileForm({
       // Update profile with new data
       return ovationService.updatePersonalInfo(data)
     },
-    onSuccess: () => {
+    onSuccess: async () => {
+      await updateUserData({
+        displayName: tempFormValues.displayName,
+        email: tempFormValues.email,
+        image: tempFormValues.profileImage,
+        username: tempFormValues.username,
+      } as ParticipantMod)
+
       toast.success('Profile updated successfully')
       refetch()
       setUserData({ ...userData, ...tempFormValues })

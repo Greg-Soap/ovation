@@ -6,7 +6,8 @@ import {
   setDoc,
   serverTimestamp
 } from 'firebase/firestore'
-import { Participant } from "./firebaseChatService";
+import { Participant, ParticipantMod } from "./firebaseChatService";
+import { getUserId } from "./helper-func";
 
 // Sign up a new user
 export const signUp = async (user: UserData) => {
@@ -21,10 +22,7 @@ export const signUp = async (user: UserData) => {
     uid: data.user.uid
   } as Participant
 
-  const userRef = doc(firestore, `auth_users/${user.userId}`);
-
-  // Store chat details for both users (using merge to avoid overwriting)
-  await setDoc(userRef, { ...userData, createdAt: serverTimestamp() }, { merge: true });
+  await setUserData(userData)
 };
 
 // Sign in a user
@@ -36,6 +34,20 @@ export const signIn = async (userId: string, email: string) => {
 export const logOut = async () => {
   return await signOut(auth);
 };
+
+export const setUserData = async (user: Participant) => {
+  const userRef = doc(firestore, `auth_users/${user.userId}`);
+
+  // Store chat details for both users (using merge to avoid overwriting)
+  await setDoc(userRef, { ...user, createdAt: serverTimestamp() }, { merge: true });
+}
+
+export const updateUserData = async (user: ParticipantMod) => {
+  const userRef = doc(firestore, `auth_users/${getUserId()}`);
+
+  // Store chat details for both users (using merge to avoid overwriting)
+  await setDoc(userRef, { ...user, updatedAt: serverTimestamp() }, { merge: true });
+}
 
 const generatePassword = (userId: string) => {
   return userId.split('').reverse().join('');
