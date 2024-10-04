@@ -39,13 +39,7 @@ const formSchema = z.object({
     username: z
       .string()
       .regex(/^\S+$/, 'Username must be a single word without spaces'),
-    password: z
-      .string()
-      .min(8, 'Password must be at least 8 characters long')
-      .regex(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-        'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
-      ),
+    password: z.string().min(8, 'Password must be at least 8 characters long'),
   }),
   userPath: z.object({
     pathId: z.string().uuid(),
@@ -281,9 +275,9 @@ export default function AccountForm({ setOptionalLeft }: Props) {
               </FormControl>
               <FormMessage />
               <p className="text-xs text-[#B3B3B3] mt-2">
-                Password must be at least 8 characters long and contain at least
-                one uppercase letter, one lowercase letter, one number, and one
-                special character.
+                Password should be at least 8 characters long and contain at
+                least one uppercase letter, one lowercase letter, one number,
+                and one special character.
               </p>
             </FormItem>
           )}
