@@ -31,7 +31,7 @@ const formSchema = z.object({
   startDate: z.string(),
   endDate: z.string().nullable().optional(),
   description: z.string().optional(),
-  skills: z.array(z.string()).optional(),
+  skills: z.string().optional(),
 })
 
 interface FormValues extends z.infer<typeof formSchema> {}
@@ -42,7 +42,9 @@ export default function ExperienceForm({
   experienceData: UserExperience[]
 }) {
   const [isDisabled, setIsDisabled] = useState<boolean>(true)
-  const [isCurrentJob, setIsCurrentJob] = useState<boolean>(false)
+  const [isCurrentJob, setIsCurrentJob] = useState<boolean>(
+    !experienceData[0]?.endDate
+  )
   const [isUpdating, setIsUpdating] = useState<boolean>(false)
   const { storedValue, setValue } = useLocalStorage<Partial<FormValues>>(
     'experienceDraft',
@@ -53,7 +55,7 @@ export default function ExperienceForm({
       startDate: '',
       endDate: null,
       description: '',
-      skills: [],
+      skills: '',
     },
   )
 
@@ -71,7 +73,7 @@ export default function ExperienceForm({
       endDate: experienceData[0]?.endDate || storedValue.endDate || null,
       description:
         experienceData[0]?.description || storedValue.description || '',
-      skills: experienceData[0]?.skill.split(',') || storedValue.skills || [],
+      skills: experienceData[0]?.skill || storedValue.skills || '',
     },
   })
 
@@ -84,7 +86,7 @@ export default function ExperienceForm({
             endDate: isCurrentJob
               ? null
               : formatDate(new Date(data.endDate || '')),
-            skill: data.skills?.join(', ') || '',
+            skill: data.skills || '',
             role: data.role || '',
             department: data.department || '',
             description: data.description || '',
@@ -95,7 +97,7 @@ export default function ExperienceForm({
             endDate: isCurrentJob
               ? null
               : formatDate(new Date(data.endDate || '')),
-            skill: data.skills?.join(', ') || '',
+            skill: data.skills || '',
             role: data.role || '',
             department: data.department || '',
             description: data.description || '',
@@ -124,7 +126,7 @@ export default function ExperienceForm({
       endDate: isCurrentJob ? null : formatDate(new Date(data.endDate || '')),
     }
     mutate(formattedData)
-    setValue(data as Partial<FormValues>) // Save to local storage on submit
+    setValue(data as Partial<FormValues>) 
   }
 
   return (
@@ -298,14 +300,6 @@ export default function ExperienceForm({
                     <Input
                       placeholder="ex. JavaScript, React, Node.js"
                       {...field}
-                      onChange={(e) =>
-                        field.onChange(
-                          e.target.value
-                            .split(',')
-                            .map((skill) => skill.trim()),
-                        )
-                      }
-                      value={field.value?.join(', ') || ''}
                       className="h-[47px] text-sm text-[#F8F8FF] border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
                     />
                   </FormControl>

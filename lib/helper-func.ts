@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { useLocalStorage } from './use-local-storage'
 import type { UserData } from '@/models/all.model'
-import { FriendProps } from '@/app/apps/messages/message-container'
+import type { FriendProps } from '@/app/apps/messages/message-container'
 
 function generateRandomString(length = 10) {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -195,8 +195,7 @@ export function getReceiver(): FriendProps | null {
   if (typeof window !== 'undefined') {
     const receiver = window.localStorage.getItem('receiver')
     const receiverData = receiver ? (JSON.parse(receiver) as FriendProps) : null
-    if(receiverData == null)
-      return null
+    if (receiverData == null) return null
     return receiverData
   }
   return null
@@ -215,4 +214,21 @@ export function getStoredUser(): UserData | null {
     return userData ? (JSON.parse(userData) as UserData) : null
   }
   return null
+}
+
+export function debounce<T extends (...args: any[]) => any>(
+  func: T,
+  wait: number,
+): (...args: Parameters<T>) => void {
+  let timeout: NodeJS.Timeout | null = null
+
+  return function (this: any, ...args: Parameters<T>) {
+    if (timeout !== null) {
+      clearTimeout(timeout)
+    }
+
+    timeout = setTimeout(() => {
+      func.apply(this, args)
+    }, wait)
+  }
 }
