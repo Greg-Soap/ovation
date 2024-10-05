@@ -29,7 +29,12 @@ import {
   uploadCoverImage,
 } from '@/lib/firebaseStorageUtils'
 import SavingOverlay from '@/components/saving-overlay'
+<<<<<<<<< Temporary merge branch 1
+import { updateUserData } from '@/lib/firebaseAuthService'
+import { Participant, ParticipantMod } from '@/lib/firebaseChatService'
+=========
 import { Progress } from '@/components/ui/progress'
+>>>>>>>>> Temporary merge branch 2
 
 const formSchema = z.object({
   displayName: z.string().min(1, 'Display name is required'),
@@ -138,12 +143,11 @@ export default function ProfileForm({
       return ovationService.updatePersonalInfo(data)
     },
     onSuccess: async () => {
-      
       await updateUserData({
         displayName: tempFormValues.displayName,
         email: tempFormValues.email,
         image: tempFormValues.profileImage,
-        username: tempFormValues.username
+        username: tempFormValues.username,
       } as ParticipantMod)
 
       toast.success('Profile updated successfully')
