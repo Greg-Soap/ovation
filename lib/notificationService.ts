@@ -16,6 +16,7 @@ export class NotificationService {
           skipNegotiation: true,
           transport: signalR.HttpTransportType.WebSockets,
         })
+        .configureLogging(signalR.LogLevel.None)
         .withAutomaticReconnect()
         .build()
 
