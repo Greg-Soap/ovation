@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import Socials from '../_sections/socials'
 import Image from 'next/image'
 import TwitterIcon from '@/components/icons/twitter-icon'
@@ -83,13 +82,13 @@ export default function Teams() {
                     <p className="text-lighter text-center">{item.position}</p>
                   </div>
 
-                  <Link href={item.href} target="_blank">
+                  <a href={item.href} target="_blank" rel="noreferrer">
                     {item.social === 'twitter' ? (
                       <TwitterIcon className="w-[37px] h-[37px]" />
                     ) : (
                       <LinkedInIcon className="w-[37px] h-[37px]" />
                     )}
-                  </Link>
+                  </a>
                 </div>
               </div>
             ))}

@@ -4,7 +4,6 @@ import type {
   UserExperience,
   UserSocialsMod,
 } from '@/models/all.model'
-import Link from 'next/link'
 
 export function GetStarted({
   user,
@@ -81,12 +80,12 @@ export function GetStarted({
               asChild
               className="transition-all duration-300 mt-2 hover:opacity-80"
             >
-              <Link
+              <a
                 href={task.link}
                 className="text-[10px] text-[#111115] font-medium"
               >
                 {task.buttonText}
-              </Link>
+              </a>
             </Button>
           </div>
         ))}

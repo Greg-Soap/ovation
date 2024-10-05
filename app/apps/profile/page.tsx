@@ -11,7 +11,6 @@ import { ErrorFallback } from '@/components/error-boundary'
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { toast } from 'sonner'
-import Link from 'next/link'
 
 export default function Page() {
   const router = useRouter()

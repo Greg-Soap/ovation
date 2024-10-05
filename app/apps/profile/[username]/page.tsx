@@ -4,7 +4,7 @@ import AsideMsgIcon from '@/components/icons/asideMsgIcon'
 import UserProfile from '../_components/user-profile'
 import ovationService from '@/services/ovation.service'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import MainProfileSection from '../_components/main-profile-section'
 import type { ProfileData } from '@/models/all.model'
 import { Suspense, useEffect } from 'react'
@@ -13,11 +13,12 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
 import { useLocalStorage } from '@/lib/use-local-storage'
 import type { FriendProps } from '../../messages/message-container'
+import { useAnchorNavigation } from '@/lib/use-navigation'
 
 export default function SecondaryProfile() {
   const params = useParams()
   const username = params.username as string
-  const router = useRouter()
+  const navigateTo = useAnchorNavigation()
   const { setValue } = useLocalStorage<FriendProps | null>('receiver', null)
 
   const {
@@ -76,7 +77,7 @@ export default function SecondaryProfile() {
         lastMessage: '',
       }
       setValue(receiver)
-      router.push('/apps/messages')
+      navigateTo('/apps/messages')
     }
   }
 

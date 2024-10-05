@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import CompleteIcon from '@/public/assets/images/ovationAuthCompleteIcon'
 
@@ -15,9 +14,9 @@ export default function SuccessMessage() {
         </p>
       </div>
       <Button className="w-full h-[53px] font-semibold text-sm">
-        <Link className="w-full" href="/login">
+        <a className="w-full" href="/login">
           Back to Login
-        </Link>
+        </a>
       </Button>
     </div>
   )

@@ -4,7 +4,6 @@ import { formatUsername } from '@/lib/helper-func'
 import ovationService from '@/services/ovation.service'
 import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
-import Link from 'next/link'
 
 export function MostViewed() {
   const { data: mostViewedData, isLoading: mostViewedLoading } = useQuery({
@@ -71,19 +70,19 @@ export function MostViewed() {
           <div className="flex items-center w-full justify-between pb-6 border-b border-[#FFFFFF0D]">
             <div className="flex items-center justify-between w-full gap-2">
               <div className="flex flex-col">
-                <Link
+                <a
                   href={`/apps/profile/${mostViewed[0]?.username}`}
                   className="flex gap-1 items-center text-base font-semibold leading-5 "
                 >
                   {mostViewed[0]?.displayName}
                   <VerifyIcon />
-                </Link>
-                <Link
+                </a>
+                <a
                   href={`/apps/profile/${mostViewed[0]?.username}`}
                   className="text-xs leading-5 font-medium text-light"
                 >
                   {formatUsername(mostViewed[0]?.username)}
-                </Link>
+                </a>
               </div>
               <div className="bg-primary text-[10px] font-medium text-black px-[10px] py-2 w-fit rounded-3xl">
                 {mostViewed[0]?.views > 1000
@@ -115,20 +114,20 @@ export function MostViewed() {
                 </div>
 
                 <div className="flex flex-col">
-                  <Link
+                  <a
                     href={`/apps/profile/${user?.username}`}
                     className="text-sm font-semibold"
                   >
                     {user?.displayName}
-                  </Link>
+                  </a>
 
-                  <Link
+                  <a
                     href={`/apps/profile/${user?.username}`}
                     className="flex gap-1 text-xs text-light items-center"
                   >
                     <span>{formatUsername(user?.username)} </span>
                     <VerifyIcon />
-                  </Link>
+                  </a>
                 </div>
               </div>
               <div className="bg-primary ml-auto text-[10px] font-medium text-black px-[10px] py-2 rounded-3xl">

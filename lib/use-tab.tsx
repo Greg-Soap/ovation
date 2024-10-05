@@ -1,19 +1,20 @@
 'use client'
 
 import { useCallback, useEffect } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
+import { useAnchorNavigation } from './use-navigation'
 
 export function useTabUrlSync(defaultTab: string) {
-  const router = useRouter()
+  const navigateTo = useAnchorNavigation()
   const searchParams = useSearchParams()
 
   const setTab = useCallback(
     (tab: string) => {
       const params = new URLSearchParams(searchParams)
       params.set('tab', tab)
-      router.push(`?${params.toString()}`, { scroll: false })
+      navigateTo(`?${params.toString()}`)
     },
-    [router, searchParams],
+    [navigateTo, searchParams],
   )
 
   const currentTab = searchParams.get('tab') || defaultTab

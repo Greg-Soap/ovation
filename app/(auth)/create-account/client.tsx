@@ -19,6 +19,7 @@ import PersonalInfoForm from './_components/personal-form-section'
 import PathSelection from './_components/path-selection'
 import FormErrorSummary from './_components/form-error-summary'
 import { Form } from '@/components/ui/form'
+import { useAnchorNavigation } from '@/lib/use-navigation'
 
 const formSchema = z.object({
   personalInfo: z.object({
@@ -48,7 +49,7 @@ interface Props {
 }
 
 export default function AccountForm({ setOptionalLeft }: Props) {
-  const router = useRouter()
+  const navigateTo = useAnchorNavigation()
   const [page, setPage] = useState(1)
 
   const [isManualWallet, setIsManualWallet] = useState(true)
@@ -99,7 +100,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
 
       toast.success('Profile created successfully')
       setDraft({}) // Clear the draft
-      router.push('/apps/discover')
+      navigateTo('/apps/discover')
     },
     onError: (error) => {
       console.log(error)

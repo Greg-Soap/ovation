@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Image from 'next/image'
 import Socials from '../_sections/socials'
-import Link from 'next/link'
 
 const features = [
   {
@@ -37,14 +36,15 @@ export default function FounderNfts() {
             width={25}
             height={25}
           />
-          <Link
+          <a
             target="_blank"
             href="https://opensea.io/collection/founder-nfts"
+            rel="noreferrer"
           >
             <p className="text-[17px] text-primary font-medium">
               AVAILABLE NOW ON
             </p>
-          </Link>
+          </a>
 
           <Image
             src={'/assets/images/founder-nft/arrow-right.png'}

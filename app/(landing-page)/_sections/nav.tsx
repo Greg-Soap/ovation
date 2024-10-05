@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
-import Link from 'next/link'
 import { getStoredUser } from '@/lib/helper-func'
 import colors from '@/lib/colors'
 
@@ -60,9 +59,9 @@ export function Header({ navLinks = links }: HeaderProps) {
         {showButton && (
           <Button variant={'default'}>
             {user ? (
-              <Link href={'/apps/discover'}>Dashboard</Link>
+              <a href={'/apps/discover'}>Dashboard</a>
             ) : (
-              <Link href={'/login'}>Login</Link>
+              <a href={'/login'}>Login</a>
             )}
           </Button>
         )}
@@ -162,7 +161,7 @@ function Navigation({ mobile = false, navLinks = [] }: NavigationProps) {
             >
               {button ? (
                 <Button variant={'default'} className={` ${mobile && 'mx-4'}`}>
-                  <Link href={href}>{title}</Link>
+                  <a href={href}>{title}</a>
                 </Button>
               ) : (
                 <NavLink
@@ -184,7 +183,7 @@ function Navigation({ mobile = false, navLinks = [] }: NavigationProps) {
 function NavLink({ children, className, mobile, href }: NavLinkProps) {
   return (
     <Button variant={'ghost'} size={'tiny'} className="hover:bg-transparent ">
-      <Link
+      <a
         className={`
         block whitespace-nowrap  text-lg text-foreground no-underline transition hover:text-primary
         ${mobile && ''}
@@ -194,7 +193,7 @@ function NavLink({ children, className, mobile, href }: NavLinkProps) {
         href={`${href}`}
       >
         {children}
-      </Link>
+      </a>
     </Button>
   )
 }

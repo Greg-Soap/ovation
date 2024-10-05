@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ArrowLeft } from 'iconsax-react'
 import { FormBase, FormField } from '@/components/customs/custom-form'
-import Link from 'next/link'
 
 const formSchema = z.object({
   otp: z.string().length(6, 'OTP must be 6 digits'),
@@ -47,9 +46,9 @@ export default function OtpForm({ onSubmit, onResendOtp }: OtpFormProps) {
       <div>
         <div className="flex gap-2 items-center">
           <Button variant="ghost" asChild>
-            <Link href="/forgot-password">
+            <a href="/forgot-password">
               <ArrowLeft />
-            </Link>
+            </a>
           </Button>
           <h1 className="font-semibold text-3xl ">Enter OTP</h1>
         </div>

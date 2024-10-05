@@ -1,14 +1,13 @@
 'use client'
 import Image from 'next/image'
 import React from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import {
   LocationDiscover,
   Profile,
@@ -20,12 +19,13 @@ import {
 import { useLocalStorage } from '@/lib/use-local-storage'
 import type { UserData } from '@/models/all.model'
 import ovationService from '@/services/ovation.service'
-// import FeedbackModal from './feedback'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
 import FeedbackModal from './_feedback/feedback'
 import { getStoredUser } from '@/lib/helper-func'
-import Link from 'next/link'
+import { useAnchorNavigation } from '@/lib/use-navigation'
+import CustomModal from '@/components/customs/custom-modal'
+import colors from '@/lib/colors'
 
 const menuItems = [
   {
@@ -56,7 +56,7 @@ const menuItems = [
 ]
 
 export default function Aside() {
-  const router = useRouter()
+  const navigateTo = useAnchorNavigation()
   const currentPath = usePathname()
   const { removeValue } = useLocalStorage<UserData | null>('userData', null)
   const user = getStoredUser()
@@ -72,7 +72,7 @@ export default function Aside() {
         localStorage.removeItem(key)
       }
     }
-    router.push('/')
+    navigateTo('/')
   }
 
   return (
@@ -137,14 +137,18 @@ export default function Aside() {
                   key={index}
                   asChild
                 >
-                  <Link href={item.path}>
-                    <Icon size={24} variant={isActive ? 'Bold' : 'Outline'} />
+                  <a href={item.path}>
+                    <Icon
+                      size={24}
+                      variant={isActive ? 'Bold' : 'Outline'}
+                      color={isActive ? colors.primary.DEFAULT : colors.light}
+                    />
                     <p
                       className={`hidden lg:flex items-center gap-2 text-lg group-hover: group-focus:text-gray ${isActive ? ' font-medium' : 'text-light'}`}
                     >
                       {item.text}
                     </p>
-                  </Link>
+                  </a>
                 </Button>
               )
             })}
@@ -177,20 +181,19 @@ export function FeedbackButton({ className }: { className?: string }) {
             for everyone. Thank you for being a part of this journey!
           </p>
         </div>
-        <Dialog>
-          <DialogTrigger asChild>
+        <CustomModal
+          trigger={
             <Button
               variant={'default'}
-              className="text-[#0B0A10] text-xs font-semibold py-2 px-3 w-full h-[30px] bg-primary rounded-[8px]"
+              className=" text-xs font-semibold py-2 px-3 w-full h-[30px]  rounded-[8px]"
             >
               Submit a feedback
             </Button>
-          </DialogTrigger>
-          <DialogContent className="flex flex-col items-center justify-center p-0 m-0 w-fit h-fit overflow-auto border-none">
-            {/* <FeedbackModal /> */}
-            <FeedbackModal />
-          </DialogContent>
-        </Dialog>
+          }
+          className="flex flex-col items-center justify-center p-0 m-0 w-fit h-fit overflow-auto border-none"
+        >
+          <FeedbackModal />
+        </CustomModal>
       </div>
     </ErrorBoundary>
   )

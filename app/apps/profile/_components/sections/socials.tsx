@@ -1,6 +1,5 @@
 import type { UserSocialsMod } from '@/models/all.model'
 import Image from 'next/image'
-import Link from 'next/link'
 
 const socialIcons = {
   linkedIn: '/assets/images/settings/social/linked-in.png',
@@ -31,7 +30,7 @@ export default function Socials({ socials }: { socials: UserSocialsMod }) {
       {hasSocials ? (
         <div className="flex w-full gap-2">
           {availableSocials.map(([platform, url]) => (
-            <Link
+            <a
               key={platform}
               href={formatUrl(url)}
               target="_blank"
@@ -46,11 +45,11 @@ export default function Socials({ socials }: { socials: UserSocialsMod }) {
                 width={32}
                 height={32}
               />
-            </Link>
+            </a>
           ))}
         </div>
       ) : (
-        <p className="text-sm text-gray-400">No social links available</p>
+        <p className="text-sm text-light">No social links available</p>
       )}
     </div>
   )

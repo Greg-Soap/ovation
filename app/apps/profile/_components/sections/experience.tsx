@@ -1,11 +1,11 @@
 import PlusIcon from '@/components/icons/plus-icon'
 import { Button } from '@/components/ui/button'
+import { useAnchorNavigation } from '@/lib/use-navigation'
 import type { UserExperience } from '@/models/all.model'
 import { Briefcase } from 'iconsax-react'
-import { useRouter } from 'next/navigation'
 
 export default function Experience({ data }: { data: UserExperience[] }) {
-  const router = useRouter()
+  const navigateTo = useAnchorNavigation()
 
   return (
     <div className="w-[95%] ml-[2.5%] flex items-center justify-center rounded-[14px] flex-col gap-[34px] mt-[34px]">
@@ -17,7 +17,7 @@ export default function Experience({ data }: { data: UserExperience[] }) {
             <Button
               variant="ghost"
               className="hover:bg-transparent"
-              onClick={() => router.push('/apps/settings?tab=Experience')}
+              onClick={() => navigateTo('/apps/settings?tab=Experience')}
             >
               <PlusIcon className="w-[14px] h-[14px] stroke-[#CFF073]" />
             </Button>

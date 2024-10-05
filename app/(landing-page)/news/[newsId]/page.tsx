@@ -2,7 +2,6 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import React, { useState } from 'react'
 import { ArticleSection } from '../../_components/new-article'
@@ -112,7 +111,7 @@ export default function NewsDetails({ params }: any) {
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-9">
           {filteredBlogs.slice(1).map((blog, index) => (
-            <Link
+            <a
               href={`/news/${blog.id}`}
               className="flex flex-col gap-6 h-auto w-fit max-w-[385px]"
               key={index}
@@ -129,7 +128,7 @@ export default function NewsDetails({ params }: any) {
                 </p>
                 <p className="text-sm text-gray">{blog.blogDetails}</p>
               </div>
-            </Link>
+            </a>
           ))}
         </div>
       </div>

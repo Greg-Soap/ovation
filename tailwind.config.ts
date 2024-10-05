@@ -58,6 +58,7 @@ const config = {
         lighter: '#999999', // white/60%
         primary: {
           DEFAULT: '#CFF073',
+          // DEFAULT: '#C1FE17',
           foreground: '#0B0A10',
         },
         secondary: {

@@ -1,6 +1,6 @@
 import PulseButton from '@/components/animations/pulse-btn'
 import { Button } from '@/components/ui/button'
-import Link from 'next/link'
+import colors from '@/lib/colors'
 
 export default function SuccessMail() {
   return (
@@ -11,16 +11,17 @@ export default function SuccessMail() {
         the mean time follow us on our socials below
       </p>
       <div className="flex lg:flex-row flex-col items-center gap-5 w-fit">
-        <Link
+        <a
           href="https://x.com/Ovation_Network"
           className="flex items-center gap-2"
           target="_blank"
+          rel="noreferrer"
         >
           <Button
             asChild
             className="bg-primary text-sm text-[#0B0A10] h-fit gap-2"
           >
-            <PulseButton pulseColor="#CFF073">
+            <PulseButton pulseColor={colors.primary.DEFAULT}>
               <img
                 src="/assets/images/twitter-LP.png"
                 alt="Twitter Logo"
@@ -29,17 +30,18 @@ export default function SuccessMail() {
               Follow us on twitter
             </PulseButton>
           </Button>
-        </Link>
-        <Link
+        </a>
+        <a
           href=" https://www.linkedin.com/company/ovationnetwork/posts/?feedView=all"
           className="flex items-center gap-2"
           target="_blank"
+          rel="noreferrer"
         >
           <Button
             asChild
             className="bg-primary text-sm text-[#0B0A10] h-fit gap-2"
           >
-            <PulseButton pulseColor="#CFF073">
+            <PulseButton pulseColor={colors.primary.DEFAULT}>
               <img
                 src="/assets/images/linkedIn-LP.png"
                 alt="LinkedIn Logo"
@@ -48,7 +50,7 @@ export default function SuccessMail() {
               Follow us on LinkedIn
             </PulseButton>
           </Button>
-        </Link>
+        </a>
       </div>
     </div>
   )

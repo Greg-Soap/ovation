@@ -1,5 +1,4 @@
 import React from 'react'
-import Link from 'next/link'
 import {
   Popover,
   PopoverContent,
@@ -10,7 +9,6 @@ import Editicon from '@/components/icons/edit-icon'
 import PlusIcon from '@/components/icons/plus-icon'
 import type { FeaturedItem } from '@/models/all.model'
 import ExternalEmptyState from '../ui/empty-state'
-import { NFTCard } from '../ui/nft-card'
 
 interface FeaturedSectionProps {
   featured: FeaturedItem[]
@@ -70,9 +68,9 @@ function ActionButtons() {
       </Popover>
 
       <Button asChild className="p-1 h-fit rounded-none bg-transparent">
-        <Link href="/apps/profile/edit-featured">
+        <a href="/apps/profile/edit-featured">
           <Editicon className="fill-[#CFF073] w-4 h-4" />
-        </Link>
+        </a>
       </Button>
     </div>
   )
@@ -108,11 +106,11 @@ function EmptyFeaturedState() {
             featured NFT
           </p>
         </div>
-        <Link href="/apps/profile?tab=portfolio" passHref className="w-full">
+        <a href="/apps/profile?tab=portfolio" className="w-full">
           <Button className="w-full bg-primary text-black font-medium py-2 px-4 rounded-full hover:bg-[#BFE063] transition-colors">
             Go to portfolio
           </Button>
-        </Link>
+        </a>
       </div>
     </div>
   )

@@ -45,7 +45,7 @@ export default function FavouriteNft({ userId }: { userId: string }) {
           ))}
         </div>
       ) : (
-        <p className="text-sm text-gray-400">No favorite NFTs found</p>
+        <p className="text-sm text-light">No favorite NFTs found</p>
       )}
     </div>
   )

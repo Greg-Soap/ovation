@@ -1,7 +1,5 @@
 'use client'
 import Socials from '../_sections/socials'
-import Image from 'next/image'
-import Link from 'next/link'
 import { blogs } from './data'
 
 export default function News() {
@@ -20,7 +18,7 @@ export default function News() {
             </p>
           </div>
 
-          <Link
+          <a
             href={`/news/${blogs[0].id}`}
             className="flex flex-col gap-6 w-full"
           >
@@ -48,7 +46,7 @@ export default function News() {
                 {blogs[0].blogDetails}
               </p>
             </div>
-          </Link>
+          </a>
         </div>
 
         <div className="flex flex-col w-full px-0 py-20 border-y border-[#29292F] gap-6">
@@ -58,7 +56,7 @@ export default function News() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full gap-y-20 gap-x-9">
             {blogs.slice(1).map((blog, index) => (
-              <Link
+              <a
                 href={`/news/${blog.id}`}
                 className="flex flex-col gap-6 h-full w-full "
                 key={index}
@@ -75,7 +73,7 @@ export default function News() {
                   </p>
                   <p className="text-sm text-gray">{blog.blogDetails}</p>
                 </div>
-              </Link>
+              </a>
             ))}
           </div>
         </div>

@@ -10,7 +10,7 @@ import {
 
 interface CustomModalProps {
   trigger: ReactNode
-  title: string
+  title?: string
   description?: string
   children: ReactNode
   className?: string
@@ -27,10 +27,14 @@ function CustomModal({
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className={className}>
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-          {description && <DialogDescription>{description}</DialogDescription>}
-        </DialogHeader>
+        {title || description ? (
+          <DialogHeader>
+            {title && <DialogTitle>{title}</DialogTitle>}
+            {description && (
+              <DialogDescription>{description}</DialogDescription>
+            )}
+          </DialogHeader>
+        ) : null}
         {children}
       </DialogContent>
     </Dialog>

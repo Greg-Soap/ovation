@@ -1,8 +1,7 @@
 'use client'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
-import Link from 'next/link'
 import { useState } from 'react'
 import { X } from 'lucide-react'
 import {
@@ -21,11 +20,13 @@ import type { ProfileData, UserData } from '@/models/all.model'
 import MiniLoader from '@/components/mini-loader'
 import { useLocalStorage } from '@/lib/use-local-storage'
 import FeedbackModal from '../../_feedback/feedback'
+import { useAnchorNavigation } from '@/lib/use-navigation'
+import colors from '@/lib/colors'
 
 export default function Hamburger() {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
-  const router = useRouter()
+  const navigateTo = useAnchorNavigation()
   const { storedValue, removeValue } = useLocalStorage<UserData | null>(
     'userData',
     null,
@@ -35,7 +36,7 @@ export default function Hamburger() {
   const handleLogout = () => {
     ovationService.logout()
     removeValue()
-    router.push('/')
+    navigateTo('/')
   }
 
   const handleLinkClick = () => {
@@ -115,7 +116,7 @@ export default function Hamburger() {
                 {navLinks.map(({ href, icon: Icon, label }) => {
                   const isActive = pathname === href
                   return (
-                    <Link
+                    <a
                       key={href}
                       onClick={handleLinkClick}
                       href={href}
@@ -123,11 +124,11 @@ export default function Hamburger() {
                     >
                       <Icon
                         size={24}
-                        color="#cff073"
+                        color={colors.primary.DEFAULT}
                         variant={isActive ? 'Bold' : 'Outline'}
                       />
                       {label}
-                    </Link>
+                    </a>
                   )
                 })}
               </ul>

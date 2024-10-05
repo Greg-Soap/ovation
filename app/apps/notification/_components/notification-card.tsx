@@ -4,7 +4,6 @@ import type { NotificationItem } from './types'
 import Image from 'next/image'
 import { useMutation } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
-import Link from 'next/link'
 import { startCase } from '@/lib/helper-func'
 
 export default function NotificationCard({
@@ -49,9 +48,9 @@ export default function NotificationCard({
                 className="rounded-full w-[36px] h-[36px]"
               />
               <div className="flex flex-col gap-1">
-                <Link href={`/apps/profile/${initiator?.username}`}>
+                <a href={`/apps/profile/${initiator?.username}`}>
                   <p className="font-semibold text-sm ">{title}</p>
-                </Link>
+                </a>
                 <p className="text-sm text-gray-300">{message}</p>
               </div>
             </div>

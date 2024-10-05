@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button'
-import Link from 'next/link'
 import { blogs } from '../news/data'
 
 export default function MoreFromOvation() {
@@ -10,13 +9,13 @@ export default function MoreFromOvation() {
           More from ovation
         </p>
 
-        <Link href="/news" className="flex items-center gap-2">
+        <a href="/news" className="flex items-center gap-2">
           <Button className="text-sm  h-fit gap-2">Browse articles</Button>
-        </Link>
+        </a>
       </div>
 
       {blogs.map((blog, index) => (
-        <Link
+        <a
           href={`/news/${blog.id}`}
           className="flex flex-col gap-6 h-auto w-fit max-w-[385px]"
           key={index}
@@ -31,7 +30,7 @@ export default function MoreFromOvation() {
             <p className="text-xl font-semibold">{blog.blogHeader}</p>
             <p className="text-sm text-lighter">{blog.blogDetails}</p>
           </div>
-        </Link>
+        </a>
       ))}
     </section>
   )

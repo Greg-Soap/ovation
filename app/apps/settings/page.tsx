@@ -20,9 +20,20 @@ import type {
 import { useTabUrlSync } from '@/lib/use-tab'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
+import { useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 export default function Page() {
   const { currentTab, setTab } = useTabUrlSync('Personal Info')
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const tabFromUrl = searchParams.get('tab')
+    console.log({ tabFromUrl, currentTab })
+    if (tabFromUrl && tabFromUrl !== currentTab) {
+      setTab(tabFromUrl)
+    }
+  }, [currentTab, searchParams, setTab])
 
   const [isHidden, setHidden] = useState(true)
   const { data: profileData, refetch } = useQuery({
@@ -90,6 +101,7 @@ export default function Page() {
         <Tabs
           className="flex h-full w-full overflow-hidden"
           defaultValue={currentTab}
+          value={currentTab}
           onValueChange={setTab}
         >
           <ErrorBoundary FallbackComponent={ErrorFallback}>

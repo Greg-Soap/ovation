@@ -2,8 +2,8 @@
 import Marquee from '@/components/animations/marquee'
 import PulseButton from '@/components/animations/pulse-btn'
 import { Button } from '@/components/ui/button'
+import colors from '@/lib/colors'
 import { generateRandomString } from '@/lib/helper-func'
-import Link from 'next/link'
 
 export default function ExtendedPartners() {
   return (
@@ -28,20 +28,21 @@ export default function ExtendedPartners() {
             Ovation helps with their initiatives, and our partners help us
             revolutionize the NFT ecosystem.
           </p>
-          <Link
+          <a
             href="https://x.com/Ovation_Network"
             className="flex items-center gap-2"
             target="_blank"
+            rel="noreferrer"
           >
             <Button
               asChild
               className="bg-primary text-sm text-[#0B0A10] h-fit gap-2"
             >
-              <PulseButton pulseColor="#CFF073">
+              <PulseButton pulseColor={colors.primary.DEFAULT}>
                 Join us as a partner
               </PulseButton>
             </Button>
-          </Link>
+          </a>
         </div>
       </div>
 

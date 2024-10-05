@@ -5,7 +5,6 @@ import { formatUsername } from '@/lib/helper-func'
 import type { DiscoverUserData } from '@/models/all.model'
 import ovationService from '@/services/ovation.service'
 import { useQuery } from '@tanstack/react-query'
-import Link from 'next/dist/client/link'
 
 export function Ranking() {
   const creatorsQuery = useQuery({
@@ -102,19 +101,19 @@ export function Ranking() {
                     />
                   </div>
                   <div className="flex flex-col">
-                    <Link
+                    <a
                       href={`/apps/profile/${user?.username}`}
                       className="2xl:text-xl text-sm font-semibold"
                     >
                       {user?.displayName}
-                    </Link>
-                    <Link
+                    </a>
+                    <a
                       href={`/apps/profile/${user?.username}`}
                       className="flex gap-1 text-xs items-center text-[#E6E6E6]"
                     >
                       <span>{formatUsername(user?.username)} </span>
                       <VerifyIcon />
-                    </Link>
+                    </a>
                   </div>
                 </div>
                 <div className="bg-white text-[#0B0A10] px-[10px] text-[9px] py-[6px] rounded-3xl">
@@ -145,19 +144,19 @@ export function Ranking() {
                     />
                   </div>
                   <div className="flex flex-col">
-                    <Link
+                    <a
                       href={`/apps/profile/${user?.username}`}
                       className="2xl:text-xl text-sm font-semibold"
                     >
                       {user?.displayName}
-                    </Link>
-                    <Link
+                    </a>
+                    <a
                       href={`/apps/profile/${user?.username}`}
                       className="flex gap-2 text-xs items-center"
                     >
                       <span> {formatUsername(user?.username)} </span>
                       <VerifyIcon />
-                    </Link>
+                    </a>
                   </div>
                 </div>
                 <div className="bg-[#3C3B40] text-light px-[10px] py-[6px] text-[9px] rounded-3xl">

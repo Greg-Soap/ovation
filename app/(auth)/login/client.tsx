@@ -1,5 +1,4 @@
 'use client'
-import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -7,7 +6,6 @@ import { z } from 'zod'
 import Google from '@/public/assets/images/ovationAuthGoogle'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
-import Link from 'next/link'
 import arrow from '@/public/assets/images/arrow-right.png'
 import Image from 'next/image'
 import { useGoogleLogin } from '@react-oauth/google'
@@ -18,6 +16,7 @@ import { useLocalStorage } from '@/lib/use-local-storage'
 import type { UserData } from '@/models/all.model'
 import PasswordInput from '@/components/password-input'
 import { FormBase, FormField } from '@/components/customs/custom-form'
+import { useAnchorNavigation } from '@/lib/use-navigation'
 
 const formSchema = z.object({
   userId: z.string(),
@@ -25,7 +24,7 @@ const formSchema = z.object({
 })
 
 export default function LoginForm() {
-  const router = useRouter()
+  const navigateTo = useAnchorNavigation()
   const { setValue } = useLocalStorage<UserData | null>('userData', null)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -49,9 +48,9 @@ export default function LoginForm() {
         const intendedDestination = localStorage.getItem('intendedDestination')
         if (intendedDestination) {
           localStorage.removeItem('intendedDestination')
-          router.push(intendedDestination)
+          navigateTo(intendedDestination)
         } else {
-          router.push('/apps/discover')
+          navigateTo('/apps/discover')
         }
       } else {
         toast.error('Login failed: No token received')
@@ -77,7 +76,7 @@ export default function LoginForm() {
         setValue(data?.data?.userData)
 
         toast.success('Login successful!')
-        router.push('/apps/discover')
+        navigateTo('/apps/discover')
       } else {
         toast.error('Login failed: No token received')
       }
@@ -149,12 +148,12 @@ export default function LoginForm() {
                 value={field.value}
                 onChange={field.onChange}
               />
-              <Link
+              <a
                 href="/forgot-password"
                 className="text-primary self-end  text-xs"
               >
                 Forgot Password
-              </Link>
+              </a>
             </div>
           )}
         </FormField>
@@ -171,9 +170,9 @@ export default function LoginForm() {
         <div className="flex items-center justify-center w-full text-xs">
           <p className="flex items-center gap-1">
             Not registered yet?
-            <Link href="/create-account" className=" text-primary">
+            <a href="/create-account" className=" text-primary">
               Create Account
-            </Link>
+            </a>
           </p>
           <Image alt="arrow" src={arrow} />
         </div>

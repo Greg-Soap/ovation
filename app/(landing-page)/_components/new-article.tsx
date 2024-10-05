@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-import Link from 'next/link'
 
 interface ArticleSectionProps {
   header?: string
@@ -47,9 +46,9 @@ export function ArticleSection({
       {link && (
         <div className="flex flex-col gap-2">
           {link.map((l) => (
-            <Link href={l.url} key={l.name} target="_blank">
+            <a href={l.url} key={l.name} target="_blank" rel="noreferrer">
               {l.name}
-            </Link>
+            </a>
           ))}
         </div>
       )}

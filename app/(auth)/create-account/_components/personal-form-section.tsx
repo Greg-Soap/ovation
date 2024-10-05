@@ -4,7 +4,6 @@ import PasswordInput from '@/components/password-input'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { ArrowUpRight } from 'lucide-react'
-import Link from 'next/link'
 import OvationService from '@/services/ovation.service'
 import { FormField } from '@/components/customs/custom-form'
 import colors from '@/lib/colors'
@@ -127,9 +126,9 @@ export default function PersonalInfoForm({
       <div className="flex items-center justify-center w-full text-xs">
         <p>
           Already have an account?{' '}
-          <Link href="/login" className="text-primary">
+          <a href="/login" className="text-primary">
             Login
-          </Link>{' '}
+          </a>{' '}
         </p>
         <ArrowUpRight className="w-4 h-4" color={colors.primary.DEFAULT} />
       </div>
