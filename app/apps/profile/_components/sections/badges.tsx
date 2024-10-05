@@ -2,11 +2,13 @@ import { useQuery } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
 import { startCase } from '@/lib/helper-func'
 import MiniLoader from '@/components/mini-loader'
+import CustomTooltip from '@/components/customs/custom-tooltip'
 
 export default function Badges({ userId }: { userId: string }) {
   const { data: badgesData, isLoading } = useQuery({
     queryKey: ['badges', userId],
     queryFn: () => ovationService.getBadges(userId),
+    enabled: !!userId,
   })
 
   const hasBadges = badgesData && badgesData?.data?.data?.length > 0
@@ -17,7 +19,7 @@ export default function Badges({ userId }: { userId: string }) {
 
   const fallbackBadge = (badgeName: string) => (
     <div className="w-[50px] h-[50px] rounded-full flex items-center justify-center bg-[#18181C] border border-[#262626] p-1">
-      <h3 className="text-white text-center font-bold text-[8px] break-words">
+      <h3 className=" text-center font-bold text-[8px] break-words">
         {startCase(badgeName)}
       </h3>
     </div>
@@ -30,11 +32,13 @@ export default function Badges({ userId }: { userId: string }) {
       {hasBadges ? (
         <div className="flex flex-wrap gap-2">
           {badgesData?.data?.data?.map((badge, index) => (
-            <div
-              className="flex flex-col gap-2 justify-center items-center"
+            <CustomTooltip
               key={index}
+              content={startCase(badge.badgeName)}
+              side="top"
+              align="center"
             >
-              <div className="relative group">
+              <div className="flex flex-col gap-2 justify-center items-center">
                 {badge.imageUrl ? (
                   <div className="w-[50px] h-[50px] relative">
                     <img
@@ -47,7 +51,7 @@ export default function Badges({ userId }: { userId: string }) {
                         const fallbackDiv = document.createElement('div')
                         fallbackDiv.className =
                           'w-[50px] h-[50px] rounded-md flex items-center justify-center bg-red-500 p-1'
-                        fallbackDiv.innerHTML = `<h3 class="text-white text-center font-bold text-[10px] break-words">${startCase(badge.badgeName)}</h3>`
+                        fallbackDiv.innerHTML = `<h3 class=" text-center font-bold text-[10px] break-words">${startCase(badge.badgeName)}</h3>`
                         e.currentTarget.parentElement?.appendChild(fallbackDiv)
                       }}
                     />
@@ -55,15 +59,12 @@ export default function Badges({ userId }: { userId: string }) {
                 ) : (
                   fallbackBadge(badge.badgeName)
                 )}
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
-                  {startCase(badge.badgeName)}
-                </div>
               </div>
-            </div>
+            </CustomTooltip>
           ))}
         </div>
       ) : (
-        <p className="text-sm text-[#B3B3B3]">No badges earned yet.</p>
+        <p className="text-sm text-light">No badges earned yet.</p>
       )}
     </div>
   )

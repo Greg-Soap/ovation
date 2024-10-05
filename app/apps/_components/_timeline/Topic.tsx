@@ -41,7 +41,7 @@ const topics: Topic[] = [
 export default function Topics() {
   return (
     <div className="flex flex-col w-full border border-[#FFFFFF14] rounded-[14px] p-6 gap-6">
-      <p className="text-base font-medium text-white">Topics</p>
+      <p className="text-base font-medium ">Topics</p>
 
       <div className="flex flex-col gap-4 w-full">
         {topics.map((topic, index) => (

@@ -5,14 +5,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import Google from '@/public/assets/images/ovationAuthGoogle'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import Link from 'next/link'
@@ -25,6 +17,7 @@ import { setToken } from '@/lib/cookies'
 import { useLocalStorage } from '@/lib/use-local-storage'
 import type { UserData } from '@/models/all.model'
 import PasswordInput from '@/components/password-input'
+import { FormBase, FormField } from '@/components/customs/custom-form'
 
 const formSchema = z.object({
   userId: z.string(),
@@ -115,9 +108,10 @@ export default function LoginForm() {
   return (
     <div className="flex flex-col gap-11">
       <div id="login__header">
-        <h1 className="text-3xl font-semibold text-white">Login</h1>
-        <p className="text-sm"> Hi, Welcome back ✋</p>
+        <h1 className="text-3xl font-semibold ">Login</h1>
+        <p className="text-sm text-light mt-1"> Hi, Welcome back ✋</p>
       </div>
+      {/* TODO: Add Google Login */}
       {/* <div className="  flex justify-between mb-4">
         <Button
           onClick={loginGoogle}
@@ -136,70 +130,54 @@ export default function LoginForm() {
           <span className="w-[47%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]" />
         </span>
       </div> */}
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(formSubmit)}
-          className="flex flex-col gap-6"
+      <FormBase form={form} onSubmit={formSubmit}>
+        <FormField name="userId" form={form} label="Username">
+          {(field) => (
+            <Input
+              placeholder="Username101"
+              type="text"
+              value={field.value}
+              onChange={field.onChange}
+            />
+          )}
+        </FormField>
+        <FormField name="password" form={form} label="Password" showMessage>
+          {(field) => (
+            <div className="flex flex-col gap-1">
+              <PasswordInput
+                placeholder="Enter your password"
+                value={field.value}
+                onChange={field.onChange}
+              />
+              <Link
+                href="/forgot-password"
+                className="text-primary self-end  text-xs"
+              >
+                Forgot Password
+              </Link>
+            </div>
+          )}
+        </FormField>
+
+        <Button
+          className="w-full hover:scale-105 h-[52px] text-sm font-semibold"
+          variant={'default'}
+          type="submit"
+          disabled={loginMutation.isPending}
         >
-          <FormField
-            control={form.control}
-            name="userId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Username</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Username101"
-                    type="text"
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem className="flex flex-col end-0">
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <PasswordInput
-                    placeholder="Enter your password"
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
-                </FormControl>
-                <FormMessage className=" ml-auto w-fit">
-                  <Link href="/forgot-password" className="text-[#CFF073]">
-                    Forgot Password
-                  </Link>
-                </FormMessage>
-              </FormItem>
-            )}
-          />
-          <Button
-            className="w-full hover:scale-105 h-[52px] text-sm font-semibold"
-            variant={'default'}
-            type="submit"
-            disabled={loginMutation.isPending}
-          >
-            {loginMutation.isPending ? 'Logging in...' : 'Login'}
-          </Button>
-        </form>
+          {loginMutation.isPending ? 'Logging in...' : 'Login'}
+        </Button>
 
         <div className="flex items-center justify-center w-full text-xs">
-          <p>
-            {' '}
-            Not registered yet?{' '}
-            <Link href="/create-account" className=" text-[#CFF073]">
+          <p className="flex items-center gap-1">
+            Not registered yet?
+            <Link href="/create-account" className=" text-primary">
               Create Account
-            </Link>{' '}
+            </Link>
           </p>
           <Image alt="arrow" src={arrow} />
         </div>
-      </Form>
+      </FormBase>
     </div>
   )
 }

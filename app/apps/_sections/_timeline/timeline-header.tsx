@@ -34,7 +34,7 @@ export default function TimelineHeader() {
               ) : (
                 <Moon />
               )}
-              <p className="text-[#CCCCCC] text-base lg:text-xl font-medium">
+              <p className="text-gray text-base lg:text-xl font-medium">
                 {getGreeting()}, {user?.displayName}
               </p>
             </div>

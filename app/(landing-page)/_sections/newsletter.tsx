@@ -64,10 +64,8 @@ export function Newsletter() {
   return (
     <section className="pt-[60px] md:pt-[120px] pb-[40px] md:pb-[80px] container flex items-center gap-6 md:gap-12 flex-col md:flex-row ">
       <div className="w-full">
-        <h2 className="text-2xl font-heading uppercase text-primary-foreground font-bold">
-          subscribe
-        </h2>
-        <p className="text-base md:text-lg">
+        <h2 className="text-2xl font-heading uppercase font-bold">subscribe</h2>
+        <p className="text-base md:text-lg text-lighter">
           Learn about the Ovation alpha launch and other important updates.
         </p>
       </div>

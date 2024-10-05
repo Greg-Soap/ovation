@@ -2,17 +2,12 @@ import { useFormContext } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import PasswordInput from '@/components/password-input'
 import { Button } from '@/components/ui/button'
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { ArrowUpRight } from 'lucide-react'
 import Link from 'next/link'
 import OvationService from '@/services/ovation.service'
+import { FormField } from '@/components/customs/custom-form'
+import colors from '@/lib/colors'
 
 export default function PersonalInfoForm({
   setPage,
@@ -65,76 +60,63 @@ export default function PersonalInfoForm({
           <span className="w-[46%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]" />
         </div> */}
       <FormField
-        control={form.control}
         name="personalInfo.displayName"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Display name</FormLabel>
-            <FormControl>
-              <Input
-                {...field}
-                className="h-[46px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
-                placeholder="kvngCZ"
-                type="text"
-              />
-            </FormControl>
-          </FormItem>
-        )}
-      />
+        form={form}
+        label="Display name"
+        showMessage
+      >
+        <Input
+          className="h-[46px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
+          placeholder="kvngCZ"
+          type="text"
+        />
+      </FormField>
       <FormField
-        control={form.control}
         name="personalInfo.username"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Username</FormLabel>
-            <FormControl>
-              <Input
-                {...field}
-                className="h-[46px] bg-transparent border-[#353538] border-solid  border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
-                placeholder="chang_zhao"
-                type="text"
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+        form={form}
+        label="Username"
+        showMessage
+      >
+        <Input
+          className="h-[46px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
+          placeholder="kvngCZ"
+          type="text"
+        />
+      </FormField>
       <FormField
-        control={form.control}
         name="personalInfo.email"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Email</FormLabel>
-            <FormControl>
-              <Input
-                {...field}
-                className="h-[46px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
-                placeholder="cz@blockchain.com"
-                type="email"
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+        form={form}
+        label="Email"
+        showMessage
+      >
+        <Input
+          className="h-[46px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
+          placeholder="cz@blockchain.com"
+          type="email"
+        />
+      </FormField>
       <FormField
-        control={form.control}
         name="personalInfo.password"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Password</FormLabel>
-            <FormControl>
-              <PasswordInput placeholder="*********" {...field} />
-            </FormControl>
-            <FormMessage />
-            <p className="text-xs text-[#B3B3B3] mt-2">
+        form={form}
+        label="Password"
+        showMessage
+      >
+        {(field) => (
+          <>
+            <PasswordInput
+              placeholder="*********"
+              value={field.value}
+              onChange={field.onChange}
+            />
+            <p className="text-xs text-light mt-2">
               Password should be at least 8 characters long and contain at least
               one uppercase letter, one lowercase letter, one number, and one
               special character.
             </p>
-          </FormItem>
+          </>
         )}
-      />
+      </FormField>
+
       <Button
         type="submit"
         className="w-full h-[52px] hover:scale-95 text-sm font-semibold"
@@ -145,11 +127,11 @@ export default function PersonalInfoForm({
       <div className="flex items-center justify-center w-full text-xs">
         <p>
           Already have an account?{' '}
-          <Link href="/login" className="text-[#CFF073]">
+          <Link href="/login" className="text-primary">
             Login
           </Link>{' '}
         </p>
-        <ArrowUpRight className="w-4 h-4" color="#CFF073" />
+        <ArrowUpRight className="w-4 h-4" color={colors.primary.DEFAULT} />
       </div>
     </form>
   )

@@ -1,25 +1,15 @@
 import EventIcon from '@/components/icons/eventIcon'
 import Image from 'next/image'
-import Badges from './badges'
-import Socials from './socials'
-import FavouriteNft from './favourite-nft'
+import Badges from './sections/badges'
+import Socials from './sections/socials'
+import FavouriteNft from './sections/favourite-nft'
 import type { ProfileData, UserExperience } from '@/models/all.model'
 import MiniLoader from '@/components/mini-loader'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
 import LocationIcon from '@/public/assets/images/ovationLocationIcon'
-import { format, parseISO } from 'date-fns'
-import { Calendar, Calendar2 } from 'iconsax-react'
-
-function formatJoinedDate(dateString: string): string {
-  try {
-    const date = parseISO(dateString)
-    return `Joined ${format(date, 'MMMM yyyy')}`
-  } catch (error) {
-    console.error('Error parsing date:', error)
-    return 'Join date unavailable'
-  }
-}
+import { Calendar2 } from 'iconsax-react'
+import { formatJoinedDate } from '@/lib/helper-func'
 
 export default function UserProfile({
   profileData,
@@ -55,12 +45,12 @@ export default function UserProfile({
             ) : (
               <div className="w-full h-fit flex flex-col gap-0.5">
                 <div className="flex items-center gap-[13px]">
-                  <p className="text-[#F8F8FF] text-[22px] font-semibold">
+                  <p className=" text-[22px] font-semibold">
                     {profileData?.profile?.displayName || 'Anonymous User'}
                   </p>
                 </div>
 
-                <p className="flex items-center gap-1 text-base text-[#B3B3B3]">
+                <p className="flex items-center gap-1 text-base text-light">
                   {profileData?.username
                     ? `@${profileData.username.replace(/^@/, '')}`
                     : 'No username set'}
@@ -75,7 +65,7 @@ export default function UserProfile({
             ) : (
               <div className="w-full h-fit px-5 py-[15px] rounded-[20px] bg-[#18181C] flex flex-col gap-5">
                 {latestExperience && (
-                  <p className="text-xs text-[#F8F8FF] font-semibold">
+                  <p className="text-xs  font-semibold">
                     {latestExperience?.role && latestExperience?.company
                       ? `${latestExperience?.role} @ ${latestExperience?.company}`
                       : 'No current role'}
@@ -121,7 +111,7 @@ export default function UserProfile({
                 <div className="flex flex-col gap-3  justify-between">
                   {latestExperience?.skill && (
                     <div className="flex items-center gap-1.5">
-                      <p className="text-xs text-[#B3B3B3]">
+                      <p className="text-xs text-light">
                         <strong>Skills: </strong> {latestExperience.skill}
                       </p>
                     </div>
@@ -135,7 +125,7 @@ export default function UserProfile({
                         height={13}
                         className="rounded-full"
                       />
-                      <p className="text-xs text-[#B3B3B3]">
+                      <p className="text-xs text-light">
                         {latestExperience.department}
                       </p>
                     </div>
@@ -144,24 +134,24 @@ export default function UserProfile({
                     {latestExperience?.startDate && (
                       <div className="flex items-center gap-1.5">
                         <EventIcon className="w-[13px] h-[13px] stroke-[#B3B3B3]" />
-                        <p className="text-xs text-[#B3B3B3]">
+                        <p className="text-xs text-light">
                           {latestExperience.startDate}
                         </p>
                       </div>
                     )}
                     {latestExperience?.startDate && (
                       <>
-                        <p className="text-xs text-[#B3B3B3]">-</p>
+                        <p className="text-xs text-light">-</p>
                         <div className="flex items-center gap-1.5">
                           {latestExperience.endDate ? (
                             <>
                               <EventIcon className="w-[13px] h-[13px] stroke-[#B3B3B3]" />
-                              <p className="text-xs text-[#B3B3B3]">
+                              <p className="text-xs text-light">
                                 {latestExperience.endDate}
                               </p>
                             </>
                           ) : (
-                            <p className="text-xs text-[#B3B3B3]">Present</p>
+                            <p className="text-xs text-light">Present</p>
                           )}
                         </div>
                       </>
@@ -170,7 +160,7 @@ export default function UserProfile({
                   {profileData.profile?.location && (
                     <div className="flex items-center gap-1.5">
                       <LocationIcon className="w-[13px] h-[13px] stroke-[#B3B3B3]" />
-                      <p className="text-xs text-[#B3B3B3]">
+                      <p className="text-xs text-light">
                         {profileData.profile.location}
                       </p>
                     </div>

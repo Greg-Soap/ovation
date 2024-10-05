@@ -2,19 +2,11 @@ import MiniLoader from '@/components/mini-loader'
 import ovationService from '@/services/ovation.service'
 import { useQuery } from '@tanstack/react-query'
 
-function formatUSD(value: number): string {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  }).format(value)
-}
-
 export default function Stats({ userId }: { userId: string }) {
   const { data: statsData, isLoading } = useQuery({
     queryKey: ['stats', userId],
     queryFn: () => ovationService.getStats(userId as string),
+    enabled: !!userId,
   })
 
   if (isLoading) {
@@ -27,7 +19,7 @@ export default function Stats({ userId }: { userId: string }) {
     <div className="w-full py-10 flex items-center justify-center">
       <div className="w-[95%] flex flex-col gap-[34px]">
         <div className="px-7 py-6 rounded-[14px] border border-[#353538] flex flex-col gap-[34px]">
-          <p className="text-white font-medium uppercase">Overview</p>
+          <p className=" font-medium uppercase">Overview</p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5">
             {[
@@ -46,9 +38,7 @@ export default function Stats({ userId }: { userId: string }) {
                 <p className="text-[#808080] text-xs font-medium">
                   {item.label}
                 </p>
-                <p className="text-[#F8F8FF] font-semibold text-4xl">
-                  {item.value}
-                </p>
+                <p className=" font-semibold text-4xl">{item.value}</p>
               </div>
             ))}
           </div>
@@ -58,37 +48,8 @@ export default function Stats({ userId }: { userId: string }) {
   )
 }
 
-interface Overiew {
-  cardName: string
-  itemCount: number
-}
-
 interface Stats {
   name: string
   description: string
   isLast: boolean
 }
-
-const overview: Overiew[] = [
-  { cardName: 'NFT CREATED', itemCount: 43 },
-  { cardName: 'NFT COLLECTED', itemCount: 33 },
-  { cardName: 'TOTAL NFT COUNT', itemCount: 23 },
-]
-
-const stats: Stats[] = [
-  {
-    name: 'NFT ASSETS',
-    description: 'A breakdown of you assets by categories',
-    isLast: false,
-  },
-  {
-    name: 'PORTFOLIO VALUE',
-    description: 'Your portfolio journey overtime',
-    isLast: false,
-  },
-  {
-    name: 'TRANSACTION HISTORY',
-    description: 'A list of all transactions completed',
-    isLast: true,
-  },
-]

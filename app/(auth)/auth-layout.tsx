@@ -29,7 +29,7 @@ export default function AuthLayout({
         {showAuthLeftOptional && (
           <div
             id="auth-left-optional"
-            className=" hidden text-white text-5xl w-[525px] font-bold leading-[60px]  h-[600px] md:w-[500px] justify-center xl:flex flex-col gap-8 items-center "
+            className=" hidden  text-5xl w-[525px] font-bold leading-[60px]  md:w-[500px] justify-center xl:flex flex-col gap-8 items-start"
           >
             Experience the Next-Generation NFT Social Platform
             <div className="flex gap-3 font-normal opacity-70 w-full  text-lg  ">
@@ -41,7 +41,7 @@ export default function AuthLayout({
           </div>
         )}
 
-        <div className=" rounded-lg border-1 w-[80vw] h-[80vh] md:w-[500px] md:h-fit p-0">
+        <div className=" rounded-lg border-1  w-[80vw] h-full  md:w-[500px] md:h-fit p-0 pb-10 lg:pb-0">
           <QueryClientProvider client={queryClient}>
             <GoogleOAuthProvider clientId={clientId}>
               {children}

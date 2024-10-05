@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getStoredUser } from '@/lib/helper-func'
+import colors from '@/lib/colors'
 
 function convertToISOString(dateString: string): string {
   // Expected format: "YYYY MM DD : HH mm"
@@ -116,7 +117,7 @@ function Navigation({ mobile = false, navLinks = [] }: NavigationProps) {
     ${mobile ? 'flex-col space-y-2 w-full ' : 'items-center gap-5'}
   `
   const navListItemClassName = `
-    group relative rounded-full  px-1 py-1   text-lg text-[#FFFFFF] transform transition-transform
+    group relative rounded-full  px-1 py-1   text-lg text-foreground transform transition-transform
     ${mobile ? 'w-full overflow-x-visible' : ''}
   `
   const navListLinkClassName = mobile ? 'mx-2 rounded-[20px]' : ''
@@ -132,7 +133,11 @@ function Navigation({ mobile = false, navLinks = [] }: NavigationProps) {
             onClick={() => setMobileNavigationOpened(true)}
             title="Open navigation menu"
           >
-            <HamburgerMenuIcon height={'15px'} width={'20px'} color="#CFF073" />
+            <HamburgerMenuIcon
+              height={'15px'}
+              width={'20px'}
+              color={colors.primary.DEFAULT}
+            />
           </Button>
         </div>
       )}
@@ -181,7 +186,7 @@ function NavLink({ children, className, mobile, href }: NavLinkProps) {
     <Button variant={'ghost'} size={'tiny'} className="hover:bg-transparent ">
       <Link
         className={`
-        block whitespace-nowrap  text-lg text-primary-foreground no-underline transition hover:text-[#CFF073]
+        block whitespace-nowrap  text-lg text-foreground no-underline transition hover:text-primary
         ${mobile && ''}
         ${className}
         `}

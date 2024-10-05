@@ -3,13 +3,6 @@
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
@@ -31,7 +24,8 @@ import {
 import SavingOverlay from '@/components/saving-overlay'
 import { Progress } from '@/components/ui/progress'
 import { updateUserData } from '@/lib/firebaseAuthService'
-import { Participant, ParticipantMod } from '@/lib/firebaseChatService'
+import type { ParticipantMod } from '@/lib/firebaseChatService'
+import { FormBase, FormField } from '@/components/customs/custom-form'
 
 const formSchema = z.object({
   displayName: z.string().min(1, 'Display name is required'),
@@ -198,236 +192,155 @@ export default function ProfileForm({
         isLoading={isPending}
         loadingText="Saving your information..."
       />
-      <Form {...form}>
-        <form
-          className="mt-[45px] flex flex-col gap-7 w-full"
-          onSubmit={form.handleSubmit(onSubmit)}
-          onChange={() => setDisabled(false)}
-        >
-          <div className="w-full flex gap-7 flex-col px-4 sm:px-10 2xl:px-20">
-            <FormField
-              control={form.control}
-              name="profileImage"
-              render={({ field }) => (
-                <FormItem>
-                  <div className="flex gap-8 items-center mb-4">
-                    <span className="w-[150px] h-[150px] rounded-full">
-                      <Image
-                        alt="user image"
-                        src={field.value || '/assets/images/default-user.svg'}
-                        width={150}
-                        height={150}
-                        className="rounded-full w-full h-full text-[#F8F8FF] object-cover"
-                      />
-                    </span>
-                    <FormControl>
-                      <>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          ref={fileInputRef}
-                          style={{ display: 'none' }}
-                          onChange={(e) => handleImageSelection(e, true)}
-                        />
-                        <Button
-                          type="button"
-                          variant="outline"
-                          className="border-[#353538] rounded-3xl"
-                          onClick={() => fileInputRef.current?.click()}
-                        >
-                          Upload image
-                        </Button>
-                      </>
-                    </FormControl>
+      <FormBase
+        form={form}
+        onSubmit={onSubmit}
+        className="mt-[45px] flex flex-col gap-7 w-full"
+      >
+        <div className="w-full flex gap-7 flex-col px-4 sm:px-10 2xl:px-20">
+          <FormField name="profileImage" form={form}>
+            {(field) => (
+              <>
+                <div className="flex gap-8 items-center mb-4">
+                  <span className="w-[150px] h-[150px] rounded-full">
+                    <Image
+                      alt="user image"
+                      src={field.value || '/assets/images/default-user.svg'}
+                      width={150}
+                      height={150}
+                      className="rounded-full w-full h-full  object-cover"
+                    />
+                  </span>
+
+                  <div>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      ref={fileInputRef}
+                      style={{ display: 'none' }}
+                      onChange={(e) => handleImageSelection(e, true)}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="border-[#353538] rounded-3xl"
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      Upload image
+                    </Button>
                   </div>
-                  {uploadProgress.profile > 0 &&
-                    uploadProgress.profile < 100 && (
-                      <div className="mt-2">
-                        <Progress
-                          value={uploadProgress.profile}
-                          className="w-[200px]"
-                        />
-                        <p className="text-sm text-[#B3B3B3] mt-1">
-                          Uploading: {uploadProgress.profile.toFixed(0)}%
-                        </p>
-                      </div>
-                    )}
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="coverImage"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-[#B3B3B3] text-sm">
-                    Cover Image
-                  </FormLabel>
-                  <div className="flex flex-col gap-4">
-                    <div className="w-full h-[200px] rounded-lg overflow-hidden">
-                      <Image
-                        alt="cover image"
-                        src={field.value || '/assets/images/profile/image8.png'}
-                        width={300}
-                        height={200}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <FormControl>
-                      <>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          ref={coverFileInputRef}
-                          style={{ display: 'none' }}
-                          onChange={(e) => handleImageSelection(e, false)}
-                        />
-                        <Button
-                          type="button"
-                          variant="outline"
-                          className="border-[#353538] rounded-3xl"
-                          onClick={() => coverFileInputRef.current?.click()}
-                        >
-                          Upload cover image
-                        </Button>
-                      </>
-                    </FormControl>
+                </div>
+                {uploadProgress.profile > 0 && uploadProgress.profile < 100 && (
+                  <div className="mt-2">
+                    <Progress
+                      value={uploadProgress.profile}
+                      className="w-[200px]"
+                    />
+                    <p className="text-sm text-light mt-1">
+                      Uploading: {uploadProgress.profile.toFixed(0)}%
+                    </p>
                   </div>
-                  {uploadProgress.cover > 0 && uploadProgress.cover < 100 && (
-                    <div className="mt-2">
-                      <Progress
-                        value={uploadProgress.cover}
-                        className="w-[200px]"
-                      />
-                      <p className="text-sm text-[#B3B3B3] mt-1">
-                        Uploading: {uploadProgress.cover.toFixed(0)}%
-                      </p>
-                    </div>
-                  )}
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="displayName"
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-2">
-                  <FormLabel className="text-[#B3B3B3] text-sm">
-                    Display name
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="Pancakeguy"
-                      className="text-[#F8F8FF] text-sm max-w-[940px] h-[47px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
+                )}
+              </>
+            )}
+          </FormField>
+          <FormField name="coverImage" form={form} label="Cover image">
+            {(field) => (
+              <>
+                <div className="flex flex-col gap-4">
+                  <div className="w-full h-[200px] rounded-lg overflow-hidden">
+                    <Image
+                      alt="cover image"
+                      src={field.value || '/assets/images/profile/image8.png'}
+                      width={300}
+                      height={200}
+                      className="w-full h-full object-cover"
                     />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-2">
-                  <FormLabel className="text-[#B3B3B3] text-sm">
-                    Username
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="@pancakeguy"
-                      className="text-[#F8F8FF] text-sm max-w-[940px] h-[47px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-2">
-                  <FormLabel className="text-[#B3B3B3] text-sm">
-                    Email address
-                  </FormLabel>
-                  <div className="max-w-[940px] h-[47px] flex border-[1px] border-[#353538] p-2 rounded-[500px] items-center pr-3">
-                    <FormControl>
-                      <Input
-                        {...field}
-                        placeholder="pancake78@email.com"
-                        className="text-[#F8F8FF] text-sm max-w-[940px] h-full bg-transparent border-none focus:border-none rounded-full"
-                        type="email"
-                      />
-                    </FormControl>
-                    {/* <Button className='text-[#0B0A10] text-xs font-medium h-fit'>Verify Email</Button> */}
                   </div>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="birthDate"
-              render={({ field }) => (
-                <FormItem className="max-w-[940px] flex flex-col gap-2">
-                  <FormLabel className="text-[#B3B3B3] text-sm">
-                    Date of birth
-                  </FormLabel>
-                  <FormControl>
-                    <DatePicker
-                      value={field.value}
-                      onChange={(date) => {
-                        if (date) {
-                          field.onChange(formatDate(date))
-                        }
-                      }}
+
+                  <>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      ref={coverFileInputRef}
+                      style={{ display: 'none' }}
+                      onChange={(e) => handleImageSelection(e, false)}
                     />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="location"
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-2">
-                  <FormLabel className="text-[#B3B3B3] text-sm">
-                    Location
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="ex: United States"
-                      className="text-[#F8F8FF] text-sm max-w-[940px] h-[47px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="border-[#353538] rounded-3xl"
+                      onClick={() => coverFileInputRef.current?.click()}
+                    >
+                      Upload cover image
+                    </Button>
+                  </>
+                </div>
+                {uploadProgress.cover > 0 && uploadProgress.cover < 100 && (
+                  <div className="mt-2">
+                    <Progress
+                      value={uploadProgress.cover}
+                      className="w-[200px]"
                     />
-                  </FormControl>
-                </FormItem>
-              )}
+                    <p className="text-sm text-light mt-1">
+                      Uploading: {uploadProgress.cover.toFixed(0)}%
+                    </p>
+                  </div>
+                )}
+              </>
+            )}
+          </FormField>
+          <FormField name="displayName" form={form} label="Display name">
+            <Input
+              placeholder="@pancakeguy"
+              className=" text-sm max-w-[940px] h-[47px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
             />
-            <FormField
-              control={form.control}
-              name="bio"
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-2">
-                  <FormLabel className="text-[#B3B3B3] text-sm">Bio</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder="Tell us about yourself ....."
-                      className="text-[#F8F8FF] text-sm max-w-[940px] h-[47px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
+          </FormField>
+          <FormField name="username" form={form} label="Username">
+            <Input
+              placeholder="@pancakeguy"
+              className=" text-sm max-w-[940px] h-[47px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
             />
-          </div>
-          <SettingsChange
-            disabled={disabled}
-            isLoading={isPending}
-            saveDraft={() => setValue(form.getValues())}
-          />
-        </form>
-      </Form>
+          </FormField>
+          <FormField name="email" form={form} label="Email">
+            <Input
+              placeholder="pancake78@email.com"
+              className=" text-sm max-w-[940px] h-full bg-transparent border-none focus:border-none rounded-full"
+              type="email"
+            />
+          </FormField>
+          <FormField name="birthDate" form={form} label="Birth date">
+            {(field) => (
+              <DatePicker
+                value={field.value}
+                onChange={(date) => {
+                  if (date) {
+                    field.onChange(formatDate(date))
+                  }
+                }}
+              />
+            )}
+          </FormField>
+          <FormField name="location" form={form} label="Location">
+            <Input
+              placeholder="ex: United States"
+              className=" text-sm max-w-[940px] h-[47px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
+            />
+          </FormField>
+          <FormField name="bio" form={form} label="Bio">
+            <Input
+              placeholder="Tell us about yourself ....."
+              className=" text-sm max-w-[940px] h-[47px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
+            />
+          </FormField>
+        </div>
+      </FormBase>
+
+      <SettingsChange
+        disabled={disabled}
+        isLoading={isPending}
+        saveDraft={() => setValue(form.getValues())}
+      />
     </>
   )
 }

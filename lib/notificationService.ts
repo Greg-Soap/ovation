@@ -4,7 +4,7 @@ import { getToken } from '@/lib/cookies'
 export class NotificationService {
   private connection: signalR.HubConnection | null = null
   private token = getToken() as string
-  private hubUrl = `https://apiovation.com/notification`
+  private hubUrl = 'https://apiovation.com/notification'
 
   public startConnection = async () => {
     try {
@@ -14,27 +14,25 @@ export class NotificationService {
             return this.token
           },
           skipNegotiation: true,
-          transport: signalR.HttpTransportType.WebSockets
+          transport: signalR.HttpTransportType.WebSockets,
         })
         .withAutomaticReconnect()
         .build()
 
       await this.connection.start()
-    } catch (err) {
-
-    }
+    } catch (err) {}
   }
 
   // Send a message to the server
   public sendMessageNotification = async (method: string, ...args: any) => {
-      if (this.connection) {
-          try {
-              await this.connection.invoke(method, ...args);
-          } catch (err) {
-              console.error("Error sending message: ", err);
-          }
+    if (this.connection) {
+      try {
+        await this.connection.invoke(method, ...args)
+      } catch (err) {
+        // console.error('Error sending message: ', err)
       }
-  };
+    }
+  }
 
   // Listen for messages from the server
   public onMessage = (method: string, callback: (...args: any[]) => void) => {

@@ -12,8 +12,8 @@ export default function FavouriteNft({ userId }: { userId: string }) {
   const { data: favouriteNfts, isLoading } = useQuery({
     queryKey: ['favouriteNft', userId],
     queryFn: () => ovationService.getFavouriteNft(userId),
+    enabled: !!userId,
   })
-
 
   return (
     <div className="flex flex-col bg-[#18181C] rounded-[20px] gap-4 px-5 py-[18px]">
@@ -38,7 +38,7 @@ export default function FavouriteNft({ userId }: { userId: string }) {
                 height={100}
                 className="w-full h-auto object-cover rounded-md"
               />
-              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 bg-black text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 bg-black  text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
                 {getNFTName(nft.name)}
               </div>
             </div>

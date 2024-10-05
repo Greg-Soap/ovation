@@ -4,6 +4,7 @@ import { jwtDecode } from 'jwt-decode'
 import { useLocalStorage } from './use-local-storage'
 import type { UserData } from '@/models/all.model'
 import type { FriendProps } from '@/app/apps/messages/message-container'
+import { format, parseISO } from 'date-fns'
 
 function generateRandomString(length = 10) {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -230,5 +231,15 @@ export function debounce<T extends (...args: any[]) => any>(
     timeout = setTimeout(() => {
       func.apply(this, args)
     }, wait)
+  }
+}
+
+export function formatJoinedDate(dateString: string): string {
+  try {
+    const date = parseISO(dateString)
+    return `Joined ${format(date, 'MMMM yyyy')}`
+  } catch (error) {
+    console.error('Error parsing date:', error)
+    return 'Join date unavailable'
   }
 }

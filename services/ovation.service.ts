@@ -98,8 +98,12 @@ class OvationService {
     return api.post<{ message: string; data: WalletAcct[] }>('/Profile/wallet', data)
   }
 
-  static getUserWallets() {
-    return api.get<{ data: WalletAcct[]; message: string }>('/Profile/wallet')
+  static getUserWallets(userId: string) {
+    return api.get<{ data: WalletAcct[]; message: string }>(`/Profile/wallet/${userId}`)
+  }
+
+  static deleteWallet(walletId: string | number) {
+    return api.delete(`/Profile/wallet/${walletId}`)
   }
 
   // Experience
@@ -169,8 +173,6 @@ class OvationService {
   static getWallets() {
     return api.get<{ data: Wallet[]; message: string }>('/Wallet')
   }
-
-  
 
   // Feedback and Newsletter
   static async sendFeedback(data: {

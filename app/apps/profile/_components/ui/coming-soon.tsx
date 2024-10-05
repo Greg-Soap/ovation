@@ -41,7 +41,7 @@ export default function ComingSoon() {
   return (
     <div className="w-full flex items-center justify-center mt-12">
       <div className="flex flex-col items-center justify-center px-11 py-7 rounded-[20px] gap-[52px]">
-        <p className="text-lg text-[#F8F8FF] font-semibold">COMING SOON.....</p>
+        <p className="text-lg  font-semibold">COMING SOON.....</p>
 
         <Image
           src="/assets/images/profile/soon.png"
@@ -87,7 +87,7 @@ export default function ComingSoon() {
               />
             </form>
           </Form>
-          <p className="text-xs text-[#999999] text-center">
+          <p className="text-xs text-lighter text-center">
             {isSubmitted
               ? 'Your response has been recorded, we will notify you when we go live'
               : 'Be among the special ones to get early notification when we launch'}

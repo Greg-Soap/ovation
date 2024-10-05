@@ -81,7 +81,7 @@ export default function PasswordForm() {
             control={form.control}
             render={({ field }) => (
               <FormItem className="flex flex-col gap-1">
-                <FormLabel className="text-sm text-[#B3B3B3]">
+                <FormLabel className="text-sm text-light">
                   Old Password
                 </FormLabel>
                 <FormControl>
@@ -99,7 +99,7 @@ export default function PasswordForm() {
             control={form.control}
             render={({ field }) => (
               <FormItem className="flex flex-col gap-1">
-                <FormLabel className="text-sm text-[#B3B3B3] max-w-[637px]">
+                <FormLabel className="text-sm text-light max-w-[637px]">
                   New password
                 </FormLabel>
                 <FormControl>
@@ -118,7 +118,7 @@ export default function PasswordForm() {
             control={form.control}
             render={({ field }) => (
               <FormItem className="flex flex-col gap-1">
-                <FormLabel className="text-sm text-[#B3B3B3] max-w-[637px]">
+                <FormLabel className="text-sm text-light max-w-[637px]">
                   Confirm new password
                 </FormLabel>
                 <FormControl>

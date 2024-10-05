@@ -6,7 +6,7 @@ export function ErrorFallback({ error, resetErrorBoundary }) {
   const [showDetails, setShowDetails] = useState(false)
 
   return (
-    <div className="flex flex-col items-center justify-center p-4 bg-transparent border border-[#FFFFFF14] text-white rounded-lg">
+    <div className="flex flex-col items-center justify-center p-4 bg-transparent border border-[#FFFFFF14]  rounded-lg">
       <h2 className="text-lg font-semibold mb-2 text-center">
         Oops! Something went wrong
       </h2>
@@ -18,7 +18,7 @@ export function ErrorFallback({ error, resetErrorBoundary }) {
       </Button>
       <button
         onClick={() => setShowDetails(!showDetails)}
-        className="text-sm text-[#CFF073] underline"
+        className="text-sm text-primary underline"
         type="button"
       >
         {showDetails ? 'Hide' : 'Show'} technical details

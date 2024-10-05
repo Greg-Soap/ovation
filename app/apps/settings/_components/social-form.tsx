@@ -252,7 +252,7 @@ export default function SocialForm({ userId }: { userId: string }) {
               name={platform.name as keyof FormValues}
               render={({ field }) => (
                 <FormItem className="w-full flex flex-col gap-2 px-10 2xl:pl-20">
-                  <FormLabel className="text-sm text-[#B3B3B3]">
+                  <FormLabel className="text-sm text-light">
                     {platform.label}
                   </FormLabel>
                   <FormControl>
@@ -266,7 +266,7 @@ export default function SocialForm({ userId }: { userId: string }) {
                       <Input
                         placeholder={`Enter ${platform.label} link here`}
                         {...field}
-                        className="focus:border-none focus:outline-none focus:ring-0 focus-visible:ring-0 border-none h-fit px-0 py-2 text-sm text-[#F8F8FF]"
+                        className="focus:border-none focus:outline-none focus:ring-0 focus-visible:ring-0 border-none h-fit px-0 py-2 text-sm "
                       />
                     </div>
                   </FormControl>

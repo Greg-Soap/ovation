@@ -7,51 +7,61 @@ import Link from 'next/link'
 
 export default function ExtendedPartners() {
   return (
-    <section className='container flex flex-col w-full items-center justify-center h-fit py-20 overflow-hidden'>
-      <div className='relative flex  flex-col items-center justify-center'>
-        <Marquee className='[--duration:20s]'>
-          <p className=' font-bold font-heading text-[70px] leading-[90px] tracking-[-0.55px] md:text-[280px] md:leading-[355px] md:tracking-[-2px] text-white'>
-            JOIN US AS A <span className='text-[#CFF073]'>PARTNER</span>
+    <section className="container flex flex-col w-full items-center justify-center h-fit py-20 overflow-hidden">
+      <div className="relative flex  flex-col items-center justify-center">
+        <Marquee className="[--duration:20s]">
+          <p className=" font-bold font-heading text-[70px] leading-[90px] tracking-[-0.55px] md:text-[280px] md:leading-[355px] md:tracking-[-2px] ">
+            JOIN US AS A <span className="text-primary">PARTNER</span>
           </p>
         </Marquee>
       </div>
-      <div className='grid grid-cols-2 gap-6 mt-10 md:mt-20 extended-partners-det-ctn'>
-        <p className='text-white font-bold text-2xl md:text-3xl font-heading section-header'>
+      <div className="grid grid-cols-2 gap-6 mt-10 md:mt-20 extended-partners-det-ctn">
+        <p className=" font-bold text-2xl md:text-3xl font-heading section-header">
           Over 100 launch partners have already joined us on our journey
         </p>
 
-        <div className='flex flex-col gap-9'>
-          <p className='text-base md:text-2xl font-light tracking-[-0.87px] section-description'>
-            Are you ready to join the next-generation NFT Social Platform? Beyond joining our Alpha
-            launch by clicking &quot;Launch App,&quot; our partnerships are a mutual collaborative
-            relationship where Ovation helps with their initiatives, and our partners help us
+        <div className="flex flex-col gap-9">
+          <p className="text-base md:text-2xl font-light tracking-[-0.87px] text-lighter">
+            Are you ready to join the next-generation NFT Social Platform?
+            Beyond joining our Alpha launch by clicking &quot;Launch App,&quot;
+            our partnerships are a mutual collaborative relationship where
+            Ovation helps with their initiatives, and our partners help us
             revolutionize the NFT ecosystem.
           </p>
           <Link
-            href='https://x.com/Ovation_Network'
-            className='flex items-center gap-2'
-            target='_blank'>
-            <Button asChild className='bg-[#CFF073] text-sm text-[#0B0A10] h-fit gap-2'>
-              <PulseButton pulseColor='#CFF073'>Join us as a partner</PulseButton>
+            href="https://x.com/Ovation_Network"
+            className="flex items-center gap-2"
+            target="_blank"
+          >
+            <Button
+              asChild
+              className="bg-primary text-sm text-[#0B0A10] h-fit gap-2"
+            >
+              <PulseButton pulseColor="#CFF073">
+                Join us as a partner
+              </PulseButton>
             </Button>
           </Link>
         </div>
       </div>
 
-      <div className='grid grid-cols-4 gap-x-10 gap-y-[20px] w-[95%] mt-20 extended-partners-partners-ctn'>
+      <div className="grid grid-cols-4 gap-x-10 gap-y-[20px] w-[95%] mt-20 extended-partners-partners-ctn">
         {extendedPartners.map((partner, index) => (
           <div
-            className='flex flex-col items-center opacity-100 md:opacity-30 md:hover:opacity-100 transition-opacity duration-300'
-            key={generateRandomString()}>
+            className="flex flex-col items-center opacity-100 md:opacity-30 md:hover:opacity-100 transition-opacity duration-300"
+            key={generateRandomString()}
+          >
             <img
               className={'rounded-full h-[200px] w-[200px] mb-4'}
               src={partner.imgSrc}
-              alt='Partner display'
+              alt="Partner display"
             />
-            <p className='text-white text-base md:text-xl font-medium text-center mb-1 partners-name'>
+            <p className="text-base md:text-xl font-medium text-center mb-1 partners-name">
               {partner.name}
             </p>
-            <p className='text-[10px] leading-[14px] md:text-sm text-center'>{partner.position}</p>
+            <p className="text-[10px] text-lighter font-normal leading-[14px] md:text-sm text-center">
+              {partner.position}
+            </p>
           </div>
         ))}
       </div>

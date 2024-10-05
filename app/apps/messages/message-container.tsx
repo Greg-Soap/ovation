@@ -135,9 +135,7 @@ export default function MessageContainer({
         <section className="w-full h-[100vh] lg:h-full lg:col-span-2 flex flex-col items-center justify-center bg-[#111115] other-link overflow-auto">
           <div className="flex flex-col items-center gap-[13px]">
             <div className="flex flex-col items-center gap-[6px]">
-              <p className="text-[#F8F8FF] text-xl font-semibold">
-                No Conversation Selected
-              </p>
+              <p className=" text-xl font-semibold">No Conversation Selected</p>
               <p className="text-[#E6E6E6] text-center text-sm max-w-[280px]">
                 To start a new conversation, visit a user&apos;s profile and
                 click the message button.
@@ -160,9 +158,7 @@ export default function MessageContainer({
               size={24}
               onClick={goBack}
             />
-            <p className="text-sm font-medium text-[#F8F8FF]">
-              {friend.displayName}
-            </p>
+            <p className="text-sm font-medium ">{friend.displayName}</p>
           </div>
         </ErrorBoundary>
 
@@ -178,7 +174,7 @@ export default function MessageContainer({
               className="rounded-full w-[81px] h-[81px] object-cover"
             />
             <div className="flex flex-col gap-1 w-fit items-center">
-              <p className="text-[#F8F8FF] text-xl font-semibold w-fit leading-[30px] text-center">
+              <p className=" text-xl font-semibold w-fit leading-[30px] text-center">
                 {friend.displayName}
               </p>
               <p className="text-sm text-[#808080] w-fit">{friend.userName}</p>
@@ -190,7 +186,7 @@ export default function MessageContainer({
           <div className="flex-grow overflow-y-auto px-3 pt-[30px] pb-[100px] md:px-[30px] md:pt-[30px] md:pb-[90px] xir:p-[30px]">
             {loading ? (
               <div className="flex justify-center items-center h-full">
-                <p className="text-[#F8F8FF]">Loading messages...</p>
+                <p className="">Loading messages...</p>
               </div>
             ) : (
               messages.map((msg, index) => (
@@ -201,7 +197,7 @@ export default function MessageContainer({
                   } mb-5`}
                 >
                   <p
-                    className={`px-5 py-[10px] rounded-[20px] text-[#F8F8FF] text-sm font-medium max-w-[85%] lg:max-w-[50%] ${
+                    className={`px-5 py-[10px] rounded-[20px]  text-sm font-medium max-w-[85%] lg:max-w-[50%] ${
                       msg.userId === currentUserId
                         ? 'bg-[#1D3E00] rounded-tr-[20px]'
                         : 'bg-[#232227] rounded-tl-[20px]'
@@ -244,7 +240,7 @@ export default function MessageContainer({
               <Input
                 placeholder="Type out a new message..."
                 value={message}
-                className="h-[24px] text-white bg-transparent border-none  outline-none ring-0 focus:outline-none focus-visible:border-none ml-0 py-"
+                className="h-[24px]  bg-transparent border-none  outline-none ring-0 focus:outline-none focus-visible:border-none ml-0 py-"
                 onChange={handleChange}
                 onKeyPress={handleKeyPress}
                 disabled={isSending}

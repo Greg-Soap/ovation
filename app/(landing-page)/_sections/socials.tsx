@@ -33,10 +33,10 @@ export default function Socials() {
         />
 
         <div className="flex flex-col items-center gap-10 mb-10 mt-5">
-          <p className="text-white w-[90%] text-[35px] md:text-5xl font-bold text-center leading-[40px] md:leading-[60px]">
+          <p className=" w-[90%] text-[35px] md:text-5xl font-bold text-center leading-[40px] md:leading-[60px]">
             Explore Next-Gen NFT Socials
           </p>
-          <p className="text-base md:leading-9 md:text-[22px] -mt-5 text-[#CCCCCC] w-[75%] text-center">
+          <p className="text-base md:leading-9 md:text-[22px] -mt-5 text-foreground/80 w-[75%] text-center">
             The only Web3 platform with intelligent profiles, personalized
             portfolios, and a blockchain UI for a unified NFT experience.
           </p>
@@ -50,7 +50,7 @@ export default function Socials() {
           >
             <Button
               asChild
-              className="bg-[#CFF073] text-sm text-[#0B0A10] h-fit gap-2"
+              className="bg-primary text-sm text-[#0B0A10] h-fit gap-2"
             >
               <PulseButton pulseColor="#CFF073">
                 <img
@@ -69,7 +69,7 @@ export default function Socials() {
           >
             <Button
               asChild
-              className="bg-[#CFF073] text-sm text-[#0B0A10] h-fit gap-2"
+              className="bg-primary text-sm text-[#0B0A10] h-fit gap-2"
             >
               <PulseButton pulseColor="#CFF073">
                 <img

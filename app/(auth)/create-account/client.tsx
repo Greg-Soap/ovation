@@ -158,7 +158,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
   return (
     <div className="flex flex-col gap-8">
       <div className="space-y-4">
-        <h1 className="text-3xl font-semibold text-white">Create Account</h1>
+        <h1 className="text-3xl font-semibold ">Create Account</h1>
         <nav
           aria-label="Account creation steps"
           className="flex flex-wrap items-center gap-2 text-sm md:text-base"
@@ -173,16 +173,14 @@ export default function AccountForm({ setOptionalLeft }: Props) {
                 type="button"
                 onClick={() => setPage(item.step)}
                 className={`transition-colors duration-200 ${
-                  page >= item.step
-                    ? 'text-white font-semibold'
-                    : 'text-gray-400'
+                  page >= item.step ? ' font-semibold' : 'text-gray-400'
                 } hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white rounded`}
               >
                 {item.label}
               </button>
               {index < 2 && (
                 <ChevronRight
-                  className="text-[#cff073] h-4 w-4 flex-shrink-0"
+                  className="text-primary h-4 w-4 flex-shrink-0"
                   aria-hidden="true"
                 />
               )}

@@ -96,13 +96,13 @@ export default function Hamburger() {
                   ) : (
                     <div className="w-full h-fit flex flex-col gap-0.5">
                       <div className="flex items-center gap-[13px]">
-                        <p className="text-[#F8F8FF] text-[22px] font-semibold">
+                        <p className=" text-[22px] font-semibold">
                           {profileData?.profile?.displayName ||
                             'Anonymous User'}
                         </p>
                       </div>
 
-                      <p className="flex items-center gap-1 text-base text-[#B3B3B3]">
+                      <p className="flex items-center gap-1 text-base text-light">
                         {profileData?.username
                           ? `@${profileData.username.replace(/^@/, '')}`
                           : 'No username set'}
@@ -111,7 +111,7 @@ export default function Hamburger() {
                   )}
                 </div>
               </div>
-              <ul className="gap-8 pt-10 font-bold flex text-white flex-col text-lg">
+              <ul className="gap-8 pt-10 font-bold flex  flex-col text-lg">
                 {navLinks.map(({ href, icon: Icon, label }) => {
                   const isActive = pathname === href
                   return (
@@ -160,8 +160,8 @@ export function FeedbackButton({ className }: { className?: string }) {
         className="absolute -top-4 w-[33px] h-[33px]"
       />
       <div className="w-full flex flex-col items-center gap-0.5">
-        <p className="text-[#F8F8FF] text-xs font-medium">Help us improve</p>
-        <p className="text-[#B3B3B3] text-[9px] text-center">
+        <p className=" text-xs font-medium">Help us improve</p>
+        <p className="text-light text-[9px] text-center">
           Your input will help us improve and create an even better experience
           for everyone. Thank you for being a part of this journey!
         </p>
@@ -170,7 +170,7 @@ export function FeedbackButton({ className }: { className?: string }) {
         <DialogTrigger asChild>
           <Button
             variant={'default'}
-            className="text-[#0B0A10] text-xs font-semibold py-2 px-3 w-full h-[30px] bg-[#CFF073] rounded-[8px]"
+            className="text-[#0B0A10] text-xs font-semibold py-2 px-3 w-full h-[30px] bg-primary rounded-[8px]"
           >
             Submit a feedback
           </Button>

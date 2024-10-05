@@ -24,9 +24,7 @@ export const FirstPage: React.FC = () => {
         name="userEmail"
         render={({ field }) => (
           <FormItem className="flex flex-col w-full">
-            <FormLabel className="text-sm text-[#F8F8FF]">
-              Email address
-            </FormLabel>
+            <FormLabel className="text-sm ">Email address</FormLabel>
             <FormControl>
               <Input
                 {...field}
@@ -45,7 +43,7 @@ export const FirstPage: React.FC = () => {
         name="satisfactory"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm text-[#F8F8FF]">
+            <FormLabel className="text-sm ">
               How satisfied are you with the overall experience of using our
               product?
             </FormLabel>
@@ -73,7 +71,7 @@ export const FirstPage: React.FC = () => {
         name="usefulFeature"
         render={() => (
           <FormItem>
-            <FormLabel className="text-sm mb-4 text-[#F8F8FF]">
+            <FormLabel className="text-sm mb-4 ">
               Which feature did you find most valuable or useful?
             </FormLabel>
             <div className="flex flex-col gap-3">
@@ -98,7 +96,7 @@ export const FirstPage: React.FC = () => {
                           className="border-[#B3B3B3]"
                         />
                       </FormControl>
-                      <FormLabel className="font-normal m-0 text-sm text-[#999999] leading-none">
+                      <FormLabel className="font-normal m-0 text-sm text-lighter leading-none">
                         {item.label}
                       </FormLabel>
                     </FormItem>
@@ -116,13 +114,13 @@ export const FirstPage: React.FC = () => {
         name="improvement"
         render={({ field }) => (
           <FormItem className="flex flex-col w-full">
-            <FormLabel className="text-sm text-[#F8F8FF]">
+            <FormLabel className="text-sm ">
               What improvements would you suggest for the next version? (Choose
               your top 5 in order)
             </FormLabel>
             <FormControl>
               <React.Fragment>
-                <div className="mb-2 space-y-1 text-sm text-[#B3B3B3]">
+                <div className="mb-2 space-y-1 text-sm text-light">
                   <p>1. Posting timeline + replies</p>
                   <p>
                     2. Post initiatives (connect w/ X Co Hosts, Project Collabs,
@@ -138,7 +136,7 @@ export const FirstPage: React.FC = () => {
                 <Textarea
                   {...field}
                   placeholder="Tell us your suggestions"
-                  className="h-[80px] w-full bg-[#18181C] text-xs text-[#B3B3B3] rounded-[9px]"
+                  className="h-[80px] w-full bg-[#18181C] text-xs text-light rounded-[9px]"
                 />
               </React.Fragment>
             </FormControl>
@@ -160,14 +158,14 @@ export const SecondPage: React.FC = () => {
         name="confusion"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm text-[#F8F8FF]">
+            <FormLabel className="text-sm ">
               Was there anything you found confusing or difficult to use?
             </FormLabel>
             <FormControl>
               <Textarea
                 {...field}
                 placeholder="Tell us what you think"
-                className="max-h-[80px] w-full bg-[#18181C] text-xs text-[#B3B3B3] rounded-[9px]"
+                className="max-h-[80px] w-full bg-[#18181C] text-xs text-light rounded-[9px]"
               />
             </FormControl>
             <FormMessage />
@@ -180,7 +178,7 @@ export const SecondPage: React.FC = () => {
         name="likelyRecommend"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm text-[#F8F8FF]">
+            <FormLabel className="text-sm ">
               How likely are you to recommend our product to others?
             </FormLabel>
             <FormControl>
@@ -207,14 +205,14 @@ export const SecondPage: React.FC = () => {
         name="addition"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm text-[#F8F8FF]">
+            <FormLabel className="text-sm ">
               Is there anything else you&apos;d like to add?
             </FormLabel>
             <FormControl>
               <Textarea
                 {...field}
                 placeholder="Tell us what you think"
-                className="max-h-[80px] w-full bg-[#18181C] text-xs text-[#B3B3B3] rounded-[9px]"
+                className="max-h-[80px] w-full bg-[#18181C] text-xs text-light rounded-[9px]"
               />
             </FormControl>
             <FormMessage />
@@ -227,14 +225,14 @@ export const SecondPage: React.FC = () => {
         name="biggestPain"
         render={({ field }) => (
           <FormItem>
-            <FormLabel className="text-sm text-[#F8F8FF]">
+            <FormLabel className="text-sm ">
               What are your biggest pain points in the NFT industry?
             </FormLabel>
             <FormControl>
               <Textarea
                 {...field}
                 placeholder="Tell us what you think"
-                className="max-h-[80px] w-full bg-[#18181C] text-xs text-[#B3B3B3] rounded-[9px]"
+                className="max-h-[80px] w-full bg-[#18181C] text-xs text-light rounded-[9px]"
               />
             </FormControl>
             <FormMessage />

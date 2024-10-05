@@ -400,10 +400,6 @@ input:focus {
   .section-header {
     @apply text-2xl;
   }
-
-  .section-description {
-    @apply text-base;
-  }
 }
 
 .hero-gradient {

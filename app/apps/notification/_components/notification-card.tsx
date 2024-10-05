@@ -50,7 +50,7 @@ export default function NotificationCard({
               />
               <div className="flex flex-col gap-1">
                 <Link href={`/apps/profile/${initiator?.username}`}>
-                  <p className="font-semibold text-sm text-white">{title}</p>
+                  <p className="font-semibold text-sm ">{title}</p>
                 </Link>
                 <p className="text-sm text-gray-300">{message}</p>
               </div>
@@ -85,7 +85,7 @@ export default function NotificationCard({
       case 'Badge':
         return (
           <div>
-            <p className="font-semibold text-sm text-white">{title}</p>
+            <p className="font-semibold text-sm ">{title}</p>
             <p className="text-sm text-gray-300">
               {message} - {startCase(referenceId)}
             </p>

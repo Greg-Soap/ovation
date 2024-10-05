@@ -6,16 +6,8 @@ import {
   FormItem,
   FormLabel,
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import { Checkbox } from '@/components/ui/checkbox'
-import { optionValueToBlockchainName } from '@/lib/helper-func'
+import { ManualWalletForm } from '@/components/manual-wallet-form'
 
 export default function RenderWalletAndConfirmation({
   form,
@@ -57,58 +49,7 @@ export default function RenderWalletAndConfirmation({
       />
 
       {!form.watch('addWalletLater') && (
-        <>
-          <FormField
-            control={form.control}
-            name="userWallet.walletAddress"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Wallet Address</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    className="h-[46px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
-                    placeholder="Enter your wallet address"
-                    type="text"
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="userWallet.chain"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Select Chain</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger className="rounded-full">
-                      <SelectValue placeholder="Select a chain" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {Object.entries(optionValueToBlockchainName).map(
-                      ([value, name]) => (
-                        <SelectItem
-                          key={value}
-                          value={value}
-                          className="bg-transparent"
-                        >
-                          {name}
-                        </SelectItem>
-                      ),
-                    )}
-                  </SelectContent>
-                </Select>
-              </FormItem>
-            )}
-          />
-        </>
+        <ManualWalletForm form={form} name="userWallet" />
       )}
 
       <Button
@@ -121,7 +62,7 @@ export default function RenderWalletAndConfirmation({
         Make my profile
       </Button>
 
-      <p className="text-center mb-4">
+      <p className="text-center mb-4 text-light">
         By clicking &quot;make my profile&quot; you agree to our privacy terms,
         code of conduct and Conditions.
       </p>

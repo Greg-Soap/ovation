@@ -8,19 +8,19 @@ export default function MainTimeline() {
       <TabsList className="w-full border-b border-[#1A1A1A] px-0">
         <TabsTrigger
           value="timeline"
-          className="text-[#B3B3B3] py-7 px-5 text-lg leading-5 hover:text-white ml-3"
+          className="text-light py-7 px-5 text-lg leading-5 hover: ml-3"
         >
           Timeline
         </TabsTrigger>
         <TabsTrigger
           value="community"
-          className="text-[#B3B3B3] py-7 px-5 text-lg leading-5 hover:text-white"
+          className="text-light py-7 px-5 text-lg leading-5 hover:"
         >
           Community
         </TabsTrigger>
         <TabsTrigger
           value="contribute"
-          className="text-[#B3B3B3] py-7 px-5 text-lg leading-5 hover:text-white mr-3"
+          className="text-light py-7 px-5 text-lg leading-5 hover: mr-3"
         >
           Contribute
         </TabsTrigger>

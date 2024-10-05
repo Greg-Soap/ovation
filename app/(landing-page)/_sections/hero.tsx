@@ -104,14 +104,14 @@ export default function Hero() {
 
       <FadeText
         direction="up"
-        className="text-primary-foreground font-heading text-[30px] leading-[38px] md:text-5xl font-bold text-center w-[55%] mb-3 md:leading-[60px] hero-header"
+        className="text-foreground font-heading text-[30px] leading-[38px] md:text-5xl font-bold text-center w-[55%] mb-3 md:leading-[60px] hero-header"
       >
         Experience the Next-Generation NFT Social Platform
       </FadeText>
 
       <FadeText
         direction="up"
-        className="text-base md:text-[22px] md:leading-9  text-center lg:w-[45%]"
+        className="text-base text-lighter md:text-[22px] md:leading-9  text-center lg:w-[45%]"
       >
         The only web3 social platform offering intelligent profiles,
         personalized portfolios, and a blockchain-enabled UI for a unified NFT
@@ -159,7 +159,7 @@ export default function Hero() {
               />
             </form>
 
-            <p className="text-[#999999] text-center">
+            <p className="text-lighter text-center">
               Sign up and be the first to know about our MVP Launch!
             </p>
           </Form>

@@ -52,10 +52,13 @@ const config = {
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
+        foreground: '#F8F8FF', // white
+        gray: '#D9DBE1', // white/80%
+        light: '#B3B3B3', // white/70%
+        lighter: '#999999', // white/60%
         primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
+          DEFAULT: '#CFF073',
+          foreground: '#0B0A10',
         },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',

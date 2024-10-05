@@ -25,6 +25,7 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
 import FeedbackModal from './_feedback/feedback'
 import { getStoredUser } from '@/lib/helper-func'
+import Link from 'next/link'
 
 const menuItems = [
   {
@@ -60,10 +61,6 @@ export default function Aside() {
   const { removeValue } = useLocalStorage<UserData | null>('userData', null)
   const user = getStoredUser()
 
-  const handleClick = (path: string) => {
-    router.push(path)
-  }
-
   const handleLogout = () => {
     ovationService.logout()
     removeValue()
@@ -92,10 +89,10 @@ export default function Aside() {
                 className="rounded-full object-cover w-[28px] h-[28px]"
               />
               <div className="flex flex-col">
-                <p className="text-xs font-semibold leading-5 text-white">
+                <p className="text-xs font-semibold leading-5 ">
                   {user?.displayName}
                 </p>
-                <p className="text-[10px] leading-5 font-medium text-[#B3B3B3]">
+                <p className="text-[10px] leading-5 font-medium text-light">
                   {user?.wallets[0]?.walletAddress?.replace(
                     /^(.{6})(.*)(.{4})$/,
                     '$1***$3',
@@ -109,7 +106,7 @@ export default function Aside() {
               </PopoverTrigger>
               <PopoverContent
                 side="right"
-                className="w-fit bg-[#232227] flex flex-col items-start border-none text-white text-base py-2"
+                className="w-fit bg-[#232227] flex flex-col items-start border-none  text-base py-2"
               >
                 <Button
                   variant={'ghost'}
@@ -132,20 +129,22 @@ export default function Aside() {
               return (
                 <Button
                   type="button"
-                  className={`w-fit lg:w-full ${isActive ? 'text-[#CFF073] lg:text-[#B3B3B3]' : 'text-[#B3B3B3]'}  items-center justify-start gap-2 p-3 lg:py-7 lg:px-[30px] rounded-[50px] hover:bg-[#18181C] focus:bg-[#232227] group transition-all duration-300 ${
+                  className={`w-fit lg:w-full ${isActive ? 'text-primary lg:text-light' : 'text-light'}  items-center justify-start gap-2 p-3 lg:py-7 lg:px-[30px] rounded-[50px] hover:bg-[#18181C] focus:bg-[#232227] group transition-all duration-300 ${
                     isActive
                       ? 'bg-transparent lg:bg-[#232227]'
                       : 'bg-transparent'
                   }`}
                   key={index}
-                  onClick={() => handleClick(item.path)}
+                  asChild
                 >
-                  <Icon size={24} variant={isActive ? 'Bold' : 'Outline'} />
-                  <p
-                    className={`hidden lg:flex items-center gap-2 text-lg group-hover:text-white group-focus:text-[#CCCCCC] ${isActive ? 'text-white font-medium' : 'text-[#B3B3B3]'}`}
-                  >
-                    {item.text}
-                  </p>
+                  <Link href={item.path}>
+                    <Icon size={24} variant={isActive ? 'Bold' : 'Outline'} />
+                    <p
+                      className={`hidden lg:flex items-center gap-2 text-lg group-hover: group-focus:text-gray ${isActive ? ' font-medium' : 'text-light'}`}
+                    >
+                      {item.text}
+                    </p>
+                  </Link>
                 </Button>
               )
             })}
@@ -172,8 +171,8 @@ export function FeedbackButton({ className }: { className?: string }) {
           className="absolute -top-4 w-[33px] h-[33px] "
         />
         <div className="w-full flex flex-col items-center gap-0.5">
-          <p className="text-[#F8F8FF] text-xs font-medium">Help us improve</p>
-          <p className="text-[#B3B3B3] text-[9px] text-center">
+          <p className=" text-xs font-medium">Help us improve</p>
+          <p className="text-light text-[9px] text-center">
             Your input will help us improve and create an even better experience
             for everyone. Thank you for being a part of this journey!
           </p>
@@ -182,7 +181,7 @@ export function FeedbackButton({ className }: { className?: string }) {
           <DialogTrigger asChild>
             <Button
               variant={'default'}
-              className="text-[#0B0A10] text-xs font-semibold py-2 px-3 w-full h-[30px] bg-[#CFF073] rounded-[8px]"
+              className="text-[#0B0A10] text-xs font-semibold py-2 px-3 w-full h-[30px] bg-primary rounded-[8px]"
             >
               Submit a feedback
             </Button>

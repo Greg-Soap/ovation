@@ -140,10 +140,8 @@ export default function FeedbackModal() {
   const renderFormHeader = () => (
     <div className="flex flex-col gap-2 mb-6">
       <p className="text-sm text-[#E7F7B9]">{formPage}/2</p>
-      <h2 className="text-xl font-semibold text-[#F8F8FF]">
-        We&apos;d love your feedback!
-      </h2>
-      <p className="text-sm text-[#999999]">
+      <h2 className="text-xl font-semibold ">We&apos;d love your feedback!</h2>
+      <p className="text-sm text-lighter">
         Ovation is currently in its MVP (Minimum Viable Product) stage, where
         we&apos;re focused on gathering user feedback to refine our platform.
         Your input is crucial in helping us improve. Fill out the feedback form
@@ -165,7 +163,7 @@ export default function FeedbackModal() {
             <Button
               type="button"
               variant="outline"
-              className="text-[#F8F8FF] text-[10px] rounded-full font-semibold px-3 py-2 outline outline-1 outline-[#29292F] h-fit bg-transparent"
+              className=" text-[10px] rounded-full font-semibold px-3 py-2 outline outline-1 outline-[#29292F] h-fit bg-transparent"
               onClick={() =>
                 formPage === 1 ? methods.reset() : setFormPage(1)
               }

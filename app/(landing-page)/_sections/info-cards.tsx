@@ -4,31 +4,34 @@ import CardFour from '../_components/info-card/card-four'
 
 export default function InfoCards() {
   return (
-    <section className='container   grid md:grid-cols-1 lg:grid-cols-2 gap-x-5 gap-y-12 py-20 '>
+    <section className="container   grid md:grid-cols-1 lg:grid-cols-2 gap-x-5 gap-y-12 py-20 ">
       {moreCards.map((card, i) => (
         <div
           key={i}
           className={
             'flex flex-col items-center justify-center rounded-[20px] bg-card-gradient h-auto md:h-[684px] py-10  overflow-hidden'
-          }>
-          <div className='h-[300px] md:h-[400px] w-full flex justify-center items-center'>
+          }
+        >
+          <div className="h-[300px] md:h-[400px] w-full flex justify-center items-center">
             {card.hasComponent ? (
               <div className={'w-full '}>{card.component}</div>
             ) : (
               <img
                 className={`h-[inherit] rounded-lg ${card.isFullWidth ? 'w-auto h-auto' : 'w-[70%] h-auto'}`}
                 src={card.imgSrc}
-                alt=''
+                alt=""
               />
             )}
           </div>
 
-          <div className='flex flex-col gap-3 mt-10  px-[30px]'>
-            <p className={'text-white text-lg md:text-[28px] font-medium text-center'}>
+          <div className="flex flex-col gap-3 mt-10  px-[30px]">
+            <p className="text-lg md:text-[28px] font-medium text-center">
               {card.header}
             </p>
 
-            <p className={'text-sm md:text-xl text-center'}>{card.description}</p>
+            <p className="text-sm md:text-xl text-center text-lighter">
+              {card.description}
+            </p>
           </div>
         </div>
       ))}

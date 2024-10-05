@@ -46,25 +46,29 @@ const team: Teams[] = [
 
 export default function Teams() {
   return (
-    <main className='flex flex-col gap-[120px] pt-[120px] pb-[200px]'>
-      <div className='container lg:w-full lg:h-[568px] w-[90%] h-[400px] bg-team-banner bg-cover bg-center' />
+    <main className="flex flex-col gap-[120px] pt-[120px] pb-[200px]">
+      <div className="container lg:w-full lg:h-[568px] w-[90%] h-[400px] bg-team-banner bg-cover bg-center" />
 
-      <section className='container flex flex-col mt-12'>
-        <div className='flex flex-col w-full h-fit gap-[80px]'>
-          <div className='flex flex-col items-center justify-center gap-2 w-full h-fit'>
-            <p className='text-white text-[35px] md:text-5xl font-bold text-center mb-2'>
+      <section className="container flex flex-col mt-12">
+        <div className="flex flex-col w-full h-fit gap-[80px]">
+          <div className="flex flex-col items-center justify-center gap-2 w-full h-fit">
+            <p className="text-[35px] md:text-5xl font-bold text-center mb-2">
               Meet our team
             </p>
-            <p className='text-[#999999] text-lg md:text-2xl font-light w-[80%] text-center'>
-              Discover the dedicated professionals behind our success. Our team brings together a
-              wealth of experience, creativity, and passion to deliver exceptional results.{' '}
+            <p className="text-lighter text-lg md:text-2xl font-light w-[80%] text-center">
+              Discover the dedicated professionals behind our success. Our team
+              brings together a wealth of experience, creativity, and passion to
+              deliver exceptional results.{' '}
             </p>
           </div>
 
-          <div className='w-full grid grid-cols-1 md:grid-cols-2 gap-y-[60px] gap-x-5'>
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-y-[60px] gap-x-5">
             {team.map((item, index) => (
-              <div className='flex flex-col gap-6 w-fit items-center ' key={index}>
-                <div className=' rounded-full w-full  md:w-[70%]'>
+              <div
+                className="flex flex-col gap-6 w-fit items-center "
+                key={index}
+              >
+                <div className=" rounded-full w-full  md:w-[70%]">
                   <Image
                     src={`${item.image}`}
                     alt={`${item.name} + " " + "Picture"`}
@@ -73,17 +77,17 @@ export default function Teams() {
                   />
                 </div>
 
-                <div className='flex flex-col gap-3 items-center justify-center'>
-                  <div className='flex flex-col gap-[9px]'>
-                    <p className='text-2xl font-semibold text-white'>{item.name}</p>
-                    <p className='text-[#999999] text-center'>{item.position}</p>
+                <div className="flex flex-col gap-3 items-center justify-center">
+                  <div className="flex flex-col gap-[9px]">
+                    <p className="text-2xl font-semibold ">{item.name}</p>
+                    <p className="text-lighter text-center">{item.position}</p>
                   </div>
 
-                  <Link href={item.href} target='_blank'>
+                  <Link href={item.href} target="_blank">
                     {item.social === 'twitter' ? (
-                      <TwitterIcon className='w-[37px] h-[37px]' />
+                      <TwitterIcon className="w-[37px] h-[37px]" />
                     ) : (
-                      <LinkedInIcon className='w-[37px] h-[37px]' />
+                      <LinkedInIcon className="w-[37px] h-[37px]" />
                     )}
                   </Link>
                 </div>

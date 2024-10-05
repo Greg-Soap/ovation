@@ -29,7 +29,7 @@ function PasswordInput({ placeholder, value, onChange }: PasswordInputProps) {
         type="button"
         variant="ghost"
         size="icon"
-        className="absolute right-0 top-0 h-full rounded-full hover:bg-transparent hover:text-white/75"
+        className="absolute right-0 top-0 h-full rounded-full hover:bg-transparent hover:/75"
         onClick={toggleVisibility}
       >
         {isVisible ? (

@@ -11,6 +11,7 @@ import { ErrorFallback } from '@/components/error-boundary'
 import { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { toast } from 'sonner'
+import Link from 'next/link'
 
 export default function Page() {
   const router = useRouter()
@@ -20,9 +21,10 @@ export default function Page() {
   })
 
   const { data: experienceData } = useQuery({
-    queryKey: ['experience'],
+    queryKey: ['experience', profileData?.data?.userId],
     queryFn: () =>
       ovationService.getExperience(profileData?.data?.userId as string),
+    enabled: !!profileData?.data?.userId,
   })
 
   const [isCopying, setIsCopying] = useState(false)
@@ -70,12 +72,9 @@ export default function Page() {
             </Button>
             <Button
               variant="default"
-              onClick={() => {
-                router.push('/apps/settings')
-              }}
-              className="bg-[#333333] py-[11px] px-4 border border-[#E6E6E64D] text-white text-xs"
+              className="py-[11px] px-4 border border-[#E6E6E64D]  text-xs"
             >
-              Edit Profile
+              <a href="/apps/settings">Edit Profile</a>
             </Button>
           </div>
         </ErrorBoundary>

@@ -43,7 +43,7 @@ export default function ExperienceForm({
 }) {
   const [isDisabled, setIsDisabled] = useState<boolean>(true)
   const [isCurrentJob, setIsCurrentJob] = useState<boolean>(
-    !experienceData[0]?.endDate
+    !experienceData[0]?.endDate,
   )
   const [isUpdating, setIsUpdating] = useState<boolean>(false)
   const { storedValue, setValue } = useLocalStorage<Partial<FormValues>>(
@@ -126,7 +126,7 @@ export default function ExperienceForm({
       endDate: isCurrentJob ? null : formatDate(new Date(data.endDate || '')),
     }
     mutate(formattedData)
-    setValue(data as Partial<FormValues>) 
+    setValue(data as Partial<FormValues>)
   }
 
   return (
@@ -146,14 +146,12 @@ export default function ExperienceForm({
               name="company"
               render={({ field }) => (
                 <FormItem className="flex flex-col gap-2">
-                  <FormLabel className="text-sm text-[#B3B3B3]">
-                    Company
-                  </FormLabel>
+                  <FormLabel className="text-sm text-light">Company</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="ex. Google"
                       {...field}
-                      className="h-[47px] text-sm text-[#F8F8FF] border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
+                      className="h-[47px] text-sm  border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -166,12 +164,12 @@ export default function ExperienceForm({
               name="role"
               render={({ field }) => (
                 <FormItem className="flex flex-col gap-2">
-                  <FormLabel className="text-sm text-[#B3B3B3]">Role</FormLabel>
+                  <FormLabel className="text-sm text-light">Role</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="ex. CEO"
                       {...field}
-                      className="h-[47px] text-sm text-[#F8F8FF] border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
+                      className="h-[47px] text-sm  border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -184,14 +182,14 @@ export default function ExperienceForm({
               name="department"
               render={({ field }) => (
                 <FormItem className="flex flex-col gap-2">
-                  <FormLabel className="text-sm text-[#B3B3B3]">
+                  <FormLabel className="text-sm text-light">
                     Department
                   </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="ex. Engineering"
                       {...field}
-                      className="h-[47px] text-sm text-[#F8F8FF] border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
+                      className="h-[47px] text-sm  border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -206,7 +204,7 @@ export default function ExperienceForm({
                   name="startDate"
                   render={({ field }) => (
                     <FormItem className="flex flex-col gap-2">
-                      <FormLabel className="text-sm text-[#B3B3B3]">
+                      <FormLabel className="text-sm text-light">
                         Start Date
                       </FormLabel>
                       <FormControl>
@@ -228,7 +226,7 @@ export default function ExperienceForm({
                   name="endDate"
                   render={({ field }) => (
                     <FormItem className="flex flex-col gap-2">
-                      <FormLabel className="text-sm text-[#B3B3B3]">
+                      <FormLabel className="text-sm text-light">
                         Finish Date
                       </FormLabel>
                       <FormControl>
@@ -257,7 +255,7 @@ export default function ExperienceForm({
                       form.setValue('endDate', null)
                     }
                   }}
-                  className="border-[#CFF073] data-[state=checked]:bg-[#CFF073] data-[state=checked]:text-[#0B0A10]"
+                  className="border-[#CFF073] data-[state=checked]:bg-primary data-[state=checked]:text-[#0B0A10]"
                 />
                 <label
                   htmlFor="work"
@@ -273,14 +271,14 @@ export default function ExperienceForm({
               name="description"
               render={({ field }) => (
                 <FormItem className="flex flex-col gap-2">
-                  <FormLabel className="text-sm text-[#B3B3B3]">
+                  <FormLabel className="text-sm text-light">
                     Description
                   </FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="ex. CEO"
                       {...field}
-                      className="text-sm text-[#F8F8FF] min-h-[150px] border border-solid border-[#4D4D4D] rounded-[16px] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
+                      className="text-sm  min-h-[150px] border border-solid border-[#4D4D4D] rounded-[16px] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
                     />
                   </FormControl>
                   <FormMessage />
@@ -293,14 +291,12 @@ export default function ExperienceForm({
               name="skills"
               render={({ field }) => (
                 <FormItem className="flex flex-col gap-2">
-                  <FormLabel className="text-sm text-[#B3B3B3]">
-                    Skills
-                  </FormLabel>
+                  <FormLabel className="text-sm text-light">Skills</FormLabel>
                   <FormControl>
                     <Input
                       placeholder="ex. JavaScript, React, Node.js"
                       {...field}
-                      className="h-[47px] text-sm text-[#F8F8FF] border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
+                      className="h-[47px] text-sm  border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
                     />
                   </FormControl>
                   <FormMessage />
