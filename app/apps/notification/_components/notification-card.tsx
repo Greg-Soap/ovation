@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { useMutation } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
 import { startCase } from '@/lib/helper-func'
+import CustomAvatar from '@/components/customs/custom-avatar'
 
 export default function NotificationCard({
   id,
@@ -38,14 +39,10 @@ export default function NotificationCard({
         return (
           <div className="flex gap-3 justify-between items-center">
             <div className="flex gap-3 items-center">
-              <Image
-                src={
-                  initiator?.profileImage || '/assets/images/default-user.svg'
-                }
+              <CustomAvatar
+                src={initiator?.profileImage}
                 alt="Department Icon"
-                width={36}
-                height={36}
-                className="rounded-full w-[36px] h-[36px]"
+                size="md"
               />
               <div className="flex flex-col gap-1">
                 <a href={`/apps/profile/${initiator?.username}`}>

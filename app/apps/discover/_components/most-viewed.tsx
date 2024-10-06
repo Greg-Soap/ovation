@@ -1,3 +1,4 @@
+import CustomAvatar from '@/components/customs/custom-avatar'
 import VerifyIcon from '@/components/icons/verifyIcon'
 import MiniLoader from '@/components/mini-loader'
 import { formatUsername } from '@/lib/helper-func'
@@ -105,13 +106,7 @@ export function MostViewed() {
             <div className="flex flex-wrap gap-4 py-4  pl-4 pr-4 bg-[#18181C] rounded-[20px] items-center justify-between border border-[#35353880]">
               <div className="flex items-center gap-2">
                 <div className="w-[30px] h-[30px] rounded-full overflow-hidden border-2 border-white">
-                  <img
-                    alt="imag"
-                    src={
-                      user?.profileImage || '/assets/images/default-user.svg'
-                    }
-                    className="w-full h-full object-cover"
-                  />
+                  <CustomAvatar src={user?.profileImage} size="sm" />
                 </div>
 
                 <div className="flex flex-col">

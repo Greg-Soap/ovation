@@ -22,6 +22,7 @@ import { useLocalStorage } from '@/lib/use-local-storage'
 import FeedbackModal from '../../_feedback/feedback'
 import { useAnchorNavigation } from '@/lib/use-navigation'
 import colors from '@/lib/colors'
+import CustomAvatar from '@/components/customs/custom-avatar'
 
 export default function Hamburger() {
   const [open, setOpen] = useState(false)
@@ -68,9 +69,15 @@ export default function Hamburger() {
         <DrawerTrigger asChild>
           <Button className="" variant={'link'} onClick={() => setOpen(!open)}>
             {!open && (
-              <HamburgerMenuIcon color={'#cff073'} width={24} height={24} />
+              <HamburgerMenuIcon
+                color={colors.primary.DEFAULT}
+                width={24}
+                height={24}
+              />
             )}
-            {open && <X color={'#cff073'} width={24} height={24} />}
+            {open && (
+              <X color={colors.primary.DEFAULT} width={24} height={24} />
+            )}
           </Button>
         </DrawerTrigger>
         <DrawerContent
@@ -80,15 +87,10 @@ export default function Hamburger() {
           <div className="bg-[#111115] flex flex-col p-5 h-full justify-between">
             <div>
               <div className="flex flex-col gap-5 justify-between">
-                <Image
-                  src={
-                    profileData?.profile?.profileImage ||
-                    '/assets/images/default-user.svg'
-                  }
+                <CustomAvatar
+                  src={profileData?.profile?.profileImage}
                   alt="User Display Picture"
-                  width={131}
-                  height={131}
-                  className="rounded-full w-[131px] h-[131px] object-cover"
+                  size="huge"
                 />
 
                 <div className="flex flex-col gap-9">

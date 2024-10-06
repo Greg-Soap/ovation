@@ -23,6 +23,7 @@ import colors from '@/lib/colors'
 import { useAppStore } from '@/store/use-app-store'
 import CustomPopover from '@/components/customs/custom-popover'
 import CustomDialog from '@/components/customs/custom-dialog'
+import CustomAvatar from '@/components/customs/custom-avatar'
 
 const menuItems = [
   {
@@ -78,12 +79,10 @@ export default function Aside() {
         <ErrorBoundary FallbackComponent={ErrorFallback}>
           <div className="hidden lg:flex w-[90%] items-center justify-between border border-[#333333] bg-[#18181C] p-3 rounded-[8px]">
             <div className="flex items-center gap-[7px]">
-              <Image
-                src={user?.profileImage || '/assets/images/default-user.svg'}
+              <CustomAvatar
+                src={user?.profileImage}
                 alt="User Display Picture"
-                width={28}
-                height={28}
-                className="rounded-full object-cover w-[28px] h-[28px]"
+                size="sm"
               />
               <div className="flex flex-col">
                 <p className="text-xs font-semibold leading-5 ">

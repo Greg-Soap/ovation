@@ -7,11 +7,12 @@ import { useAnchorNavigation } from '@/lib/use-navigation'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
 import MiniLoader from '@/components/mini-loader'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { UserIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import CustomDialog from '@/components/customs/custom-dialog'
 import { linkify } from '@/lib/use-link'
+import CustomAvatar from '@/components/customs/custom-avatar'
+import { ErrorBoundary } from 'react-error-boundary'
+import { ErrorFallback } from '@/components/error-boundary'
 
 export default function FollowersFollowing({
   username,
@@ -43,32 +44,38 @@ export default function FollowersFollowing({
   }
 
   return (
-    <Tabs value={activeTab} onValueChange={handleTabChange}>
-      <TabsList className="grid w-full grid-cols-2 pt-4 pb-1 border-b rounded-none border-[#353538]">
-        <div className="flex justify-center w-full">
-          <TabsTrigger
-            value="followers"
-            className="py-2 data-[state=active]: transition-all duration-300 w-fit text-center"
-          >
-            Followers
-          </TabsTrigger>
-        </div>
-        <div className="flex justify-center w-full">
-          <TabsTrigger
-            value="following"
-            className="py-2 data-[state=active]: transition-all duration-300 w-fit"
-          >
-            Following
-          </TabsTrigger>
-        </div>
-      </TabsList>
-      <TabsContent value="followers">
-        <UserList type="followers" userId={userId} />
-      </TabsContent>
-      <TabsContent value="following">
-        <UserList type="following" userId={userId} />
-      </TabsContent>
-    </Tabs>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <Tabs value={activeTab} onValueChange={handleTabChange}>
+        <TabsList className="grid w-full grid-cols-2 pt-4 pb-1 border-b rounded-none border-[#353538]">
+          <div className="flex justify-center w-full">
+            <TabsTrigger
+              value="followers"
+              className="py-2 data-[state=active]: transition-all duration-300 w-fit text-center"
+            >
+              Followers
+            </TabsTrigger>
+          </div>
+          <div className="flex justify-center w-full">
+            <TabsTrigger
+              value="following"
+              className="py-2 data-[state=active]: transition-all duration-300 w-fit"
+            >
+              Following
+            </TabsTrigger>
+          </div>
+        </TabsList>
+        <TabsContent value="followers">
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <UserList type="followers" userId={userId} />
+          </ErrorBoundary>
+        </TabsContent>
+        <TabsContent value="following">
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <UserList type="following" userId={userId} />
+          </ErrorBoundary>
+        </TabsContent>
+      </Tabs>
+    </ErrorBoundary>
   )
 }
 
@@ -141,16 +148,11 @@ function UserList({
           className="flex gap-3 justify-between items-start hover:bg-foreground/10 p-2 rounded-md"
         >
           <div className="flex gap-3 items-start">
-            <Avatar>
-              <AvatarImage
-                className="object-cover"
-                alt="user profile"
-                src={user?.profileImage || '/assets/images/default-user.svg'}
-              />
-              <AvatarFallback>
-                <UserIcon className="w-full h-full" />
-              </AvatarFallback>
-            </Avatar>
+            <CustomAvatar
+              src={user?.profileImage}
+              alt="User Display Picture"
+              size="md"
+            />
             <div className="flex flex-col gap-1">
               <a
                 href={`/apps/profile/${user?.username}`}

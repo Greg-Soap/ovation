@@ -1,5 +1,7 @@
+import CustomAvatar from '@/components/customs/custom-avatar'
 import VerifyIcon from '@/components/icons/verifyIcon'
 import MiniLoader from '@/components/mini-loader'
+import { Avatar } from '@/components/ui/avatar'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { formatUsername } from '@/lib/helper-func'
 import type { DiscoverUserData } from '@/models/all.model'
@@ -193,14 +195,10 @@ const renderHoldersList = (
               <div className="flex items-center gap-2">
                 <span className="font-semibold">{index + 1}</span>
                 <div className="w-[50px] h-[50px] rounded-full overflow-hidden border-2 border-white">
-                  <img
+                  <CustomAvatar
+                    src={user?.profileImage}
                     alt={user?.displayName}
-                    src={
-                      user?.profileImage || '/assets/images/default-user.svg'
-                    }
-                    width={50}
-                    height={50}
-                    className="w-full h-full object-cover"
+                    size="lg"
                   />
                 </div>
                 <div className="flex flex-col">
@@ -236,14 +234,10 @@ const renderHoldersList = (
               <div className="flex items-center gap-2">
                 <span className="font-semibold">{index + 4}</span>
                 <div className="w-[50px] h-[50px] rounded-full overflow-hidden border-2 border-white">
-                  <img
+                  <CustomAvatar
+                    src={user?.profileImage}
                     alt={user?.displayName}
-                    src={
-                      user?.profileImage || '/assets/images/default-user.svg'
-                    }
-                    width={50}
-                    height={50}
-                    className="w-full h-full object-cover"
+                    size="lg"
                   />
                 </div>
                 <div className="flex flex-col">
