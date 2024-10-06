@@ -87,7 +87,11 @@ export default function MessageContainer({
     setLoading(true)
 
     try {
-      const messageDocuments = await getMessagesForChat(friend.userId)
+      const messageDocuments = await getMessagesForChat(
+        friend.userId,
+        100,
+        currentUserId as string,
+      )
       setMessages(
         messageDocuments.messages.reverse().map(
           (doc): MessageProps => ({
