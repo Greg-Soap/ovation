@@ -2,11 +2,6 @@
 import Image from 'next/image'
 import React from 'react'
 import { usePathname } from 'next/navigation'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
 import { Button } from '@/components/ui/button'
 import {
   LocationDiscover,
@@ -22,10 +17,12 @@ import ovationService from '@/services/ovation.service'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
 import FeedbackModal from './_feedback/feedback'
-import { getStoredUser } from '@/lib/helper-func'
 import { useAnchorNavigation } from '@/lib/use-navigation'
 import CustomModal from '@/components/customs/custom-modal'
 import colors from '@/lib/colors'
+import { useAppStore } from '@/store/use-app-store'
+import CustomPopover from '@/components/customs/custom-popover'
+import CustomDialog from '@/components/customs/custom-dialog'
 
 const menuItems = [
   {
@@ -59,7 +56,7 @@ export default function Aside() {
   const navigateTo = useAnchorNavigation()
   const currentPath = usePathname()
   const { removeValue } = useLocalStorage<UserData | null>('userData', null)
-  const user = getStoredUser()
+  const { user } = useAppStore()
 
   const handleLogout = () => {
     ovationService.logout()
@@ -100,23 +97,32 @@ export default function Aside() {
                 </p>
               </div>
             </div>
-            <Popover>
-              <PopoverTrigger className="p-1 rounded-full">
-                <More size={24} color="white" variant="Outline" />
-              </PopoverTrigger>
-              <PopoverContent
-                side="right"
-                className="w-fit bg-[#232227] flex flex-col items-start border-none  text-base py-2"
-              >
-                <Button
-                  variant={'ghost'}
-                  onClick={handleLogout}
-                  className="py-[10px] w-full text-red-500 hover:text-red-600 hover:bg-transparent"
-                >
-                  Logout {user?.username}
-                </Button>
-              </PopoverContent>
-            </Popover>
+            <CustomPopover
+              trigger={
+                <button className="p-1 rounded-full" type="button">
+                  <More size={24} color="white" variant="Outline" />
+                </button>
+              }
+              content={
+                <CustomDialog
+                  trigger={
+                    <Button
+                      variant={'ghost'}
+                      className="py-[10px] w-full text-red-500 hover:text-red-600 hover:bg-transparent"
+                    >
+                      Logout {user?.username}
+                    </Button>
+                  }
+                  title="Confirm Logout"
+                  description="Are you sure you want to log out?"
+                  confirmText="Logout"
+                  cancelText="Cancel"
+                  onConfirm={handleLogout}
+                />
+              }
+              side="bottom"
+              className="w-fit bg-[#232227] flex flex-col items-start border-none text-base py-2"
+            />
           </div>
         </ErrorBoundary>
 

@@ -136,7 +136,7 @@ export default function MessageContainer({
           <div className="flex flex-col items-center gap-[13px]">
             <div className="flex flex-col items-center gap-[6px]">
               <p className=" text-xl font-semibold">No Conversation Selected</p>
-              <p className="text-[#E6E6E6] text-center text-sm max-w-[280px]">
+              <p className="text-foreground text-center text-sm max-w-[280px]">
                 To start a new conversation, visit a user&apos;s profile and
                 click the message button.
               </p>
@@ -177,7 +177,7 @@ export default function MessageContainer({
               <p className=" text-xl font-semibold w-fit leading-[30px] text-center">
                 {friend.displayName}
               </p>
-              <p className="text-sm text-[#808080] w-fit">{friend.userName}</p>
+              <p className="text-sm text-lighter w-fit">{friend.userName}</p>
             </div>
           </div>
         </ErrorBoundary>

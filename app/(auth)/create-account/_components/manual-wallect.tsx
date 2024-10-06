@@ -1,13 +1,8 @@
 import { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from '@/components/ui/form'
 import { Checkbox } from '@/components/ui/checkbox'
 import { ManualWalletForm } from '@/components/manual-wallet-form'
+import { FormField } from '@/components/customs/custom-form'
 
 export default function RenderWalletAndConfirmation({
   form,
@@ -30,23 +25,11 @@ export default function RenderWalletAndConfirmation({
       onSubmit={form.handleSubmit(handleFormSubmit)}
       className="flex flex-col gap-7"
     >
-      <FormField
-        control={form.control}
-        name="addWalletLater"
-        render={({ field }) => (
-          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-            <FormControl>
-              <Checkbox
-                checked={field.value}
-                onCheckedChange={field.onChange}
-              />
-            </FormControl>
-            <div className="space-y-1 leading-none">
-              <FormLabel>Add wallet later</FormLabel>
-            </div>
-          </FormItem>
+      <FormField form={form} name="addWalletLater" label="Add wallet later">
+        {(field) => (
+          <Checkbox checked={field.value} onCheckedChange={field.onChange} />
         )}
-      />
+      </FormField>
 
       {!form.watch('addWalletLater') && (
         <ManualWalletForm form={form} name="userWallet" />

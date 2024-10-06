@@ -60,6 +60,7 @@ const config = {
           DEFAULT: '#CFF073',
           // DEFAULT: '#C1FE17',
           foreground: '#0B0A10',
+          bright: '#C1FE17',
         },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',

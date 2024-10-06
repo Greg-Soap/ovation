@@ -5,14 +5,14 @@ import { useQuery } from '@tanstack/react-query'
 import type { UserData } from '@/models/all.model'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
-import { getStoredUser } from '@/lib/helper-func'
 import { GetStarted } from './_components/get-started'
 import { Header } from './_components/header'
 import { Ranking } from './_components/ranking'
 import { MostViewed } from './_components/most-viewed'
+import { useAppStore } from '@/store/use-app-store'
 
 export default function Page() {
-  const user = getStoredUser()
+  const { user } = useAppStore()
 
   const { data: experiences } = useQuery({
     queryKey: ['experiences'],

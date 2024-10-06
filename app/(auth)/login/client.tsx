@@ -12,12 +12,11 @@ import { useGoogleLogin } from '@react-oauth/google'
 import { useMutation } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
 import { setToken } from '@/lib/cookies'
-import { useLocalStorage } from '@/lib/use-local-storage'
-import type { UserData } from '@/models/all.model'
 import PasswordInput from '@/components/password-input'
 import { FormBase, FormField } from '@/components/customs/custom-form'
 import { useAnchorNavigation } from '@/lib/use-navigation'
 import { signInOrSignUp } from '@/lib/firebaseAuthService'
+import { useAppStore } from '@/store/use-app-store'
 
 const formSchema = z.object({
   userId: z.string(),
@@ -26,8 +25,7 @@ const formSchema = z.object({
 
 export default function LoginForm() {
   const navigateTo = useAnchorNavigation()
-  const { setValue } = useLocalStorage<UserData | null>('userData', null)
-
+  const { setUser } = useAppStore()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,7 +39,7 @@ export default function LoginForm() {
     onSuccess: async (data) => {
       if (data?.data?.token) {
         setToken(data?.data?.token)
-        setValue(data?.data?.userData)
+        setUser(data?.data?.userData)
 
         toast.success('Login successful!')
         await signInOrSignUp(data?.data?.userData)
@@ -75,7 +73,7 @@ export default function LoginForm() {
       console.log({ loginGoogle: data })
       if (data?.data?.token) {
         setToken(data?.data?.token)
-        setValue(data?.data?.userData)
+        setUser(data?.data?.userData)
 
         toast.success('Login successful!')
         navigateTo('/apps/discover')

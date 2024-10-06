@@ -5,14 +5,6 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Image from 'next/image'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import SettingsChange from './settings-change'
 import ovationService from '@/services/ovation.service'
@@ -20,6 +12,111 @@ import { toast } from 'sonner'
 import { useMutation } from '@tanstack/react-query'
 import { useQuery } from '@tanstack/react-query'
 import SavingOverlay from '@/components/saving-overlay'
+import { FormBase, FormField } from '@/components/customs/custom-form'
+
+export default function SocialForm({ userId }: { userId: string }) {
+  const [isDisabled, setIsDisabled] = useState(true)
+  const { data: socialLinks, isLoading: isSocialLinksLoading } = useQuery({
+    queryKey: ['socialLinks', userId],
+    queryFn: () => ovationService.getSocialLinks(userId),
+  })
+  const socialLinksData = socialLinks?.data?.data
+
+  const form = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      linkedin: '',
+      twitter: '',
+      website: '',
+      lens: '',
+      farcaster: '',
+      blur: '',
+      foundation: '',
+      magiceden: '',
+      ethco: '',
+    },
+  })
+
+  useEffect(() => {
+    if (socialLinksData) {
+      form.reset({
+        linkedin: socialLinksData.linkedIn || '',
+        twitter: socialLinksData.twitter || '',
+        website: socialLinksData.website || '',
+        lens: socialLinksData.lens || '',
+        farcaster: socialLinksData.forcaster || '',
+        blur: socialLinksData.blur || '',
+        foundation: socialLinksData.foundation || '',
+        magiceden: socialLinksData.magic || '',
+        ethco: socialLinksData.ethico || '',
+      })
+    }
+  }, [socialLinksData, form])
+  const { mutate, isPending } = useMutation({
+    mutationFn: (data: FormValues) => ovationService.updateSocials(data),
+    onSuccess: () => {
+      toast.success('Social links updated successfully')
+      setIsDisabled(true)
+    },
+    onError: () => {
+      toast.error('Failed to update social links')
+    },
+  })
+
+  const onSubmit = (data: FormValues) => {
+    const formattedData = {
+      blur: data.blur || '',
+      foundation: data.foundation || '',
+      twitter: data.twitter || '',
+      website: data.website || '',
+      linkedIn: data.linkedin || '',
+      lens: data.lens || '',
+      forcaster: data.farcaster || '',
+      ethico: data.ethco || '',
+      magic: data.magiceden || '',
+    }
+
+    mutate(formattedData)
+  }
+
+  return (
+    <section className="w-full h-full flex flex-col gap-[23px] pb-5">
+      <SavingOverlay
+        isLoading={isSocialLinksLoading}
+        loadingText={'Loading your social links...'}
+      />
+      <FormBase
+        form={form}
+        onSubmit={onSubmit}
+        className="space-y-[23px] min-h-full"
+      >
+        {socialPlatforms.map((platform) => (
+          <FormField
+            key={platform.name}
+            name={platform.name as keyof FormValues}
+            form={form}
+            showMessage
+          >
+            <div className="h-[47px] flex items-center border border-[#4D4D4D] rounded-full px-3 py-2 gap-2">
+              <Image
+                src={platform.imgSrc}
+                alt={platform.label}
+                width={25}
+                height={25}
+              />
+              <Input
+                placeholder={`Enter ${platform.label} link here`}
+                className="focus:border-none focus:outline-none focus:ring-0 focus-visible:ring-0 border-none h-fit px-0 py-2 text-sm "
+              />
+            </div>
+          </FormField>
+        ))}
+      </FormBase>
+
+      <SettingsChange disabled={isDisabled} isLoading={isPending} />
+    </section>
+  )
+}
 
 const urlRefinement = (val: string | undefined, errorMessage: string) => {
   if (!val) return true // Allow empty strings (optional fields)
@@ -167,118 +264,3 @@ const socialPlatforms: SocialPlatform[] = [
     label: 'EthCo',
   },
 ]
-
-export default function SocialForm({ userId }: { userId: string }) {
-  const [isDisabled, setIsDisabled] = useState(true)
-  const { data: socialLinks, isLoading: isSocialLinksLoading } = useQuery({
-    queryKey: ['socialLinks', userId],
-    queryFn: () => ovationService.getSocialLinks(userId),
-  })
-  const socialLinksData = socialLinks?.data?.data
-
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      linkedin: '',
-      twitter: '',
-      website: '',
-      lens: '',
-      farcaster: '',
-      blur: '',
-      foundation: '',
-      magiceden: '',
-      ethco: '',
-    },
-  })
-
-  useEffect(() => {
-    if (socialLinksData) {
-      form.reset({
-        linkedin: socialLinksData.linkedIn || '',
-        twitter: socialLinksData.twitter || '',
-        website: socialLinksData.website || '',
-        lens: socialLinksData.lens || '',
-        farcaster: socialLinksData.forcaster || '',
-        blur: socialLinksData.blur || '',
-        foundation: socialLinksData.foundation || '',
-        magiceden: socialLinksData.magic || '',
-        ethco: socialLinksData.ethico || '',
-      })
-    }
-  }, [socialLinksData, form])
-  const { mutate, isPending } = useMutation({
-    mutationFn: (data: FormValues) => ovationService.updateSocials(data),
-    onSuccess: () => {
-      toast.success('Social links updated successfully')
-      setIsDisabled(true)
-    },
-    onError: () => {
-      toast.error('Failed to update social links')
-    },
-  })
-
-  const onSubmit = (data: FormValues) => {
-    const formattedData = {
-      blur: data.blur || '',
-      foundation: data.foundation || '',
-      twitter: data.twitter || '',
-      website: data.website || '',
-      linkedIn: data.linkedin || '',
-      lens: data.lens || '',
-      forcaster: data.farcaster || '',
-      ethico: data.ethco || '',
-      magic: data.magiceden || '',
-    }
-
-    mutate(formattedData)
-  }
-
-  return (
-    <section className="w-full h-full flex flex-col gap-[23px] pb-5">
-      <SavingOverlay
-        isLoading={isSocialLinksLoading}
-        loadingText={'Loading your social links...'}
-      />
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          onChange={() => setIsDisabled(false)}
-          className="space-y-[23px] min-h-full"
-        >
-          {socialPlatforms.map((platform) => (
-            <FormField
-              key={platform.name}
-              control={form.control}
-              name={platform.name as keyof FormValues}
-              render={({ field }) => (
-                <FormItem className="w-full flex flex-col gap-2 px-10 2xl:pl-20">
-                  <FormLabel className="text-sm text-light">
-                    {platform.label}
-                  </FormLabel>
-                  <FormControl>
-                    <div className="h-[47px] flex items-center border border-[#4D4D4D] rounded-full px-3 py-2 gap-2">
-                      <Image
-                        src={platform.imgSrc}
-                        alt={platform.label}
-                        width={25}
-                        height={25}
-                      />
-                      <Input
-                        placeholder={`Enter ${platform.label} link here`}
-                        {...field}
-                        className="focus:border-none focus:outline-none focus:ring-0 focus-visible:ring-0 border-none h-fit px-0 py-2 text-sm "
-                      />
-                    </div>
-                  </FormControl>
-                  <FormMessage className="text-xs text-red-500" />
-                </FormItem>
-              )}
-            />
-          ))}
-
-          <SettingsChange disabled={isDisabled} isLoading={isPending} />
-        </form>
-      </Form>
-    </section>
-  )
-}

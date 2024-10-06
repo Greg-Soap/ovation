@@ -31,7 +31,7 @@ export default function Experience({ data }: { data: UserExperience[] }) {
           <p className="text-light text-lg font-medium">
             No experience added yet
           </p>
-          <p className="text-[#808080] text-sm mt-2">
+          <p className="text-lighter text-sm mt-2">
             Click the plus icon to add your work experience
           </p>
         </div>
@@ -43,7 +43,7 @@ export default function Experience({ data }: { data: UserExperience[] }) {
               <div className="flex flex-col gap-[3px]">
                 <p className=" text-lg font-semibold">{experienceItem?.role}</p>
                 <p className="text-gray">{experienceItem?.company}</p>
-                <p className="text-[#808080]">{`${experienceItem?.startDate} - ${experienceItem?.endDate || 'Present'}`}</p>{' '}
+                <p className="text-lighter">{`${experienceItem?.startDate} - ${experienceItem?.endDate || 'Present'}`}</p>{' '}
               </div>
 
               <div className="flex flex-col gap-[13px]">

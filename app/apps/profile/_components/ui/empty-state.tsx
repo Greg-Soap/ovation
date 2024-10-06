@@ -17,7 +17,7 @@ export default function ExternalEmptyState({
 
       <div className="flex flex-col items-center max-w-[274px] gap-[23px]">
         <div className="flex flex-col gap-1 items-center">
-          <p className="text-lg text-[#E6E6E6] font-medium text-center">
+          <p className="text-lg text-foreground font-medium text-center">
             Nothing here yet
           </p>
           <p className="text-xs text-light text-center">

@@ -12,6 +12,7 @@ import type {
   Badge,
   DiscoverUserData,
   WalletAcct,
+  FollowersFollowing,
 } from '../models/all.model'
 import { removeToken } from '@/lib/cookies'
 
@@ -85,6 +86,14 @@ class OvationService {
 
   static unfollowUser(userId: string) {
     return api.delete(`/Profile/follow/${userId}`)
+  }
+
+  static getFollowers(userId: string) {
+    return api.get<{ data: FollowersFollowing[]; message: string }>(`/Profile/followers/${userId}`)
+  }
+
+  static getFollowing(userId: string) {
+    return api.get<{ data: FollowersFollowing[]; message: string }>(`/Profile/followings/${userId}`)
   }
 
   static viewProfile(userId: string) {
@@ -234,6 +243,13 @@ class OvationService {
   static async getMostViewed() {
     const response = await api.get<{ data: DiscoverUserData[]; message: string }>(
       '/Discover/most-viewed',
+    )
+    return response.data?.data
+  }
+
+  static async getMostFollowed() {
+    const response = await api.get<{ data: DiscoverUserData[]; message: string }>(
+      '/Discover/most-followed',
     )
     return response.data?.data
   }

@@ -1,13 +1,11 @@
 import Image from 'next/image'
-import { useLocalStorage } from '@/lib/use-local-storage'
-import type { UserData } from '@/models/all.model'
 import { getGreeting } from '@/lib/helper-func'
 import Hamburger from '../../_components/_timeline/hamburger'
 import { Moon, Sun1 } from 'iconsax-react'
+import { useAppStore } from '@/store/use-app-store'
 
 export default function TimelineHeader() {
-  const { storedValue } = useLocalStorage<UserData | null>('userData', null)
-  const user = storedValue
+  const { user } = useAppStore()
 
   return (
     <header className="w-full  flex items-center h-[90px] border-r border-b border-[#1A1A1A] bg-[#111115] sticky top-0  max1440px] z-50">

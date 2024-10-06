@@ -150,7 +150,7 @@ export default function FriendList() {
                       </p>
                     </div>
                   </div>
-                  <p className="text-[11px] text-[#808080] mt-2">
+                  <p className="text-[11px] text-lighter mt-2">
                     {formatDate(friend.lastMessageSentAt)}
                   </p>
                 </Button>

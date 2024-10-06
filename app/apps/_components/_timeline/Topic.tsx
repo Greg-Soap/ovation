@@ -49,7 +49,7 @@ export default function Topics() {
             className="flex hover:scale-105 transition-all flex-col w-full gap-[10px] p-4 bg-[#18181C] border border-[#35353880] rounded-[17px]"
             key={index}
           >
-            <p className="font-semibold text-[#E6E6E6] leading-5">
+            <p className="font-semibold text-foreground leading-5">
               {topic.text}
             </p>
 

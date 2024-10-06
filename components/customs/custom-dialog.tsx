@@ -12,7 +12,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { Button } from '@/components/ui/button'
+import { ButtonProps } from '@/components/ui/button'
 
 interface CustomDialogProps {
   trigger: React.ReactNode
@@ -20,6 +20,7 @@ interface CustomDialogProps {
   description: string
   confirmText?: string
   cancelText?: string
+  actionVariant?: ButtonProps['variant']
   onConfirm: () => void
 }
 
@@ -30,6 +31,7 @@ function CustomDialog({
   confirmText = 'Confirm',
   cancelText = 'Cancel',
   onConfirm,
+  actionVariant = 'secondary',
 }: CustomDialogProps) {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -38,9 +40,17 @@ function CustomDialog({
     setIsOpen(false)
   }
 
+  const handleTriggerClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    setIsOpen(true)
+  }
+
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
-      <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>
+      <AlertDialogTrigger asChild onClick={handleTriggerClick}>
+        {trigger}
+      </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
@@ -48,7 +58,7 @@ function CustomDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>{cancelText}</AlertDialogCancel>
-          <AlertDialogAction onClick={handleConfirm}>
+          <AlertDialogAction onClick={handleConfirm} variant={actionVariant}>
             {confirmText}
           </AlertDialogAction>
         </AlertDialogFooter>

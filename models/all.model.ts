@@ -223,4 +223,15 @@ export interface DiscoverUserData {
   totalNft?: number
   founderNft?: number
   experiences?: number
+  followers?: number
+}
+
+export interface FollowersFollowing {
+displayName: string
+isUserFollowing: boolean
+isFollowing: boolean
+profileImage: string
+userId: string
+  username: string
+  bio: string
 }

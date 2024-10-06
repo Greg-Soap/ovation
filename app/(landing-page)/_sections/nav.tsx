@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
-import { getStoredUser } from '@/lib/helper-func'
 import colors from '@/lib/colors'
+import { useAppStore } from '@/store/use-app-store'
 
 function convertToISOString(dateString: string): string {
   // Expected format: "YYYY MM DD : HH mm"
@@ -25,7 +25,7 @@ function convertToISOString(dateString: string): string {
 }
 
 export function Header({ navLinks = links }: HeaderProps) {
-  const user = getStoredUser()
+  const { isAuthenticated } = useAppStore()
   const [showButton, setShowButton] = useState(false)
 
   const showButtonTime = '2024 10 11 : 21 00'
@@ -58,7 +58,7 @@ export function Header({ navLinks = links }: HeaderProps) {
         <Navigation mobile navLinks={navLinks} />
         {showButton && (
           <Button variant={'default'}>
-            {user ? (
+            {isAuthenticated ? (
               <a href={'/apps/discover'}>Dashboard</a>
             ) : (
               <a href={'/login'}>Login</a>
@@ -90,10 +90,10 @@ const links: NavLink[] = [
     title: 'News',
     href: '/news',
   },
-  {
-    title: 'Founder NFT',
-    href: '/founder-nfts',
-  },
+  // {
+  //   title: 'Founder NFT',
+  //   href: '/founder-nfts',
+  // },
 ]
 
 function Navigation({ mobile = false, navLinks = [] }: NavigationProps) {

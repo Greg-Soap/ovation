@@ -1,5 +1,4 @@
 'use client'
-import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -11,7 +10,6 @@ import ovationService from '@/services/ovation.service'
 import { useMutation } from '@tanstack/react-query'
 import { setToken } from '@/lib/cookies'
 import { useLocalStorage } from '@/lib/use-local-storage'
-import type { UserData } from '@/models/all.model'
 import { signUp } from '@/lib/firebaseAuthService'
 import { useGoogleLogin } from '@react-oauth/google'
 import RenderWalletAndConfirmation from './_components/manual-wallect'
@@ -20,6 +18,7 @@ import PathSelection from './_components/path-selection'
 import FormErrorSummary from './_components/form-error-summary'
 import { Form } from '@/components/ui/form'
 import { useAnchorNavigation } from '@/lib/use-navigation'
+import { useAppStore } from '@/store/use-app-store'
 
 const formSchema = z.object({
   personalInfo: z.object({
@@ -54,7 +53,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
 
   const [isManualWallet, setIsManualWallet] = useState(true)
 
-  const { setValue } = useLocalStorage<UserData | null>('userData', null)
+  const { setUser } = useAppStore()
 
   const { storedValue: draft, setValue: setDraft } = useLocalStorage<
     Partial<z.infer<typeof formSchema>>
@@ -94,7 +93,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
     mutationFn: ovationService.register,
     onSuccess: async (data) => {
       setToken(data.data?.token)
-      setValue(data.data?.userData)
+      setUser(data.data?.userData)
 
       await signUp(data.data?.userData) // for firebase
 

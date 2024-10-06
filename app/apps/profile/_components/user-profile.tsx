@@ -10,15 +10,18 @@ import { ErrorFallback } from '@/components/error-boundary'
 import LocationIcon from '@/public/assets/images/ovationLocationIcon'
 import { Calendar2 } from 'iconsax-react'
 import { formatJoinedDate } from '@/lib/helper-func'
+import { linkify } from '@/lib/use-link'
 
 export default function UserProfile({
   profileData,
   isLoading,
   experienceData,
+  secondaryProfile,
 }: {
   profileData: ProfileData
   isLoading: boolean
   experienceData: UserExperience[]
+  secondaryProfile?: boolean
 }) {
   const latestExperience = experienceData?.[0] ?? null
 
@@ -73,39 +76,52 @@ export default function UserProfile({
                 )}
 
                 {profileData?.profile?.bio ? (
-                  <p className="font-normal text-[#E6E6E6] text-sm">
-                    {profileData?.profile?.bio}
+                  <p className="font-normal text-foreground text-sm">
+                    {linkify(profileData?.profile?.bio)}
                   </p>
                 ) : (
                   <a
                     href="/apps/settings"
-                    className="font-normal text-[#cff073d7] text-sm hover:underline"
+                    className="font-normal text-primary text-sm hover:underline"
                   >
                     Add a bio
                   </a>
                 )}
 
                 {profileData?.createdDate && (
-                  <p className="font-normal text-[#808080] text-sm flex items-center gap-1">
-                    <Calendar2 className="w-[13px] h-[13px] stroke-[#808080]" />
+                  <p className="font-normal text-lighter text-sm flex items-center gap-1">
+                    <Calendar2 className="w-[13px] h-[13px] stroke-lighter" />
                     <span>{formatJoinedDate(profileData?.createdDate)}</span>
                   </p>
                 )}
 
                 <div className="flex items-center gap-6">
-                  <p className="flex items-center text-[#E6E6E6] text-sm font-semibold gap-2">
+                  <a
+                    href={
+                      secondaryProfile
+                        ? `/apps/profile/${profileData?.username}/following`
+                        : '/apps/profile/following'
+                    }
+                    className="flex items-center text-foreground text-sm font-semibold gap-2 "
+                  >
                     {profileData?.userStats?.following || 0}{' '}
-                    <span className="font-medium text-[#808080]">
+                    <span className="font-medium text-lighter text-sm hover:underline">
                       Following
                     </span>
-                  </p>
-
-                  <p className="flex items-center text-[#E6E6E6] text-sm font-semibold gap-[9px]">
+                  </a>
+                  <a
+                    href={
+                      secondaryProfile
+                        ? `/apps/profile/${profileData?.username}/followers`
+                        : '/apps/profile/followers'
+                    }
+                    className="flex items-center text-foreground text-sm font-semibold gap-[9px]"
+                  >
                     {profileData?.userStats?.followers || 0}{' '}
-                    <span className="font-medium text-[#808080] text-sm">
+                    <span className="font-medium text-lighter text-sm hover:underline">
                       Followers
                     </span>
-                  </p>
+                  </a>
                 </div>
 
                 <div className="flex flex-col gap-3  justify-between">
@@ -126,7 +142,7 @@ export default function UserProfile({
                         className="rounded-full"
                       />
                       <p className="text-xs text-light">
-                        {latestExperience.department}
+                        {latestExperience?.department}
                       </p>
                     </div>
                   )}
@@ -135,7 +151,7 @@ export default function UserProfile({
                       <div className="flex items-center gap-1.5">
                         <EventIcon className="w-[13px] h-[13px] stroke-[#B3B3B3]" />
                         <p className="text-xs text-light">
-                          {latestExperience.startDate}
+                          {latestExperience?.startDate}
                         </p>
                       </div>
                     )}
@@ -143,11 +159,11 @@ export default function UserProfile({
                       <>
                         <p className="text-xs text-light">-</p>
                         <div className="flex items-center gap-1.5">
-                          {latestExperience.endDate ? (
+                          {latestExperience?.endDate ? (
                             <>
                               <EventIcon className="w-[13px] h-[13px] stroke-[#B3B3B3]" />
                               <p className="text-xs text-light">
-                                {latestExperience.endDate}
+                                {latestExperience?.endDate}
                               </p>
                             </>
                           ) : (
@@ -157,11 +173,11 @@ export default function UserProfile({
                       </>
                     )}
                   </div>
-                  {profileData.profile?.location && (
+                  {profileData?.profile?.location && (
                     <div className="flex items-center gap-1.5">
                       <LocationIcon className="w-[13px] h-[13px] stroke-[#B3B3B3]" />
                       <p className="text-xs text-light">
-                        {profileData.profile.location}
+                        {profileData?.profile?.location}
                       </p>
                     </div>
                   )}

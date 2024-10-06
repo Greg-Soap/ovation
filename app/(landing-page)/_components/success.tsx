@@ -5,7 +5,7 @@ import colors from '@/lib/colors'
 export default function SuccessMail() {
   return (
     <div className="flex flex-col gap-5 items-center my-[60px] w-full lg:w-[45%]">
-      <h1 className="text-[#E6E6E6] text-2xl text-center">Thank you!</h1>
+      <h1 className="text-foreground text-2xl text-center">Thank you!</h1>
       <p className="text-lighter text-center">
         Your response has been recorded, we will notify you when we go live, in
         the mean time follow us on our socials below

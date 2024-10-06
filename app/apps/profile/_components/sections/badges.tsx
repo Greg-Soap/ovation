@@ -27,7 +27,7 @@ export default function Badges({ userId }: { userId: string }) {
 
   return (
     <div className="flex flex-col bg-[#18181C] rounded-[20px] gap-4 px-5 py-[18px]">
-      <p className="text-xs font-medium text-[#808080]">Badges</p>
+      <p className="text-xs font-medium text-lighter">Badges</p>
 
       {hasBadges ? (
         <div className="flex flex-wrap gap-2">

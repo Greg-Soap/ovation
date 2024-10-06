@@ -5,6 +5,7 @@ const colors = {
   primary: {
     DEFAULT: '#CFF073',
     foreground: '#0B0A10',
+    bright: '#C1FE17',
   },
   secondary: {
     DEFAULT: '#1C1C1E',

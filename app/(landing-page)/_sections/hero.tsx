@@ -4,13 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import { BorderBeam } from '@/components/animations/border-beam'
@@ -19,6 +12,8 @@ import axios from 'axios'
 import SuccessMail from '../_components/success'
 import { useState } from 'react'
 import ovationService from '@/services/ovation.service'
+import colors from '@/lib/colors'
+import { FormBase, FormField } from '@/components/customs/custom-form'
 
 const formSchema = z.object({
   subscriberEmail: z.string().email({
@@ -93,7 +88,7 @@ export default function Hero() {
         className="absolute right-40 bottom-[290px] hero-img-bottom-right"
       />
 
-      <div className="text-[10px] leading-[15px] md:text-base text-[#C1FE17] py-[6.5px] px-4 rounded-[20px] border border-[#828774] flex items-center gap-3 bg-custom-gradient mb-10">
+      <div className="text-[10px] leading-[15px] md:text-base text-primary-bright py-[6.5px] px-4 rounded-[20px] border border-[#828774] flex items-center gap-3 bg-custom-gradient mb-10">
         <img
           src="assets/images/Cone.png"
           alt="logo"
@@ -121,48 +116,37 @@ export default function Hero() {
         <SuccessMail />
       ) : (
         <div className="lg:w-[50%] w-[90%] flex flex-col gap-4 items-center justify-center mb-10">
-          <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-8 w-full mt-10"
-            >
-              <FormField
-                control={form.control}
-                name="subscriberEmail"
-                render={({ field }) => (
-                  <FormItem className="relative">
-                    <FormControl>
-                      <div className="relative border border-[#666666] bg-[#FFFFFF1A] rounded-[500px]">
-                        <Input
-                          placeholder="Enter your email"
-                          {...field}
-                          className="text-lg h-[65px]"
-                        />
-                        <Button
-                          className="absolute top-[20%] right-[15px] text-xs text-[#111115] px-4 py-3 h-fit"
-                          type="submit"
-                        >
-                          Submit
-                        </Button>
-                        <BorderBeam
-                          size={125}
-                          duration={8}
-                          anchor={90}
-                          colorFrom="#C1FE17"
-                          colorTo="#bbff00"
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </form>
+          <FormBase
+            form={form}
+            onSubmit={onSubmit}
+            className="w-full mt-10 space-y-8"
+          >
+            <FormField name="subscriberEmail" form={form} showMessage>
+              <div className="relative border border-[#666666] bg-[#FFFFFF1A] rounded-[500px]">
+                <Input
+                  placeholder="Enter your email"
+                  className="text-lg h-[65px]"
+                />
+                <Button
+                  className="absolute top-[20%] right-[15px] text-xs text-[#111115] px-4 py-3 h-fit"
+                  type="submit"
+                >
+                  Submit
+                </Button>
+                <BorderBeam
+                  size={125}
+                  duration={8}
+                  anchor={90}
+                  colorFrom={colors.primary.bright}
+                  colorTo={colors.primary.DEFAULT}
+                />
+              </div>
+            </FormField>
 
             <p className="text-lighter text-center">
               Sign up and be the first to know about our MVP Launch!
             </p>
-          </Form>
+          </FormBase>
         </div>
       )}
     </section>

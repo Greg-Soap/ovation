@@ -1,6 +1,7 @@
 import VerifyIcon from '@/components/icons/verifyIcon'
 import MiniLoader from '@/components/mini-loader'
 import { formatUsername } from '@/lib/helper-func'
+import { linkify } from '@/lib/use-link'
 import ovationService from '@/services/ovation.service'
 import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
@@ -94,7 +95,7 @@ export function MostViewed() {
           </div>
 
           <p className="text-sm text-light">
-            {mostViewed[0]?.bio || 'No bio available'}
+            {linkify(mostViewed[0]?.bio || 'No bio available')}
           </p>
         </div>
       </div>

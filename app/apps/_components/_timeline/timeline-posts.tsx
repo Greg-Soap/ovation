@@ -212,11 +212,11 @@ export default function TimelinePosts() {
                     {post.displayName}
                     <VerifyIcon />
                   </p>
-                  <p className="text-xs font-medium text-[#808080]">
+                  <p className="text-xs font-medium text-lighter">
                     {post.userName}
                   </p>
                   <div className="w-1 h-1 rounded-full bg-[#808080]" />
-                  <p className="text-xs leading-5 font-medium text-[#808080]">
+                  <p className="text-xs leading-5 font-medium text-lighter">
                     2h
                   </p>
                 </div>
@@ -246,7 +246,7 @@ export default function TimelinePosts() {
                 'flex flex-col w-[93.5%] h-fit max-w-[820px] gap-[22px]'
               }
             >
-              <p className="text-sm leading-5 text-[#E6E6E6]">
+              <p className="text-sm leading-5 text-foreground">
                 Dedicated NFT enthusiast, embracing the
                 <span className="text-primary"> #digital</span> revolution one
                 token at a time. Let&apos; explore the world of blockchain art
@@ -289,7 +289,7 @@ export default function TimelinePosts() {
                 <div className="flex flex-col w-full h-fit px-4 gap-3 border-l-[4px] border-[#4D4D4D]">
                   {post.transcripts.map((list, index) => (
                     <p
-                      className="flex items-center gap-2 text-sm text-[#808080]"
+                      className="flex items-center gap-2 text-sm text-lighter"
                       key={index}
                     >
                       {list.time} <span className="">{list.text}</span>
@@ -297,7 +297,7 @@ export default function TimelinePosts() {
                   ))}
                   {post.extraTranscripts.map((list, index) => (
                     <p
-                      className={`${list.isHidden ? 'flex' : 'hidden'} items-center gap-2 text-sm text-[#808080]`}
+                      className={`${list.isHidden ? 'flex' : 'hidden'} items-center gap-2 text-sm text-lighter`}
                       key={index}
                     >
                       {list.time} <span className="">{list.text}</span>

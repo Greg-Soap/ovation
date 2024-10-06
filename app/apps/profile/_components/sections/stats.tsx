@@ -35,9 +35,7 @@ export default function Stats({ userId }: { userId: string }) {
                 className="max-w-[245px] border border-[#FFFFFF0D] rounded-[10px] bg-[#18181C] lg:px-[30px] px-2 py-2 lg:py-6 flex flex-col gap-5"
                 key={index}
               >
-                <p className="text-[#808080] text-xs font-medium">
-                  {item.label}
-                </p>
+                <p className="text-lighter text-xs font-medium">{item.label}</p>
                 <p className=" font-semibold text-4xl">{item.value}</p>
               </div>
             ))}

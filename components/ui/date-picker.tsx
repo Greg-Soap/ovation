@@ -102,7 +102,7 @@ export function DatePicker({
           disabled={disableDate}
           className={cn(
             'w-full justify-start text-left  font-normal hover:bg-transparent hover:',
-            !selectedDate && 'text-[#808080]',
+            !selectedDate && 'text-lighter',
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />

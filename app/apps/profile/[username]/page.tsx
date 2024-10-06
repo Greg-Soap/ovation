@@ -28,6 +28,7 @@ export default function SecondaryProfile() {
   } = useQuery({
     queryKey: ['profile', username],
     queryFn: () => ovationService.getUserProfile(username),
+    enabled: !!username,
   })
 
   const { data: experienceData } = useQuery({
@@ -152,6 +153,7 @@ export default function SecondaryProfile() {
               profileData={profileData as ProfileData}
               experienceData={experienceData?.data?.data || []}
               isLoading={isLoading}
+              secondaryProfile={true}
             />
           </Suspense>
         </ErrorBoundary>

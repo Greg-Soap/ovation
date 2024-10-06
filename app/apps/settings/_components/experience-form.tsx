@@ -3,14 +3,6 @@
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { DatePicker } from '@/components/ui/date-picker'
 import { Textarea } from '@/components/ui/textarea'
@@ -23,6 +15,7 @@ import { useLocalStorage } from '@/lib/use-local-storage'
 import { useState, useEffect } from 'react'
 import { formatDate } from '@/lib/helper-func'
 import type { UserExperience } from '@/models/all.model'
+import { FormBase, FormField } from '@/components/customs/custom-form'
 
 const formSchema = z.object({
   company: z.string().min(1, 'Company is required'),
@@ -131,187 +124,118 @@ export default function ExperienceForm({
 
   return (
     <div className="flex flex-col gap-[23px] h-full">
-      <p className="text-lg text-[#E6E6E6] font-medium px-10 2xl:px-20">
+      <p className="text-lg text-foreground font-medium px-10 2xl:px-20">
         Experience
       </p>
 
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(handleSubmit)}
-          onChange={() => setIsDisabled(false)}
-        >
-          <div className="flex gap-7 flex-col px-4 sm:px-10 2xl:px-20 pb-5">
-            <FormField
-              control={form.control}
-              name="company"
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-2">
-                  <FormLabel className="text-sm text-light">Company</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="ex. Google"
-                      {...field}
-                      className="h-[47px] text-sm  border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+      <FormBase form={form} onSubmit={handleSubmit}>
+        <div className="flex gap-7 flex-col px-4 sm:px-10 2xl:px-20 pb-5">
+          <FormField name="company" label="Company" showMessage form={form}>
+            <Input
+              placeholder="ex. Google"
+              className="h-[47px] text-sm  border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
             />
-
-            <FormField
-              control={form.control}
-              name="role"
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-2">
-                  <FormLabel className="text-sm text-light">Role</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="ex. CEO"
-                      {...field}
-                      className="h-[47px] text-sm  border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+          </FormField>
+          <FormField name="role" label="Role" showMessage form={form}>
+            <Input
+              placeholder="ex. CEO"
+              className="h-[47px] text-sm  border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
             />
-
-            <FormField
-              control={form.control}
-              name="department"
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-2">
-                  <FormLabel className="text-sm text-light">
-                    Department
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="ex. Engineering"
-                      {...field}
-                      className="h-[47px] text-sm  border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+          </FormField>
+          <FormField
+            name="department"
+            label="Department"
+            showMessage
+            form={form}
+          >
+            <Input
+              placeholder="ex. Engineering"
+              className="h-[47px] text-sm  border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
             />
-
-            <div className="flex flex-col gap-[13px]">
-              <div className="grid grid-cols-2 gap-[33px]">
-                <FormField
-                  control={form.control}
-                  name="startDate"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col gap-2">
-                      <FormLabel className="text-sm text-light">
-                        Start Date
-                      </FormLabel>
-                      <FormControl>
-                        <DatePicker
-                          value={field.value}
-                          disableDate={false}
-                          placeholder="Select Start Date"
-                          onChange={(date) =>
-                            field.onChange(formatDate(date || new Date()))
-                          }
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="endDate"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col gap-2">
-                      <FormLabel className="text-sm text-light">
-                        Finish Date
-                      </FormLabel>
-                      <FormControl>
-                        <DatePicker
-                          disableDate={isCurrentJob}
-                          value={field.value || ''}
-                          placeholder="Select Finish Date"
-                          onChange={(date) =>
-                            field.onChange(formatDate(date || new Date()))
-                          }
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div className="flex items-center gap-[7px] mt-[13px]">
-                <Checkbox
-                  id="work"
-                  checked={isCurrentJob}
-                  onCheckedChange={(checked) => {
-                    setIsCurrentJob(checked as boolean)
-                    if (checked) {
-                      form.setValue('endDate', null)
+          </FormField>
+          <div className="flex flex-col gap-[13px]">
+            <div className="grid grid-cols-2 gap-[33px]">
+              <FormField
+                name="startDate"
+                label="Start Date"
+                showMessage
+                form={form}
+              >
+                {(field) => (
+                  <DatePicker
+                    value={field.value}
+                    disableDate={false}
+                    placeholder="Select Start Date"
+                    onChange={(date) =>
+                      field.onChange(formatDate(date || new Date()))
                     }
-                  }}
-                  className="border-[#CFF073] data-[state=checked]:bg-primary data-[state=checked]:text-[#0B0A10]"
-                />
-                <label
-                  htmlFor="work"
-                  className="text-xs text-[#CCCDD7] leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  I still work here
-                </label>
-              </div>
+                  />
+                )}
+              </FormField>
+              <FormField
+                name="endDate"
+                label="Finish Date"
+                showMessage
+                form={form}
+              >
+                {(field) => (
+                  <DatePicker
+                    disableDate={isCurrentJob}
+                    value={field.value || ''}
+                    placeholder="Select Finish Date"
+                    onChange={(date) =>
+                      field.onChange(formatDate(date || new Date()))
+                    }
+                  />
+                )}
+              </FormField>
             </div>
 
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-2">
-                  <FormLabel className="text-sm text-light">
-                    Description
-                  </FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="ex. CEO"
-                      {...field}
-                      className="text-sm  min-h-[150px] border border-solid border-[#4D4D4D] rounded-[16px] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="skills"
-              render={({ field }) => (
-                <FormItem className="flex flex-col gap-2">
-                  <FormLabel className="text-sm text-light">Skills</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="ex. JavaScript, React, Node.js"
-                      {...field}
-                      className="h-[47px] text-sm  border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex items-center gap-[7px] mt-[13px]">
+              <Checkbox
+                id="work"
+                checked={isCurrentJob}
+                onCheckedChange={(checked) => {
+                  setIsCurrentJob(checked as boolean)
+                  if (checked) {
+                    form.setValue('endDate', null)
+                  }
+                }}
+                className="border-[#CFF073] data-[state=checked]:bg-primary data-[state=checked]:text-[#0B0A10]"
+              />
+              <label
+                htmlFor="work"
+                className="text-xs text-[#CCCDD7] leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                I still work here
+              </label>
+            </div>
           </div>
-
-          <SettingsChange
-            disabled={false}
-            isLoading={isPending}
-            saveDraft={() => setValue(form.getValues())}
+        </div>
+        <FormField
+          name="description"
+          label="Description"
+          showMessage
+          form={form}
+        >
+          <Textarea
+            placeholder="ex. CEO"
+            className="text-sm  min-h-[150px] border border-solid border-[#4D4D4D] rounded-[16px] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
           />
-        </form>
-      </Form>
+        </FormField>
+        <FormField name="skills" label="Skills" showMessage form={form}>
+          <Input
+            placeholder="ex. JavaScript, React, Node.js"
+            className="h-[47px] text-sm  border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
+          />
+        </FormField>
+      </FormBase>
+
+      <SettingsChange
+        disabled={false}
+        isLoading={isPending}
+        saveDraft={() => setValue(form.getValues())}
+      />
     </div>
   )
 }

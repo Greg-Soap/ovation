@@ -52,7 +52,7 @@ export default function ComingSoon() {
 
         <div className="flex flex-col gap-4 items-center">
           <p
-            className={`${isSubmitted ? 'hidden' : 'flex'} text-center text-[#E6E6E6]`}
+            className={`${isSubmitted ? 'hidden' : 'flex'} text-center text-foreground`}
           >
             Subscribe below to be notified of when it goes live
           </p>

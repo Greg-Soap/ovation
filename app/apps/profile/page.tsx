@@ -5,7 +5,6 @@ import UserProfile from './_components/user-profile'
 import MainProfileSection from './_components/main-profile-section'
 import ovationService from '@/services/ovation.service'
 import type { ProfileData, UserExperience } from '@/models/all.model'
-import { useRouter } from 'next/navigation'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
 import { useState } from 'react'
@@ -13,7 +12,6 @@ import { usePathname } from 'next/navigation'
 import { toast } from 'sonner'
 
 export default function Page() {
-  const router = useRouter()
   const { data: profileData, isLoading } = useQuery({
     queryKey: ['profile'],
     queryFn: () => ovationService.getProfile(),

@@ -39,7 +39,7 @@ export default function News() {
             </div>
 
             <div className="w-full flex flex-col gap-[10px]">
-              <p className="text-[#E6E6E6] text-3xl lg:text-[40px] lg:leading-[50px] font-bold">
+              <p className="text-foreground text-3xl lg:text-[40px] lg:leading-[50px] font-bold">
                 {blogs[0].blogHeader}
               </p>
               <p className="text-gray text-lg lg:text-2xl">
@@ -68,7 +68,7 @@ export default function News() {
                 />
 
                 <div className="flex flex-col gap-[10px]">
-                  <p className="text-[#E6E6E6] text-xl font-semibold">
+                  <p className="text-foreground text-xl font-semibold">
                     {blog.blogHeader}
                   </p>
                   <p className="text-sm text-gray">{blog.blogDetails}</p>

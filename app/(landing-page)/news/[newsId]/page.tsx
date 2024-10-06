@@ -123,7 +123,7 @@ export default function NewsDetails({ params }: any) {
               />
 
               <div className="flex flex-col gap-[10px]">
-                <p className="text-[#E6E6E6] text-xl font-semibold">
+                <p className="text-foreground text-xl font-semibold">
                   {blog.blogHeader}
                 </p>
                 <p className="text-sm text-gray">{blog.blogDetails}</p>
