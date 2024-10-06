@@ -13,6 +13,8 @@ import { linkify } from '@/lib/use-link'
 import CustomAvatar from '@/components/customs/custom-avatar'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
+import { truncate } from '@/lib/helper-func'
+import { useIsDesktop, useIsMobileToTablet } from '@/lib/use-breakpoints'
 
 export default function FollowersFollowing({
   username,
@@ -86,6 +88,11 @@ function UserList({
   type: 'followers' | 'following'
   userId: string
 }) {
+  const isMobileToTablet = useIsMobileToTablet()
+  const isDesktop = useIsDesktop()
+
+  const truncateLength = isMobileToTablet ? 100 : 400
+
   const fetchUsers =
     type === 'followers'
       ? ovationService.getFollowers
@@ -130,7 +137,7 @@ function UserList({
   if (users.length === 0) {
     return (
       <div className="text-center flex flex-col items-center justify-center py-10">
-        <p className="text-foreground text-2xl font-semibold">
+        <p className="text-foreground text-xl md:text-2xl font-semibold">
           {type === 'followers'
             ? "You don't have any followers yet."
             : "You're not following anyone yet."}
@@ -145,15 +152,15 @@ function UserList({
         <a
           href={`/apps/profile/${user?.username}`}
           key={user.userId}
-          className="flex gap-3 justify-between items-start hover:bg-foreground/10 p-2 rounded-md"
+          className="flex gap-3 justify-between items-start hover:bg-foreground/10 p-2 rounded-md w-full"
         >
-          <div className="flex gap-3 items-start">
-            <CustomAvatar
-              src={user?.profileImage}
-              alt="User Display Picture"
-              size="md"
-            />
-            <div className="flex flex-col gap-1">
+          <CustomAvatar
+            src={user?.profileImage}
+            alt="User Display Picture"
+            size="md"
+          />
+          <div className="flex flex-col gap-2 w-full">
+            <div className="flex gap-3 items-start justify-between w-full">
               <a
                 href={`/apps/profile/${user?.username}`}
                 className="flex flex-col gap-1"
@@ -163,46 +170,48 @@ function UserList({
                   {`@${user?.username.replace(/^@/, '')}`}
                 </p>
               </a>
-              <p className="font-light text-md ">
-                {linkify(user?.bio || 'No bio available')}
-              </p>
-            </div>
-          </div>
-          {user?.isFollowing ? (
-            <CustomDialog
-              trigger={
+              {user?.isFollowing ? (
+                <CustomDialog
+                  trigger={
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="mt-2 rounded-full"
+                      isLoading={isUnfollowingPending}
+                      loadingText="Unfollowing..."
+                    >
+                      Following
+                    </Button>
+                  }
+                  title="Unfollow User"
+                  description={`Are you sure you want to unfollow ${user.displayName}?`}
+                  confirmText="Unfollow"
+                  actionVariant="destructive"
+                  onConfirm={() => unfollowUser(user?.userId as string)}
+                />
+              ) : (
                 <Button
-                  variant="outline"
+                  variant="secondary"
                   size="sm"
                   className="mt-2 rounded-full"
-                  isLoading={isUnfollowingPending}
-                  loadingText="Unfollowing..."
+                  disabled={isFollowingPending}
+                  isLoading={isFollowingPending}
+                  loadingText="Following..."
+                  onClick={(e) => {
+                    e.preventDefault()
+                    followUser(user?.userId as string)
+                  }}
                 >
-                  Following
+                  Follow
                 </Button>
-              }
-              title="Unfollow User"
-              description={`Are you sure you want to unfollow ${user.displayName}?`}
-              confirmText="Unfollow"
-              actionVariant="destructive"
-              onConfirm={() => unfollowUser(user?.userId as string)}
-            />
-          ) : (
-            <Button
-              variant="secondary"
-              size="sm"
-              className="mt-2 rounded-full"
-              disabled={isFollowingPending}
-              isLoading={isFollowingPending}
-              loadingText="Following..."
-              onClick={(e) => {
-                e.preventDefault()
-                followUser(user?.userId as string)
-              }}
-            >
-              Follow
-            </Button>
-          )}
+              )}
+            </div>
+            <p className="font-light text-sm md:text-md ">
+              {linkify(
+                truncate(user?.bio || 'No bio available', truncateLength),
+              )}
+            </p>
+          </div>
         </a>
       ))}
     </div>
