@@ -3,7 +3,6 @@ import { auth, firestore } from './firebase'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
 import type { Participant, ParticipantMod } from './firebaseChatService'
-import { getUserId } from './helper-func'
 
 // Sign up a new user
 export const signUp = async (user: UserData) => {
@@ -48,8 +47,8 @@ export const setUserData = async (user: Participant) => {
   await setDoc(userRef, { ...user, createdAt: serverTimestamp() }, { merge: true })
 }
 
-export const updateUserData = async (user: ParticipantMod) => {
-  const userRef = doc(firestore, `auth_users/${getUserId()}`)
+export const updateUserData = async (user: ParticipantMod, userId: string) => {
+  const userRef = doc(firestore, `auth_users/${userId}`)
 
   // Store chat details for both users (using merge to avoid overwriting)
   await setDoc(userRef, { ...user, updatedAt: serverTimestamp() }, { merge: true })

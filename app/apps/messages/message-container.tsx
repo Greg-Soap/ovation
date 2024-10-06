@@ -21,10 +21,11 @@ import { getMessagesForChat, sendMessage } from '@/lib/firebaseChatService'
 import GalleryIcon from '@/components/icons/galleryIcon'
 import EmojiIcon from '@/components/icons/emojiIcon'
 import SendIcon from '@/components/icons/sendIcon'
-import { getReceiver, getUserId } from '@/lib/helper-func'
+import { getReceiver } from '@/lib/helper-func'
 import type { Timestamp } from 'firebase/firestore'
 import Spinner from '@/components/ui/spinner'
 import { notificationServices } from '../layout'
+import { useAppStore } from '@/store/use-app-store'
 
 export interface FriendProps {
   friendDisplayPicture: string
@@ -63,7 +64,7 @@ export default function MessageContainer({
   const messagesEndRef = useRef<null | HTMLDivElement>(null)
   const [isSending, setIsSending] = useState(false)
 
-  const currentUserId = getUserId()
+  const { userId: currentUserId } = useAppStore()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value)
@@ -118,7 +119,7 @@ export default function MessageContainer({
 
     setIsSending(true)
     try {
-      await sendMessage(friend.userId, message)
+      await sendMessage(friend.userId, message, currentUserId as string)
       setMessage('')
       await fetchMessages()
     } catch (error) {

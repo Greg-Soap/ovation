@@ -12,14 +12,14 @@ import {
   getActiveChatsForUser,
   type Participant,
 } from '@/lib/firebaseChatService'
-import { getUserId } from '@/lib/helper-func'
-import { useLocalStorage } from '@/lib/use-local-storage'
+import { useAppStore } from '@/store/use-app-store'
 
 export default function FriendList() {
   const [friends, setFriends] = useState<ChatData[]>([])
   const [selectedFriend, setSelectedFriend] = useState<ChatData | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [storedReceiver, setStoredReceiver] = useState<FriendProps | null>(null)
+  const { userId } = useAppStore()
 
   useEffect(() => {
     fetchChatData()
@@ -46,8 +46,6 @@ export default function FriendList() {
   const fetchChatData = async () => {
     setIsLoading(true)
     try {
-      const userId = getUserId()
-
       if (userId) {
         const chatData = await getActiveChatsForUser(userId)
 
@@ -66,7 +64,7 @@ export default function FriendList() {
 
   const getOtherParticipant = (data: ChatData): Participant | undefined => {
     const otherParticipant = data.participants.find(
-      (obj) => obj.userId !== getUserId(),
+      (obj) => obj.userId !== userId,
     )
 
     return otherParticipant

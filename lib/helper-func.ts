@@ -183,14 +183,7 @@ export function parseDate(dateString: string): Date | null {
   return new Date(year, month - 1, day)
 }
 
-export function getUserId(): string | undefined {
-  if (typeof window !== 'undefined') {
-    const userData = window.localStorage.getItem('userData')
-    const user = userData ? (JSON.parse(userData) as UserData) : null
-    return user?.userId
-  }
-  return undefined
-}
+
 
 export function getReceiver(): FriendProps | null {
   if (typeof window !== 'undefined') {
@@ -207,14 +200,6 @@ export function formatUsername(username?: string): string {
     return ''
   }
   return username.startsWith('@') ? username : `@${username}`
-}
-
-export function getStoredUser(): UserData | null {
-  if (typeof window !== 'undefined') {
-    const userData = window.localStorage.getItem('userData')
-    return userData ? (JSON.parse(userData) as UserData) : null
-  }
-  return null
 }
 
 export function debounce<T extends (...args: any[]) => any>(

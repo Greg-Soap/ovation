@@ -16,8 +16,9 @@ import {
   QuerySnapshot
 } from 'firebase/firestore'
 import { firestore, auth } from './firebase'
-import { getUserId } from './helper-func'
+
 import { notificationServices } from '@/app/apps/layout'
+
 
 /**
  * Sends a message from auth user to another user.
@@ -29,8 +30,8 @@ import { notificationServices } from '@/app/apps/layout'
 export const sendMessage = async (
   receiverId: string,
   messageText: string,
+  senderId: string
 ): Promise<void> => {
-  const senderId = getUserId()
 
   if(senderId == undefined)
     return
@@ -229,8 +230,7 @@ const checkChatExists = async (chatId: string) => {
  * Listens for all messages in the active chats for the current user.
  * Filters messages server-side based on the chatId.
  */
-export const listenForUserMessages = (callback: (messages: any[]) => void) => {
-  const userId = getUserId()
+export const listenForUserMessages = (userId: string, callback: (messages: any[]) => void) => {
 
   if (userId === undefined) {
     return
@@ -263,10 +263,11 @@ export const listenForUserMessages = (callback: (messages: any[]) => void) => {
 
 export const getMessagesForChat = async (
   receiverId: string,
-  pageSize: number = 100
+  pageSize: number = 100,
+  userId: string
 ): Promise<{ messages: DocumentData[], lastVisible: DocumentData | null }> => {
 
-  const chatId = getChatId(getUserId()!, receiverId)
+  const chatId = getChatId(userId!, receiverId)
   const messagesRef = collection(firestore, `chats/${chatId}/messages`);
 
   // Create a query to get messages sorted by 'sentAt' in ascending order (oldest first)

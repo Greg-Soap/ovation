@@ -26,6 +26,7 @@ import { Progress } from '@/components/ui/progress'
 import { updateUserData } from '@/lib/firebaseAuthService'
 import type { ParticipantMod } from '@/lib/firebaseChatService'
 import { FormBase, FormField } from '@/components/customs/custom-form'
+import { useAppStore } from '@/store/use-app-store'
 
 const formSchema = z.object({
   displayName: z.string().min(1, 'Display name is required'),
@@ -79,10 +80,7 @@ export default function ProfileForm({
     },
   )
 
-  const { storedValue: userData, setValue: setUserData } = useLocalStorage(
-    'userData',
-    {} as UserData,
-  )
+  const { user: userData, setUser: setUserData } = useAppStore()
 
   const [uploadProgress, setUploadProgress] = useState<{
     profile: number
@@ -134,16 +132,28 @@ export default function ProfileForm({
       return ovationService.updatePersonalInfo(data)
     },
     onSuccess: async () => {
-      await updateUserData({
-        displayName: tempFormValues.displayName,
-        email: tempFormValues.email,
-        image: tempFormValues.profileImage,
-        username: tempFormValues.username,
-      } as ParticipantMod)
+      await updateUserData(
+        {
+          displayName: tempFormValues.displayName,
+          email: tempFormValues.email,
+          image: tempFormValues.profileImage,
+          username: tempFormValues.username,
+        } as ParticipantMod,
+        userData?.userId!,
+      )
 
       toast.success('Profile updated successfully')
       refetch()
-      setUserData({ ...userData, ...tempFormValues })
+      // TODO: FIX LATER
+      // setUserData({
+      //   ...userData,
+      //   ...tempFormValues,
+      //   userId: userData?.userId!,
+      //   badges: userData?.badges ?? [],
+      //   nft: userData?.nft ?? [],
+      //   paths: userData?.paths ?? [],
+      //   featured: userData?.featured ?? [],
+      // })
       setDisabled(true)
       // Reset selected images
       setSelectedProfileImage(null)

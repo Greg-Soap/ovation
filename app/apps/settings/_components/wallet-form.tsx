@@ -4,7 +4,7 @@ import type { WalletAcct } from '@/models/all.model'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
 import { PlusIcon } from 'lucide-react'
-import { getUserId, startCase } from '@/lib/helper-func'
+import { startCase } from '@/lib/helper-func'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
@@ -14,6 +14,7 @@ import LoadingOverlay from '@/components/saving-overlay'
 import { toast } from 'sonner'
 import { FormBase, FormFooter } from '@/components/customs/custom-form'
 import { ManualWalletForm } from '@/components/manual-wallet-form'
+import { useAppStore } from '@/store/use-app-store'
 
 const formSchema = z.object({
   walletAddress: z.string().min(1, 'Wallet address is required'),
@@ -24,7 +25,8 @@ const formSchema = z.object({
 
 export default function WalletForm() {
   const [addingWallet, setAddingWallet] = useState(false)
-  const userId = getUserId()
+  const { userId } = useAppStore()
+
   const { data: walletsData, refetch: refetchWallets } = useQuery({
     queryKey: ['user-wallets', userId],
     queryFn: () => ovationService.getUserWallets(userId as string),

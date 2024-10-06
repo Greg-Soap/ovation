@@ -134,7 +134,7 @@ function UserList({
     )
   }
 
-  if (users.length === 0) {
+  if (!isLoading && users.length === 0) {
     return (
       <div className="text-center flex flex-col items-center justify-center py-10">
         <p className="text-foreground text-xl md:text-2xl font-semibold">

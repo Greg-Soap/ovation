@@ -1,9 +1,9 @@
 import CustomModal from '@/components/customs/custom-modal'
 import CustomPopover from '@/components/customs/custom-popover'
 import { Button } from '@/components/ui/button'
-import { getUserId } from '@/lib/helper-func'
 import type { NFT } from '@/models/all.model'
 import ovationService from '@/services/ovation.service'
+import { useAppStore } from '@/store/use-app-store'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { EllipsisVertical } from 'lucide-react'
 import Image from 'next/image'
@@ -19,7 +19,7 @@ export function NFTCard({
   secondaryProfile,
 }: NFT & { secondaryProfile?: boolean }) {
   const queryClient = useQueryClient()
-  const userId = getUserId()
+  const { userId } = useAppStore()
 
   const { data: favouriteNfts } = useQuery({
     queryKey: ['favouriteNft', userId],

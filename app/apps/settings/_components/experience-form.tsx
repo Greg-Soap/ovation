@@ -211,24 +211,24 @@ export default function ExperienceForm({
               </label>
             </div>
           </div>
+          <FormField
+            name="description"
+            label="Description"
+            showMessage
+            form={form}
+          >
+            <Textarea
+              placeholder="ex. CEO"
+              className="text-sm  min-h-[150px] border border-solid border-[#4D4D4D] rounded-[16px] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
+            />
+          </FormField>
+          <FormField name="skills" label="Skills" showMessage form={form}>
+            <Input
+              placeholder="ex. JavaScript, React, Node.js"
+              className="h-[47px] text-sm  border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
+            />
+          </FormField>
         </div>
-        <FormField
-          name="description"
-          label="Description"
-          showMessage
-          form={form}
-        >
-          <Textarea
-            placeholder="ex. CEO"
-            className="text-sm  min-h-[150px] border border-solid border-[#4D4D4D] rounded-[16px] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
-          />
-        </FormField>
-        <FormField name="skills" label="Skills" showMessage form={form}>
-          <Input
-            placeholder="ex. JavaScript, React, Node.js"
-            className="h-[47px] text-sm  border border-solid border-[#4D4D4D] focus:border-solid focus:border-[1px] focus:border-[#4D4D4D]"
-          />
-        </FormField>
       </FormBase>
 
       <SettingsChange

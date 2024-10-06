@@ -88,7 +88,7 @@ export default function SocialForm({ userId }: { userId: string }) {
       <FormBase
         form={form}
         onSubmit={onSubmit}
-        className="space-y-[23px] min-h-full"
+        className="space-y-[23px] min-h-full px-4 sm:px-10 2xl:px-20"
       >
         {socialPlatforms.map((platform) => (
           <FormField

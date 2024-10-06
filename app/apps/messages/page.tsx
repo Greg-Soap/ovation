@@ -1,5 +1,4 @@
 'use client'
-import { getUserId } from '@/lib/helper-func'
 import FriendList from './_components/friend-lists'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
