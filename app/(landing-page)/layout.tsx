@@ -6,6 +6,8 @@ import Promotion from './_sections/promotion'
 import Preloader from './_components/preloader'
 import React, { useEffect, useState } from 'react'
 import { Suspense } from 'react'
+import { StoreProvider } from 'easy-peasy'
+import store from '@/store/store'
 
 export default function LandingPageLayout({
   children,
@@ -38,13 +40,15 @@ export default function LandingPageLayout({
 function Application({ children }: { children: React.ReactNode }) {
   return (
     <React.Fragment>
-      <html lang='en'>
-        <body>
-          <Promotion />
-          <Header />
-          {children}
-          <Footer />
-        </body>
+      <html lang="en">
+        <StoreProvider store={store}>
+          <body>
+            <Promotion />
+            <Header />
+            {children}
+            <Footer />
+          </body>
+        </StoreProvider>
       </html>
     </React.Fragment>
   )

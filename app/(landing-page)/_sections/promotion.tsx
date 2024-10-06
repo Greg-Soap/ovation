@@ -7,7 +7,7 @@ export default function Promotion() {
   const [isHidden, setIsHidden] = useState(false)
   return (
     <section
-      className={`w-full py-[36px] bg-primary items-center justify-center gap-4 promotion relative ${isHidden ? 'hidden' : 'flex'}`}
+      className={`w-full py-[36px] bg-primary-bright items-center justify-center gap-4 promotion relative ${isHidden ? 'hidden' : 'flex'}`}
     >
       <a href="/news/1">
         <p className="text-2xl text-primary-foreground font-semibold">
