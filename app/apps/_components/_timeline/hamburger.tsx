@@ -16,27 +16,24 @@ import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer'
 import { useQuery } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
 import Image from 'next/image'
-import type { ProfileData, UserData } from '@/models/all.model'
+import type { ProfileData } from '@/models/all.model'
 import MiniLoader from '@/components/mini-loader'
-import { useLocalStorage } from '@/lib/use-local-storage'
 import FeedbackModal from '../../_feedback/feedback'
 import { useAnchorNavigation } from '@/lib/use-navigation'
 import colors from '@/lib/colors'
 import CustomAvatar from '@/components/customs/custom-avatar'
+import { useAppStore } from '@/store/use-app-store'
+import CustomDialog from '@/components/customs/custom-dialog'
 
 export default function Hamburger() {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
   const navigateTo = useAnchorNavigation()
-  const { storedValue, removeValue } = useLocalStorage<UserData | null>(
-    'userData',
-    null,
-  )
-  const user = storedValue
+  const { user, clearUser } = useAppStore()
 
   const handleLogout = () => {
     ovationService.logout()
-    removeValue()
+    clearUser()
     navigateTo('/')
   }
 
@@ -84,7 +81,7 @@ export default function Hamburger() {
           className="p-0 border-0 w-[80vw] max-w-[400px] h-screen fixed top-0 left-0 rounded-none bg-[#111115] border-r-[0.5px] border-solid border-gray-500 transform transition-transform duration-300 ease-in-out"
           style={{}}
         >
-          <div className="bg-[#111115] flex flex-col p-5 h-full justify-between">
+          <div className="bg-[#111115] flex flex-col p-5 h-full overflow-y-scroll justify-between">
             <div>
               <div className="flex flex-col gap-5 justify-between">
                 <CustomAvatar
@@ -137,13 +134,20 @@ export default function Hamburger() {
             </div>
             <div className="flex flex-col gap-4">
               <FeedbackButton className="w-full mb-4" />
-              <Button
-                variant={'ghost'}
-                onClick={handleLogout}
-                className="py-[10px] w-full text-red-500"
-              >
-                Logout {user?.username}
-              </Button>
+              <CustomDialog
+                trigger={
+                  <Button
+                    variant={'ghost'}
+                    className="py-[10px] w-full text-red-500"
+                  >
+                    Logout {user?.username}
+                  </Button>
+                }
+                onConfirm={handleLogout}
+                confirmText="Logout"
+                title="Confirm logout?"
+                description="Are you sure you want to log out?"
+              />
             </div>
           </div>
         </DrawerContent>

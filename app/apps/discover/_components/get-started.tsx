@@ -21,7 +21,7 @@ export function GetStarted({
       icon: '/assets/images/profile/task2.png',
       link: '/apps/settings?tab=Personal Info',
       buttonText: 'Add info',
-      isComplete: !!(user?.bio && user?.location && user?.profileImage),
+      isComplete: !!(user?.bio && user?.location && user?.profileImage && user?.location),
     },
     {
       title: 'ADD A LINK',
@@ -35,10 +35,18 @@ export function GetStarted({
     {
       title: 'ADD YOUR EXPERIENCE',
       description: "Show the world what you've contributed to!",
-      icon: '/assets/images/profile/task1.png',
+      icon: '/assets/images/profile/medium.png',
       link: '/apps/settings?tab=Experience',
       buttonText: 'Add Experience',
       isComplete: experiences?.length > 0,
+    },
+    {
+      title: 'ADD YOUR WALLET',
+      description: "Show the world what NFT's you have collected!",
+      icon: '/assets/images/profile/task1.png',
+      link: '/apps/settings?tab=Wallets',
+      buttonText: 'Add Wallet',
+      isComplete: user?.wallets.length > 0,
     },
   ]
 

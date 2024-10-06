@@ -101,7 +101,7 @@ export function DatePicker({
           variant={'outline'}
           disabled={disableDate}
           className={cn(
-            'w-full justify-start text-left  font-normal hover:bg-transparent hover:',
+            'w-full justify-start text-left  font-normal hover:bg-transparent hover:text-light ',
             !selectedDate && 'text-lighter',
           )}
         >
@@ -113,7 +113,7 @@ export function DatePicker({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0 bg-black ">
+      <PopoverContent className="w-auto p-0 bg-black text-foreground border-[#353538] ">
         <div className="flex justify-between gap-2 px-2 py-1 pt-2">
           <Select
             value={currentMonth.getMonth().toString()}

@@ -8,7 +8,7 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { DatePicker } from '@/components/ui/date-picker'
 import SettingsChange from './settings-change'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import ovationService from '@/services/ovation.service'
 import { toast } from 'sonner'
 import { useRef } from 'react'
@@ -106,6 +106,24 @@ export default function ProfileForm({
       coverImage: profileData?.profile?.coverImage || storedValue.coverImage,
     },
   })
+
+    useEffect(() => {
+    if (profileData) {
+      form.reset({
+        displayName: profileData?.profile?.displayName || '',
+        username: profileData?.username || '',
+        email: profileData?.email || '',
+        birthDate: profileData?.profile?.birthDate || '',
+        location: profileData?.profile?.location || '',
+      bio: profileData?.profile?.bio || '',
+        profileImage: profileData?.profile?.profileImage || '',
+        coverImage: profileData?.profile?.coverImage || '',
+        
+      })
+    }
+  }, [profileData, form])
+
+console.log({birthDate:profileData.profile.birthDate})
 
   const { mutate: updateProfile, isPending } = useMutation({
     mutationFn: async (data: ProfileFormValues) => {

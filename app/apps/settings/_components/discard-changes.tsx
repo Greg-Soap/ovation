@@ -34,7 +34,7 @@ export default function DiscardChanges({
         <Button
           variant="outline"
           onClick={() => router.back()}
-          className="text-xs  font-semibold py-2 w-full border-[#29292F] rounded-full bg-transparent hover:bg-[#29292F] transition-colors"
+          className="text-xs  font-semibold py-2 w-full border-[#29292F] rounded-full bg-transparent hover:bg-[#29292F] hover:text-foreground transition-colors"
         >
           Yes, don&apos;t save my changes
         </Button>
