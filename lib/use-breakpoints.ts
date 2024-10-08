@@ -1,6 +1,5 @@
 import useMediaQuery from './use-media-query'
 
-
 const BREAKPOINTS = {
   mobile: '(max-width: 767px)',
   tablet: '(min-width: 768px) and (max-width: 1023px)',
@@ -12,7 +11,7 @@ export function useIsMobile(): boolean {
 }
 
 export function useIsMobileToTablet(): boolean {
-  return useMediaQuery(`(max-width: 1023px)`)
+  return useMediaQuery('(max-width: 1023px)')
 }
 
 export function useIsTablet(): boolean {

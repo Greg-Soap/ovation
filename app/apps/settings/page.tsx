@@ -36,7 +36,11 @@ export default function Page() {
   }, [currentTab, searchParams, setTab])
 
   const [isHidden, setHidden] = useState(true)
-  const { data: profileData, refetch } = useQuery({
+  const {
+    data: profileData,
+    refetch,
+    isLoading: isProfileLoading,
+  } = useQuery({
     queryKey: ['profile'],
     queryFn: () => ovationService.getProfile(),
   })
@@ -51,6 +55,7 @@ export default function Page() {
   const tabComponents = {
     'Personal Info': (props: {
       profileData: ProfileData
+      isProfileLoading: boolean
       refetch: () => void
     }) => <ProfileForm {...props} />,
     Socials: (props: { userId: string }) => <SocialForm {...props} />,
@@ -170,6 +175,7 @@ export default function Page() {
                       {tab.heading &&
                         tabComponents[tab.heading as TabHeading]({
                           profileData: profileData?.data as ProfileData,
+                          isProfileLoading: isProfileLoading,
                           refetch: refetch,
                           experienceData: experienceData?.data
                             ?.data as UserExperience[],

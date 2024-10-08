@@ -44,9 +44,11 @@ type ProfileFormValues = z.infer<typeof formSchema>
 export default function ProfileForm({
   profileData,
   refetch,
+  isProfileLoading,
 }: {
   profileData: ProfileData
   refetch: () => void
+  isProfileLoading: boolean
 }) {
   const [disabled, setDisabled] = useState(false)
   const [selectedProfileImage, setSelectedProfileImage] = useState<File | null>(
@@ -107,7 +109,7 @@ export default function ProfileForm({
     },
   })
 
-    useEffect(() => {
+  useEffect(() => {
     if (profileData) {
       form.reset({
         displayName: profileData?.profile?.displayName || '',
@@ -115,15 +117,12 @@ export default function ProfileForm({
         email: profileData?.email || '',
         birthDate: profileData?.profile?.birthDate || '',
         location: profileData?.profile?.location || '',
-      bio: profileData?.profile?.bio || '',
+        bio: profileData?.profile?.bio || '',
         profileImage: profileData?.profile?.profileImage || '',
         coverImage: profileData?.profile?.coverImage || '',
-        
       })
     }
   }, [profileData, form])
-
-console.log({birthDate:profileData.profile.birthDate})
 
   const { mutate: updateProfile, isPending } = useMutation({
     mutationFn: async (data: ProfileFormValues) => {
@@ -157,6 +156,7 @@ console.log({birthDate:profileData.profile.birthDate})
           image: tempFormValues.profileImage,
           username: tempFormValues.username,
         } as ParticipantMod,
+        // biome-ignore lint/style/noNonNullAssertion: <explanation>
         userData?.userId!,
       )
 
@@ -219,6 +219,10 @@ console.log({birthDate:profileData.profile.birthDate})
       <SavingOverlay
         isLoading={isPending}
         loadingText="Saving your information..."
+      />
+      <SavingOverlay
+        isLoading={isProfileLoading}
+        loadingText={'Loading your profile...'}
       />
       <FormBase
         form={form}
@@ -333,7 +337,7 @@ console.log({birthDate:profileData.profile.birthDate})
           <FormField name="email" form={form} label="Email">
             <Input
               placeholder="pancake78@email.com"
-              className=" text-sm max-w-[940px] h-full bg-transparent border-none focus:border-none rounded-full"
+              className=" text-sm max-w-[940px] h-[47px] bg-transparent  rounded-full"
               type="email"
             />
           </FormField>

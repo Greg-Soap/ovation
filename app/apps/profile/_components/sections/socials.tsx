@@ -34,6 +34,7 @@ export default function Socials({ socials }: { socials: UserSocialsMod }) {
             const formattedUrl = formatUrl(url)
             const icon = (
               <Image
+                key={platform}
                 src={
                   socialIcons[platform as keyof typeof socialIcons] ||
                   '/assets/images/profile/link.png'

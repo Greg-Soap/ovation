@@ -24,7 +24,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
   onWalletDisconnected,
   setIsManualWallet,
 }) => {
-  const { account, connectWallet, disconnectWallet } = useWalletConnect(
+  const { account, chain, connectWallet, disconnectWallet } = useWalletConnect(
     onWalletConnected,
     onWalletDisconnected,
   )

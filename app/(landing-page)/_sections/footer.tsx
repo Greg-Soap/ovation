@@ -80,7 +80,7 @@ export default function Footer() {
                 className="w-8 h-8"
               />
             </a>
-            <a
+            {/* <a
               href="https://opensea.io/collection/founder-nfts"
               target="_blank"
               rel="noreferrer"
@@ -90,7 +90,7 @@ export default function Footer() {
                 alt=""
                 className="w-8 h-8 rounded-full"
               />
-            </a>
+            </a> */}
           </div>
         </div>
       </div>

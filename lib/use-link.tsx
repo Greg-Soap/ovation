@@ -1,4 +1,4 @@
-import React from 'react'
+import type React from 'react'
 
 export function linkify(text: string): React.ReactNode {
   const urlRegex = /(https?:\/\/[^\s]+)/g
