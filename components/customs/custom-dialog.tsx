@@ -12,7 +12,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { ButtonProps } from '@/components/ui/button'
+import type { ButtonProps } from '@/components/ui/button'
 
 interface CustomDialogProps {
   trigger: React.ReactNode
@@ -51,7 +51,7 @@ function CustomDialog({
       <AlertDialogTrigger asChild onClick={handleTriggerClick}>
         {trigger}
       </AlertDialogTrigger>
-      <AlertDialogContent className='w-[90%] rounded-md'>
+      <AlertDialogContent className="w-[90%] rounded-md">
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>

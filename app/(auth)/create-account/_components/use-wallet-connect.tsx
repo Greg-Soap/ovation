@@ -9,7 +9,7 @@ import type { OfflineSigner } from '@cosmjs/proto-signing'
 const infuraId = process.env.NEXT_PUBLIC_INFURA_ID as string
 
 export function useWalletConnect(
-  onWalletConnected?: (account: string) => void,
+  onWalletConnected?: (account: string, chain: string) => void,
   onWalletDisconnected?: () => void,
 ) {
   const [provider, setProvider] = useState<any>(null)
@@ -33,6 +33,12 @@ export function useWalletConnect(
     setWeb3Modal(web3ModalInstance)
   }, [])
 
+  const handleWalletConnection = (account: string, chainName: string) => {
+    setAccount(account)
+    setChain(chainName)
+    if (onWalletConnected) onWalletConnected(account, chainName)
+  }
+
   const connectMetaMask = async () => {
     if ((window as any).ethereum) {
       const provider = new BrowserProvider(window.ethereum)
@@ -41,12 +47,11 @@ export function useWalletConnect(
         const signer = await provider.getSigner()
 
         const network = await provider.getNetwork()
-        setChain(chainIdToChainName[Number(network.chainId)])
-
-        const account = signer.address
+        handleWalletConnection(
+          signer.address,
+          chainIdToChainName[Number(network.chainId)],
+        )
         setProvider(provider)
-        setAccount(account)
-        if (onWalletConnected) onWalletConnected(account)
         console.log('Connected with MetaMask:', account)
       } catch (error) {
         console.error('MetaMask connection failed:', error)
@@ -65,12 +70,13 @@ export function useWalletConnect(
       const signer = await provider.getSigner()
 
       const network = await provider.getNetwork()
-      setChain(chainIdToChainName[Number(network.chainId)])
+      setProvider(provider)
 
       const account = signer.address
-      setProvider(provider)
-      setAccount(account)
-      if (onWalletConnected) onWalletConnected(account)
+      handleWalletConnection(
+        account,
+        chainIdToChainName[Number(network.chainId)],
+      )
       console.log('Connected with WalletConnect:', account)
     } catch (error) {
       console.error('WalletConnect connection failed:', error)
@@ -82,8 +88,7 @@ export function useWalletConnect(
       try {
         const response = await (window as any).solana.connect()
         setAccount(response.publicKey.toString())
-        setChain('solana')
-        if (onWalletConnected) onWalletConnected(response.publicKey.toString())
+        handleWalletConnection(response.publicKey.toString(), 'solana')
         console.log('Connected with Phantom:', response.publicKey.toString())
       } catch (err) {
         console.error('Phantom connection failed:', err)
@@ -101,12 +106,13 @@ export function useWalletConnect(
         const signer = await provider.getSigner()
 
         const network = await provider.getNetwork()
-        setChain(chainIdToChainName[Number(network.chainId)])
 
         const account = signer.address
+        handleWalletConnection(
+          account,
+          chainIdToChainName[Number(network.chainId)],
+        )
         setProvider(provider)
-        setAccount(account)
-        if (onWalletConnected) onWalletConnected(account)
         console.log('Connected with OKX Wallet:', account)
       } catch (error) {
         console.error('OKX Wallet connection failed:', error)
@@ -124,12 +130,13 @@ export function useWalletConnect(
         const signer = await provider.getSigner()
 
         const network = await provider.getNetwork()
-        setChain(chainIdToChainName[Number(network.chainId)])
 
         const account = signer.address
         setProvider(provider)
-        setAccount(account)
-        if (onWalletConnected) onWalletConnected(account)
+        handleWalletConnection(
+          account,
+          chainIdToChainName[Number(network.chainId)],
+        )
         console.log('Connected with Trust Wallet:', account)
       } catch (error) {
         console.error('Trust Wallet connection failed:', error)
@@ -147,12 +154,13 @@ export function useWalletConnect(
         const signer = await provider.getSigner()
 
         const network = await provider.getNetwork()
-        setChain(chainIdToChainName[Number(network.chainId)])
 
         const account = signer.address
         setProvider(provider)
-        setAccount(account)
-        if (onWalletConnected) onWalletConnected(account)
+        handleWalletConnection(
+          account,
+          chainIdToChainName[Number(network.chainId)],
+        )
         console.log('Connected with Binance Chain Wallet:', account)
       } catch (error) {
         console.error('Binance Chain Wallet connection failed:', error)
@@ -170,12 +178,13 @@ export function useWalletConnect(
         const signer = await provider.getSigner()
 
         const network = await provider.getNetwork()
-        setChain(chainIdToChainName[Number(network.chainId)])
 
         const account = signer.address
         setProvider(provider)
-        setAccount(account)
-        if (onWalletConnected) onWalletConnected(account)
+        handleWalletConnection(
+          account,
+          chainIdToChainName[Number(network.chainId)],
+        )
         console.log('Connected with Coin98 Wallet:', account)
       } catch (error) {
         console.error('Coin98 Wallet connection failed:', error)
@@ -193,12 +202,13 @@ export function useWalletConnect(
         const signer = await provider.getSigner()
 
         const network = await provider.getNetwork()
-        setChain(chainIdToChainName[Number(network.chainId)])
 
         const account = signer.address
         setProvider(provider)
-        setAccount(account)
-        if (onWalletConnected) onWalletConnected(account)
+        handleWalletConnection(
+          account,
+          chainIdToChainName[Number(network.chainId)],
+        )
         console.log('Connected with Opera Wallet:', account)
       } catch (error) {
         console.error('Opera Wallet connection failed:', error)
@@ -216,12 +226,13 @@ export function useWalletConnect(
         const signer = await provider.getSigner()
 
         const network = await provider.getNetwork()
-        setChain(chainIdToChainName[Number(network.chainId)])
 
         const account = signer.address
         setProvider(provider)
-        setAccount(account)
-        if (onWalletConnected) onWalletConnected(account)
+        handleWalletConnection(
+          account,
+          chainIdToChainName[Number(network.chainId)],
+        )
         console.log('Connected with Brave Wallet:', account)
       } catch (error) {
         console.error('Brave Wallet connection failed:', error)
@@ -239,12 +250,13 @@ export function useWalletConnect(
         const signer = await provider.getSigner()
 
         const network = await provider.getNetwork()
-        setChain(chainIdToChainName[Number(network.chainId)])
 
         const account = signer.address
         setProvider(provider)
-        setAccount(account)
-        if (onWalletConnected) onWalletConnected(account)
+        handleWalletConnection(
+          account,
+          chainIdToChainName[Number(network.chainId)],
+        )
         console.log('Connected with Math Wallet:', account)
       } catch (error) {
         console.error('Math Wallet connection failed:', error)
@@ -262,12 +274,13 @@ export function useWalletConnect(
         const signer = await provider.getSigner()
 
         const network = await provider.getNetwork()
-        setChain(chainIdToChainName[Number(network.chainId)])
 
         const account = signer.address
         setProvider(provider)
-        setAccount(account)
-        if (onWalletConnected) onWalletConnected(account)
+        handleWalletConnection(
+          account,
+          chainIdToChainName[Number(network.chainId)],
+        )
         console.log('Connected with SafePal Wallet:', account)
       } catch (error) {
         console.error('SafePal Wallet connection failed:', error)
@@ -285,12 +298,13 @@ export function useWalletConnect(
         const signer = await provider.getSigner()
 
         const network = await provider.getNetwork()
-        setChain(chainIdToChainName[Number(network.chainId)])
 
         const account = signer.address
         setProvider(provider)
-        setAccount(account)
-        if (onWalletConnected) onWalletConnected(account)
+        handleWalletConnection(
+          account,
+          chainIdToChainName[Number(network.chainId)],
+        )
         console.log('Connected with TokenPocket:', account)
       } catch (error) {
         console.error('TokenPocket connection failed:', error)
@@ -313,8 +327,7 @@ export function useWalletConnect(
       const offlineSigner: OfflineSigner = window.getOfflineSigner(chainId)
 
       const accounts = await offlineSigner.getAccounts()
-      setAccount(accounts[0].address)
-      setChain('archway')
+      handleWalletConnection(accounts[0].address, 'archway')
 
       // const client = await StargateClient.connect("https://rpc.cosmos.network");
       // const balance = await client.getAllBalances(accountAddress);
@@ -337,8 +350,7 @@ export function useWalletConnect(
       const offlineSigner = window.leap.getOfflineSigner(chainId)
       const accounts = await offlineSigner.getAccounts()
 
-      setAccount(accounts[0].address)
-      setChain('archway')
+      handleWalletConnection(accounts[0].address, 'archway')
 
       console.log('Connected account address: ', accounts[0].address)
     } catch (error) {

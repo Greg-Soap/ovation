@@ -12,20 +12,28 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
 import colors from '@/lib/colors'
 import { useWalletConnect } from './use-wallet-connect'
+import { Badge } from '@/components/ui/badge'
+import CustomDialog from '@/components/customs/custom-dialog'
 
 interface WalletConnectComponentProps {
-  onWalletConnected?: (account: string) => void
+  onWalletConnected?: (account: string, chain: string) => void
   onWalletDisconnected?: () => void
   setIsManualWallet?: (isManualWallet: boolean) => void
+  form: any
+  handleFormSubmit: any
+  isPending: boolean
 }
 
 const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
   onWalletConnected,
   onWalletDisconnected,
   setIsManualWallet,
+  form,
+  handleFormSubmit,
+  isPending,
 }) => {
   const { account, chain, connectWallet, disconnectWallet } = useWalletConnect(
-    onWalletConnected,
+    (account, chain) => onWalletConnected?.(account, chain),
     onWalletDisconnected,
   )
 
@@ -67,7 +75,9 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
                             className="text-start flex justify-between p-2 md:p-[1rem] h-[58px] w-full md:w-[242px] text-xs md:text-sm font-semibold  border-[1px] border-solid bg-transparent border-[#353538]"
                             onClick={() => connectWallet(wallet.name)}
                           >
-                            <p>{startCase(wallet.name)}</p>
+                            <p className="text-foreground">
+                              {startCase(wallet.name)}
+                            </p>
                             <Image
                               src={wallet.logoUrl}
                               alt={wallet.name}
@@ -98,12 +108,50 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
             </ErrorBoundary>
           ) : (
             <ErrorBoundary FallbackComponent={ErrorFallback}>
-              <div>
-                <p>Connected Account: {account}</p>
-                <button type="button" onClick={disconnectWallet}>
-                  Disconnect Wallet
-                </button>
-              </div>
+              <form
+                onSubmit={form.handleSubmit(handleFormSubmit)}
+                className="flex flex-col gap-7"
+              >
+                <div className="w-full flex items-center justify-between bg-[#18181C] p-4 px-6 py-2.5 rounded-full">
+                  <div className="flex items-center gap-[7px]">
+                    <div className="flex flex-col gap-2">
+                      <p className="text-sm font-semibold ">
+                        Connected Account: {account}
+                      </p>
+                      <div className="flex items-center gap-[3px] text-xs text-light">
+                        <Badge>Connected to {startCase(chain ?? '')}</Badge>
+                      </div>
+                    </div>
+                  </div>
+                  <CustomDialog
+                    trigger={
+                      <Button className="text-[10px] font-medium h-fit">
+                        Disconnect wallet
+                      </Button>
+                    }
+                    title="Are you sure?"
+                    description="This action cannot be undone. This will permanently disconnect the wallet from your account."
+                    confirmText="Yes, disconnect"
+                    cancelText="No, keep it"
+                    onConfirm={() => disconnectWallet()}
+                  />
+
+                  <Button
+                    type="submit"
+                    className="w-full text-sm font-semibold h-[53px]"
+                    disabled={isPending}
+                    isLoading={isPending}
+                    loadingText="Creating profile..."
+                  >
+                    Make my profile
+                  </Button>
+
+                  <p className="text-center mb-4 text-light">
+                    By clicking &quot;make my profile&quot; you agree to our
+                    privacy terms, code of conduct and Conditions.
+                  </p>
+                </div>
+              </form>
             </ErrorBoundary>
           )}
         </div>

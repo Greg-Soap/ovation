@@ -5,33 +5,36 @@ import { useState } from 'react'
 import PathICon from '@/components/icons/pathIcon'
 import MiniLoader from '@/components/mini-loader'
 import { FormField } from '@/components/customs/custom-form'
+import { useFormContext } from 'react-hook-form'
 
 export default function PathSelection({
-  form,
   setPage,
 }: {
-  form: any
   setPage: (page: number) => void
 }) {
   const [active, setActive] = useState('')
   const pathColors = ['#cff073', '#EF91FF', '#FF9B02', '#0094FF']
   const pathBackgrounds = ['#283502', '#42044C', '#2F2009', '#0B293F']
+  const form = useFormContext()
 
   const { data: pathOptions, isLoading } = useQuery({
     queryKey: ['path'],
     queryFn: () => ovationService.getPath(),
   })
 
-  function handleButtonClick(pathId: string) {
+  async function handleButtonClick(pathId: string) {
     form.setValue('userPath.pathId', pathId)
     setActive(pathId)
+
+    // Validate the field
+    const isValid = await form.trigger('userPath.pathId')
+    if (isValid) {
+      setPage(3)
+    }
   }
 
   return (
-    <form
-      onSubmit={form.handleSubmit(() => setPage(3))}
-      className="flex flex-col gap-7"
-    >
+    <div className="flex flex-col gap-7">
       <FormField name="userPath.pathId" form={form}>
         <div className="flex flex-col md:flex-row items-center flex-wrap w-full gap-4">
           {isLoading ? (
@@ -73,13 +76,6 @@ export default function PathSelection({
           )}
         </div>
       </FormField>
-
-      <Button
-        type="submit"
-        className="hover:scale-95 w-full h-[52px] text-sm font-semibold"
-      >
-        Continue
-      </Button>
-    </form>
+    </div>
   )
 }

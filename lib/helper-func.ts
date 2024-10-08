@@ -183,8 +183,6 @@ export function parseDate(dateString: string): Date | null {
   return new Date(year, month - 1, day)
 }
 
-
-
 export function getReceiver(): FriendProps | null {
   if (typeof window !== 'undefined') {
     const receiver = window.localStorage.getItem('receiver')
@@ -233,7 +231,11 @@ export function truncate(str: string, maxLength: number): string {
   if (str.length <= maxLength) {
     return str
   }
-  return str.slice(0, maxLength - 3) + '...'
+  return `${str.slice(0, maxLength - 3)}...`
 }
 
+const isAppDev = (): boolean => {
+  return process.env.NEXT_PUBLIC_APP_ENV === 'development'
+}
 
+export { isAppDev }

@@ -15,14 +15,11 @@ export default function PersonalInfoForm({
 }) {
   const form = useFormContext()
 
-  const {
-    mutate: checkUsername,
-    isPending,
-    isError,
-  } = useMutation({
+  const { mutate: checkUsername, isPending } = useMutation({
     mutationFn: OvationService.checkUsername,
     onSuccess: () => {
       form.clearErrors('personalInfo.username')
+      setPage(2)
     },
     onError: () => {
       form.setError('personalInfo.username', {
@@ -32,18 +29,22 @@ export default function PersonalInfoForm({
     },
   })
 
-  const handleSubmit = (data: any) => {
-    checkUsername(data.personalInfo.username)
-    if (!isError) {
-      setPage(2)
+  const handleContinue = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const isValid = await form.trigger([
+      'personalInfo.displayName',
+      'personalInfo.email',
+      'personalInfo.username',
+      'personalInfo.password',
+    ])
+    if (isValid) {
+      const username = form.getValues('personalInfo.username')
+      checkUsername(username)
     }
   }
 
   return (
-    <form
-      onSubmit={form.handleSubmit(handleSubmit)}
-      className="flex flex-col gap-7"
-    >
+    <form onSubmit={handleContinue} className="flex flex-col gap-7">
       {/* <div className="  flex justify-between mb-4">
           <Button
             onClick={loginGoogle}
@@ -121,7 +122,7 @@ export default function PersonalInfoForm({
         className="w-full h-[52px] hover:scale-95 text-sm font-semibold"
         disabled={isPending}
       >
-        {isPending ? 'Checking...' : 'Continue'}
+        {isPending ? 'Checking username...' : 'Continue'}
       </Button>
       <div className="flex items-center justify-center w-full text-xs">
         <p>
