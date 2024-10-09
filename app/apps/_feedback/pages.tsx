@@ -57,17 +57,19 @@ export function FirstPage({ form }: { form: any }) {
         {(field) => (
           <div className="flex flex-col gap-2">
             {ITEMS.map((item: any) => (
-              <Checkbox
-                key={item.id}
-                checked={field.value?.includes(item.id)}
-                onCheckedChange={(checked) => {
-                  const updatedItems = checked
-                    ? [...field.value, item.id]
-                    : field.value?.filter((value: any) => value !== item.id)
-                  field.onChange(updatedItems)
-                }}
-                className="border-[#B3B3B3]"
-              />
+              <div key={item.id} className="flex items-center gap-2">
+                <Checkbox
+                  checked={field.value?.includes(item.id)}
+                  onCheckedChange={(checked) => {
+                    const updatedItems = checked
+                      ? [...field.value, item.id]
+                      : field.value?.filter((value: any) => value !== item.id)
+                    field.onChange(updatedItems)
+                  }}
+                  className="border-[#B3B3B3]"
+                />
+                <span className="text-sm text-light">{item.label}</span>
+              </div>
             ))}
           </div>
         )}
@@ -79,17 +81,20 @@ export function FirstPage({ form }: { form: any }) {
         showMessage
         label="What improvements would you suggest for the next version? (Choose your top 5 in order)"
       >
-        <React.Fragment>
-          <div className="mb-2 space-y-1 text-sm text-light">
-            {improvementOptions.map((option, index) => (
-              <p key={index}>{`${index + 1}. ${option}`}</p>
-            ))}
-          </div>
-          <Textarea
-            placeholder="Tell us your suggestions"
-            className="h-[80px] w-full bg-[#18181C] text-xs text-light rounded-[9px]"
-          />
-        </React.Fragment>
+        {(field) => (
+          <React.Fragment>
+            <div className="mb-2 space-y-1 text-sm text-light">
+              {improvementOptions.map((option, index) => (
+                <p key={index}>{`${index + 1}. ${option}`}</p>
+              ))}
+            </div>
+            <Textarea
+              {...field}
+              placeholder="Tell us your suggestions"
+              className="h-[80px] w-full bg-[#18181C] text-xs text-light rounded-[9px]"
+            />
+          </React.Fragment>
+        )}
       </FormField>
     </>
   )

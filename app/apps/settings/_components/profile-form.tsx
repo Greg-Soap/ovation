@@ -50,7 +50,6 @@ export default function ProfileForm({
   refetch: () => void
   isProfileLoading: boolean
 }) {
-  const [disabled, setDisabled] = useState(false)
   const [selectedProfileImage, setSelectedProfileImage] = useState<File | null>(
     null,
   )
@@ -163,16 +162,17 @@ export default function ProfileForm({
       toast.success('Profile updated successfully')
       refetch()
       // TODO: FIX LATER
-      // setUserData({
-      //   ...userData,
-      //   ...tempFormValues,
-      //   userId: userData?.userId!,
-      //   badges: userData?.badges ?? [],
-      //   nft: userData?.nft ?? [],
-      //   paths: userData?.paths ?? [],
-      //   featured: userData?.featured ?? [],
-      // })
-      setDisabled(true)
+      setUserData({
+        ...userData,
+        ...tempFormValues,
+        userId: userData?.userId!,
+        badges: userData?.badges ?? [],
+        nft: userData?.nft ?? [],
+        paths: userData?.paths ?? [],
+        featured: userData?.featured ?? [],
+        socials: userData?.socials ?? null,
+      } as UserData)
+
       // Reset selected images
       setSelectedProfileImage(null)
       setSelectedCoverImage(null)
@@ -205,7 +205,6 @@ export default function ProfileForm({
       const localUrl = URL.createObjectURL(file)
       form.setValue('coverImage', localUrl)
     }
-    setDisabled(false)
   }
 
   const onSubmit = async (data: ProfileFormValues) => {
@@ -366,13 +365,11 @@ export default function ProfileForm({
             />
           </FormField>
         </div>
+        <SettingsChange
+          isLoading={isPending}
+          saveDraft={() => setValue(form.getValues())}
+        />
       </FormBase>
-
-      <SettingsChange
-        disabled={disabled}
-        isLoading={isPending}
-        saveDraft={() => setValue(form.getValues())}
-      />
     </>
   )
 }

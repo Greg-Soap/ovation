@@ -34,7 +34,6 @@ export default function ExperienceForm({
 }: {
   experienceData: UserExperience[]
 }) {
-  const [isDisabled, setIsDisabled] = useState<boolean>(true)
   const [isCurrentJob, setIsCurrentJob] = useState<boolean>(
     !experienceData[0]?.endDate,
   )
@@ -99,7 +98,6 @@ export default function ExperienceForm({
       toast.success(
         `Experience ${isUpdating ? 'updated' : 'added'} successfully`,
       )
-      setIsDisabled(true)
     },
     onError: (error) => {
       console.error(
@@ -232,7 +230,6 @@ export default function ExperienceForm({
       </FormBase>
 
       <SettingsChange
-        disabled={false}
         isLoading={isPending}
         saveDraft={() => setValue(form.getValues())}
       />
