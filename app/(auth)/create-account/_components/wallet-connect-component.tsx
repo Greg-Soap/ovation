@@ -124,7 +124,8 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
                       </div>
                     </div>
                   </div>
-                  {/* <CustomDialog
+                </div>
+                {/* <CustomDialog
                     trigger={
                       <Button className="text-[10px] font-medium h-fit">
                         Disconnect wallet
@@ -136,7 +137,6 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
                     cancelText="No, keep it"
                     onConfirm={() => disconnectWallet()}
                   /> */}
-                </div>
                 <Button
                   type="submit"
                   className="w-full text-sm font-semibold h-[53px]"
