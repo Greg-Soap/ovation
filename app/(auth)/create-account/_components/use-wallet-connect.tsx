@@ -40,7 +40,7 @@ export function useWalletConnect(
   }
 
   const connectMetaMask = async () => {
-    if ((window as any).ethereum) {
+    if ((window as any).ethereum?.isMetaMask) {
       const provider = new BrowserProvider(window.ethereum)
       try {
         await provider.send('eth_requestAccounts', [])
@@ -123,7 +123,7 @@ export function useWalletConnect(
   }
 
   const connectTrustWallet = async () => {
-    if ((window as any).ethereum?.isTrust) {
+    if ((window as any)?.ethereum) {
       try {
         const provider = new BrowserProvider((window as any).ethereum)
         await provider.send('eth_requestAccounts', [])
@@ -147,7 +147,7 @@ export function useWalletConnect(
   }
 
   const connectBinanceChainWallet = async () => {
-    if ((window as any).BinanceChain) {
+    if ((window as any).ethereum) {
       try {
         const provider = new BrowserProvider((window as any).BinanceChain)
         await provider.send('eth_requestAccounts', [])
@@ -243,7 +243,7 @@ export function useWalletConnect(
   }
 
   const connectMathWallet = async () => {
-    if ((window as any).ethereum?.isMathWallet) {
+    if ((window as any).ethereum.isMathWallet) {
       try {
         const provider = new BrowserProvider((window as any).ethereum)
         await provider.send('eth_requestAccounts', [])
@@ -267,19 +267,28 @@ export function useWalletConnect(
   }
 
   const connectSafePalWallet = async () => {
-    if ((window as any).ethereum?.isSafePal) {
+    if ((window as any).safePal) {
       try {
-        const provider = new BrowserProvider((window as any).ethereum)
-        await provider.send('eth_requestAccounts', [])
-        const signer = await provider.getSigner()
+        const SafePalProvider = (window as any).safepalProvider
 
-        const network = await provider.getNetwork()
+        await SafePalProvider.request({ method: 'eth_requestAccounts' })
+        const [address] = await SafePalProvider.request({
+          method: 'eth_accounts',
+        })
+        const chainId = await SafePalProvider.request({ method: 'eth_chainId' })
 
-        const account = signer.address
-        setProvider(provider)
+        const doesChainExist = chainIdToChainName[Number(parseInt(chainId, 16))]
+
+        if (!doesChainExist) {
+          return toast.error(
+            `Chain ${chainId} not supported, please select a different chain on your safe pal wallet`,
+          )
+        }
+
+        setProvider(SafePalProvider)
         handleWalletConnection(
-          account,
-          chainIdToChainName[Number(network.chainId)],
+          address,
+          chainIdToChainName[Number(parseInt(chainId, 16))],
         )
         console.log('Connected with SafePal Wallet:', account)
       } catch (error) {
@@ -291,7 +300,7 @@ export function useWalletConnect(
   }
 
   const connectTokenPocket = async () => {
-    if ((window as any).ethereum?.isTokenPocket) {
+    if ((window as any).ethereum.isTokenPocket) {
       try {
         const provider = new BrowserProvider((window as any).ethereum)
         await provider.send('eth_requestAccounts', [])
@@ -390,8 +399,7 @@ export function useWalletConnect(
       case 'Wallet Connect':
         await connectWalletConnect()
         break
-
-      case 'Okx':
+      case 'OKX':
         await connectOKXWallet()
         break
       case 'Opera Wallet':
