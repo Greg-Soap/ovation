@@ -112,18 +112,20 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
                 onSubmit={form.handleSubmit(handleFormSubmit)}
                 className="flex flex-col gap-7"
               >
-                <div className="w-full flex items-center justify-between bg-[#18181C] p-4 px-6 py-2.5 rounded-full">
-                  <div className="flex items-center gap-[7px]">
-                    <div className="flex flex-col gap-2">
-                      <p className="text-sm font-semibold ">
-                        Connected Account: {account}
+                <div className="w-full flex items-center justify-center bg-[#18181C] p-4 px-6 lg:py-2.5 rounded-full">
+                  <div className="fle items-center gap-[7px]">
+                    <div className="flex flex-col gap-2 justify-center">
+                      <p className="text-sm font-semibold text-center">
+                        Connected Account: {account.slice(0, 10)}...
+                        {account.slice(38)}
                       </p>
-                      <div className="flex items-center gap-[3px] text-xs text-light">
+                      <div className="flex items-center justify-center gap-[3px] text-xs text-light">
                         <Badge>Connected to {startCase(chain ?? '')}</Badge>
                       </div>
                     </div>
                   </div>
-                  <CustomDialog
+                </div>
+                {/* <CustomDialog
                     trigger={
                       <Button className="text-[10px] font-medium h-fit">
                         Disconnect wallet
@@ -134,23 +136,20 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
                     confirmText="Yes, disconnect"
                     cancelText="No, keep it"
                     onConfirm={() => disconnectWallet()}
-                  />
-
-                  <Button
-                    type="submit"
-                    className="w-full text-sm font-semibold h-[53px]"
-                    disabled={isPending}
-                    isLoading={isPending}
-                    loadingText="Creating profile..."
-                  >
-                    Make my profile
-                  </Button>
-
-                  <p className="text-center mb-4 text-light">
-                    By clicking &quot;make my profile&quot; you agree to our
-                    privacy terms, code of conduct and Conditions.
-                  </p>
-                </div>
+                  /> */}
+                <Button
+                  type="submit"
+                  className="w-full text-sm font-semibold h-[53px]"
+                  disabled={isPending}
+                  isLoading={isPending}
+                  loadingText="Creating profile..."
+                >
+                  Make my profile
+                </Button>
+                <p className="text-center mb-4 text-light">
+                  By clicking &quot;make my profile&quot; you agree to our
+                  privacy terms, code of conduct and Conditions.
+                </p>
               </form>
             </ErrorBoundary>
           )}
