@@ -64,33 +64,51 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
                     <Spinner size="huge" color={colors.primary.DEFAULT} />
                   </div>
                 ) : (
-                  <ErrorBoundary FallbackComponent={ErrorFallback}>
-                    <div className="grid grid-cols-2 gap-4">
-                      {sortedWallets?.map((wallet) => (
-                        <ErrorBoundary
-                          key={wallet.walletId}
-                          FallbackComponent={ErrorFallback}
-                        >
-                          <Button
-                            className="text-start flex justify-between p-2 md:p-[1rem] h-[58px] w-full md:w-[242px] text-xs md:text-sm font-semibold  border-[1px] border-solid bg-transparent border-[#353538]"
-                            onClick={() => {
-                              connectWallet(wallet.name)
-                            }}
+                  <>
+                    <Button
+                      className="text-start flex justify-center p-2 md:p-[1rem] h-[58px] w-full text-xs md:text-sm font-semibold  border-[1px] border-solid bg-transparent border-[#353538]"
+                      onClick={() => {
+                        connectWallet(sortedWallets[0].name)
+                      }}
+                    >
+                      <p className="text-foreground mr-2">
+                        {startCase(sortedWallets[0].name)}
+                      </p>
+                      <Image
+                        src={sortedWallets[0].logoUrl}
+                        alt={sortedWallets[0].name}
+                        width={20}
+                        height={20}
+                      />
+                    </Button>
+                    <ErrorBoundary FallbackComponent={ErrorFallback}>
+                      <div className="grid grid-cols-2 gap-4">
+                        {sortedWallets?.slice(1, 9)?.map((wallet) => (
+                          <ErrorBoundary
+                            key={wallet.walletId}
+                            FallbackComponent={ErrorFallback}
                           >
-                            <p className="text-foreground">
-                              {startCase(wallet.name)}
-                            </p>
-                            <Image
-                              src={wallet.logoUrl}
-                              alt={wallet.name}
-                              width={20}
-                              height={20}
-                            />
-                          </Button>
-                        </ErrorBoundary>
-                      ))}
-                    </div>
-                  </ErrorBoundary>
+                            <Button
+                              className="text-start flex justify-between p-2 md:p-[1rem] h-[58px] w-full md:w-[242px] text-xs md:text-sm font-semibold  border-[1px] border-solid bg-transparent border-[#353538]"
+                              onClick={() => {
+                                connectWallet(wallet.name)
+                              }}
+                            >
+                              <p className="text-foreground">
+                                {startCase(wallet.name)}
+                              </p>
+                              <Image
+                                src={wallet.logoUrl}
+                                alt={wallet.name}
+                                width={20}
+                                height={20}
+                              />
+                            </Button>
+                          </ErrorBoundary>
+                        ))}
+                      </div>
+                    </ErrorBoundary>
+                  </>
                 )}
 
                 <ErrorBoundary FallbackComponent={ErrorFallback}>
