@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import type { WalletAcct } from '@/models/all.model'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -15,6 +15,10 @@ import { toast } from 'sonner'
 import { FormBase, FormFooter } from '@/components/customs/custom-form'
 import { ManualWalletForm } from '@/components/manual-wallet-form'
 import { useAppStore } from '@/store/use-app-store'
+import { ErrorBoundary } from 'react-error-boundary'
+import { ErrorFallback } from '@/components/error-boundary'
+import Image from 'next/image'
+import { useWalletConnect } from '@/app/(auth)/create-account/_components/use-wallet-connect'
 
 const formSchema = z.object({
   walletAddress: z.string().min(1, 'Wallet address is required'),
@@ -26,6 +30,51 @@ const formSchema = z.object({
 export default function WalletForm() {
   const [addingWallet, setAddingWallet] = useState(false)
   const { userId } = useAppStore()
+  const [walletAutomatically, setWalletAutomatically] = useState(false)
+  const [walletConnected, setWaletConnected] = useState(false)
+  const [walletTypeUId, setWalletTypeUId] = useState('')
+
+  const { account, chain, walletTypeId, connectWallet, disconnectWallet } =
+    useWalletConnect((account, chain) => onWalletConnected())
+
+  const { mutate: addWallet, isPending: isAddingWallet } = useMutation({
+    mutationFn: ovationService.addWallet,
+    onSuccess: async (data) => {
+      toast.success('Wallet Added Successfully')
+      setWalletAutomatically(false)
+      setWaletConnected(false)
+      refetchWallets()
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message)
+      setWalletAutomatically(false)
+      setWaletConnected(false)
+    },
+  })
+
+  const { data: allwallet, isLoading } = useQuery({
+    queryKey: ['wallets'],
+    queryFn: () => ovationService.getWallets(),
+  })
+
+  const sortedWallets = useMemo(() => {
+    if (!allwallet?.data?.data) return []
+
+    return allwallet.data.data.sort((a, b) => {
+      if (a.name.toLowerCase() === 'leap wallet') return -1
+      if (b.name.toLowerCase() === 'leap wallet') return 1
+      return 0
+    })
+  }, [allwallet])
+
+  const onWalletConnected = () => {
+    setWaletConnected(true)
+  }
+
+  const onWalletDisconnected = () => {
+    // form.setValue('userWallet', null)
+    // handleFormSubmit(form.getValues())
+  }
 
   const { data: walletsData, refetch: refetchWallets } = useQuery({
     queryKey: ['user-wallets', userId],
@@ -34,6 +83,15 @@ export default function WalletForm() {
   })
 
   const wallets = walletsData?.data?.data
+
+  const addWalletForUser = () => {
+    const data: any = {
+      chain: chain,
+      walletAddress: account,
+      walletTypeId: walletTypeUId,
+    }
+    addWallet(data)
+  }
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -45,19 +103,8 @@ export default function WalletForm() {
     },
   })
 
-  const { mutate: addWallet, isPending: isAddingWallet } = useMutation({
-    mutationFn: (values: z.infer<typeof formSchema>) =>
-      ovationService.addWallet(values),
-    onSuccess: () => {
-      toast.success('Wallet connected successfully')
-      setAddingWallet(false)
-      refetchWallets()
-    },
-  })
-
   const { mutate: deleteWallet, isPending: isDeletingWallet } = useMutation({
-    mutationFn: (walletId: string | number) =>
-      ovationService.deleteWallet(walletId),
+    mutationFn: (Type: string | number) => ovationService.deleteWallet(Type),
     onSuccess: () => {
       toast.success('Wallet disconnected successfully')
       refetchWallets()
@@ -88,7 +135,7 @@ export default function WalletForm() {
             <div className="flex items-center gap-[7px]">
               <div className="flex flex-col gap-2">
                 <p className="text-sm font-semibold ">
-                  {wallet.walletAddress.replace(
+                  {wallet?.walletAddress?.replace(
                     /^(.{6})(.*)(.{4})$/,
                     '$1***$3',
                   )}
@@ -108,19 +155,14 @@ export default function WalletForm() {
               description="This action cannot be undone. This will permanently disconnect the wallet from your account."
               confirmText="Yes, disconnect"
               cancelText="No, keep it"
-              onConfirm={() => deleteWallet(wallet.id as string | number)}
+              onConfirm={() => {
+                console.log(wallet)
+                deleteWallet(wallet?.id)
+              }}
             />
           </div>
         ))}
-        {!addingWallet ? (
-          <Button
-            variant="outline"
-            className="w-full h-[46px] flex items-center gap-[7px] text-[13px] font-semibold  border-[#29292F] rounded-full"
-            onClick={() => setAddingWallet(true)}
-          >
-            Add new wallet <PlusIcon size={16} />
-          </Button>
-        ) : (
+        {addingWallet ? (
           <FormBase form={form} onSubmit={onSubmit}>
             <ManualWalletForm form={form} />
             <FormFooter>
@@ -137,6 +179,88 @@ export default function WalletForm() {
               </Button>
             </FormFooter>
           </FormBase>
+        ) : walletAutomatically == true ? (
+          <div>
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              {walletConnected ? (
+                <div>
+                  Connected Account: {account?.slice(0, 10)}...
+                  {account?.slice(38)}
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-4">
+                  {sortedWallets?.map((wallet) => (
+                    <ErrorBoundary
+                      key={wallet.walletId}
+                      FallbackComponent={ErrorFallback}
+                    >
+                      <Button
+                        className="text-start flex justify-between p-2 md:p-[1rem] h-[58px] w-full md:w-[242px] text-xs md:text-sm font-semibold  border-[1px] border-solid bg-transparent border-[#353538]"
+                        onClick={() => {
+                          setWalletTypeUId(wallet.walletId)
+                          connectWallet(wallet.name)
+                        }}
+                      >
+                        <p className="text-foreground">
+                          {startCase(wallet.name)}
+                        </p>
+                        <Image
+                          src={wallet.logoUrl}
+                          alt={wallet.name}
+                          width={20}
+                          height={20}
+                        />
+                      </Button>
+                    </ErrorBoundary>
+                  ))}
+                </div>
+              )}
+            </ErrorBoundary>
+            <div className="flex">
+              <div className="w-full mr-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setWaletConnected(false)
+                    setWalletAutomatically(false)
+                  }}
+                  className="flex-1  mt-10 w-full"
+                >
+                  Cancel
+                </Button>
+              </div>
+              {walletConnected && (
+                <div className="w-full ml-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={addWalletForUser}
+                    className="flex-1  mt-10 w-full"
+                  >
+                    {isAddingWallet ? 'Adding Wallet' : 'Add Wallet'}
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="flex">
+            <Button
+              variant="outline"
+              className="w-full mr-2 h-[46px] flex items-center gap-[7px] text-[13px] font-semibold  border-[#29292F] rounded-full"
+              onClick={() => setWalletAutomatically(true)}
+            >
+              Connect Wallet Automatically <PlusIcon size={16} />
+            </Button>
+            <Button
+              variant="outline"
+              className="w-full ml-2 h-[46px] flex items-center gap-[7px] text-[13px] font-semibold  border-[#29292F] rounded-full"
+              onClick={() => setAddingWallet(true)}
+            >
+              Add new wallet <PlusIcon size={16} />
+            </Button>
+          </div>
         )}
       </div>
     </>
