@@ -91,6 +91,12 @@ export function DatePicker({
     }
   }, [value])
 
+  const handlePopoverInteraction = (
+    event: React.MouseEvent | React.FocusEvent,
+  ) => {
+    event.stopPropagation()
+  }
+
   return (
     <Popover>
       <PopoverTrigger
@@ -104,6 +110,7 @@ export function DatePicker({
             'w-full justify-start text-left  font-normal hover:bg-transparent hover:text-light ',
             !selectedDate && 'text-lighter',
           )}
+          onClick={handlePopoverInteraction}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
           {selectedDate ? (
@@ -113,7 +120,7 @@ export function DatePicker({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0 bg-black text-foreground border-[#353538] ">
+      <PopoverContent className="w-auto p-0 bg-black text-foreground border-[#353538]  z-[9999]">
         <div className="flex justify-between gap-2 px-2 py-1 pt-2">
           <Select
             value={currentMonth.getMonth().toString()}

@@ -63,13 +63,8 @@ const formSchema = z.object({
       required_error: 'Please select your satisfaction level.',
     },
   ),
-  usefulFeature: z.array(z.string()).min(1, {
-    message: 'Please select at least one feature you found valuable.',
-  }),
-  improvement: z.string().min(2, {
-    message:
-      'Please share your suggestions for improvement (minimum 2 characters).',
-  }),
+  usefulFeature: z.array(z.string()).optional(),
+  improvement: z.string().optional(),
   confusion: z.string().optional(),
   likelyRecommend: z
     .enum([
@@ -101,7 +96,7 @@ export default function FeedbackModal() {
       addition: '',
       biggestPain: '',
     },
-    mode: 'onSubmit',
+    mode: 'onBlur',
   })
 
   const { mutate, isPending } = useMutation({
@@ -119,7 +114,7 @@ export default function FeedbackModal() {
   const onSubmit = (data: FormData) => {
     const transformedData = {
       ...data,
-      usefulFeature: data.usefulFeature.join(','),
+      usefulFeature: data.usefulFeature?.join(','),
     }
     mutate(transformedData)
   }
@@ -137,6 +132,9 @@ export default function FeedbackModal() {
   }
 
   const handleSubmit = form.handleSubmit(onSubmit)
+
+  console.log(form.formState.errors)
+  console.log(form.getValues())
 
   const renderFormHeader = () => (
     <div className="flex flex-col gap-2 mb-6">

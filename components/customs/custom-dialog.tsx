@@ -51,7 +51,7 @@ function CustomDialog({
       <AlertDialogTrigger asChild onClick={handleTriggerClick}>
         {trigger}
       </AlertDialogTrigger>
-      <AlertDialogContent className="w-[90%] rounded-md">
+      <AlertDialogContent className="w-[90%] rounded-md border-[#FFFFFF14]">
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>

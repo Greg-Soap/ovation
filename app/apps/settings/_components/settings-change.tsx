@@ -3,12 +3,10 @@ import { Button } from '@/components/ui/button'
 import DiscardChanges from './discard-changes'
 
 export default function SettingsChange({
-  disabled,
   position,
   isLoading,
   saveDraft,
 }: {
-  disabled: boolean
   position?: string
   isLoading: boolean
   saveDraft?: () => void
@@ -22,7 +20,7 @@ export default function SettingsChange({
           <Button
             variant={'outline'}
             type="button"
-            disabled={disabled}
+            disabled={isLoading}
             className="h-[46px] font-semibold  rounded-full w-[150px] bg-[#18181C] border-[1px] border-[#353538] text-[13px]"
           >
             Discard changes
@@ -35,7 +33,7 @@ export default function SettingsChange({
 
       <Button
         type="submit"
-        disabled={disabled}
+        disabled={isLoading}
         isLoading={isLoading}
         loadingText="Saving changes..."
         className="h-[46px] text-[13px] text-[#0B0A10] font-semibold rounded-full w-[125px]"

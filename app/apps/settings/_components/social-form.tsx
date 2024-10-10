@@ -15,7 +15,6 @@ import SavingOverlay from '@/components/saving-overlay'
 import { FormBase, FormField } from '@/components/customs/custom-form'
 
 export default function SocialForm({ userId }: { userId: string }) {
-  const [isDisabled, setIsDisabled] = useState(true)
   const { data: socialLinks, isLoading: isSocialLinksLoading } = useQuery({
     queryKey: ['socialLinks', userId],
     queryFn: () => ovationService.getSocialLinks(userId),
@@ -56,7 +55,6 @@ export default function SocialForm({ userId }: { userId: string }) {
     mutationFn: (data: FormValues) => ovationService.updateSocials(data),
     onSuccess: () => {
       toast.success('Social links updated successfully')
-      setIsDisabled(true)
     },
     onError: () => {
       toast.error('Failed to update social links')
@@ -111,9 +109,8 @@ export default function SocialForm({ userId }: { userId: string }) {
             </div>
           </FormField>
         ))}
+        <SettingsChange isLoading={isPending} />
       </FormBase>
-
-      <SettingsChange disabled={isDisabled} isLoading={isPending} />
     </section>
   )
 }

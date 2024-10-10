@@ -24,8 +24,6 @@ const formSchema = z
   })
 
 export default function PasswordForm() {
-  const [isDisabled, setIsDisabled] = useState<boolean>(true)
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -42,7 +40,6 @@ export default function PasswordForm() {
       toast.success('Password changed successfully')
 
       form.reset()
-      setIsDisabled(true)
     },
     onError: (error) => {
       console.error('Error changing password:', error)
@@ -94,7 +91,7 @@ export default function PasswordForm() {
           )}
         </FormField>
       </div>
-      <SettingsChange disabled={isDisabled} isLoading={isPending} />
+      <SettingsChange isLoading={isPending} />
     </FormBase>
   )
 }

@@ -9,11 +9,22 @@ import {
 } from '@/components/ui/dialog'
 
 interface CustomModalProps {
-  trigger: ReactNode
+  trigger?: ReactNode
   title?: string
   description?: string
   children: ReactNode
   className?: string
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full'
+}
+
+const sizeClasses = {
+  sm: 'sm:max-w-sm',
+  md: 'sm:max-w-md',
+  lg: 'sm:max-w-lg',
+  xl: 'sm:max-w-xl',
+  full: 'sm:max-w-[calc(100vw-2rem)]',
 }
 
 function CustomModal({
@@ -22,11 +33,16 @@ function CustomModal({
   description,
   children,
   className,
+  open,
+  onOpenChange,
+  size = 'md',
 }: CustomModalProps) {
   return (
-    <Dialog>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className={className}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
+      <DialogContent
+        className={`sm:max-w-[425px] ${sizeClasses[size]} p-0 border-[#4D4D4D]`}
+      >
         {title || description ? (
           <DialogHeader>
             {title && <DialogTitle>{title}</DialogTitle>}
