@@ -16,10 +16,20 @@ const DEFAULT_ETH_JSONRPC_URL = infuraId
 const DEFAULT_CHAIN_ID: any = 1
 
 // Initialize Coinbase Wallet SDK
-export const coinbaseWallet = new CoinbaseWalletSDK({
-  appName: APP_NAME,
-  appLogoUrl: APP_LOGO_URL,
-})
+
+let ethereum: any
+
+setTimeout(async () => {
+  const coinbaseWallet = new CoinbaseWalletSDK({
+    appName: APP_NAME,
+    appLogoUrl: APP_LOGO_URL,
+  })
+
+  ethereum = coinbaseWallet.makeWeb3Provider(
+    DEFAULT_ETH_JSONRPC_URL,
+    DEFAULT_CHAIN_ID,
+  )
+}, 4000)
 
 export function useWalletConnect(
   onWalletConnected?: (account: string, chain: string) => void,
@@ -59,7 +69,7 @@ export function useWalletConnect(
   }
 
   const connectMetaMask = async () => {
-    if ((window as any)?.ethereum?.isMetaMask) {
+    if ((window as any)?.ethereum) {
       try {
         const provider = new BrowserProvider(window?.ethereum)
 
@@ -223,10 +233,6 @@ export function useWalletConnect(
   const connectCoinBaseWallet = async () => {
     if ((window as any).ethereum) {
       try {
-        const ethereum = coinbaseWallet.makeWeb3Provider(
-          DEFAULT_ETH_JSONRPC_URL,
-          DEFAULT_CHAIN_ID,
-        )
         const provider = new BrowserProvider(ethereum)
         await ethereum.request({
           method: 'eth_requestAccounts',
