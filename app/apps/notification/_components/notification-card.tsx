@@ -4,8 +4,8 @@ import type { NotificationItem } from './types'
 import Image from 'next/image'
 import { useMutation } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
-import Link from 'next/link'
 import { startCase } from '@/lib/helper-func'
+import CustomAvatar from '@/components/customs/custom-avatar'
 
 export default function NotificationCard({
   id,
@@ -39,19 +39,15 @@ export default function NotificationCard({
         return (
           <div className="flex gap-3 justify-between items-center">
             <div className="flex gap-3 items-center">
-              <Image
-                src={
-                  initiator?.profileImage || '/assets/images/default-user.svg'
-                }
+              <CustomAvatar
+                src={initiator?.profileImage}
                 alt="Department Icon"
-                width={36}
-                height={36}
-                className="rounded-full w-[36px] h-[36px]"
+                size="md"
               />
               <div className="flex flex-col gap-1">
-                <Link href={`/apps/profile/${initiator?.username}`}>
-                  <p className="font-semibold text-sm text-white">{title}</p>
-                </Link>
+                <a href={`/apps/profile/${initiator?.username}`}>
+                  <p className="font-semibold text-sm ">{title}</p>
+                </a>
                 <p className="text-sm text-gray-300">{message}</p>
               </div>
             </div>
@@ -85,7 +81,7 @@ export default function NotificationCard({
       case 'Badge':
         return (
           <div>
-            <p className="font-semibold text-sm text-white">{title}</p>
+            <p className="font-semibold text-sm ">{title}</p>
             <p className="text-sm text-gray-300">
               {message} - {startCase(referenceId)}
             </p>

@@ -95,14 +95,14 @@ export function DatePicker({
     <Popover>
       <PopoverTrigger
         asChild
-        className="text-white h-[47px] rounded-3xl border-[#353538] border-[1px] border-solid"
+        className=" h-[47px] rounded-3xl border-[#353538] border-[1px] border-solid"
       >
         <Button
           variant={'outline'}
           disabled={disableDate}
           className={cn(
-            'w-full justify-start text-left text-[#F8F8FF] font-normal hover:bg-transparent hover:text-[#F8F8FF]',
-            !selectedDate && 'text-[#808080]',
+            'w-full justify-start text-left  font-normal hover:bg-transparent hover:text-light ',
+            !selectedDate && 'text-lighter',
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
@@ -113,16 +113,16 @@ export function DatePicker({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0 bg-black text-white">
+      <PopoverContent className="w-auto p-0 bg-black text-foreground border-[#353538] ">
         <div className="flex justify-between gap-2 px-2 py-1 pt-2">
           <Select
             value={currentMonth.getMonth().toString()}
             onValueChange={(value) => handleMonthChange(Number.parseInt(value))}
           >
-            <SelectTrigger className="bg-black text-white border-[#353538]">
+            <SelectTrigger className="bg-black  border-[#353538]">
               <SelectValue>{months[currentMonth.getMonth()]}</SelectValue>
             </SelectTrigger>
-            <SelectContent className="bg-black text-white border-[#353538] max-h-[200px]">
+            <SelectContent className="bg-black  border-[#353538] max-h-[200px]">
               {months.map((month, index) => (
                 <SelectItem key={month} value={index.toString()}>
                   {month}
@@ -134,10 +134,10 @@ export function DatePicker({
             value={currentMonth.getFullYear().toString()}
             onValueChange={(value) => handleYearChange(Number.parseInt(value))}
           >
-            <SelectTrigger className="bg-black text-white border-[#353538]">
+            <SelectTrigger className="bg-black  border-[#353538]">
               <SelectValue>{currentMonth.getFullYear()}</SelectValue>
             </SelectTrigger>
-            <SelectContent className="bg-black text-white border-[#353538] max-h-[200px]">
+            <SelectContent className="bg-black  border-[#353538] max-h-[200px]">
               {years.map((year) => (
                 <SelectItem key={year} value={year.toString()}>
                   {year}

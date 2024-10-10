@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { useForm, FormProvider } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
@@ -9,6 +9,7 @@ import { useMutation } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
 import { FirstPage, SecondPage } from './pages'
 import NextButton from './next-buttons'
+import { FormBase } from '@/components/customs/custom-form'
 
 // Define types
 export type SatisfactionLevel =
@@ -62,13 +63,8 @@ const formSchema = z.object({
       required_error: 'Please select your satisfaction level.',
     },
   ),
-  usefulFeature: z.array(z.string()).min(1, {
-    message: 'Please select at least one feature you found valuable.',
-  }),
-  improvement: z.string().min(2, {
-    message:
-      'Please share your suggestions for improvement (minimum 2 characters).',
-  }),
+  usefulFeature: z.array(z.string()).optional(),
+  improvement: z.string().optional(),
   confusion: z.string().optional(),
   likelyRecommend: z
     .enum([
@@ -88,7 +84,7 @@ export type FormData = z.infer<typeof formSchema>
 export default function FeedbackModal() {
   const [formPage, setFormPage] = React.useState(1)
 
-  const methods = useForm<FormData>({
+  const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       userEmail: '',
@@ -100,14 +96,14 @@ export default function FeedbackModal() {
       addition: '',
       biggestPain: '',
     },
-    mode: 'onSubmit',
+    mode: 'onBlur',
   })
 
   const { mutate, isPending } = useMutation({
     mutationFn: (data: any) => ovationService.sendFeedback(data),
     onSuccess: () => {
       toast('Thank you for your feedback!')
-      methods.reset()
+      form.reset()
       setFormPage(1)
     },
     onError: () => {
@@ -118,13 +114,13 @@ export default function FeedbackModal() {
   const onSubmit = (data: FormData) => {
     const transformedData = {
       ...data,
-      usefulFeature: data.usefulFeature.join(','),
+      usefulFeature: data.usefulFeature?.join(','),
     }
     mutate(transformedData)
   }
 
   const handleNextClick = async () => {
-    const isValid = await methods.trigger([
+    const isValid = await form.trigger([
       'userEmail',
       'satisfactory',
       'usefulFeature',
@@ -135,15 +131,16 @@ export default function FeedbackModal() {
     }
   }
 
-  const handleSubmit = methods.handleSubmit(onSubmit)
+  const handleSubmit = form.handleSubmit(onSubmit)
+
+  console.log(form.formState.errors)
+  console.log(form.getValues())
 
   const renderFormHeader = () => (
     <div className="flex flex-col gap-2 mb-6">
       <p className="text-sm text-[#E7F7B9]">{formPage}/2</p>
-      <h2 className="text-xl font-semibold text-[#F8F8FF]">
-        We&apos;d love your feedback!
-      </h2>
-      <p className="text-sm text-[#999999]">
+      <h2 className="text-xl font-semibold ">We&apos;d love your feedback!</h2>
+      <p className="text-sm text-lighter">
         Ovation is currently in its MVP (Minimum Viable Product) stage, where
         we&apos;re focused on gathering user feedback to refine our platform.
         Your input is crucial in helping us improve. Fill out the feedback form
@@ -155,32 +152,33 @@ export default function FeedbackModal() {
   return (
     <div className="px-6 py-8 gap-[30px] bg-[#232227] rounded-2xl flex flex-col max-w-[700px] mx-auto overflow-y-scroll overflow-x-hidden h-[90vh] w-fit sm:w-full">
       {renderFormHeader()}
-      <FormProvider {...methods}>
-        <form
-          onSubmit={methods.handleSubmit(onSubmit)}
-          className="space-y-6 w-[80vw] md:w-full"
-        >
-          {formPage === 1 ? <FirstPage /> : <SecondPage />}
-          <div className="flex justify-end gap-[10px] w-full">
-            <Button
-              type="button"
-              variant="outline"
-              className="text-[#F8F8FF] text-[10px] rounded-full font-semibold px-3 py-2 outline outline-1 outline-[#29292F] h-fit bg-transparent"
-              onClick={() =>
-                formPage === 1 ? methods.reset() : setFormPage(1)
-              }
-            >
-              {formPage === 1 ? 'Reset' : 'Previous'}
-            </Button>
-            <NextButton
-              formPage={formPage}
-              isPending={isPending}
-              onNextClick={handleNextClick}
-              onSubmit={handleSubmit}
-            />
-          </div>
-        </form>
-      </FormProvider>
+      <FormBase
+        form={form}
+        onSubmit={handleSubmit}
+        className="space-y-6 w-[80vw] md:w-full"
+      >
+        {formPage === 1 ? (
+          <FirstPage form={form} />
+        ) : (
+          <SecondPage form={form} />
+        )}
+        <div className="flex justify-end gap-[10px] w-full">
+          <Button
+            type="button"
+            variant="outline"
+            className=" text-[10px] rounded-full font-semibold px-3 py-2 outline outline-1 outline-[#29292F] h-fit bg-transparent"
+            onClick={() => (formPage === 1 ? form.reset() : setFormPage(1))}
+          >
+            {formPage === 1 ? 'Reset' : 'Previous'}
+          </Button>
+          <NextButton
+            formPage={formPage}
+            isPending={isPending}
+            onNextClick={handleNextClick}
+            onSubmit={handleSubmit}
+          />
+        </div>
+      </FormBase>
     </div>
   )
 }

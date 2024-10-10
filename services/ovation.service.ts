@@ -11,6 +11,8 @@ import type {
   UserData,
   Badge,
   DiscoverUserData,
+  WalletAcct,
+  FollowersFollowing,
 } from '../models/all.model'
 import { removeToken } from '@/lib/cookies'
 
@@ -86,12 +88,31 @@ class OvationService {
     return api.delete(`/Profile/follow/${userId}`)
   }
 
+  static getFollowers(userId: string) {
+    return api.get<{ data: FollowersFollowing[]; message: string }>(`/Profile/followers/${userId}`)
+  }
+
+  static getFollowing(userId: string) {
+    return api.get<{ data: FollowersFollowing[]; message: string }>(`/Profile/followings/${userId}`)
+  }
+
   static viewProfile(userId: string) {
     return api.post(`/Profile/view/${userId}`)
   }
 
   static hideNft(data: { nftId: string; public: boolean }) {
     return api.patch('/Profile/nft/privacy', data)
+  }
+  static addWallet(data: WalletAcct) {
+    return api.post<{ message: string; data: WalletAcct[] }>('/Profile/wallet', data)
+  }
+
+  static getUserWallets(userId: string) {
+    return api.get<{ data: WalletAcct[]; message: string }>(`/Profile/wallet/${userId}`)
+  }
+
+  static deleteWallet(walletId: string | number) {
+    return api.delete(`/Profile/wallet/${walletId}`)
   }
 
   // Experience
@@ -222,6 +243,13 @@ class OvationService {
   static async getMostViewed() {
     const response = await api.get<{ data: DiscoverUserData[]; message: string }>(
       '/Discover/most-viewed',
+    )
+    return response.data?.data
+  }
+
+  static async getMostFollowed() {
+    const response = await api.get<{ data: DiscoverUserData[]; message: string }>(
+      '/Discover/most-followed',
     )
     return response.data?.data
   }

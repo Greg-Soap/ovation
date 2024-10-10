@@ -2,16 +2,17 @@
 
 import { useEffect, useState } from 'react'
 import Spinner from './ui/spinner'
+import colors from '@/lib/colors'
 
-interface SavingOverlayProps {
+interface LoadingOverlayProps {
   isLoading: boolean
   loadingText?: string
 }
 
-function SavingOverlay({
+function LoadingOverlay({
   isLoading,
   loadingText = 'Saving...',
-}: SavingOverlayProps) {
+}: LoadingOverlayProps) {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
@@ -28,11 +29,11 @@ function SavingOverlay({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-[#1C1C1E] rounded-lg p-6 flex flex-col items-center">
-        <Spinner size="average" color="#CFF073" />
-        <p className="mt-4 text-[#F8F8FF] text-lg font-medium">{loadingText}</p>
+        <Spinner size="average" color={colors.primary.DEFAULT} />
+        <p className="mt-4  text-lg font-medium">{loadingText}</p>
       </div>
     </div>
   )
 }
 
-export default SavingOverlay
+export default LoadingOverlay

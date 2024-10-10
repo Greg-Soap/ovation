@@ -21,10 +21,11 @@ import { getMessagesForChat, sendMessage } from '@/lib/firebaseChatService'
 import GalleryIcon from '@/components/icons/galleryIcon'
 import EmojiIcon from '@/components/icons/emojiIcon'
 import SendIcon from '@/components/icons/sendIcon'
-import { getReceiver, getUserId } from '@/lib/helper-func'
+import { getReceiver } from '@/lib/helper-func'
 import type { Timestamp } from 'firebase/firestore'
 import Spinner from '@/components/ui/spinner'
 import { notificationServices } from '../layout'
+import { useAppStore } from '@/store/use-app-store'
 
 export interface FriendProps {
   friendDisplayPicture: string
@@ -63,7 +64,7 @@ export default function MessageContainer({
   const messagesEndRef = useRef<null | HTMLDivElement>(null)
   const [isSending, setIsSending] = useState(false)
 
-  const currentUserId = getUserId()
+  const { userId: currentUserId } = useAppStore()
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value)
@@ -86,7 +87,11 @@ export default function MessageContainer({
     setLoading(true)
 
     try {
-      const messageDocuments = await getMessagesForChat(friend.userId)
+      const messageDocuments = await getMessagesForChat(
+        friend.userId,
+        100,
+        currentUserId as string,
+      )
       setMessages(
         messageDocuments.messages.reverse().map(
           (doc): MessageProps => ({
@@ -118,7 +123,7 @@ export default function MessageContainer({
 
     setIsSending(true)
     try {
-      await sendMessage(friend.userId, message)
+      await sendMessage(friend.userId, message, currentUserId as string)
       setMessage('')
       await fetchMessages()
     } catch (error) {
@@ -135,10 +140,8 @@ export default function MessageContainer({
         <section className="w-full h-[100vh] lg:h-full lg:col-span-2 flex flex-col items-center justify-center bg-[#111115] other-link overflow-auto">
           <div className="flex flex-col items-center gap-[13px]">
             <div className="flex flex-col items-center gap-[6px]">
-              <p className="text-[#F8F8FF] text-xl font-semibold">
-                No Conversation Selected
-              </p>
-              <p className="text-[#E6E6E6] text-center text-sm max-w-[280px]">
+              <p className=" text-xl font-semibold">No Conversation Selected</p>
+              <p className="text-foreground text-center text-sm max-w-[280px]">
                 To start a new conversation, visit a user&apos;s profile and
                 click the message button.
               </p>
@@ -160,9 +163,7 @@ export default function MessageContainer({
               size={24}
               onClick={goBack}
             />
-            <p className="text-sm font-medium text-[#F8F8FF]">
-              {friend.displayName}
-            </p>
+            <p className="text-sm font-medium ">{friend.displayName}</p>
           </div>
         </ErrorBoundary>
 
@@ -178,10 +179,10 @@ export default function MessageContainer({
               className="rounded-full w-[81px] h-[81px] object-cover"
             />
             <div className="flex flex-col gap-1 w-fit items-center">
-              <p className="text-[#F8F8FF] text-xl font-semibold w-fit leading-[30px] text-center">
+              <p className=" text-xl font-semibold w-fit leading-[30px] text-center">
                 {friend.displayName}
               </p>
-              <p className="text-sm text-[#808080] w-fit">{friend.userName}</p>
+              <p className="text-sm text-lighter w-fit">{friend.userName}</p>
             </div>
           </div>
         </ErrorBoundary>
@@ -190,7 +191,7 @@ export default function MessageContainer({
           <div className="flex-grow overflow-y-auto px-3 pt-[30px] pb-[100px] md:px-[30px] md:pt-[30px] md:pb-[90px] xir:p-[30px]">
             {loading ? (
               <div className="flex justify-center items-center h-full">
-                <p className="text-[#F8F8FF]">Loading messages...</p>
+                <p className="">Loading messages...</p>
               </div>
             ) : (
               messages.map((msg, index) => (
@@ -201,7 +202,7 @@ export default function MessageContainer({
                   } mb-5`}
                 >
                   <p
-                    className={`px-5 py-[10px] rounded-[20px] text-[#F8F8FF] text-sm font-medium max-w-[85%] lg:max-w-[50%] ${
+                    className={`px-5 py-[10px] rounded-[20px]  text-sm font-medium max-w-[85%] lg:max-w-[50%] ${
                       msg.userId === currentUserId
                         ? 'bg-[#1D3E00] rounded-tr-[20px]'
                         : 'bg-[#232227] rounded-tl-[20px]'
@@ -244,7 +245,7 @@ export default function MessageContainer({
               <Input
                 placeholder="Type out a new message..."
                 value={message}
-                className="h-[24px] text-white bg-transparent border-none  outline-none ring-0 focus:outline-none focus-visible:border-none ml-0 py-"
+                className="h-[24px]  bg-transparent border-none  outline-none ring-0 focus:outline-none focus-visible:border-none ml-0 py-"
                 onChange={handleChange}
                 onKeyPress={handleKeyPress}
                 disabled={isSending}

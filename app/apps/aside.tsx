@@ -1,14 +1,8 @@
 'use client'
 import Image from 'next/image'
 import React from 'react'
-import { usePathname, useRouter } from 'next/navigation'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover'
+import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import {
   LocationDiscover,
   Profile,
@@ -20,11 +14,16 @@ import {
 import { useLocalStorage } from '@/lib/use-local-storage'
 import type { UserData } from '@/models/all.model'
 import ovationService from '@/services/ovation.service'
-// import FeedbackModal from './feedback'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
 import FeedbackModal from './_feedback/feedback'
-import { getStoredUser } from '@/lib/helper-func'
+import { useAnchorNavigation } from '@/lib/use-navigation'
+import CustomModal from '@/components/customs/custom-modal'
+import colors from '@/lib/colors'
+import { useAppStore } from '@/store/use-app-store'
+import CustomPopover from '@/components/customs/custom-popover'
+import CustomDialog from '@/components/customs/custom-dialog'
+import CustomAvatar from '@/components/customs/custom-avatar'
 
 const menuItems = [
   {
@@ -55,14 +54,10 @@ const menuItems = [
 ]
 
 export default function Aside() {
-  const router = useRouter()
+  const navigateTo = useAnchorNavigation()
   const currentPath = usePathname()
   const { removeValue } = useLocalStorage<UserData | null>('userData', null)
-  const user = getStoredUser()
-
-  const handleClick = (path: string) => {
-    router.push(path)
-  }
+  const { user } = useAppStore()
 
   const handleLogout = () => {
     ovationService.logout()
@@ -75,7 +70,7 @@ export default function Aside() {
         localStorage.removeItem(key)
       }
     }
-    router.push('/')
+    navigateTo('/')
   }
 
   return (
@@ -84,18 +79,16 @@ export default function Aside() {
         <ErrorBoundary FallbackComponent={ErrorFallback}>
           <div className="hidden lg:flex w-[90%] items-center justify-between border border-[#333333] bg-[#18181C] p-3 rounded-[8px]">
             <div className="flex items-center gap-[7px]">
-              <Image
-                src={user?.profileImage || '/assets/images/default-user.svg'}
+              <CustomAvatar
+                src={user?.profileImage}
                 alt="User Display Picture"
-                width={28}
-                height={28}
-                className="rounded-full object-cover w-[28px] h-[28px]"
+                size="sm"
               />
               <div className="flex flex-col">
-                <p className="text-xs font-semibold leading-5 text-white">
+                <p className="text-xs font-semibold leading-5 ">
                   {user?.displayName}
                 </p>
-                <p className="text-[10px] leading-5 font-medium text-[#B3B3B3]">
+                <p className="text-[10px] leading-5 font-medium text-light">
                   {user?.wallets[0]?.walletAddress?.replace(
                     /^(.{6})(.*)(.{4})$/,
                     '$1***$3',
@@ -103,23 +96,32 @@ export default function Aside() {
                 </p>
               </div>
             </div>
-            <Popover>
-              <PopoverTrigger className="p-1 rounded-full">
-                <More size={24} color="white" variant="Outline" />
-              </PopoverTrigger>
-              <PopoverContent
-                side="right"
-                className="w-fit bg-[#232227] flex flex-col items-start border-none text-white text-base py-2"
-              >
-                <Button
-                  variant={'ghost'}
-                  onClick={handleLogout}
-                  className="py-[10px] w-full text-red-500 hover:text-red-600 hover:bg-transparent"
-                >
-                  Logout {user?.username}
-                </Button>
-              </PopoverContent>
-            </Popover>
+            <CustomPopover
+              trigger={
+                <button className="p-1 rounded-full" type="button">
+                  <More size={24} color="white" variant="Outline" />
+                </button>
+              }
+              content={
+                <CustomDialog
+                  trigger={
+                    <Button
+                      variant={'ghost'}
+                      className="py-[10px] w-full text-red-500 hover:text-red-600 hover:bg-transparent"
+                    >
+                      Logout {user?.username}
+                    </Button>
+                  }
+                  title="Confirm Logout"
+                  description="Are you sure you want to log out?"
+                  confirmText="Logout"
+                  cancelText="Cancel"
+                  onConfirm={handleLogout}
+                />
+              }
+              side="bottom"
+              className="w-fit bg-[#232227] flex flex-col items-start border-none text-base py-2"
+            />
           </div>
         </ErrorBoundary>
 
@@ -132,20 +134,26 @@ export default function Aside() {
               return (
                 <Button
                   type="button"
-                  className={`w-fit lg:w-full ${isActive ? 'text-[#CFF073] lg:text-[#B3B3B3]' : 'text-[#B3B3B3]'}  items-center justify-start gap-2 p-3 lg:py-7 lg:px-[30px] rounded-[50px] hover:bg-[#18181C] focus:bg-[#232227] group transition-all duration-300 ${
+                  className={`w-fit lg:w-full ${isActive ? 'text-primary lg:text-light' : 'text-light'}  items-center justify-start gap-2 p-3 lg:py-7 lg:px-[30px] rounded-[50px] hover:bg-[#18181C] focus:bg-[#232227] group transition-all duration-300 ${
                     isActive
                       ? 'bg-transparent lg:bg-[#232227]'
                       : 'bg-transparent'
                   }`}
                   key={index}
-                  onClick={() => handleClick(item.path)}
+                  asChild
                 >
-                  <Icon size={24} variant={isActive ? 'Bold' : 'Outline'} />
-                  <p
-                    className={`hidden lg:flex items-center gap-2 text-lg group-hover:text-white group-focus:text-[#CCCCCC] ${isActive ? 'text-white font-medium' : 'text-[#B3B3B3]'}`}
-                  >
-                    {item.text}
-                  </p>
+                  <a href={item.path}>
+                    <Icon
+                      size={24}
+                      variant={isActive ? 'Bold' : 'Outline'}
+                      color={isActive ? colors.primary.DEFAULT : colors.light}
+                    />
+                    <p
+                      className={`hidden lg:flex items-center gap-2 text-lg group-hover: group-focus:text-gray ${isActive ? ' font-medium' : 'text-light'}`}
+                    >
+                      {item.text}
+                    </p>
+                  </a>
                 </Button>
               )
             })}
@@ -172,26 +180,25 @@ export function FeedbackButton({ className }: { className?: string }) {
           className="absolute -top-4 w-[33px] h-[33px] "
         />
         <div className="w-full flex flex-col items-center gap-0.5">
-          <p className="text-[#F8F8FF] text-xs font-medium">Help us improve</p>
-          <p className="text-[#B3B3B3] text-[9px] text-center">
+          <p className=" text-xs font-medium">Help us improve</p>
+          <p className="text-light text-[9px] text-center">
             Your input will help us improve and create an even better experience
             for everyone. Thank you for being a part of this journey!
           </p>
         </div>
-        <Dialog>
-          <DialogTrigger asChild>
+        <CustomModal
+          trigger={
             <Button
               variant={'default'}
-              className="text-[#0B0A10] text-xs font-semibold py-2 px-3 w-full h-[30px] bg-[#CFF073] rounded-[8px]"
+              className=" text-xs font-semibold py-2 px-3 w-full h-[30px]  rounded-[8px]"
             >
               Submit a feedback
             </Button>
-          </DialogTrigger>
-          <DialogContent className="flex flex-col items-center justify-center p-0 m-0 w-fit h-fit overflow-auto border-none">
-            {/* <FeedbackModal /> */}
-            <FeedbackModal />
-          </DialogContent>
-        </Dialog>
+          }
+          className="flex flex-col items-center justify-center p-0 m-0 w-fit h-fit overflow-auto border-none"
+        >
+          <FeedbackModal />
+        </CustomModal>
       </div>
     </ErrorBoundary>
   )

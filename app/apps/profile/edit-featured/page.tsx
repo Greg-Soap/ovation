@@ -25,21 +25,21 @@ export default function EditFeatured() {
             />
           </Button>
 
-          <p className="text-[23px] text-[#F8F8FF] font-semibold">Featured</p>
+          <p className="text-[23px]  font-semibold">Featured</p>
         </div>
 
         <Popover>
-          <PopoverTrigger className="text-[10px] font-semibold text-[#111115] px-3 py-2 rounded-[24px] h-fit bg-[#CFF073]">
+          <PopoverTrigger className="text-[10px] font-semibold text-[#111115] px-3 py-2 rounded-[24px] h-fit bg-primary">
             Add featured
           </PopoverTrigger>
           <PopoverContent className="max-w-[104px] flex flex-col rounded-[6px] bg-[#232227] p-0 border-none">
-            <Button className="bg-[#232227] px-2 py-2.5 text-[11px] text-[#F8F8FF] rounded-none w-full h-fit rounded-t-[6px] flex justify-start">
+            <Button className="bg-[#232227] px-2 py-2.5 text-[11px]  rounded-none w-full h-fit rounded-t-[6px] flex justify-start">
               Event
             </Button>
-            <Button className="bg-[#232227] px-2 py-2.5 text-[11px] text-[#F8F8FF] rounded-none w-full h-fit border-t border-[#333333] flex justify-start">
+            <Button className="bg-[#232227] px-2 py-2.5 text-[11px]  rounded-none w-full h-fit border-t border-[#333333] flex justify-start">
               NFT
             </Button>
-            <Button className="bg-[#232227] px-2 py-2.5 text-[11px] text-[#F8F8FF] rounded-none w-full h-fit border-t border-[#333333] rounded-b-[6px] flex justify-start">
+            <Button className="bg-[#232227] px-2 py-2.5 text-[11px]  rounded-none w-full h-fit border-t border-[#333333] rounded-b-[6px] flex justify-start">
               Article
             </Button>
           </PopoverContent>
@@ -97,11 +97,11 @@ function FeaturedCard({
         <div className="flex flex-col gap-10">
           <div className="flex flex-col gap-2">
             <p className="text-[11px] text-[#E7F7B9]">{type}</p>
-            <p className="text-[17px] font-semibold text-[#F8F8FF]">
+            <p className="text-[17px] font-semibold ">
               {isEvent ? eventName : creator}
             </p>
             <p
-              className={`${isEvent ? 'hidden' : 'flex'} text-[#999999] text-[13px] w-[80%] max-w-[798px]`}
+              className={`${isEvent ? 'hidden' : 'flex'} text-lighter text-[13px] w-[80%] max-w-[798px]`}
             >
               {isNft ? price : description}
             </p>
@@ -109,12 +109,12 @@ function FeaturedCard({
             <div
               className={`${isEvent ? 'flex' : 'hidden'} items-center gap-[5px]`}
             >
-              <p className="text-[#999999] text-[13px]">{date}</p>
+              <p className="text-lighter text-[13px]">{date}</p>
             </div>
             <div
               className={`${isEvent ? 'flex' : 'hidden'} items-center gap-[5px]`}
             >
-              <p className="text-[#999999] text-[13px] underline">{location}</p>
+              <p className="text-lighter text-[13px] underline">{location}</p>
             </div>
           </div>
 

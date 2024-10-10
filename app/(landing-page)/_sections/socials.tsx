@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import PulseButton from '@/components/animations/pulse-btn'
 import { Button } from '@/components/ui/button'
-import Link from 'next/link'
+import colors from '@/lib/colors'
 
 export default function Socials() {
   return (
@@ -33,26 +33,24 @@ export default function Socials() {
         />
 
         <div className="flex flex-col items-center gap-10 mb-10 mt-5">
-          <p className="text-white w-[90%] text-[35px] md:text-5xl font-bold text-center leading-[40px] md:leading-[60px]">
+          <p className=" w-[90%] text-[35px] md:text-5xl font-bold text-center leading-[40px] md:leading-[60px]">
             Explore Next-Gen NFT Socials
           </p>
-          <p className="text-base md:leading-9 md:text-[22px] -mt-5 text-[#CCCCCC] w-[75%] text-center">
+          <p className="text-base md:leading-9 md:text-[22px] -mt-5 text-foreground/80 w-[75%] text-center">
             The only Web3 platform with intelligent profiles, personalized
             portfolios, and a blockchain UI for a unified NFT experience.
           </p>
         </div>
 
         <div className="flex lg:flex-row flex-col items-center gap-5 w-fit">
-          <Link
+          <a
             href="https://x.com/Ovation_Network"
             className="flex items-center gap-2"
             target="_blank"
+            rel="noreferrer"
           >
-            <Button
-              asChild
-              className="bg-[#CFF073] text-sm text-[#0B0A10] h-fit gap-2"
-            >
-              <PulseButton pulseColor="#CFF073">
+            <Button asChild className=" text-sm h-fit gap-2">
+              <PulseButton pulseColor={colors.primary.DEFAULT}>
                 <img
                   src="/assets/images/twitter-LP.png"
                   alt="Twitter Logo"
@@ -61,17 +59,15 @@ export default function Socials() {
                 Follow us on twitter
               </PulseButton>
             </Button>
-          </Link>
-          <Link
+          </a>
+          <a
             href=" https://www.linkedin.com/company/ovationnetwork/posts/?feedView=all"
             className="flex items-center gap-2"
             target="_blank"
+            rel="noreferrer"
           >
-            <Button
-              asChild
-              className="bg-[#CFF073] text-sm text-[#0B0A10] h-fit gap-2"
-            >
-              <PulseButton pulseColor="#CFF073">
+            <Button asChild className=" text-sm h-fit gap-2">
+              <PulseButton pulseColor={colors.primary.DEFAULT}>
                 <img
                   src="/assets/images/linkedIn-LP.png"
                   alt="LinkedIn Logo"
@@ -80,7 +76,7 @@ export default function Socials() {
                 Follow us on LinkedIn
               </PulseButton>
             </Button>
-          </Link>
+          </a>
         </div>
       </div>
     </section>

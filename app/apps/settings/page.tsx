@@ -12,16 +12,35 @@ import { ArrowLeft } from 'iconsax-react'
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
-import type { ProfileData, UserExperience } from '@/models/all.model'
+import type {
+  ProfileData,
+  UserExperience,
+  WalletAcct,
+} from '@/models/all.model'
 import { useTabUrlSync } from '@/lib/use-tab'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
+import { useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 export default function Page() {
   const { currentTab, setTab } = useTabUrlSync('Personal Info')
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    const tabFromUrl = searchParams.get('tab')
+    console.log({ tabFromUrl, currentTab })
+    if (tabFromUrl && tabFromUrl !== currentTab) {
+      setTab(tabFromUrl)
+    }
+  }, [currentTab, searchParams, setTab])
 
   const [isHidden, setHidden] = useState(true)
-  const { data: profileData, refetch } = useQuery({
+  const {
+    data: profileData,
+    refetch,
+    isLoading: isProfileLoading,
+  } = useQuery({
     queryKey: ['profile'],
     queryFn: () => ovationService.getProfile(),
   })
@@ -30,18 +49,20 @@ export default function Page() {
     queryKey: ['experience'],
     queryFn: () =>
       ovationService.getExperience(profileData?.data?.userId as string),
+    enabled: !!profileData?.data?.userId,
   })
 
   const tabComponents = {
     'Personal Info': (props: {
       profileData: ProfileData
+      isProfileLoading: boolean
       refetch: () => void
     }) => <ProfileForm {...props} />,
     Socials: (props: { userId: string }) => <SocialForm {...props} />,
     Experience: (props: { experienceData: UserExperience[] }) => (
       <ExperienceForm {...props} />
     ),
-    // Wallets: () => <WalletForm />,
+    Wallets: () => <WalletForm />,
     Password: () => <PasswordForm />,
   }
 
@@ -67,11 +88,11 @@ export default function Page() {
       heading: 'Experience',
       subtitle: 'Set your work profile to build trust and security',
     },
-    // {
-    //   imgSrc: '/assets/images/settings/tab-list/four.png',
-    //   heading: 'Wallets',
-    //   subtitle: 'Update your wallet info and details here',
-    // },
+    {
+      imgSrc: '/assets/images/settings/tab-list/four.png',
+      heading: 'Wallets',
+      subtitle: 'Update your wallet info and details here',
+    },
     {
       imgSrc: '/assets/images/settings/tab-list/five.png',
       heading: 'Password',
@@ -85,13 +106,14 @@ export default function Page() {
         <Tabs
           className="flex h-full w-full overflow-hidden"
           defaultValue={currentTab}
+          value={currentTab}
           onValueChange={setTab}
         >
           <ErrorBoundary FallbackComponent={ErrorFallback}>
             <div
               className={`xl:border-r-[1px] border-[#1A1A1A] min-w-[414px] w-full xl:max-w-[505px] items-center ${isHidden ? 'flex' : 'hidden xl:flex'} flex-col pt-8 overflow-y-scroll`}
             >
-              <h1 className="font-semibold text-[23px] text-[#F8F8FF] mr-auto ml-8 mb-5">
+              <h1 className="font-semibold text-[23px]  mr-auto ml-8 mb-5">
                 Settings
               </h1>
               {/* <SearchInput inpClass="w-[90%] md:w-[70%] mr-auto ml-6 lg:ml-0 lg:mr-0 lg:w-[90%] mb-10" /> */}
@@ -112,8 +134,8 @@ export default function Page() {
                       className="w-6 h-6"
                     />
                     <div className="flex flex-col items-start gap-1">
-                      <h3 className="text-sm text-[#F8F8FF]">{item.heading}</h3>
-                      <p className="text-[#B3B3B3] text-xs">{item.subtitle}</p>
+                      <h3 className="text-sm ">{item.heading}</h3>
+                      <p className="text-light text-xs">{item.subtitle}</p>
                     </div>
                   </TabsTrigger>
                 ))}
@@ -143,16 +165,17 @@ export default function Page() {
                         />
 
                         <div className="flex flex-col items-center xl:items-start gap-1">
-                          <h2 className="font-semibold text-[22px] text-[#F8F8FF]">
+                          <h2 className="font-semibold text-[22px] ">
                             {tab.heading}
                           </h2>
-                          <p className="text-[#B3B3B3]">{tab.subtitle}</p>
+                          <p className="text-light">{tab.subtitle}</p>
                         </div>
                       </div>
 
                       {tab.heading &&
                         tabComponents[tab.heading as TabHeading]({
                           profileData: profileData?.data as ProfileData,
+                          isProfileLoading: isProfileLoading,
                           refetch: refetch,
                           experienceData: experienceData?.data
                             ?.data as UserExperience[],

@@ -1,436 +1,41 @@
 import type React from 'react'
-import { useState, useEffect, Suspense, useMemo } from 'react'
-// import Web3 from 'web3';
-import Web3Modal from 'web3modal'
-import WalletConnectProvider from '@walletconnect/web3-provider'
-import { BrowserProvider } from 'ethers'
-import walletData from '../_data'
+import { Suspense, useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import arrow from '@/public/assets/images/arrow-right.png'
 import { Button } from '@/components/ui/button'
-import { chainIdToChainName, startCase } from '@/lib/helper-func'
-import { toast } from 'sonner'
+import { startCase } from '@/lib/helper-func'
 import ovationService from '@/services/ovation.service'
 import { useQuery } from '@tanstack/react-query'
-import {
-  type OfflineSigner,
-  DirectSecp256k1HdWallet,
-} from '@cosmjs/proto-signing'
-import { StargateClient } from '@cosmjs/stargate'
 import Spinner from '@/components/ui/spinner'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
+import colors from '@/lib/colors'
+import { useWalletConnect } from './use-wallet-connect'
+import { Badge } from '@/components/ui/badge'
+import CustomDialog from '@/components/customs/custom-dialog'
 
 interface WalletConnectComponentProps {
-  onWalletConnected?: (account: string) => void
+  onWalletConnected?: (account: string, chain: string) => void
   onWalletDisconnected?: () => void
   setIsManualWallet?: (isManualWallet: boolean) => void
+  form: any
+  handleFormSubmit: any
+  isPending: boolean
 }
-
-const infuraId = process.env.NEXT_PUBLIC_INFURA_ID as string
 
 const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
   onWalletConnected,
   onWalletDisconnected,
   setIsManualWallet,
+  form,
+  handleFormSubmit,
+  isPending,
 }) => {
-  const [provider, setProvider] = useState<any>(null)
-  const [web3Modal, setWeb3Modal] = useState<Web3Modal | null>(null)
-  const [account, setAccount] = useState<string | null>(null)
-  const [chain, setChain] = useState<string | null>(null)
-
-  useEffect(() => {
-    const web3ModalInstance = new Web3Modal({
-      cacheProvider: false,
-      providerOptions: {
-        walletconnect: {
-          package: WalletConnectProvider,
-          options: {
-            infuraId: { infuraId },
-          },
-        },
-      },
-    })
-
-    setWeb3Modal(web3ModalInstance)
-  }, [])
-
-  const connectMetaMask = async () => {
-    if ((window as any).ethereum) {
-      const provider = new BrowserProvider(window.ethereum)
-      try {
-        await provider.send('eth_requestAccounts', [])
-        const signer = await provider.getSigner()
-
-        const network = await provider.getNetwork()
-        setChain(chainIdToChainName[Number(network.chainId)])
-
-        const account = signer.address
-        setProvider(provider)
-        setAccount(account)
-        if (onWalletConnected) onWalletConnected(account)
-        console.log('Connected with MetaMask:', account)
-      } catch (error) {
-        console.error('MetaMask connection failed:', error)
-      }
-    } else {
-      toast.error('Please install MetaMask!')
-    }
-  }
-
-  const connectWalletConnect = async () => {
-    if (!web3Modal) return
-
-    try {
-      const instance = await web3Modal.connectTo('walletconnect') // Direct connection to WalletConnect
-      const provider = new BrowserProvider(instance)
-      const signer = await provider.getSigner()
-
-      const network = await provider.getNetwork()
-      setChain(chainIdToChainName[Number(network.chainId)])
-
-      const account = signer.address
-      setProvider(provider)
-      setAccount(account)
-      if (onWalletConnected) onWalletConnected(account)
-      console.log('Connected with WalletConnect:', account)
-    } catch (error) {
-      console.error('WalletConnect connection failed:', error)
-    }
-  }
-
-  const connectPhantom = async () => {
-    if ((window as any).solana?.isPhantom) {
-      try {
-        const response = await (window as any).solana.connect()
-        setAccount(response.publicKey.toString())
-        setChain('solana')
-        if (onWalletConnected) onWalletConnected(response.publicKey.toString())
-        console.log('Connected with Phantom:', response.publicKey.toString())
-      } catch (err) {
-        console.error('Phantom connection failed:', err)
-      }
-    } else {
-      toast.error('Please install Phantom Wallet!')
-    }
-  }
-
-  const connectOKXWallet = async () => {
-    if ((window as any).okexchain) {
-      try {
-        const provider = new BrowserProvider((window as any).okexchain)
-        await provider.send('eth_requestAccounts', [])
-        const signer = await provider.getSigner()
-
-        const network = await provider.getNetwork()
-        setChain(chainIdToChainName[Number(network.chainId)])
-
-        const account = signer.address
-        setProvider(provider)
-        setAccount(account)
-        if (onWalletConnected) onWalletConnected(account)
-        console.log('Connected with OKX Wallet:', account)
-      } catch (error) {
-        console.error('OKX Wallet connection failed:', error)
-      }
-    } else {
-      toast.error('Please install OKX Wallet!')
-    }
-  }
-
-  const connectTrustWallet = async () => {
-    if ((window as any).ethereum?.isTrust) {
-      try {
-        const provider = new BrowserProvider((window as any).ethereum)
-        await provider.send('eth_requestAccounts', [])
-        const signer = await provider.getSigner()
-
-        const network = await provider.getNetwork()
-        setChain(chainIdToChainName[Number(network.chainId)])
-
-        const account = signer.address
-        setProvider(provider)
-        setAccount(account)
-        if (onWalletConnected) onWalletConnected(account)
-        console.log('Connected with Trust Wallet:', account)
-      } catch (error) {
-        console.error('Trust Wallet connection failed:', error)
-      }
-    } else {
-      toast.error('Please install Trust Wallet!')
-    }
-  }
-
-  const connectBinanceChainWallet = async () => {
-    if ((window as any).BinanceChain) {
-      try {
-        const provider = new BrowserProvider((window as any).BinanceChain)
-        await provider.send('eth_requestAccounts', [])
-        const signer = await provider.getSigner()
-
-        const network = await provider.getNetwork()
-        setChain(chainIdToChainName[Number(network.chainId)])
-
-        const account = signer.address
-        setProvider(provider)
-        setAccount(account)
-        if (onWalletConnected) onWalletConnected(account)
-        console.log('Connected with Binance Chain Wallet:', account)
-      } catch (error) {
-        console.error('Binance Chain Wallet connection failed:', error)
-      }
-    } else {
-      toast.error('Please install Binance Chain Wallet!')
-    }
-  }
-
-  const connectCoin98Wallet = async () => {
-    if ((window as any).coin98) {
-      try {
-        const provider = new BrowserProvider((window as any).coin98)
-        await provider.send('eth_requestAccounts', [])
-        const signer = await provider.getSigner()
-
-        const network = await provider.getNetwork()
-        setChain(chainIdToChainName[Number(network.chainId)])
-
-        const account = signer.address
-        setProvider(provider)
-        setAccount(account)
-        if (onWalletConnected) onWalletConnected(account)
-        console.log('Connected with Coin98 Wallet:', account)
-      } catch (error) {
-        console.error('Coin98 Wallet connection failed:', error)
-      }
-    } else {
-      toast.error('Please install Coin98 Wallet!')
-    }
-  }
-
-  const connectOperaWallet = async () => {
-    if ((window as any).ethereum?.isOpera) {
-      try {
-        const provider = new BrowserProvider((window as any).ethereum)
-        await provider.send('eth_requestAccounts', [])
-        const signer = await provider.getSigner()
-
-        const network = await provider.getNetwork()
-        setChain(chainIdToChainName[Number(network.chainId)])
-
-        const account = signer.address
-        setProvider(provider)
-        setAccount(account)
-        if (onWalletConnected) onWalletConnected(account)
-        console.log('Connected with Opera Wallet:', account)
-      } catch (error) {
-        console.error('Opera Wallet connection failed:', error)
-      }
-    } else {
-      toast.error('Please install Opera Wallet!')
-    }
-  }
-
-  const connectBraveWallet = async () => {
-    if ((window as any).ethereum?.isBraveWallet) {
-      try {
-        const provider = new BrowserProvider((window as any).ethereum)
-        await provider.send('eth_requestAccounts', [])
-        const signer = await provider.getSigner()
-
-        const network = await provider.getNetwork()
-        setChain(chainIdToChainName[Number(network.chainId)])
-
-        const account = signer.address
-        setProvider(provider)
-        setAccount(account)
-        if (onWalletConnected) onWalletConnected(account)
-        console.log('Connected with Brave Wallet:', account)
-      } catch (error) {
-        console.error('Brave Wallet connection failed:', error)
-      }
-    } else {
-      toast.error('Please install Brave Wallet!')
-    }
-  }
-
-  const connectMathWallet = async () => {
-    if ((window as any).ethereum?.isMathWallet) {
-      try {
-        const provider = new BrowserProvider((window as any).ethereum)
-        await provider.send('eth_requestAccounts', [])
-        const signer = await provider.getSigner()
-
-        const network = await provider.getNetwork()
-        setChain(chainIdToChainName[Number(network.chainId)])
-
-        const account = signer.address
-        setProvider(provider)
-        setAccount(account)
-        if (onWalletConnected) onWalletConnected(account)
-        console.log('Connected with Math Wallet:', account)
-      } catch (error) {
-        console.error('Math Wallet connection failed:', error)
-      }
-    } else {
-      toast.error('Please install Math Wallet!')
-    }
-  }
-
-  const connectSafePalWallet = async () => {
-    if ((window as any).ethereum?.isSafePal) {
-      try {
-        const provider = new BrowserProvider((window as any).ethereum)
-        await provider.send('eth_requestAccounts', [])
-        const signer = await provider.getSigner()
-
-        const network = await provider.getNetwork()
-        setChain(chainIdToChainName[Number(network.chainId)])
-
-        const account = signer.address
-        setProvider(provider)
-        setAccount(account)
-        if (onWalletConnected) onWalletConnected(account)
-        console.log('Connected with SafePal Wallet:', account)
-      } catch (error) {
-        console.error('SafePal Wallet connection failed:', error)
-      }
-    } else {
-      toast.error('Please install SafePal Wallet!')
-    }
-  }
-
-  const connectTokenPocket = async () => {
-    if ((window as any).ethereum?.isTokenPocket) {
-      try {
-        const provider = new BrowserProvider((window as any).ethereum)
-        await provider.send('eth_requestAccounts', [])
-        const signer = await provider.getSigner()
-
-        const network = await provider.getNetwork()
-        setChain(chainIdToChainName[Number(network.chainId)])
-
-        const account = signer.address
-        setProvider(provider)
-        setAccount(account)
-        if (onWalletConnected) onWalletConnected(account)
-        console.log('Connected with TokenPocket:', account)
-      } catch (error) {
-        console.error('TokenPocket connection failed:', error)
-      }
-    } else {
-      toast.error('Please install TokenPocket!')
-    }
-  }
-
-  const chainId = 'archway-1'
-  const connectKeplr = async (): Promise<void> => {
-    if (!window.keplr) {
-      toast.error('Please install Keplr extension')
-      return
-    }
-
-    try {
-      await window.keplr.enable(chainId)
-
-      const offlineSigner: OfflineSigner = window.getOfflineSigner(chainId)
-
-      const accounts = await offlineSigner.getAccounts()
-      setAccount(accounts[0].address)
-      setChain('archway')
-
-      // const client = await StargateClient.connect("https://rpc.cosmos.network");
-      // const balance = await client.getAllBalances(accountAddress);
-      // console.log("Account balances:", balance);
-    } catch (error) {
-      console.error('Failed to connect to Keplr:', error)
-    }
-  }
-
-  const connectLeap = async (): Promise<void> => {
-    if (!window.leap) {
-      toast.error('Please install Leap Wallet extension')
-      return
-    }
-
-    try {
-      const chainId = 'archway-1' // chain ID for Cosmos Hub
-      await window.leap.enable(chainId)
-
-      const offlineSigner = window.leap.getOfflineSigner(chainId)
-      const accounts = await offlineSigner.getAccounts()
-
-      setAccount(accounts[0].address)
-      setChain('archway')
-
-      console.log('Connected account address: ', accounts[0].address)
-    } catch (error) {
-      console.error('Error connecting to Leap Wallet:', error)
-    }
-  }
-
-  const disconnectWallet = () => {
-    if (provider?.disconnect) {
-      provider.disconnect()
-    }
-    setProvider(null)
-    setAccount(null)
-    setChain(null)
-    if (onWalletDisconnected) onWalletDisconnected()
-    console.log('Disconnected wallet')
-  }
-
-  const connectWallet = async (walletName: string) => {
-    const formattedWalletName = startCase(walletName)
-    switch (formattedWalletName) {
-      case 'Leap Wallet':
-        await connectLeap()
-        break
-      case 'Metamask':
-        await connectMetaMask()
-        break
-      case 'Trust Wallet':
-        await connectTrustWallet()
-        break
-      case 'Phantom':
-        await connectPhantom()
-        break
-      case 'Biance Chain':
-        await connectBinanceChainWallet()
-        break
-      case 'Wallet Connect':
-        await connectWalletConnect()
-        break
-
-      case 'Okx':
-        await connectOKXWallet()
-        break
-      case 'Opera Wallet':
-        await connectOperaWallet()
-        break
-      case 'Brave Wallet':
-        await connectBraveWallet()
-        break
-      case 'Math Wallet':
-        await connectMathWallet()
-        break
-      case 'Safe Pal':
-        await connectSafePalWallet()
-        break
-      case 'Token Pocket':
-        await connectTokenPocket()
-        break
-      case 'Keplr':
-        await connectKeplr()
-        break
-      case 'Leap':
-        await connectLeap()
-        break
-      default:
-        console.error('Unsupported wallet:', formattedWalletName)
-        toast.error(`${formattedWalletName} is not supported yet.`)
-    }
-  }
+  const { account, chain, connectWallet, disconnectWallet } = useWalletConnect(
+    (account, chain) => onWalletConnected?.(account, chain),
+    onWalletDisconnected,
+  )
 
   const { data: wallets, isLoading } = useQuery({
     queryKey: ['wallets'],
@@ -456,7 +61,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
               <div className="flex flex-col gap-7">
                 {isLoading ? (
                   <div className="flex justify-center items-center w-full">
-                    <Spinner size="huge" color="#Cff073" />
+                    <Spinner size="huge" color={colors.primary.DEFAULT} />
                   </div>
                 ) : (
                   <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -467,10 +72,12 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
                           FallbackComponent={ErrorFallback}
                         >
                           <Button
-                            className="text-start flex justify-between p-2 md:p-[1rem] h-[58px] w-full md:w-[242px] text-xs md:text-sm font-semibold text-white border-[1px] border-solid bg-transparent border-[#353538]"
+                            className="text-start flex justify-between p-2 md:p-[1rem] h-[58px] w-full md:w-[242px] text-xs md:text-sm font-semibold  border-[1px] border-solid bg-transparent border-[#353538]"
                             onClick={() => connectWallet(wallet.name)}
                           >
-                            <p>{startCase(wallet.name)}</p>
+                            <p className="text-foreground">
+                              {startCase(wallet.name)}
+                            </p>
                             <Image
                               src={wallet.logoUrl}
                               alt={wallet.name}
@@ -489,7 +96,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
                     <p>Wallet not listed?</p> {''}
                     <Link
                       href=""
-                      className="h-6 text-[#Cff073]"
+                      className="h-6 text-primary"
                       onClick={() => setIsManualWallet?.(true)}
                     >
                       Connect manually
@@ -501,12 +108,49 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
             </ErrorBoundary>
           ) : (
             <ErrorBoundary FallbackComponent={ErrorFallback}>
-              <div>
-                <p>Connected Account: {account}</p>
-                <button type="button" onClick={disconnectWallet}>
-                  Disconnect Wallet
-                </button>
-              </div>
+              <form
+                onSubmit={form.handleSubmit(handleFormSubmit)}
+                className="flex flex-col gap-7"
+              >
+                <div className="w-full flex items-center justify-center bg-[#18181C] p-4 px-6 lg:py-2.5 rounded-full">
+                  <div className="fle items-center gap-[7px]">
+                    <div className="flex flex-col gap-2 justify-center">
+                      <p className="text-sm font-semibold text-center">
+                        Connected Account: {account.slice(0, 10)}...
+                        {account.slice(38)}
+                      </p>
+                      <div className="flex items-center justify-center gap-[3px] text-xs text-light">
+                        <Badge>Connected to {startCase(chain ?? '')}</Badge>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {/* <CustomDialog
+                    trigger={
+                      <Button className="text-[10px] font-medium h-fit">
+                        Disconnect wallet
+                      </Button>
+                    }
+                    title="Are you sure?"
+                    description="This action cannot be undone. This will permanently disconnect the wallet from your account."
+                    confirmText="Yes, disconnect"
+                    cancelText="No, keep it"
+                    onConfirm={() => disconnectWallet()}
+                  /> */}
+                <Button
+                  type="submit"
+                  className="w-full text-sm font-semibold h-[53px]"
+                  disabled={isPending}
+                  isLoading={isPending}
+                  loadingText="Creating profile..."
+                >
+                  Make my profile
+                </Button>
+                <p className="text-center mb-4 text-light">
+                  By clicking &quot;make my profile&quot; you agree to our
+                  privacy terms, code of conduct and Conditions.
+                </p>
+              </form>
             </ErrorBoundary>
           )}
         </div>

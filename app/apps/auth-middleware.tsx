@@ -1,12 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { getToken } from '@/lib/cookies'
 import MiniLoader from '@/components/mini-loader'
+import { useAnchorNavigation } from '@/lib/use-navigation'
 
 export const AuthMiddleware = ({ children }: { children: React.ReactNode }) => {
-  const router = useRouter()
+  const navigateTo = useAnchorNavigation()
   const pathname = usePathname()
   const [isLoading, setIsLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -17,7 +18,7 @@ export const AuthMiddleware = ({ children }: { children: React.ReactNode }) => {
 
       if (!token) {
         localStorage.setItem('intendedDestination', pathname)
-        router.push('/login')
+        navigateTo('/login')
         // Keep isLoading true
       } else {
         setIsAuthenticated(true)
@@ -28,7 +29,7 @@ export const AuthMiddleware = ({ children }: { children: React.ReactNode }) => {
     setIsLoading(true)
     setIsAuthenticated(false)
     checkAuth()
-  }, [router, pathname])
+  }, [navigateTo, pathname])
 
   // This effect runs when the pathname changes
   useEffect(() => {

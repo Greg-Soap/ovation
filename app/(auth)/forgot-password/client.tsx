@@ -1,10 +1,10 @@
 'use client'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { useForgotPassword } from './_components/useForgotPassword'
+import { useForgotPassword } from './_components/use-forgot-password'
 import EmailForm from './_components/email-form'
 import OtpForm from './_components/otp-form'
-import PasswordResetForm from './_components/passwod-reset-form'
+import PasswordResetForm from './_components/password-reset-form'
 import SuccessMessage from './_components/success-message'
 
 export default function ResetForm() {

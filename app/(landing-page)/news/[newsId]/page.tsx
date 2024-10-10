@@ -2,7 +2,6 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import React, { useState } from 'react'
 import { ArticleSection } from '../../_components/new-article'
@@ -40,19 +39,19 @@ export default function NewsDetails({ params }: any) {
   }
 
   return (
-    <section className='flex flex-col w-full container'>
-      <div className='flex flex-col gap-[61px] items-center pt-[120px] pb-[80px]'>
-        <p className='text-[#F8F8FF] text-[30px] sm:text-5xl font-bold w-full sm:w-[80%] text-center'>
+    <section className="flex flex-col w-full container">
+      <div className="flex flex-col gap-[61px] items-center pt-[120px] pb-[80px]">
+        <p className=" text-[30px] sm:text-5xl font-bold w-full sm:w-[80%] text-center">
           {blog.blogHeader}
         </p>
-        <div className='relative w-full h-[300px] sm:h-[461px] rounded-xl overflow-hidden'>
+        <div className="relative w-full h-[300px] sm:h-[461px] rounded-xl overflow-hidden">
           <img
             src={`${blog.image}`}
-            alt='Blog'
-            className='relative z-10 w-auto h-full mx-auto  object-cover'
+            alt="Blog"
+            className="relative z-10 w-auto h-full mx-auto  object-cover"
           />
           <div
-            className='absolute inset-0 bg-cover bg-center blur-lg'
+            className="absolute inset-0 bg-cover bg-center blur-lg"
             style={{
               backgroundImage: `url(${blog.image})`,
               filter: 'blur(20px)',
@@ -61,30 +60,36 @@ export default function NewsDetails({ params }: any) {
           />
         </div>
 
-        <div className='flex w-full items-center justify-between'>
-          <div className='flex gap-3 items-center'>
-            <Image src={'/assets/images/news/OVA.png'} alt='Ovation Logo' width={40} height={40} />
+        <div className="flex w-full items-center justify-between">
+          <div className="flex gap-3 items-center">
+            <Image
+              src={'/assets/images/news/OVA.png'}
+              alt="Ovation Logo"
+              width={40}
+              height={40}
+            />
 
-            <div className='flex flex-col gap-1'>
-              <p className='text-lg text-[#F8F8FF] font-semibold'>Ovation</p>
-              <p className='text-sm text-[#CCCCCC]'>Admin</p>
+            <div className="flex flex-col gap-1">
+              <p className="text-lg  font-semibold">Ovation</p>
+              <p className="text-sm text-gray">Admin</p>
             </div>
           </div>
 
-          <div className='flex flex-col gap-2 items-end'>
+          <div className="flex flex-col gap-2 items-end">
             <Button
               variant={'default'}
-              className='px-[10px] py-1.5 border border-[#29292F] rounded-[5px] text-xs text-[#F8F8FF] h-fit bg-transparent transition-all duration-300'
+              className="px-[10px] py-1.5 border border-[#29292F] rounded-[5px] text-xs  h-fit bg-transparent transition-all duration-300"
               onClick={() => copyToClipboard()}
-              disabled={!!copied}>
+              disabled={!!copied}
+            >
               {copied ? 'Link copied!' : 'Copy link'}
             </Button>
           </div>
         </div>
       </div>
 
-      <div className='flex flex-col py-[106px] border-y border-[#29292F] gap-[60px]'>
-        <p className='text-[22px] text-[#F8F8FF] leading-[34px]'>{blog.blogDetails}</p>
+      <div className="flex flex-col py-[106px] border-y border-[#29292F] gap-[60px]">
+        <p className="text-[22px]  leading-[34px]">{blog.blogDetails}</p>
 
         {blog.sections.map((section, index) => (
           <ArticleSection
@@ -97,24 +102,33 @@ export default function NewsDetails({ params }: any) {
           />
         ))}
 
-        <p className='text-lg text-[#CCCCCC] italic'>{blog.otherInfo}</p>
+        <p className="text-lg text-gray italic">{blog.otherInfo}</p>
       </div>
 
-      <div className='flex flex-col gap-7 py-[93px]'>
-        <p className='text-[#E4E4EC] text-[28px] leading-[42px] font-semibold'>Related blog</p>
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-9'>
+      <div className="flex flex-col gap-7 py-[93px]">
+        <p className="text-[#E4E4EC] text-[28px] leading-[42px] font-semibold">
+          Related blog
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-9">
           {filteredBlogs.slice(1).map((blog, index) => (
-            <Link
+            <a
               href={`/news/${blog.id}`}
-              className='flex flex-col gap-6 h-auto w-fit max-w-[385px]'
-              key={index}>
-              <img src={`${blog.image}`} alt='Blog post' className='w-full h-full' />
+              className="flex flex-col gap-6 h-auto w-fit max-w-[385px]"
+              key={index}
+            >
+              <img
+                src={`${blog.image}`}
+                alt="Blog post"
+                className="w-full h-full"
+              />
 
-              <div className='flex flex-col gap-[10px]'>
-                <p className='text-[#E6E6E6] text-xl font-semibold'>{blog.blogHeader}</p>
-                <p className='text-sm text-[#CCCCCC]'>{blog.blogDetails}</p>
+              <div className="flex flex-col gap-[10px]">
+                <p className="text-foreground text-xl font-semibold">
+                  {blog.blogHeader}
+                </p>
+                <p className="text-sm text-gray">{blog.blogDetails}</p>
               </div>
-            </Link>
+            </a>
           ))}
         </div>
       </div>

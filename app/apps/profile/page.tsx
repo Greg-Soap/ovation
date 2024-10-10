@@ -5,7 +5,6 @@ import UserProfile from './_components/user-profile'
 import MainProfileSection from './_components/main-profile-section'
 import ovationService from '@/services/ovation.service'
 import type { ProfileData, UserExperience } from '@/models/all.model'
-import { useRouter } from 'next/navigation'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
 import { useState } from 'react'
@@ -13,16 +12,16 @@ import { usePathname } from 'next/navigation'
 import { toast } from 'sonner'
 
 export default function Page() {
-  const router = useRouter()
   const { data: profileData, isLoading } = useQuery({
     queryKey: ['profile'],
     queryFn: () => ovationService.getProfile(),
   })
 
   const { data: experienceData } = useQuery({
-    queryKey: ['experience'],
+    queryKey: ['experience', profileData?.data?.userId],
     queryFn: () =>
       ovationService.getExperience(profileData?.data?.userId as string),
+    enabled: !!profileData?.data?.userId,
   })
 
   const [isCopying, setIsCopying] = useState(false)
@@ -70,12 +69,9 @@ export default function Page() {
             </Button>
             <Button
               variant="default"
-              onClick={() => {
-                router.push('/apps/settings')
-              }}
-              className="bg-[#333333] py-[11px] px-4 border border-[#E6E6E64D] text-white text-xs"
+              className="py-[11px] px-4 border border-[#E6E6E64D]  text-xs"
             >
-              Edit Profile
+              <a href="/apps/settings">Edit Profile</a>
             </Button>
           </div>
         </ErrorBoundary>

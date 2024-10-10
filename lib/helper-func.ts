@@ -4,6 +4,7 @@ import { jwtDecode } from 'jwt-decode'
 import { useLocalStorage } from './use-local-storage'
 import type { UserData } from '@/models/all.model'
 import type { FriendProps } from '@/app/apps/messages/message-container'
+import { format, parseISO } from 'date-fns'
 
 function generateRandomString(length = 10) {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
@@ -182,15 +183,6 @@ export function parseDate(dateString: string): Date | null {
   return new Date(year, month - 1, day)
 }
 
-export function getUserId(): string | undefined {
-  if (typeof window !== 'undefined') {
-    const userData = window.localStorage.getItem('userData')
-    const user = userData ? (JSON.parse(userData) as UserData) : null
-    return user?.userId
-  }
-  return undefined
-}
-
 export function getReceiver(): FriendProps | null {
   if (typeof window !== 'undefined') {
     const receiver = window.localStorage.getItem('receiver')
@@ -206,14 +198,6 @@ export function formatUsername(username?: string): string {
     return ''
   }
   return username.startsWith('@') ? username : `@${username}`
-}
-
-export function getStoredUser(): UserData | null {
-  if (typeof window !== 'undefined') {
-    const userData = window.localStorage.getItem('userData')
-    return userData ? (JSON.parse(userData) as UserData) : null
-  }
-  return null
 }
 
 export function debounce<T extends (...args: any[]) => any>(
@@ -232,3 +216,26 @@ export function debounce<T extends (...args: any[]) => any>(
     }, wait)
   }
 }
+
+export function formatJoinedDate(dateString: string): string {
+  try {
+    const date = parseISO(dateString)
+    return `Joined ${format(date, 'MMMM yyyy')}`
+  } catch (error) {
+    console.error('Error parsing date:', error)
+    return 'Join date unavailable'
+  }
+}
+
+export function truncate(str: string, maxLength: number): string {
+  if (str.length <= maxLength) {
+    return str
+  }
+  return `${str.slice(0, maxLength - 3)}...`
+}
+
+const isAppDev = (): boolean => {
+  return process.env.NEXT_PUBLIC_APP_ENV === 'development'
+}
+
+export { isAppDev }

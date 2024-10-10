@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { Textarea } from '@/components/ui/textarea'
 import { Button } from '@/components/ui/button'
-import { ReactElement, useState, ChangeEvent } from 'react'
+import { type ReactElement, useState, type ChangeEvent } from 'react'
 import VerifyIcon from '../../../../components/icons/verifyIcon'
 import NftIcon from '../../../../components/icons/nftIcon'
 import GalleryIcon from '../../../../components/icons/galleryIcon'
@@ -71,18 +71,18 @@ export default function PublishPost() {
           />
 
           <div className="flex flex-col">
-            <p className="flex gap-1 items-center text-base font-semibold leading-5 text-white">
+            <p className="flex gap-1 items-center text-base font-semibold leading-5 ">
               displayname
               <VerifyIcon />
             </p>
-            <p className="text-xs leading-5 font-medium text-[#B3B3B3]">
+            <p className="text-xs leading-5 font-medium text-light">
               @username
             </p>
           </div>
         </div>
 
         <Textarea
-          className="min-h-[65px] border-none outline-none rounded-[10px] bg-[#232227] text-sm text-[#B3B3B3] ring-offset-0 placeholder:text-[#b3b3b3] focus-visible:ring-0"
+          className="min-h-[65px] border-none outline-none rounded-[10px] bg-[#232227] text-sm text-light ring-offset-0 placeholder:text-light focus-visible:ring-0"
           placeholder="Type your message here."
           onChange={handleChange}
         />
@@ -92,7 +92,7 @@ export default function PublishPost() {
             {tags.map((tag, index) => (
               <Button
                 variant="outline"
-                className={`flex items-center px-4 py-3 font-semibold gap-[6px] rounded-[400px] text-xs text-[#E6E6E6] border-[#353538] hover:bg-[#cff07333] hover:text-[#E6E6E6] ${tag.isActive ? 'bg-[#cff07366]' : 'bg-[#232227]'}`}
+                className={`flex items-center px-4 py-3 font-semibold gap-[6px] rounded-[400px] text-xs text-foreground border-[#353538] hover:bg-[#cff07333] hover:text-foreground ${tag.isActive ? 'bg-[#cff07366]' : 'bg-[#232227]'}`}
                 key={index}
                 onClick={() => handleClick(index)}
               >
@@ -105,7 +105,7 @@ export default function PublishPost() {
           <Button
             variant="secondary"
             disabled={disabledBtn}
-            className="px-4 py-3 font-semibold text-xs rounded-[400px] bg-[#cff07366] text-[#E6E6E6] hover:bg-[#cff07333] aria-disabled:true"
+            className="px-4 py-3 font-semibold text-xs rounded-[400px] bg-[#cff07366] text-foreground hover:bg-[#cff07333] aria-disabled:true"
           >
             Publish Post
           </Button>

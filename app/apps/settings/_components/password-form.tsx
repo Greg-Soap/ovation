@@ -2,22 +2,13 @@
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import {
-  Form,
-  FormField,
-  FormControl,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-
 import SettingsChange from './settings-change'
 import { useState } from 'react'
 import ovationService from '@/services/ovation.service'
-import { toast } from 'sonner' // Import toast from sonner
+import { toast } from 'sonner'
 import { useMutation } from '@tanstack/react-query'
 import PasswordInput from '@/components/password-input'
+import { FormBase, FormField } from '@/components/customs/custom-form'
 
 const formSchema = z
   .object({
@@ -33,8 +24,6 @@ const formSchema = z
   })
 
 export default function PasswordForm() {
-  const [isDisabled, setIsDisabled] = useState<boolean>(true) // Updated variable name
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -51,7 +40,6 @@ export default function PasswordForm() {
       toast.success('Password changed successfully')
 
       form.reset()
-      setIsDisabled(true)
     },
     onError: (error) => {
       console.error('Error changing password:', error)
@@ -69,72 +57,41 @@ export default function PasswordForm() {
   }
 
   return (
-    <Form {...form}>
-      <form
-        className="h-full flex flex-col w-full"
-        onChange={() => setIsDisabled(false)} // Updated variable name
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
-        <div className="h-full w-full lg:max-w-[637px] flex gap-7 flex-col box-border pb-5 px-4 sm:px-10 2xl:px-20">
-          <FormField
-            name="oldPassword"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem className="flex flex-col gap-1">
-                <FormLabel className="text-sm text-[#B3B3B3]">
-                  Old Password
-                </FormLabel>
-                <FormControl>
-                  <PasswordInput
-                    placeholder="Input your old password"
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <FormField
-            name="newPassword"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem className="flex flex-col gap-1">
-                <FormLabel className="text-sm text-[#B3B3B3] max-w-[637px]">
-                  New password
-                </FormLabel>
-                <FormControl>
-                  <PasswordInput
-                    placeholder="Input your new password"
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
-                </FormControl>
-                <FormMessage className="text-red-500 text-sm" />
-              </FormItem>
-            )}
-          />
-          <FormField
-            name="confirmPassword"
-            control={form.control}
-            render={({ field }) => (
-              <FormItem className="flex flex-col gap-1">
-                <FormLabel className="text-sm text-[#B3B3B3] max-w-[637px]">
-                  Confirm new password
-                </FormLabel>
-                <FormControl>
-                  <PasswordInput
-                    placeholder="Confirm your new password"
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
-                </FormControl>
-                <FormMessage className="text-red-500 text-sm" />
-              </FormItem>
-            )}
-          />
-        </div>
-        <SettingsChange disabled={isDisabled} isLoading={isPending} />
-      </form>
-    </Form>
+    <FormBase
+      form={form}
+      onSubmit={onSubmit}
+      className="h-full flex flex-col w-full"
+    >
+      <div className="h-full w-full lg:max-w-[637px] flex gap-7 flex-col box-border pb-5 px-4 sm:px-10 2xl:px-20">
+        <FormField name="oldPassword" form={form}>
+          {(field) => (
+            <PasswordInput
+              placeholder="Input your old password"
+              value={field.value}
+              onChange={field.onChange}
+            />
+          )}
+        </FormField>
+        <FormField name="newPassword" form={form}>
+          {(field) => (
+            <PasswordInput
+              placeholder="Input your new password"
+              value={field.value}
+              onChange={field.onChange}
+            />
+          )}
+        </FormField>
+        <FormField name="confirmPassword" form={form} showMessage>
+          {(field) => (
+            <PasswordInput
+              placeholder="Confirm your new password"
+              value={field.value}
+              onChange={field.onChange}
+            />
+          )}
+        </FormField>
+      </div>
+      <SettingsChange isLoading={isPending} />
+    </FormBase>
   )
 }

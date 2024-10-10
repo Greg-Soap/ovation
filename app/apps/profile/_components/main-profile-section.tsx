@@ -1,12 +1,12 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import Stats from './stats'
-import Portfolio from './portfolio'
-import Experience from './experience'
+import Stats from './sections/stats'
+import Portfolio from './sections/portfolio'
+import Experience from './sections/experience'
 import type { ProfileData } from '@/models/all.model'
 import { useTabUrlSync } from '@/lib/use-tab'
 import { useQuery } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
-import FeaturedSection from './featured-section'
+import FeaturedSection from './sections/featured-section'
 
 interface TabData {
   value: string
@@ -26,11 +26,13 @@ export default function MainProfileSection({
   const { data: nfts, isLoading: isNftsLoading } = useQuery({
     queryKey: ['nfts', profileData?.userId],
     queryFn: () => ovationService.getNfts(profileData?.userId as string),
+    enabled: !!profileData?.userId,
   })
 
   const { data: experienceData } = useQuery({
-    queryKey: ['experience'],
+    queryKey: ['experience', profileData?.userId],
     queryFn: () => ovationService.getExperience(profileData?.userId as string),
+    enabled: !!profileData?.userId,
   })
 
   const profileTabsData: TabData[] = [
@@ -72,7 +74,7 @@ export default function MainProfileSection({
             <TabsTrigger
               key={value}
               value={value}
-              className="text-xs text-[#999999] px-5 py-[10px] bg-transparent border-b-2 border-transparent font-normal data-[state=active]:bg-transparent data-[state=active]:border-[#CFF073] data-[state=active]:text-[#F8F8FF] transition-all duration-300"
+              className="text-xs text-lighter px-5 py-[10px] bg-transparent border-b-2 border-transparent font-normal data-[state=active]:bg-transparent data-[state=active]:border-[#CFF073] data-[state=active]: transition-all duration-300"
             >
               {label}
             </TabsTrigger>

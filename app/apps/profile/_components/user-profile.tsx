@@ -1,34 +1,27 @@
 import EventIcon from '@/components/icons/eventIcon'
 import Image from 'next/image'
-import Badges from './badges'
-import Socials from './socials'
-import FavouriteNft from './favourite-nft'
+import Badges from './sections/badges'
+import Socials from './sections/socials'
+import FavouriteNft from './sections/favourite-nft'
 import type { ProfileData, UserExperience } from '@/models/all.model'
 import MiniLoader from '@/components/mini-loader'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
 import LocationIcon from '@/public/assets/images/ovationLocationIcon'
-import { format, parseISO } from 'date-fns'
-import { Calendar, Calendar2 } from 'iconsax-react'
-
-function formatJoinedDate(dateString: string): string {
-  try {
-    const date = parseISO(dateString)
-    return `Joined ${format(date, 'MMMM yyyy')}`
-  } catch (error) {
-    console.error('Error parsing date:', error)
-    return 'Join date unavailable'
-  }
-}
+import { Calendar2 } from 'iconsax-react'
+import { formatJoinedDate } from '@/lib/helper-func'
+import { linkify } from '@/lib/use-link'
 
 export default function UserProfile({
   profileData,
   isLoading,
   experienceData,
+  secondaryProfile,
 }: {
   profileData: ProfileData
   isLoading: boolean
   experienceData: UserExperience[]
+  secondaryProfile?: boolean
 }) {
   const latestExperience = experienceData?.[0] ?? null
 
@@ -55,21 +48,12 @@ export default function UserProfile({
             ) : (
               <div className="w-full h-fit flex flex-col gap-0.5">
                 <div className="flex items-center gap-[13px]">
-                  <p className="text-[#F8F8FF] text-[22px] font-semibold">
+                  <p className=" text-[22px] font-semibold">
                     {profileData?.profile?.displayName || 'Anonymous User'}
                   </p>
-                  {/* {profileData?.profile?.isVerified && (
-                  <Image
-                    src='/assets/images/profile/Rectangle1.png'
-                    alt='Verified User'
-                    width={21}
-                    height={21}
-                    className='bg-white rounded-full'
-                  />
-                )} */}
                 </div>
 
-                <p className="flex items-center gap-1 text-base text-[#B3B3B3]">
+                <p className="flex items-center gap-1 text-base text-light">
                   {profileData?.username
                     ? `@${profileData.username.replace(/^@/, '')}`
                     : 'No username set'}
@@ -84,7 +68,7 @@ export default function UserProfile({
             ) : (
               <div className="w-full h-fit px-5 py-[15px] rounded-[20px] bg-[#18181C] flex flex-col gap-5">
                 {latestExperience && (
-                  <p className="text-xs text-[#F8F8FF] font-semibold">
+                  <p className="text-xs  font-semibold">
                     {latestExperience?.role && latestExperience?.company
                       ? `${latestExperience?.role} @ ${latestExperience?.company}`
                       : 'No current role'}
@@ -92,45 +76,58 @@ export default function UserProfile({
                 )}
 
                 {profileData?.profile?.bio ? (
-                  <p className="font-normal text-[#E6E6E6] text-sm">
-                    {profileData?.profile?.bio}
+                  <p className="font-normal text-foreground text-sm">
+                    {linkify(profileData?.profile?.bio)}
                   </p>
                 ) : (
                   <a
                     href="/apps/settings"
-                    className="font-normal text-[#cff073d7] text-sm hover:underline"
+                    className="font-normal text-primary text-sm hover:underline"
                   >
                     Add a bio
                   </a>
                 )}
 
                 {profileData?.createdDate && (
-                  <p className="font-normal text-[#808080] text-sm flex items-center gap-1">
-                    <Calendar2 className="w-[13px] h-[13px] stroke-[#808080]" />
+                  <p className="font-normal text-lighter text-sm flex items-center gap-1">
+                    <Calendar2 className="w-[13px] h-[13px] stroke-lighter" />
                     <span>{formatJoinedDate(profileData?.createdDate)}</span>
                   </p>
                 )}
 
                 <div className="flex items-center gap-6">
-                  <p className="flex items-center text-[#E6E6E6] text-sm font-semibold gap-2">
+                  <a
+                    href={
+                      secondaryProfile
+                        ? `/apps/profile/${profileData?.username}/following`
+                        : '/apps/profile/following'
+                    }
+                    className="flex items-center text-foreground text-sm font-semibold gap-2 "
+                  >
                     {profileData?.userStats?.following || 0}{' '}
-                    <span className="font-medium text-[#808080]">
+                    <span className="font-medium text-lighter text-sm hover:underline">
                       Following
                     </span>
-                  </p>
-
-                  <p className="flex items-center text-[#E6E6E6] text-sm font-semibold gap-[9px]">
+                  </a>
+                  <a
+                    href={
+                      secondaryProfile
+                        ? `/apps/profile/${profileData?.username}/followers`
+                        : '/apps/profile/followers'
+                    }
+                    className="flex items-center text-foreground text-sm font-semibold gap-[9px]"
+                  >
                     {profileData?.userStats?.followers || 0}{' '}
-                    <span className="font-medium text-[#808080] text-sm">
+                    <span className="font-medium text-lighter text-sm hover:underline">
                       Followers
                     </span>
-                  </p>
+                  </a>
                 </div>
 
                 <div className="flex flex-col gap-3  justify-between">
                   {latestExperience?.skill && (
                     <div className="flex items-center gap-1.5">
-                      <p className="text-xs text-[#B3B3B3]">
+                      <p className="text-xs text-light">
                         <strong>Skills: </strong> {latestExperience.skill}
                       </p>
                     </div>
@@ -144,8 +141,8 @@ export default function UserProfile({
                         height={13}
                         className="rounded-full"
                       />
-                      <p className="text-xs text-[#B3B3B3]">
-                        {latestExperience.department}
+                      <p className="text-xs text-light">
+                        {latestExperience?.department}
                       </p>
                     </div>
                   )}
@@ -153,28 +150,34 @@ export default function UserProfile({
                     {latestExperience?.startDate && (
                       <div className="flex items-center gap-1.5">
                         <EventIcon className="w-[13px] h-[13px] stroke-[#B3B3B3]" />
-                        <p className="text-xs text-[#B3B3B3]">
-                          {latestExperience.startDate}
+                        <p className="text-xs text-light">
+                          {latestExperience?.startDate}
                         </p>
                       </div>
                     )}
-                    {latestExperience?.endDate && (
+                    {latestExperience?.startDate && (
                       <>
-                        <p>-</p>
+                        <p className="text-xs text-light">-</p>
                         <div className="flex items-center gap-1.5">
-                          <EventIcon className="w-[13px] h-[13px] stroke-[#B3B3B3]" />
-                          <p className="text-xs text-[#B3B3B3]">
-                            {latestExperience.endDate}
-                          </p>
+                          {latestExperience?.endDate ? (
+                            <>
+                              <EventIcon className="w-[13px] h-[13px] stroke-[#B3B3B3]" />
+                              <p className="text-xs text-light">
+                                {latestExperience?.endDate}
+                              </p>
+                            </>
+                          ) : (
+                            <p className="text-xs text-light">Present</p>
+                          )}
                         </div>
                       </>
                     )}
                   </div>
-                  {profileData.profile?.location && (
+                  {profileData?.profile?.location && (
                     <div className="flex items-center gap-1.5">
                       <LocationIcon className="w-[13px] h-[13px] stroke-[#B3B3B3]" />
-                      <p className="text-xs text-[#B3B3B3]">
-                        {profileData.profile.location}
+                      <p className="text-xs text-light">
+                        {profileData?.profile?.location}
                       </p>
                     </div>
                   )}

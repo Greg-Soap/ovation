@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
-import Link from 'next/link'
-import { getStoredUser } from '@/lib/helper-func'
+import colors from '@/lib/colors'
+import { useAppStore } from '@/store/use-app-store'
 
 function convertToISOString(dateString: string): string {
   // Expected format: "YYYY MM DD : HH mm"
@@ -25,7 +25,7 @@ function convertToISOString(dateString: string): string {
 }
 
 export function Header({ navLinks = links }: HeaderProps) {
-  const user = getStoredUser()
+  const { isAuthenticated } = useAppStore()
   const [showButton, setShowButton] = useState(false)
 
   const showButtonTime = '2024 10 11 : 21 00'
@@ -58,10 +58,10 @@ export function Header({ navLinks = links }: HeaderProps) {
         <Navigation mobile navLinks={navLinks} />
         {showButton && (
           <Button variant={'default'}>
-            {user ? (
-              <Link href={'/apps/discover'}>Dashboard</Link>
+            {isAuthenticated ? (
+              <a href={'/apps/discover'}>Dashboard</a>
             ) : (
-              <Link href={'/login'}>Login</Link>
+              <a href={'/login'}>Login</a>
             )}
           </Button>
         )}
@@ -90,10 +90,10 @@ const links: NavLink[] = [
     title: 'News',
     href: '/news',
   },
-  {
-    title: 'Founder NFT',
-    href: '/founder-nfts',
-  },
+  // {
+  //   title: 'Founder NFT',
+  //   href: '/founder-nfts',
+  // },
 ]
 
 function Navigation({ mobile = false, navLinks = [] }: NavigationProps) {
@@ -116,7 +116,7 @@ function Navigation({ mobile = false, navLinks = [] }: NavigationProps) {
     ${mobile ? 'flex-col space-y-2 w-full ' : 'items-center gap-5'}
   `
   const navListItemClassName = `
-    group relative rounded-full  px-1 py-1   text-lg text-[#FFFFFF] transform transition-transform
+    group relative rounded-full  px-1 py-1   text-lg text-foreground transform transition-transform
     ${mobile ? 'w-full overflow-x-visible' : ''}
   `
   const navListLinkClassName = mobile ? 'mx-2 rounded-[20px]' : ''
@@ -132,7 +132,11 @@ function Navigation({ mobile = false, navLinks = [] }: NavigationProps) {
             onClick={() => setMobileNavigationOpened(true)}
             title="Open navigation menu"
           >
-            <HamburgerMenuIcon height={'15px'} width={'20px'} color="#CFF073" />
+            <HamburgerMenuIcon
+              height={'15px'}
+              width={'20px'}
+              color={colors.primary.DEFAULT}
+            />
           </Button>
         </div>
       )}
@@ -157,7 +161,7 @@ function Navigation({ mobile = false, navLinks = [] }: NavigationProps) {
             >
               {button ? (
                 <Button variant={'default'} className={` ${mobile && 'mx-4'}`}>
-                  <Link href={href}>{title}</Link>
+                  <a href={href}>{title}</a>
                 </Button>
               ) : (
                 <NavLink
@@ -179,9 +183,9 @@ function Navigation({ mobile = false, navLinks = [] }: NavigationProps) {
 function NavLink({ children, className, mobile, href }: NavLinkProps) {
   return (
     <Button variant={'ghost'} size={'tiny'} className="hover:bg-transparent ">
-      <Link
+      <a
         className={`
-        block whitespace-nowrap  text-lg text-primary-foreground no-underline transition hover:text-[#CFF073]
+        block whitespace-nowrap  text-lg text-foreground no-underline transition hover:text-primary
         ${mobile && ''}
         ${className}
         `}
@@ -189,7 +193,7 @@ function NavLink({ children, className, mobile, href }: NavLinkProps) {
         href={`${href}`}
       >
         {children}
-      </Link>
+      </a>
     </Button>
   )
 }

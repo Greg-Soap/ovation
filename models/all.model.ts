@@ -78,6 +78,41 @@ export interface WalletAcct {
   walletTypeId: string | null
   chain: string
   metadata?: string | null
+  id?: string | number
+}
+
+export interface NFT {
+  isPrivate?: boolean
+  id: string
+  imageUrl: string
+  description?: string
+  metaData?: {
+    Amount: string
+    BlockNumber: string
+    BlockNumberMinted: string | null
+    CollectionBannerImage: string
+    CollectionLogo: string
+    ContractType: string
+    LastMetadataSync: string
+    LastTokenUriSync: string
+    Metadata: string
+    MinterAddress: string
+    Name: string | null
+    OwnerOf: string
+    PossibleSpam: boolean
+    RarityLabel: string
+    RarityPercentage: number
+    RarityRank: number
+    Symbol: string | null
+    TokenAddress: string
+    TokenHash: string
+    TokenId: string
+    TokenUri: string
+    VerifiedCollection: boolean
+  }
+  name: string | null
+  tokenAddress: string
+  tokenId: string
 }
 
 export interface Wallet {
@@ -188,4 +223,15 @@ export interface DiscoverUserData {
   totalNft?: number
   founderNft?: number
   experiences?: number
+  followers?: number
+}
+
+export interface FollowersFollowing {
+displayName: string
+isUserFollowing: boolean
+isFollowing: boolean
+profileImage: string
+userId: string
+  username: string
+  bio: string
 }

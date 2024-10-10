@@ -4,7 +4,7 @@ import AsideMsgIcon from '@/components/icons/asideMsgIcon'
 import UserProfile from '../_components/user-profile'
 import ovationService from '@/services/ovation.service'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import MainProfileSection from '../_components/main-profile-section'
 import type { ProfileData } from '@/models/all.model'
 import { Suspense, useEffect } from 'react'
@@ -12,13 +12,14 @@ import MiniLoader from '@/components/mini-loader'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
 import { useLocalStorage } from '@/lib/use-local-storage'
-import { FriendProps } from '../../messages/message-container'
+import type { FriendProps } from '../../messages/message-container'
+import { useAnchorNavigation } from '@/lib/use-navigation'
 
 export default function SecondaryProfile() {
   const params = useParams()
   const username = params.username as string
-  const router = useRouter()
-  const {setValue} = useLocalStorage<FriendProps | null>('receiver', null)
+  const navigateTo = useAnchorNavigation()
+  const { setValue } = useLocalStorage<FriendProps | null>('receiver', null)
 
   const {
     data: profileData,
@@ -27,10 +28,11 @@ export default function SecondaryProfile() {
   } = useQuery({
     queryKey: ['profile', username],
     queryFn: () => ovationService.getUserProfile(username),
+    enabled: !!username,
   })
 
   const { data: experienceData } = useQuery({
-    queryKey: ['experience', username],
+    queryKey: ['experience', profileData?.userId],
     queryFn: () => ovationService.getExperience(profileData?.userId as string),
     enabled: !!profileData?.userId,
   })
@@ -61,7 +63,7 @@ export default function SecondaryProfile() {
     },
   )
 
- const openDM = () => {
+  const openDM = () => {
     if (profileData) {
       const receiver: FriendProps = {
         displayName: profileData.profile?.displayName!,
@@ -73,10 +75,10 @@ export default function SecondaryProfile() {
         userId: profileData.userId!,
         biography: profileData.profile?.bio!,
         userName: profileData.username!,
-        lastMessage: ''
+        lastMessage: '',
       }
       setValue(receiver)
-      router.push('/apps/messages')
+      navigateTo('/apps/messages')
     }
   }
 
@@ -113,7 +115,7 @@ export default function SecondaryProfile() {
                 py-[9px] px-[13px] text-xs font-semibold border
                 ${
                   profileData?.isFollowing
-                    ? 'bg-[#333726] text-white border-[#E6E6E64D] hover:bg-red-900 hover:text-red-200 hover:border-red-700'
+                    ? 'bg-[#333726]  border-[#E6E6E64D] hover:bg-red-900 hover:text-red-200 hover:border-red-700'
                     : ' text-[#0B0A10] border-[#E6E6E64D]'
                 }
                 transition-colors duration-200
@@ -151,6 +153,7 @@ export default function SecondaryProfile() {
               profileData={profileData as ProfileData}
               experienceData={experienceData?.data?.data || []}
               isLoading={isLoading}
+              secondaryProfile={true}
             />
           </Suspense>
         </ErrorBoundary>

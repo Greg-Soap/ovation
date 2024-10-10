@@ -3,12 +3,12 @@ import './globals.css'
 import { Toaster } from '@/components/ui/sonner'
 
 export const metadata: Metadata = {
-  title: 'Ovation: All your NFTs – One Powerful Platform’',
+  title: 'Ovation: All your NFTs – One Powerful Platform',
   description:
     'Next-generation NFT social platform – Ovation is an all-in-one hub where artists, collectors, projects, and enthusiasts can discover, buy, sell, and socialize in one place designed specifically for them. Be part of the platform that is revolutionizing the future of NFTs, digital collectibles, and how we interact with them.',
   authors: [{ name: 'Emmanuel Greg' }],
   openGraph: {
-    title: 'Ovation: All your NFTs – One Powerful Platform’',
+    title: 'Ovation: All your NFTs – One Powerful Platform',
     description:
       'Next-generation NFT social platform – Ovation is an all-in-one hub where artists, collectors, projects, and enthusiasts can discover, buy, sell, and socialize in one place designed specifically for them. Be part of the platform that is revolutionizing the future of NFTs, digital collectibles, and how we interact with them.',
     images: ['https://www.ovation.network/assets/images/dashboard-demo.png'],
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Ovation: All your NFTs – One Powerful Platform’',
+    title: 'Ovation: All your NFTs – One Powerful Platform',
     description:
       'Next-generation NFT social platform – Ovation is an all-in-one hub where artists, collectors, projects, and enthusiasts can discover, buy, sell, and socialize in one place designed specifically for them. Be part of the platform that is revolutionizing the future of NFTs, digital collectibles, and how we interact with them.',
     creator: '@EmmanuelGreg',

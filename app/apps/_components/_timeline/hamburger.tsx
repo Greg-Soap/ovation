@@ -1,8 +1,7 @@
 'use client'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
-import Link from 'next/link'
 import { useState } from 'react'
 import { X } from 'lucide-react'
 import {
@@ -16,26 +15,25 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer'
 import { useQuery } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
-import Image from 'next/image'
-import type { ProfileData, UserData } from '@/models/all.model'
+import type { ProfileData } from '@/models/all.model'
 import MiniLoader from '@/components/mini-loader'
-import { useLocalStorage } from '@/lib/use-local-storage'
 import FeedbackModal from '../../_feedback/feedback'
+import { useAnchorNavigation } from '@/lib/use-navigation'
+import colors from '@/lib/colors'
+import CustomAvatar from '@/components/customs/custom-avatar'
+import { useAppStore } from '@/store/use-app-store'
+import CustomDialog from '@/components/customs/custom-dialog'
 
 export default function Hamburger() {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
-  const router = useRouter()
-  const { storedValue, removeValue } = useLocalStorage<UserData | null>(
-    'userData',
-    null,
-  )
-  const user = storedValue
+  const navigateTo = useAnchorNavigation()
+  const { user, clearUser } = useAppStore()
 
   const handleLogout = () => {
     ovationService.logout()
-    removeValue()
-    router.push('/')
+    clearUser()
+    navigateTo('/')
   }
 
   const handleLinkClick = () => {
@@ -67,27 +65,28 @@ export default function Hamburger() {
         <DrawerTrigger asChild>
           <Button className="" variant={'link'} onClick={() => setOpen(!open)}>
             {!open && (
-              <HamburgerMenuIcon color={'#cff073'} width={24} height={24} />
+              <HamburgerMenuIcon
+                color={colors.primary.DEFAULT}
+                width={24}
+                height={24}
+              />
             )}
-            {open && <X color={'#cff073'} width={24} height={24} />}
+            {open && (
+              <X color={colors.primary.DEFAULT} width={24} height={24} />
+            )}
           </Button>
         </DrawerTrigger>
         <DrawerContent
           className="p-0 border-0 w-[80vw] max-w-[400px] h-screen fixed top-0 left-0 rounded-none bg-[#111115] border-r-[0.5px] border-solid border-gray-500 transform transition-transform duration-300 ease-in-out"
           style={{}}
         >
-          <div className="bg-[#111115] flex flex-col p-5 h-full justify-between">
+          <div className="bg-[#111115] flex flex-col p-5 h-full overflow-y-scroll justify-between">
             <div>
               <div className="flex flex-col gap-5 justify-between">
-                <Image
-                  src={
-                    profileData?.profile?.profileImage ||
-                    '/assets/images/default-user.svg'
-                  }
+                <CustomAvatar
+                  src={profileData?.profile?.profileImage}
                   alt="User Display Picture"
-                  width={131}
-                  height={131}
-                  className="rounded-full w-[131px] h-[131px] object-cover"
+                  size="huge"
                 />
 
                 <div className="flex flex-col gap-9">
@@ -96,13 +95,13 @@ export default function Hamburger() {
                   ) : (
                     <div className="w-full h-fit flex flex-col gap-0.5">
                       <div className="flex items-center gap-[13px]">
-                        <p className="text-[#F8F8FF] text-[22px] font-semibold">
+                        <p className=" text-[22px] font-semibold">
                           {profileData?.profile?.displayName ||
                             'Anonymous User'}
                         </p>
                       </div>
 
-                      <p className="flex items-center gap-1 text-base text-[#B3B3B3]">
+                      <p className="flex items-center gap-1 text-base text-light">
                         {profileData?.username
                           ? `@${profileData.username.replace(/^@/, '')}`
                           : 'No username set'}
@@ -111,11 +110,11 @@ export default function Hamburger() {
                   )}
                 </div>
               </div>
-              <ul className="gap-8 pt-10 font-bold flex text-white flex-col text-lg">
+              <ul className="gap-8 pt-10 font-bold flex  flex-col text-lg">
                 {navLinks.map(({ href, icon: Icon, label }) => {
                   const isActive = pathname === href
                   return (
-                    <Link
+                    <a
                       key={href}
                       onClick={handleLinkClick}
                       href={href}
@@ -123,24 +122,31 @@ export default function Hamburger() {
                     >
                       <Icon
                         size={24}
-                        color="#cff073"
+                        color={colors.primary.DEFAULT}
                         variant={isActive ? 'Bold' : 'Outline'}
                       />
                       {label}
-                    </Link>
+                    </a>
                   )
                 })}
               </ul>
             </div>
             <div className="flex flex-col gap-4">
               <FeedbackButton className="w-full mb-4" />
-              <Button
-                variant={'ghost'}
-                onClick={handleLogout}
-                className="py-[10px] w-full text-red-500"
-              >
-                Logout {user?.username}
-              </Button>
+              <CustomDialog
+                trigger={
+                  <Button
+                    variant={'ghost'}
+                    className="py-[10px] w-full text-red-500"
+                  >
+                    Logout {user?.username}
+                  </Button>
+                }
+                onConfirm={handleLogout}
+                confirmText="Logout"
+                title="Confirm logout?"
+                description="Are you sure you want to log out?"
+              />
             </div>
           </div>
         </DrawerContent>
@@ -160,8 +166,8 @@ export function FeedbackButton({ className }: { className?: string }) {
         className="absolute -top-4 w-[33px] h-[33px]"
       />
       <div className="w-full flex flex-col items-center gap-0.5">
-        <p className="text-[#F8F8FF] text-xs font-medium">Help us improve</p>
-        <p className="text-[#B3B3B3] text-[9px] text-center">
+        <p className=" text-xs font-medium">Help us improve</p>
+        <p className="text-light text-[9px] text-center">
           Your input will help us improve and create an even better experience
           for everyone. Thank you for being a part of this journey!
         </p>
@@ -170,7 +176,7 @@ export function FeedbackButton({ className }: { className?: string }) {
         <DialogTrigger asChild>
           <Button
             variant={'default'}
-            className="text-[#0B0A10] text-xs font-semibold py-2 px-3 w-full h-[30px] bg-[#CFF073] rounded-[8px]"
+            className="text-[#0B0A10] text-xs font-semibold py-2 px-3 w-full h-[30px] bg-primary rounded-[8px]"
           >
             Submit a feedback
           </Button>

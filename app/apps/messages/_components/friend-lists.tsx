@@ -3,34 +3,35 @@
 import Image from 'next/image'
 import React, { useState, useEffect } from 'react'
 import SearchInput from '../../_components/_timeline/search-input'
-import MessageContainer, { FriendProps } from '../../messages/message-container'
+import MessageContainer, {
+  type FriendProps,
+} from '../../messages/message-container'
 import { Button } from '@/components/ui/button'
 import {
   type ChatData,
   getActiveChatsForUser,
   type Participant,
 } from '@/lib/firebaseChatService'
-import { getUserId } from '@/lib/helper-func'
-import { useLocalStorage } from '@/lib/use-local-storage'
+import { useAppStore } from '@/store/use-app-store'
 
 export default function FriendList() {
   const [friends, setFriends] = useState<ChatData[]>([])
   const [selectedFriend, setSelectedFriend] = useState<ChatData | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [storedReceiver, setStoredReceiver] = useState<FriendProps | null>(null)
-
+  const { userId } = useAppStore()
 
   useEffect(() => {
     fetchChatData()
     const receiver = localStorage.getItem('receiver')
-   if (receiver) {
+    if (receiver) {
       const parsedReceiver = JSON.parse(receiver) as FriendProps
       setStoredReceiver(parsedReceiver)
-      localStorage.removeItem('receiver') 
+      localStorage.removeItem('receiver')
     }
   }, [])
 
-   // Function to get the friend object, either from selectedFriend or storedReceiver
+  // Function to get the friend object, either from selectedFriend or storedReceiver
   const getFriendObject = (): FriendProps | null => {
     if (selectedFriend) {
       //@ts-ignore
@@ -45,8 +46,6 @@ export default function FriendList() {
   const fetchChatData = async () => {
     setIsLoading(true)
     try {
-      const userId = getUserId()
-
       if (userId) {
         const chatData = await getActiveChatsForUser(userId)
 
@@ -65,7 +64,7 @@ export default function FriendList() {
 
   const getOtherParticipant = (data: ChatData): Participant | undefined => {
     const otherParticipant = data.participants.find(
-      (obj) => obj.userId !== getUserId(),
+      (obj) => obj.userId !== userId,
     )
 
     return otherParticipant
@@ -101,18 +100,18 @@ export default function FriendList() {
         } w-full min-h-[100vh] h-full lg:col-span-1 flex-col other-link border-r border-[#1A1A1A] overflow-auto`}
       >
         <div className="flex flex-col gap-5 px-[30px] py-8">
-          <p className="text-[22px] text-[#F8F8FF] font-semibold">Messages</p>
+          <p className="text-[22px]  font-semibold">Messages</p>
           {/* <SearchInput width="full" /> */}
         </div>
 
         <div className="flex flex-col gap-4 w-full">
           {isLoading ? (
             <div className="flex justify-center items-center h-64">
-              <p className="text-[#F8F8FF]">Loading chats...</p>
+              <p className="">Loading chats...</p>
             </div>
           ) : friends.length === 0 ? (
             <div className="flex justify-center items-center h-64">
-              <p className="text-[#F8F8FF]">No active chats</p>
+              <p className="">No active chats</p>
             </div>
           ) : (
             friends.map((friend, index) => {
@@ -138,18 +137,18 @@ export default function FriendList() {
                       className="rounded-full mr-3"
                     />
                     <div className="flex flex-col gap-1 items-start">
-                      <p className="flex text-[#F8F8FF] items-center text-sm font-medium gap-[3px]">
+                      <p className="flex  items-center text-sm font-medium gap-[3px]">
                         {otherParticipant?.displayName}
-                        <span className="text-[#B3B3B3] text-xs font-normal">
+                        <span className="text-light text-xs font-normal">
                           @{otherParticipant?.username}
                         </span>
                       </p>
-                      <p className="text-xs text-[#B3B3B3] truncate max-w-[200px]">
+                      <p className="text-xs text-light truncate max-w-[200px]">
                         {friend.lastMessage}
                       </p>
                     </div>
                   </div>
-                  <p className="text-[11px] text-[#808080] mt-2">
+                  <p className="text-[11px] text-lighter mt-2">
                     {formatDate(friend.lastMessageSentAt)}
                   </p>
                 </Button>
