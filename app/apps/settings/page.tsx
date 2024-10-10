@@ -45,7 +45,11 @@ export default function Page() {
     queryFn: () => ovationService.getProfile(),
   })
 
-  const { data: experienceData } = useQuery({
+  const {
+    data: experienceData,
+    isLoading: isExperienceLoading,
+    refetch: refetchExperience,
+  } = useQuery({
     queryKey: ['experience'],
     queryFn: () =>
       ovationService.getExperience(profileData?.data?.userId as string),
@@ -59,9 +63,11 @@ export default function Page() {
       refetch: () => void
     }) => <ProfileForm {...props} />,
     Socials: (props: { userId: string }) => <SocialForm {...props} />,
-    Experience: (props: { experienceData: UserExperience[] }) => (
-      <ExperienceForm {...props} />
-    ),
+    Experience: (props: {
+      experienceData: UserExperience[]
+      isLoading: boolean
+      refetchExperience: () => void
+    }) => <ExperienceForm {...props} />,
     Wallets: () => <WalletForm />,
     Password: () => <PasswordForm />,
   }
@@ -179,6 +185,8 @@ export default function Page() {
                           refetch: refetch,
                           experienceData: experienceData?.data
                             ?.data as UserExperience[],
+                          isLoading: isExperienceLoading,
+                          refetchExperience: refetchExperience,
                           userId: profileData?.data?.userId as string,
                         })}
                     </section>

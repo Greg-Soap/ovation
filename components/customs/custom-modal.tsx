@@ -9,11 +9,13 @@ import {
 } from '@/components/ui/dialog'
 
 interface CustomModalProps {
-  trigger: ReactNode
+  trigger?: ReactNode
   title?: string
   description?: string
   children: ReactNode
   className?: string
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
 }
 
 function CustomModal({
@@ -22,11 +24,20 @@ function CustomModal({
   description,
   children,
   className,
+  open,
+  onOpenChange,
 }: CustomModalProps) {
+  const handleContentClick = (event: React.MouseEvent) => {
+    event.stopPropagation()
+  }
+
   return (
-    <Dialog>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className={className}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
+      <DialogContent
+        className={`${className} z-50`}
+        onClick={handleContentClick}
+      >
         {title || description ? (
           <DialogHeader>
             {title && <DialogTitle>{title}</DialogTitle>}
