@@ -188,32 +188,54 @@ export default function WalletForm() {
                   {account?.slice(38)}
                 </div>
               ) : (
-                <div className="grid grid-cols-2 gap-4">
-                  {sortedWallets?.map((wallet) => (
-                    <ErrorBoundary
-                      key={wallet.walletId}
-                      FallbackComponent={ErrorFallback}
+                <>
+                  <div className="py-4 w-full">
+                    <Button
+                      className="text-start flex justify-center p-2 md:p-[1rem] h-[58px] w-full text-xs md:text-sm font-semibold  border-[1px] border-solid bg-transparent border-[#353538]"
+                      onClick={() => {
+                        setWalletTypeUId(sortedWallets[0].walletId)
+                        connectWallet(sortedWallets[0].name)
+                      }}
                     >
-                      <Button
-                        className="text-start flex justify-between p-2 md:p-[1rem] h-[58px] w-full md:w-[242px] text-xs md:text-sm font-semibold  border-[1px] border-solid bg-transparent border-[#353538]"
-                        onClick={() => {
-                          setWalletTypeUId(wallet.walletId)
-                          connectWallet(wallet.name)
-                        }}
+                      <p className="text-foreground mr-4">
+                        {startCase(sortedWallets[0].name)}
+                      </p>
+                      <Image
+                        src={sortedWallets[0].logoUrl}
+                        alt={sortedWallets[0].name}
+                        width={20}
+                        height={20}
+                      />
+                    </Button>
+                  </div>
+
+                  <div className={`grid grid-cols-2 gap-4`}>
+                    {sortedWallets?.slice(1, 9).map((wallet) => (
+                      <ErrorBoundary
+                        key={wallet.walletId}
+                        FallbackComponent={ErrorFallback}
                       >
-                        <p className="text-foreground">
-                          {startCase(wallet.name)}
-                        </p>
-                        <Image
-                          src={wallet.logoUrl}
-                          alt={wallet.name}
-                          width={20}
-                          height={20}
-                        />
-                      </Button>
-                    </ErrorBoundary>
-                  ))}
-                </div>
+                        <Button
+                          className="text-start flex justify-between p-2 md:p-[1rem] h-[58px] w-full text-xs md:text-sm font-semibold  border-[1px] border-solid bg-transparent border-[#353538]"
+                          onClick={() => {
+                            setWalletTypeUId(wallet.walletId)
+                            connectWallet(wallet.name)
+                          }}
+                        >
+                          <p className="text-foreground">
+                            {startCase(wallet.name)}
+                          </p>
+                          <Image
+                            src={wallet.logoUrl}
+                            alt={wallet.name}
+                            width={20}
+                            height={20}
+                          />
+                        </Button>
+                      </ErrorBoundary>
+                    ))}
+                  </div>
+                </>
               )}
             </ErrorBoundary>
             <div className="flex">
