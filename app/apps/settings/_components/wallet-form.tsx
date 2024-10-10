@@ -37,32 +37,20 @@ export default function WalletForm() {
   const { account, chain, walletTypeId, connectWallet, disconnectWallet } =
     useWalletConnect((account, chain) => onWalletConnected())
 
-  const {
-    mutate: createAccount,
-    isPending,
-    isSuccess,
-  } = useMutation({
+  const { mutate: addWallet, isPending: isAddingWallet } = useMutation({
     mutationFn: ovationService.addWallet,
     onSuccess: async (data) => {
-      toast.success('Profile Wallet Added Successfully')
+      toast.success('Wallet Added Successfully')
+      setWalletAutomatically(false)
+      setWaletConnected(false)
+      refetchWallets()
+    },
+    onError: (error) => {
+      toast.error(error?.response?.data?.message)
       setWalletAutomatically(false)
       setWaletConnected(false)
     },
-    onError: (error) => {
-      console.log(error)
-      // @ts-ignore
-      toast.error(error.response.data.message)
-    },
   })
-
-  const addWalletForUser = () => {
-    const data = {
-      chain: chain,
-      walletAddress: account,
-      walletTypeId: walletTypeUId,
-    }
-    createAccount(data)
-  }
 
   const { data: allwallet, isLoading } = useQuery({
     queryKey: ['wallets'],
@@ -95,15 +83,15 @@ export default function WalletForm() {
   })
 
   const wallets = walletsData?.data?.data
-  const { mutate: addWallet, isPending: isAddingWallet } = useMutation({
-    mutationFn: (values: z.infer<typeof formSchema>) =>
-      ovationService.addWallet(values),
-    onSuccess: () => {
-      refetchWallets()
-      toast.success('Wallet connected successfully')
-      setAddingWallet(false)
-    },
-  })
+
+  const addWalletForUser = () => {
+    const data: any = {
+      chain: chain,
+      walletAddress: account,
+      walletTypeId: walletTypeUId,
+    }
+    addWallet(data)
+  }
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -131,7 +119,7 @@ export default function WalletForm() {
   return (
     <>
       <LoadingOverlay
-        isLoading={isPending}
+        isLoading={isAddingWallet}
         loadingText="Connecting wallet..."
       />
       <LoadingOverlay
@@ -250,7 +238,7 @@ export default function WalletForm() {
                     onClick={addWalletForUser}
                     className="flex-1  mt-10 w-full"
                   >
-                    {isPending ? 'Adding Wallet' : 'Add Wallet'}
+                    {isAddingWallet ? 'Adding Wallet' : 'Add Wallet'}
                   </Button>
                 </div>
               )}
