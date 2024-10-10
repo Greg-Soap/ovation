@@ -16,6 +16,15 @@ interface CustomModalProps {
   className?: string
   open?: boolean
   onOpenChange?: (open: boolean) => void
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'full'
+}
+
+const sizeClasses = {
+  sm: 'sm:max-w-sm',
+  md: 'sm:max-w-md',
+  lg: 'sm:max-w-lg',
+  xl: 'sm:max-w-xl',
+  full: 'sm:max-w-[calc(100vw-2rem)]',
 }
 
 function CustomModal({
@@ -26,17 +35,13 @@ function CustomModal({
   className,
   open,
   onOpenChange,
+  size = 'md',
 }: CustomModalProps) {
-  const handleContentClick = (event: React.MouseEvent) => {
-    event.stopPropagation()
-  }
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent
-        className={`${className} z-50`}
-        onClick={handleContentClick}
+        className={`sm:max-w-[425px] ${sizeClasses[size]} p-0 border-[#4D4D4D]`}
       >
         {title || description ? (
           <DialogHeader>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -16,10 +16,9 @@ import { formatDate } from '@/lib/helper-func'
 import type { UserExperience } from '@/models/all.model'
 import { FormBase, FormField } from '@/components/customs/custom-form'
 import CustomTooltip from '@/components/customs/custom-tooltip'
-import CustomDrawer from '@/components/customs/custom-drawer'
-import { PlusIcon, PenIcon } from 'lucide-react' // Assuming you're using Lucide icons
+import CustomModal from '@/components/customs/custom-modal'
+import { PlusIcon, PenIcon } from 'lucide-react'
 import MiniLoader from '@/components/mini-loader'
-import { useCallback } from 'react'
 
 const formSchema = z.object({
   company: z.string().min(1, 'Company is required'),
@@ -70,7 +69,7 @@ export default function ExperienceForm({
   isLoading: boolean
   refetchExperience: () => void
 }) {
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [editingExperience, setEditingExperience] =
     useState<UserExperience | null>(null)
   const queryClient = useQueryClient()
@@ -112,7 +111,7 @@ export default function ExperienceForm({
       )
       queryClient.invalidateQueries({ queryKey: ['experiences'] })
       refetchExperience()
-      setIsDrawerOpen(false)
+      setIsModalOpen(false)
       setEditingExperience(null)
       form.reset()
     },
@@ -152,7 +151,7 @@ export default function ExperienceForm({
       description: experience.description,
       skills: experience.skill,
     })
-    setIsDrawerOpen(true)
+    setIsModalOpen(true)
   }
 
   function handleAddNewExperience() {
@@ -166,7 +165,7 @@ export default function ExperienceForm({
       skills: '',
     })
     setEditingExperience(null)
-    setIsDrawerOpen(true)
+    setIsModalOpen(true)
   }
 
   return (
@@ -202,12 +201,8 @@ export default function ExperienceForm({
         )}
       </div>
 
-      <CustomDrawer
-        isOpen={isDrawerOpen}
-        onOpenChange={setIsDrawerOpen}
-        size="lg"
-      >
-        <div className="flex flex-col h-full">
+      <CustomModal open={isModalOpen} onOpenChange={setIsModalOpen} size="full">
+        <div className="flex flex-col h-full max-h-[80vh]">
           <div className="p-6 border-b border-[#4D4D4D]">
             <h2 className="text-2xl font-bold">
               {editingExperience ? 'Edit Experience' : 'Add New Experience'}
@@ -326,7 +321,7 @@ export default function ExperienceForm({
             </Button>
           </div>
         </div>
-      </CustomDrawer>
+      </CustomModal>
     </div>
   )
 }
