@@ -74,7 +74,7 @@ export interface UserSocialsMod {
 }
 
 export interface WalletAcct {
-  walletAddress: string
+  walletAddress?: string
   walletTypeId: string | null
   chain: string
   metadata?: string | null

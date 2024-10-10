@@ -73,7 +73,9 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
                         >
                           <Button
                             className="text-start flex justify-between p-2 md:p-[1rem] h-[58px] w-full md:w-[242px] text-xs md:text-sm font-semibold  border-[1px] border-solid bg-transparent border-[#353538]"
-                            onClick={() => connectWallet(wallet.name)}
+                            onClick={() => {
+                              connectWallet(wallet.name)
+                            }}
                           >
                             <p className="text-foreground">
                               {startCase(wallet.name)}

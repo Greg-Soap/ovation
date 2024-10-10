@@ -1,12 +1,25 @@
 import { useState, useEffect } from 'react'
 import Web3Modal from 'web3modal'
 import WalletConnectProvider from '@walletconnect/web3-provider'
-import { BrowserProvider } from 'ethers'
+import { BrowserProvider, ethers } from 'ethers'
 import { toast } from 'sonner'
 import { chainIdToChainName, startCase } from '@/lib/helper-func'
 import type { OfflineSigner } from '@cosmjs/proto-signing'
+import CoinbaseWalletSDK from '@coinbase/wallet-sdk'
 
 const infuraId = process.env.NEXT_PUBLIC_INFURA_ID as string
+
+// Initialize Coinbase Wallet SDK
+const APP_NAME = 'Ovation'
+const APP_LOGO_URL = 'https://example.com/logo.png'
+const DEFAULT_ETH_JSONRPC_URL = infuraId
+const DEFAULT_CHAIN_ID: any = 1
+
+// Initialize Coinbase Wallet SDK
+export const coinbaseWallet = new CoinbaseWalletSDK({
+  appName: APP_NAME,
+  appLogoUrl: APP_LOGO_URL,
+})
 
 export function useWalletConnect(
   onWalletConnected?: (account: string, chain: string) => void,
@@ -16,6 +29,7 @@ export function useWalletConnect(
   const [web3Modal, setWeb3Modal] = useState<Web3Modal | null>(null)
   const [account, setAccount] = useState<string | null>(null)
   const [chain, setChain] = useState<string | null>(null)
+  const [walletTypeId, setWalletTypeId] = useState<string | null>(null)
 
   useEffect(() => {
     const web3ModalInstance = new Web3Modal({
@@ -33,16 +47,22 @@ export function useWalletConnect(
     setWeb3Modal(web3ModalInstance)
   }, [])
 
-  const handleWalletConnection = (account: string, chainName: string) => {
+  const handleWalletConnection = (
+    account: string,
+    chainName: string,
+    walletId: string,
+  ) => {
     setAccount(account)
     setChain(chainName)
+    setWalletTypeId(walletId)
     if (onWalletConnected) onWalletConnected(account, chainName)
   }
 
   const connectMetaMask = async () => {
-    if ((window as any).ethereum?.isMetaMask) {
-      const provider = new BrowserProvider(window.ethereum)
+    if ((window as any)?.ethereum?.isMetaMask) {
       try {
+        const provider = new BrowserProvider(window?.ethereum)
+
         await provider.send('eth_requestAccounts', [])
         const signer = await provider.getSigner()
 
@@ -50,6 +70,7 @@ export function useWalletConnect(
         handleWalletConnection(
           signer.address,
           chainIdToChainName[Number(network.chainId)],
+          Number(network.chainId).toString(),
         )
         setProvider(provider)
         console.log('Connected with MetaMask:', account)
@@ -76,6 +97,7 @@ export function useWalletConnect(
       handleWalletConnection(
         account,
         chainIdToChainName[Number(network.chainId)],
+        Number(network.chainId).toString(),
       )
       console.log('Connected with WalletConnect:', account)
     } catch (error) {
@@ -88,7 +110,7 @@ export function useWalletConnect(
       try {
         const response = await (window as any).solana.connect()
         setAccount(response.publicKey.toString())
-        handleWalletConnection(response.publicKey.toString(), 'solana')
+        handleWalletConnection(response.publicKey.toString(), 'solana', '900')
         console.log('Connected with Phantom:', response.publicKey.toString())
       } catch (err) {
         console.error('Phantom connection failed:', err)
@@ -111,6 +133,7 @@ export function useWalletConnect(
         handleWalletConnection(
           account,
           chainIdToChainName[Number(network.chainId)],
+          Number(network.chainId).toString(),
         )
         setProvider(provider)
         console.log('Connected with OKX Wallet:', account)
@@ -136,6 +159,7 @@ export function useWalletConnect(
         handleWalletConnection(
           account,
           chainIdToChainName[Number(network.chainId)],
+          Number(network.chainId).toString(),
         )
         console.log('Connected with Trust Wallet:', account)
       } catch (error) {
@@ -160,6 +184,7 @@ export function useWalletConnect(
         handleWalletConnection(
           account,
           chainIdToChainName[Number(network.chainId)],
+          Number(network.chainId).toString(),
         )
         console.log('Connected with Binance Chain Wallet:', account)
       } catch (error) {
@@ -184,6 +209,7 @@ export function useWalletConnect(
         handleWalletConnection(
           account,
           chainIdToChainName[Number(network.chainId)],
+          Number(network.chainId).toString(),
         )
         console.log('Connected with Coin98 Wallet:', account)
       } catch (error) {
@@ -191,6 +217,37 @@ export function useWalletConnect(
       }
     } else {
       toast.error('Please install Coin98 Wallet!')
+    }
+  }
+
+  const connectCoinBaseWallet = async () => {
+    if ((window as any).ethereum) {
+      try {
+        const ethereum = coinbaseWallet.makeWeb3Provider(
+          DEFAULT_ETH_JSONRPC_URL,
+          DEFAULT_CHAIN_ID,
+        )
+        const provider = new BrowserProvider(ethereum)
+        await ethereum.request({
+          method: 'eth_requestAccounts',
+        })
+        const signer = await provider.getSigner()
+        const network = await provider.getNetwork()
+
+        const account = signer.address
+
+        setProvider(provider)
+        handleWalletConnection(
+          account,
+          chainIdToChainName[Number(network.chainId)],
+          Number(network.chainId).toString(),
+        )
+        console.log('Connected with Coinbase Wallet:', account)
+      } catch (error) {
+        console.error('Coinbase Wallet connection failed:', error)
+      }
+    } else {
+      toast.error('Please install Coinbase Wallet!')
     }
   }
 
@@ -208,6 +265,7 @@ export function useWalletConnect(
         handleWalletConnection(
           account,
           chainIdToChainName[Number(network.chainId)],
+          Number(network.chainId).toString(),
         )
         console.log('Connected with Opera Wallet:', account)
       } catch (error) {
@@ -232,6 +290,7 @@ export function useWalletConnect(
         handleWalletConnection(
           account,
           chainIdToChainName[Number(network.chainId)],
+          Number(network.chainId).toString(),
         )
         console.log('Connected with Brave Wallet:', account)
       } catch (error) {
@@ -256,6 +315,7 @@ export function useWalletConnect(
         handleWalletConnection(
           account,
           chainIdToChainName[Number(network.chainId)],
+          Number(network.chainId).toString(),
         )
         console.log('Connected with Math Wallet:', account)
       } catch (error) {
@@ -289,6 +349,7 @@ export function useWalletConnect(
         handleWalletConnection(
           address,
           chainIdToChainName[Number(parseInt(chainId, 16))],
+          Number(chainId).toString(),
         )
         console.log('Connected with SafePal Wallet:', account)
       } catch (error) {
@@ -313,6 +374,7 @@ export function useWalletConnect(
         handleWalletConnection(
           account,
           chainIdToChainName[Number(network.chainId)],
+          Number(network.chainId).toString(),
         )
         console.log('Connected with TokenPocket:', account)
       } catch (error) {
@@ -323,7 +385,6 @@ export function useWalletConnect(
     }
   }
 
-  const chainId = 'archway-1'
   const connectKeplr = async (): Promise<void> => {
     if (!window.keplr) {
       toast.error('Please install Keplr extension')
@@ -331,12 +392,13 @@ export function useWalletConnect(
     }
 
     try {
+      const chainId = 'cosmoshub-4'
       await window.keplr.enable(chainId)
 
       const offlineSigner: OfflineSigner = window.getOfflineSigner(chainId)
 
       const accounts = await offlineSigner.getAccounts()
-      handleWalletConnection(accounts[0].address, 'archway')
+      handleWalletConnection(accounts[0].address, 'archway', chainId)
 
       // const client = await StargateClient.connect("https://rpc.cosmos.network");
       // const balance = await client.getAllBalances(accountAddress);
@@ -359,7 +421,7 @@ export function useWalletConnect(
       const offlineSigner = window.leap.getOfflineSigner(chainId)
       const accounts = await offlineSigner.getAccounts()
 
-      handleWalletConnection(accounts[0].address, 'archway')
+      handleWalletConnection(accounts[0].address, 'archway', chainId)
 
       console.log('Connected account address: ', accounts[0].address)
     } catch (error) {
@@ -420,7 +482,10 @@ export function useWalletConnect(
       case 'Keplr':
         await connectKeplr()
         break
-      case 'Leap':
+      case 'Coinbase':
+        await connectCoinBaseWallet()
+        break
+      case 'Ledger':
         await connectLeap()
         break
       default:
@@ -432,6 +497,7 @@ export function useWalletConnect(
   return {
     account,
     chain,
+    walletTypeId,
     connectWallet,
     disconnectWallet,
   }
