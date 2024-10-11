@@ -17,7 +17,7 @@ import {
 } from 'firebase/firestore'
 import { firestore, auth } from './firebase'
 
-import { notificationServices } from '@/app/apps/layout'
+import { notificationServices } from '@/app/(apps)/layout'
 
 
 /**

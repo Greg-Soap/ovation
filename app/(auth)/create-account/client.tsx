@@ -61,7 +61,6 @@ export default function AccountForm({ setOptionalLeft }: Props) {
   const [page, setPage] = useState(1)
 
   const [isManualWallet, setIsManualWallet] = useState(false)
-  console.log({ isManualWallet })
 
   const { setUser } = useAppStore()
 
@@ -108,10 +107,9 @@ export default function AccountForm({ setOptionalLeft }: Props) {
       toast.success('Profile created successfully')
       await signUp(data.data?.userData) // for firebase
       setDraft({}) // Clear the draft
-      navigateTo('/apps/discover')
+      navigateTo('/discover')
     },
     onError: (error) => {
-      console.log(error)
       // @ts-ignore
       toast.error(error.response.data.message)
     },
@@ -170,7 +168,6 @@ export default function AccountForm({ setOptionalLeft }: Props) {
             onWalletConnected={(account, chain) => {
               form.setValue('userWallet.walletAddress', account)
               form.setValue('userWallet.chain', chain)
-              handleFormSubmit(form.getValues())
             }}
             onWalletDisconnected={() => {
               form.setValue('userWallet', null)

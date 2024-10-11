@@ -1,4 +1,3 @@
-
 # Ovation - The NFT Social Platform
 
 Ovation is a next-generation NFT social platform that combines features from Twitter, Discord, Coinbase NFT, and OpenSea. It allows users to share, discover, socialize, and trade NFTs all in one place.
@@ -12,7 +11,6 @@ Ovation is a next-generation NFT social platform that combines features from Twi
 5. [Technologies Used](#technologies-used)
 6. [Key Components](#key-components)
 7. [Deployment](#deployment)
-
 
 ## Introduction
 
@@ -46,7 +44,6 @@ To get started with the Ovation project:
 
 For more detailed setup instructions, refer to:
 
-
 ````3:21:README.md
 ## Getting Started
 
@@ -69,7 +66,6 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 ````
 
-
 ## Project Structure
 
 The project follows a Next.js App Router structure:
@@ -77,7 +73,7 @@ The project follows a Next.js App Router structure:
 - `app/`: Contains the main application code
   - `(auth)/`: Authentication-related pages
   - `(landing-page)/`: Landing page components
-  - `apps/`: Main application pages and components
+  - `app/`: Main application pages and components
 - `components/`: Reusable UI components
 - `lib/`: Utility functions and custom hooks
 - `models/`: TypeScript interfaces and types
@@ -97,7 +93,6 @@ The project follows a Next.js App Router structure:
 - Firebase
 
 For a complete list of dependencies, refer to:
-
 
 ```17:63:package.json
   "dependencies": {
@@ -149,7 +144,6 @@ For a complete list of dependencies, refer to:
     "zod": "^3.23.8"
 ```
 
-
 ## Key Components
 
 ### Authentication
@@ -160,11 +154,6 @@ The project uses a combination of traditional email/password authentication and 
 - Account Creation: `app/(auth)/create-account/client.tsx`
 - Wallet Connection: `app/(auth)/create-account/_components/wallet-connect-component.tsx`
 
-
-
 ## Deployment
 
 The easiest way to deploy the Ovation app is using the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme). For more details, refer to the [Next.js deployment documentation](https://nextjs.org/docs/deployment).
-
-
-

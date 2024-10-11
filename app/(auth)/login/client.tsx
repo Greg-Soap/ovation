@@ -51,14 +51,13 @@ export default function LoginForm() {
           localStorage.removeItem('intendedDestination')
           navigateTo(intendedDestination)
         } else {
-          navigateTo('/apps/discover')
+          navigateTo('/discover')
         }
       } else {
         toast.error('Login failed: No token received')
       }
     },
     onError: (error) => {
-      console.log({ error })
       //@ts-ignore
       toast.error(`Login failed: ${error.response?.data?.message}`)
     },
@@ -71,13 +70,12 @@ export default function LoginForm() {
   const { mutate: loginG } = useMutation({
     mutationFn: (code: string) => ovationService.loginGoogle(code),
     onSuccess: (data) => {
-      console.log({ loginGoogle: data })
       if (data?.data?.token) {
         setToken(data?.data?.token)
         setUser(data?.data?.userData)
 
         toast.success('Login successful!')
-        navigateTo('/apps/discover')
+        navigateTo('/discover')
       } else {
         toast.error('Login failed: No token received')
       }

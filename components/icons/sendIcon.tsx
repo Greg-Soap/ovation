@@ -1,6 +1,6 @@
-import { CustomIconProps } from "@/app/types" 
+import { CustomIconProps } from '@/app/types'
 
-export default function SendIcon(props:CustomIconProps) {
+export default function SendIcon(props: CustomIconProps) {
   return (
     <svg
       viewBox="0 0 24 24"

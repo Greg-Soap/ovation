@@ -59,7 +59,7 @@ export function Header({ navLinks = links }: HeaderProps) {
         {showButton && (
           <Button variant={'default'}>
             {isAuthenticated ? (
-              <a href={'/apps/discover'}>Dashboard</a>
+              <a href={'/discover'}>Dashboard</a>
             ) : (
               <a href={'/login'}>Login</a>
             )}

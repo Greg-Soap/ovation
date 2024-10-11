@@ -1,6 +1,5 @@
 import { Button } from '@/components/ui/button'
 import CustomDialog from '@/components/customs/custom-dialog'
-import { isAppDev } from '@/lib/helper-func'
 
 interface WalletConnectionChoiceProps {
   onConnectWallet: () => void

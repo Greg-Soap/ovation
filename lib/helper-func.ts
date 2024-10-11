@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { useLocalStorage } from './use-local-storage'
 import type { UserData } from '@/models/all.model'
-import type { FriendProps } from '@/app/apps/messages/message-container'
+import type { FriendProps } from '@/app/(apps)/messages/message-container'
 import { format, parseISO } from 'date-fns'
 
 function generateRandomString(length = 10) {

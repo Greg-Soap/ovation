@@ -43,6 +43,7 @@ function CustomDialog({
   const handleTriggerClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
+
     setIsOpen(true)
   }
 
@@ -51,7 +52,7 @@ function CustomDialog({
       <AlertDialogTrigger asChild onClick={handleTriggerClick}>
         {trigger}
       </AlertDialogTrigger>
-      <AlertDialogContent className="w-[90%] rounded-md">
+      <AlertDialogContent className="w-[90%] rounded-md border-[#FFFFFF14]">
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>

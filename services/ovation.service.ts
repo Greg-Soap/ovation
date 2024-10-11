@@ -64,7 +64,7 @@ class OvationService {
   // Profile Management
   static async getProfile() {
     const response = await api.get<{ data: ProfileData; message: string }>('/Profile')
-    return response.data
+    return response.data?.data
   }
 
   static async getUserProfile(username: string) {
@@ -126,6 +126,10 @@ class OvationService {
 
   static getExperience(userId: string) {
     return api.get<{ data: UserExperience[]; message: string }>(`/Profile/experience/${userId}`)
+  }
+
+  static deleteExperience(id: string) {
+    return api.delete(`/Profile/experience/${id}`)
   }
 
   // Badges and NFTs
