@@ -31,12 +31,10 @@ export default function FavouriteNft({ userId }: { userId: string }) {
         <div className="grid grid-cols-3 gap-[6px]">
           {favouriteNfts?.data?.data?.slice(0, 3).map((nft: FavouriteNft) => (
             <div key={nft.id} className="relative group">
-              <Image
+              <img
                 src={getImageSrc(nft.imageUrl)}
                 alt={nft.name}
-                width={100}
-                height={100}
-                className="w-full h-auto object-cover rounded-md"
+                className="w-[100px] h-[100px] object-center object-cover rounded-md"
               />
               <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 bg-black  text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
                 {getNFTName(nft.name)}
