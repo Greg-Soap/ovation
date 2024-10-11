@@ -91,99 +91,97 @@ export default function Aside() {
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      {user && (
-        <aside className="fixed z-50 lg:fixed py-3 lg:py-0 flex flex-col items-center justify-between lg:justify-start lg:gap-7 lg:pt-4 min-w-[310px] w-full lg:w-[310px] lg:border-r border-[#1A1A1A] other-link overflow-scroll bg-[#232227] lg:bg-[#111115] bottom-0">
-          <ErrorBoundary FallbackComponent={ErrorFallback}>
-            {token && (
-              <div className="hidden lg:flex w-[90%] items-center justify-between border border-[#333333] bg-[#18181C] p-3 rounded-[8px]">
-                <div className="flex items-center gap-[7px]">
-                  <CustomAvatar
-                    src={user?.profileImage}
-                    alt="User Display Picture"
-                    size="sm"
-                  />
-                  <div className="flex flex-col">
-                    <p className="text-xs font-semibold leading-5 ">
-                      {user?.displayName}
-                    </p>
-                    <p className="text-[10px] leading-5 font-medium text-light">
-                      {user?.wallets[0]?.walletAddress?.replace(
-                        /^(.{6})(.*)(.{4})$/,
-                        '$1***$3',
-                      )}
-                    </p>
-                  </div>
-                </div>
-                <CustomPopover
-                  trigger={
-                    <button className="p-1 rounded-full" type="button">
-                      <More size={24} color="white" variant="Outline" />
-                    </button>
-                  }
-                  content={
-                    <CustomDialog
-                      trigger={
-                        <Button
-                          variant={'ghost'}
-                          className="py-[10px] w-full text-red-500 hover:text-red-600 hover:bg-transparent"
-                        >
-                          Logout {user?.username}
-                        </Button>
-                      }
-                      title="Confirm Logout"
-                      description="Are you sure you want to log out?"
-                      confirmText="Logout"
-                      cancelText="Cancel"
-                      onConfirm={handleLogout}
-                    />
-                  }
-                  side="bottom"
-                  className="w-fit bg-[#232227] flex flex-col items-start border-none text-base py-2"
+      <aside className="fixed z-50 lg:fixed py-3 lg:py-0 flex flex-col items-center justify-between lg:justify-start lg:gap-7 lg:pt-4 min-w-[310px] w-full lg:w-[310px] lg:border-r border-[#1A1A1A] other-link overflow-scroll bg-[#232227] lg:bg-[#111115] bottom-0">
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          {token && (
+            <div className="hidden lg:flex w-[90%] items-center justify-between border border-[#333333] bg-[#18181C] p-3 rounded-[8px]">
+              <div className="flex items-center gap-[7px]">
+                <CustomAvatar
+                  src={user?.profileImage}
+                  alt="User Display Picture"
+                  size="sm"
                 />
+                <div className="flex flex-col">
+                  <p className="text-xs font-semibold leading-5 ">
+                    {user?.displayName}
+                  </p>
+                  <p className="text-[10px] leading-5 font-medium text-light">
+                    {user?.wallets[0]?.walletAddress?.replace(
+                      /^(.{6})(.*)(.{4})$/,
+                      '$1***$3',
+                    )}
+                  </p>
+                </div>
               </div>
-            )}
-          </ErrorBoundary>
-
-          <ErrorBoundary FallbackComponent={ErrorFallback}>
-            <div className="w-full h-fit lg:h-[550px] lg:w-[85%] flex flex-row lg:flex-col justify-between lg:justify-start px-6 gap-2">
-              {menuItems.map((item, index) => {
-                const isActive = currentPath.includes(item.path)
-                const Icon = item.icon
-
-                return (
-                  <Button
-                    type="button"
-                    className={`w-fit lg:w-full ${isActive ? 'text-primary lg:text-light' : 'text-light'}  items-center justify-start gap-2 p-3 lg:py-7 lg:px-[30px] rounded-[50px] hover:bg-[#18181C] focus:bg-[#232227] group transition-all duration-300 ${
-                      isActive
-                        ? 'bg-transparent lg:bg-[#232227]'
-                        : 'bg-transparent'
-                    }`}
-                    key={index}
-                    asChild
-                  >
-                    <a href={item.path}>
-                      <Icon
-                        size={24}
-                        variant={isActive ? 'Bold' : 'Outline'}
-                        color={isActive ? colors.primary.DEFAULT : colors.light}
-                      />
-                      <p
-                        className={`hidden lg:flex items-center gap-2 text-lg group-hover: group-focus:text-gray ${isActive ? ' font-medium' : 'text-light'}`}
+              <CustomPopover
+                trigger={
+                  <button className="p-1 rounded-full" type="button">
+                    <More size={24} color="white" variant="Outline" />
+                  </button>
+                }
+                content={
+                  <CustomDialog
+                    trigger={
+                      <Button
+                        variant={'ghost'}
+                        className="py-[10px] w-full text-red-500 hover:text-red-600 hover:bg-transparent"
                       >
-                        {item.text}
-                      </p>
-                    </a>
-                  </Button>
-                )
-              })}
+                        Logout {user?.username}
+                      </Button>
+                    }
+                    title="Confirm Logout"
+                    description="Are you sure you want to log out?"
+                    confirmText="Logout"
+                    cancelText="Cancel"
+                    onConfirm={handleLogout}
+                  />
+                }
+                side="bottom"
+                className="w-fit bg-[#232227] flex flex-col items-start border-none text-base py-2"
+              />
             </div>
-          </ErrorBoundary>
+          )}
+        </ErrorBoundary>
 
-          <ErrorBoundary FallbackComponent={ErrorFallback}>
-            <FeedbackButton className="hidden lg:flex" />
-          </ErrorBoundary>
-        </aside>
-      )}
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <div className="w-full h-fit lg:h-[550px] lg:w-[85%] flex flex-row lg:flex-col justify-between lg:justify-start px-6 gap-2">
+            {menuItems.map((item, index) => {
+              const isActive = currentPath.includes(item.path)
+              const Icon = item.icon
+
+              return (
+                <Button
+                  type="button"
+                  className={`w-fit lg:w-full ${isActive ? 'text-primary lg:text-light' : 'text-light'}  items-center justify-start gap-2 p-3 lg:py-7 lg:px-[30px] rounded-[50px] hover:bg-[#18181C] focus:bg-[#232227] group transition-all duration-300 ${
+                    isActive
+                      ? 'bg-transparent lg:bg-[#232227]'
+                      : 'bg-transparent'
+                  }`}
+                  key={index}
+                  asChild
+                >
+                  <a href={item.path}>
+                    <Icon
+                      size={24}
+                      variant={isActive ? 'Bold' : 'Outline'}
+                      color={isActive ? colors.primary.DEFAULT : colors.light}
+                    />
+                    <p
+                      className={`hidden lg:flex items-center gap-2 text-lg group-hover: group-focus:text-gray ${isActive ? ' font-medium' : 'text-light'}`}
+                    >
+                      {item.text}
+                    </p>
+                  </a>
+                </Button>
+              )
+            })}
+          </div>
+        </ErrorBoundary>
+
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <FeedbackButton className="hidden lg:flex" />
+        </ErrorBoundary>
+      </aside>
     </ErrorBoundary>
   )
 }
