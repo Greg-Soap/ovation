@@ -50,7 +50,7 @@ export default function LoginForm() {
           localStorage.removeItem('intendedDestination')
           navigateTo(intendedDestination)
         } else {
-          navigateTo('/apps/discover')
+          navigateTo('/discover')
         }
       } else {
         toast.error('Login failed: No token received')
@@ -76,7 +76,7 @@ export default function LoginForm() {
         setUser(data?.data?.userData)
 
         toast.success('Login successful!')
-        navigateTo('/apps/discover')
+        navigateTo('/discover')
       } else {
         toast.error('Login failed: No token received')
       }
