@@ -32,7 +32,7 @@ export function NFTCard({
     {},
   )
   const notUser =
-    username != draft?.user.username || !token || username != 'profile'
+    username != draft?.user?.username || !token || username != 'profile'
 
   const { data: favouriteNfts } = useQuery({
     queryKey: ['favouriteNft', userId],
