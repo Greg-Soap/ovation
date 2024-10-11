@@ -124,7 +124,7 @@ export interface ProfileData {
   createdDate: string
   email: string
   profile: {
-    displayName: string
+    displayName: string | null
     username: string
     birthDate: string | null
     location: string | null
@@ -158,7 +158,7 @@ export interface UserData {
   userId: string
   username: string
   email: string
-  displayName: string
+  displayName: string | null
   birthDate: string | null
   location: string | null
   bio: string | null

@@ -108,7 +108,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
 
       toast.success('Profile created successfully')
       setDraft({}) // Clear the draft
-      navigateTo('/apps/discover')
+      navigateTo('/discover')
     },
     onError: (error) => {
       console.log(error)
