@@ -27,7 +27,7 @@ export default function Hamburger() {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
   const navigateTo = useAnchorNavigation()
-  const { user, clearUser } = useAppStore()
+  const { user, clearUser, notUser } = useAppStore()
 
   const handleLogout = () => {
     ovationService.logout()
@@ -44,17 +44,41 @@ export default function Hamburger() {
     queryFn: () => ovationService.getProfile(),
   })
 
-  const navLinks = [
-    { href: '/discover', icon: LocationDiscover, label: 'Discover' },
-    { href: '/', icon: Profile, label: 'Profile' },
-    { href: '/settings', icon: Setting2, label: 'Settings' },
-    { href: '/messages', icon: Message, label: 'Messages' },
-    {
-      href: '/notification',
-      icon: NotificationBing,
-      label: 'Notification',
-    },
-  ]
+  const navLinks = notUser
+    ? [
+        {
+          icon: LocationDiscover,
+          text: 'Discover',
+          path: '/discover',
+        },
+        {
+          icon: Profile,
+          text: 'Profile',
+          path: '/profile',
+        },
+        {
+          icon: Setting2,
+          text: 'Settings',
+          path: '/settings',
+        },
+        {
+          icon: Message,
+          text: 'Messages',
+          path: '/messages',
+        },
+        {
+          icon: NotificationBing,
+          text: 'Notification',
+          path: '/notification',
+        },
+      ]
+    : [
+        {
+          icon: LocationDiscover,
+          text: 'Discover',
+          path: '/discover',
+        },
+      ]
 
   return (
     <div className="lg:hidden">
@@ -108,13 +132,13 @@ export default function Hamburger() {
                 </div>
               </div>
               <ul className="gap-8 pt-10 font-bold flex  flex-col text-lg">
-                {navLinks.map(({ href, icon: Icon, label }) => {
-                  const isActive = pathname === href
+                {navLinks.map(({ path, icon: Icon, text }) => {
+                  const isActive = pathname === path
                   return (
                     <a
-                      key={href}
+                      key={path}
                       onClick={handleLinkClick}
-                      href={href}
+                      href={path}
                       className="w-full items-center justify-start flex gap-2"
                     >
                       <Icon
@@ -122,7 +146,7 @@ export default function Hamburger() {
                         color={colors.primary.DEFAULT}
                         variant={isActive ? 'Bold' : 'Outline'}
                       />
-                      {label}
+                      {text}
                     </a>
                   )
                 })}

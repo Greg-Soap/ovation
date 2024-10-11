@@ -10,9 +10,10 @@ import { Header } from './_components/header'
 import { Ranking } from './_components/ranking'
 import { MostViewed } from './_components/most-viewed'
 import { useAppStore } from '@/store/use-app-store'
+import { LoginToView } from './_components/login-to-view'
 
 export default function Page() {
-  const { user } = useAppStore()
+  const { user, notUser } = useAppStore()
 
   const { data: experiences } = useQuery({
     queryKey: ['experiences'],
@@ -28,20 +29,26 @@ export default function Page() {
     <div className="flex flex-col w-full bg-[#111115] h-fit items-center justify-center">
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <Header />
-        <GetStarted
-          user={user as UserData}
-          socials={socials?.data?.data || {}}
-          experiences={experiences?.data?.data || []}
-        />
+        {user && (
+          <GetStarted
+            user={user as UserData}
+            socials={socials?.data?.data || {}}
+            experiences={experiences?.data?.data || []}
+          />
+        )}
         <div className="flex flex-col lg:grid lg:grid-cols-3 w-[95%] gap-5">
           <div className="col-span-2 mt-10 mb-[20px] flex flex-col gap-10">
             <ErrorBoundary FallbackComponent={ErrorFallback}>
               <Ranking />
             </ErrorBoundary>
           </div>
-          <ErrorBoundary FallbackComponent={ErrorFallback}>
-            <MostViewed />
-          </ErrorBoundary>
+          {notUser ? (
+            <LoginToView />
+          ) : (
+            <ErrorBoundary FallbackComponent={ErrorFallback}>
+              <MostViewed />
+            </ErrorBoundary>
+          )}
         </div>
       </ErrorBoundary>
     </div>

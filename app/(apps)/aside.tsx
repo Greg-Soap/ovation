@@ -27,7 +27,7 @@ export default function Aside() {
   const navigateTo = useAnchorNavigation()
   const currentPath = usePathname()
   const token = getToken()
-  const { user, clearUser } = useAppStore()
+  const { user, clearUser, notUser } = useAppStore()
 
   const handleLogout = () => {
     ovationService.logout()
@@ -43,7 +43,7 @@ export default function Aside() {
     navigateTo('/')
   }
 
-  const menuItems = token
+  const menuItems = !notUser
     ? [
         {
           icon: LocationDiscover,
@@ -76,11 +76,6 @@ export default function Aside() {
           icon: LocationDiscover,
           text: 'Discover',
           path: '/discover',
-        },
-        {
-          icon: Profile,
-          text: 'Profile',
-          path: '/profile',
         },
       ]
 

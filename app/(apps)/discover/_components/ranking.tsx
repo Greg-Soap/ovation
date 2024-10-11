@@ -5,9 +5,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { formatUsername } from '@/lib/helper-func'
 import type { DiscoverUserData } from '@/models/all.model'
 import ovationService from '@/services/ovation.service'
+import { useAppStore } from '@/store/use-app-store'
 import { useQuery } from '@tanstack/react-query'
+import { LoginToView } from './login-to-view'
 
 export function Ranking() {
+  const { notUser } = useAppStore()
+
   const { data: creators, isLoading: creatorsLoading } = useQuery({
     queryKey: ['creators'],
     queryFn: () => ovationService.getCreators(),
@@ -61,28 +65,36 @@ export function Ranking() {
           </TabsList>
 
           <TabsContent value="creators">
-            {creatorsLoading ? (
+            {notUser ? (
+              <LoginToView />
+            ) : creatorsLoading ? (
               <MiniLoader />
             ) : (
               renderHoldersList(creators || [], 'creators')
             )}
           </TabsContent>
           <TabsContent value="nftHolders">
-            {nftHoldersLoading ? (
+            {notUser ? (
+              <LoginToView />
+            ) : nftHoldersLoading ? (
               <MiniLoader />
             ) : (
               renderHoldersList(nftHolders || [], 'nftHolders')
             )}
           </TabsContent>
           <TabsContent value="founderHolders">
-            {founderHoldersLoading ? (
+            {notUser ? (
+              <LoginToView />
+            ) : founderHoldersLoading ? (
               <MiniLoader />
             ) : (
               renderHoldersList(founderHolders || [], 'founderHolders')
             )}
           </TabsContent>
           <TabsContent value="mostFollowed">
-            {mostFollowedLoading ? (
+            {notUser ? (
+              <LoginToView />
+            ) : mostFollowedLoading ? (
               <MiniLoader />
             ) : (
               renderHoldersList(mostFollowed || [], 'mostFollowed')
