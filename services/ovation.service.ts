@@ -115,6 +115,10 @@ class OvationService {
     return api.delete(`/Profile/wallet/${walletId}`)
   }
 
+  static search(query: string) {
+    return api.get(`/Search/user?query=${query}`)
+  }
+
   // Experience
   static addExperience(data: UserExperience) {
     return api.post('/Profile/experience', data)
