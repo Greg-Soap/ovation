@@ -51,33 +51,43 @@ export function Header() {
         backgroundRepeat: 'no-repeat',
       }}
     >
-      <input
-        type="text"
-        className="bg-white text-black md:w-[720px] w-[90%] h-[53.36px] pl-[47.54px] placeholder:text-[13.14px] rounded-[8.21px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-        placeholder="Search assets"
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-      />
-      {/* <SearchIcon size={20} color="black" className="absolute  top-1/2  z-50" /> */}
+      <div className="relative md:w-[420px] w-full h-[53px]">
+        <input
+          type="text"
+          className="bg-white text-black md:w-[420px] w-[90%] h-[53px] pl-[47px] placeholder:text-[13px] rounded-[8px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+          placeholder="Search users"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <SearchIcon
+          size={20}
+          color="black"
+          className="absolute top-1/2 left-6 md:left-4 transform -translate-y-1/2 z-50"
+        />
+      </div>
 
       {debouncedQuery && (
         <div
-          className="absolute top-full left-1/2 transform -translate-x-1/2 mt-4 z-50"
+          className="absolute w-[80%] md:w-[420px] rounded-[8px] top-[160px] left-1/2 transform -translate-x-1/2 mt-1 z-50"
           ref={divRef}
         >
           <div
             className={`${
               hasResults ? 'bg-black' : ''
-            } rounded-[20px] p-[20px] md:w-[720px] w-[90%] max-h-[400px] overflow-auto ${
-              hasResults ? 'border border-grey' : ''
+            } rounded-[8px] p-[10px] md:w-[420px] w-full max-h-[400px] overflow-auto ${
+              hasResults ? 'border border-[#FFFFFF14]' : ''
             }`}
           >
             {isLoading ? (
-              <MiniLoader size="average" />
+              <div className="flex flex-wrap gap-4 py-4 px-4 bg-[#18181C] rounded-[8px] items-center justify-between border border-[#FFFFFF14]">
+                <MiniLoader size="average" />
+              </div>
             ) : !hasResults ? (
-              <p className="text-center font-bold">
-                No User found with the username
-              </p>
+              <div className="flex flex-wrap gap-4 py-4 px-4 bg-[#18181C] rounded-[8px] items-center justify-between border border-[#FFFFFF14]">
+                <p className="text-center font-bold">
+                  No user found with the username
+                </p>
+              </div>
             ) : (
               searchResult?.data?.data?.map((user: UserData) => (
                 <UserSearchResult key={user.userId} user={user} />
@@ -93,11 +103,14 @@ export function Header() {
 function UserSearchResult({ user }: { user: UserData }) {
   return (
     <div className="w-full mb-[20px]">
-      <div className="flex flex-wrap gap-4 py-4 px-4 bg-[#18181C] rounded-[20px] items-center justify-between border border-[#35353880]">
+      <div className="flex flex-wrap gap-4 py-4 px-4 bg-[#18181C] rounded-[8px] items-center justify-between border border-[#FFFFFF14]">
         <div className="flex items-center gap-2">
-          <div className="w-[30px] h-[30px] rounded-full overflow-hidden border-2 border-white">
-            <CustomAvatar src={user?.profileImage} size="sm" />
-          </div>
+          <CustomAvatar
+            src={user?.profileImage}
+            size="lg"
+            className="object-cover object-center"
+          />
+
           <div className="flex flex-col">
             <a href={`/${user?.username}`} className="text-sm font-semibold">
               {user?.displayName}
