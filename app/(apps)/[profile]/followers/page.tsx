@@ -9,17 +9,21 @@ import ovationService from '@/services/ovation.service'
 
 export default function FollowersPage() {
   const { user, isUser } = useAppStore()
-  const { username } = useParams()
+  const { profile } = useParams()
+  const username = profile as string
 
   const { data: profileData } = useQuery({
     queryKey: ['profile', username],
     queryFn: () => ovationService.getUserProfile(username as string),
     enabled: !!username,
   })
+
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <FollowersFollowing
-        userId={user?.userId as string}
+        userId={
+          isUser ? (user?.userId as string) : (profileData?.userId as string)
+        }
         username={isUser ? user?.username : profileData?.username}
       />
     </ErrorBoundary>

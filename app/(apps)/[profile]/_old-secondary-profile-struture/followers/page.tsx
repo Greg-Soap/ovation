@@ -18,7 +18,6 @@ export default function FollowersPage() {
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <FollowersFollowing
         userId={profileData?.userId as string}
-        secondaryProfile={true}
         username={username as string}
       />
     </ErrorBoundary>

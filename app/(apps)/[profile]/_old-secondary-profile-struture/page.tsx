@@ -154,6 +154,7 @@ export default function SecondaryProfile() {
               experienceData={experienceData?.data?.data || []}
               isLoading={isLoading}
               secondaryProfile={true}
+              isUser={false}
             />
           </Suspense>
         </ErrorBoundary>
