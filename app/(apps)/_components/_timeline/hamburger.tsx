@@ -27,7 +27,7 @@ export default function Hamburger() {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
   const navigateTo = useAnchorNavigation()
-  const { user, clearUser, notUser } = useAppStore()
+  const { user, clearUser } = useAppStore()
 
   const handleLogout = () => {
     ovationService.logout()
@@ -44,41 +44,33 @@ export default function Hamburger() {
     queryFn: () => ovationService.getProfile(),
   })
 
-  const navLinks = !notUser
-    ? [
-        {
-          icon: LocationDiscover,
-          text: 'Discover',
-          path: '/discover',
-        },
-        {
-          icon: Profile,
-          text: 'Profile',
-          path: '/profile',
-        },
-        {
-          icon: Setting2,
-          text: 'Settings',
-          path: '/settings',
-        },
-        {
-          icon: Message,
-          text: 'Messages',
-          path: '/messages',
-        },
-        {
-          icon: NotificationBing,
-          text: 'Notification',
-          path: '/notification',
-        },
-      ]
-    : [
-        {
-          icon: LocationDiscover,
-          text: 'Discover',
-          path: '/discover',
-        },
-      ]
+  const navLinks = [
+    {
+      icon: LocationDiscover,
+      text: 'Discover',
+      path: '/discover',
+    },
+    {
+      icon: Profile,
+      text: 'Profile',
+      path: '/profile',
+    },
+    {
+      icon: Setting2,
+      text: 'Settings',
+      path: '/settings',
+    },
+    {
+      icon: Message,
+      text: 'Messages',
+      path: '/messages',
+    },
+    {
+      icon: NotificationBing,
+      text: 'Notification',
+      path: '/notification',
+    },
+  ]
 
   return (
     <div className="lg:hidden">
