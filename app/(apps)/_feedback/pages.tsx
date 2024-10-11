@@ -66,7 +66,7 @@ export function FirstPage({ form }: { form: any }) {
                       : field.value?.filter((value: any) => value !== item.id)
                     field.onChange(updatedItems)
                   }}
-                  className="border-[#B3B3B3]"
+                  className="border-light"
                 />
                 <span className="text-sm text-light">{item.label}</span>
               </div>

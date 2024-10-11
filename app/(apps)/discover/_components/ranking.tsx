@@ -1,7 +1,6 @@
 import CustomAvatar from '@/components/customs/custom-avatar'
 import VerifyIcon from '@/components/icons/verifyIcon'
 import MiniLoader from '@/components/mini-loader'
-import { Avatar } from '@/components/ui/avatar'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { formatUsername } from '@/lib/helper-func'
 import type { DiscoverUserData } from '@/models/all.model'

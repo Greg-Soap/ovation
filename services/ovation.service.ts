@@ -128,6 +128,10 @@ class OvationService {
     return api.get<{ data: UserExperience[]; message: string }>(`/Profile/experience/${userId}`)
   }
 
+  static deleteExperience(id: string) {
+    return api.delete(`/Profile/experience/${id}`)
+  }
+
   // Badges and NFTs
   static getBadges(userId: string) {
     return api.get<{ data: Badge[]; message: string }>(`/Profile/badge/${userId}?page=1`)

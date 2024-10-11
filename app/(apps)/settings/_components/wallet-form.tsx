@@ -157,7 +157,6 @@ export default function WalletForm() {
               confirmText="Yes, disconnect"
               cancelText="No, keep it"
               onConfirm={() => {
-                console.log(wallet)
                 deleteWallet(wallet?.id ?? '')
               }}
             />
@@ -281,7 +280,7 @@ export default function WalletForm() {
               className="w-full ml-2 h-[46px] flex items-center gap-[7px] text-[13px] font-semibold  border-[#29292F] rounded-full"
               onClick={() => setAddingWallet(true)}
             >
-              Add new wallet <PlusIcon size={16} />
+              Add Wallet Manually <PlusIcon size={16} />
             </Button>
           </div>
         )}

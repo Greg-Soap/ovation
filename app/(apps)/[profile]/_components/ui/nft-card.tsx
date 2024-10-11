@@ -6,7 +6,6 @@ import ovationService from '@/services/ovation.service'
 import { useAppStore } from '@/store/use-app-store'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { EllipsisVertical } from 'lucide-react'
-import Image from 'next/image'
 import { toast } from 'sonner'
 
 export function NFTCard({
@@ -124,12 +123,10 @@ export function NFTCard({
         </div>
       )}
       <div className="relative pt-[100%]">
-        <Image
+        <img
           src={getImageSrc()}
           alt="NFT Preview"
-          layout="fill"
-          objectFit="cover"
-          className="absolute top-0 left-0 w-full h-full"
+          className="absolute top-0 left-0 w-full h-full object-cover"
         />
       </div>
       <div className="flex flex-col justify-between bg-[#111115] border-t border-[#FFFFFF0D] p-3 flex-grow">

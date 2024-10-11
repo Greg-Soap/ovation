@@ -24,33 +24,34 @@ export default function SocialForm({ userId }: { userId: string }) {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      linkedin: '',
+      linkedIn: '',
       twitter: '',
       website: '',
       lens: '',
-      farcaster: '',
+      forcaster: '',
       blur: '',
       foundation: '',
-      magiceden: '',
-      ethco: '',
+      magic: '',
+      ethico: '',
     },
   })
 
   useEffect(() => {
-    if (socialLinksData) {
+    if (socialLinksData && !isSocialLinksLoading) {
       form.reset({
-        linkedin: socialLinksData.linkedIn || '',
+        linkedIn: socialLinksData.linkedIn || '',
         twitter: socialLinksData.twitter || '',
         website: socialLinksData.website || '',
         lens: socialLinksData.lens || '',
-        farcaster: socialLinksData.forcaster || '',
+        forcaster: socialLinksData.forcaster || '',
         blur: socialLinksData.blur || '',
         foundation: socialLinksData.foundation || '',
-        magiceden: socialLinksData.magic || '',
-        ethco: socialLinksData.ethico || '',
+        magic: socialLinksData.magic || '',
+        ethico: socialLinksData.ethico || '',
       })
     }
-  }, [socialLinksData, form])
+  }, [socialLinksData, form, isSocialLinksLoading])
+
   const { mutate, isPending } = useMutation({
     mutationFn: (data: FormValues) => ovationService.updateSocials(data),
     onSuccess: () => {
@@ -67,11 +68,11 @@ export default function SocialForm({ userId }: { userId: string }) {
       foundation: data.foundation || '',
       twitter: data.twitter || '',
       website: data.website || '',
-      linkedIn: data.linkedin || '',
+      linkedIn: data.linkedIn || '',
       lens: data.lens || '',
-      forcaster: data.farcaster || '',
-      ethico: data.ethco || '',
-      magic: data.magiceden || '',
+      forcaster: data.forcaster || '',
+      ethico: data.ethico || '',
+      magic: data.magic || '',
     }
 
     mutate(formattedData)
@@ -95,18 +96,21 @@ export default function SocialForm({ userId }: { userId: string }) {
             form={form}
             showMessage
           >
-            <div className="h-[47px] flex items-center border border-[#4D4D4D] rounded-full px-3 py-2 gap-2">
-              <Image
-                src={platform.imgSrc}
-                alt={platform.label}
-                width={25}
-                height={25}
-              />
-              <Input
-                placeholder={`Enter ${platform.label} link here`}
-                className="focus:border-none focus:outline-none focus:ring-0 focus-visible:ring-0 border-none h-fit px-0 py-2 text-sm "
-              />
-            </div>
+            {(field) => (
+              <div className="h-[47px] flex items-center border border-[#4D4D4D] rounded-full px-3 py-2 gap-2">
+                <Image
+                  src={platform.imgSrc}
+                  alt={platform.label}
+                  width={25}
+                  height={25}
+                />
+                <Input
+                  {...field}
+                  placeholder={`Enter ${platform.label} link here`}
+                  className="focus:border-none focus:outline-none focus:ring-0 focus-visible:ring-0 border-none h-fit px-0 py-2 text-sm "
+                />
+              </div>
+            )}
           </FormField>
         ))}
         <SettingsChange isLoading={isPending} />
@@ -130,7 +134,7 @@ const urlRefinement = (val: string | undefined, errorMessage: string) => {
 }
 
 const formSchema = z.object({
-  linkedin: z
+  linkedIn: z
     .string()
     .optional()
     .refine((val) => urlRefinement(val, 'Invalid LinkedIn URL'), {
@@ -164,11 +168,11 @@ const formSchema = z.object({
     .refine((val) => !val || val.includes('lenster.xyz/u/'), {
       message: "Lens URL should include 'lenster.xyz/u/'",
     }),
-  farcaster: z
+  forcaster: z
     .string()
     .optional()
-    .refine((val) => urlRefinement(val, 'Invalid Farcaster URL'), {
-      message: 'Please enter a valid URL for Farcaster',
+    .refine((val) => urlRefinement(val, 'Invalid Forcaster URL'), {
+      message: 'Please enter a valid URL for Forcaster',
     }),
   blur: z
     .string()
@@ -189,17 +193,14 @@ const formSchema = z.object({
     .refine((val) => !val || val.includes('foundation.app/@'), {
       message: "Foundation URL should include 'foundation.app/@'",
     }),
-  magiceden: z
+  magic: z
     .string()
     .optional()
     .refine((val) => urlRefinement(val, 'Invalid Magic Eden URL'), {
       message:
         "Please enter a valid Magic Eden URL (e.g., 'magiceden.io/u/username')",
-    })
-    .refine((val) => !val || val.includes('magiceden.io/u/'), {
-      message: "Magic Eden URL should include 'magiceden.io/u/'",
     }),
-  ethco: z
+  ethico: z
     .string()
     .optional()
     .refine((val) => urlRefinement(val, 'Invalid Ethco URL'), {
@@ -216,7 +217,7 @@ interface SocialPlatform {
 
 const socialPlatforms: SocialPlatform[] = [
   {
-    name: 'linkedin',
+    name: 'linkedIn',
     imgSrc: '/assets/images/settings/social/linked-in.png',
     label: 'LinkedIn',
   },
@@ -236,9 +237,9 @@ const socialPlatforms: SocialPlatform[] = [
     label: 'Lens',
   },
   {
-    name: 'farcaster',
+    name: 'forcaster',
     imgSrc: '/assets/images/settings/social/farcaster.png',
-    label: 'Farcaster',
+    label: 'Forcaster',
   },
   {
     name: 'blur',
@@ -251,12 +252,12 @@ const socialPlatforms: SocialPlatform[] = [
     label: 'Foundation',
   },
   {
-    name: 'magiceden',
+    name: 'magic',
     imgSrc: '/assets/images/settings/social/m-eden.png',
     label: 'MagicEden',
   },
   {
-    name: 'ethco',
+    name: 'ethico',
     imgSrc: '/assets/images/settings/social/eth-co.png',
     label: 'EthCo',
   },

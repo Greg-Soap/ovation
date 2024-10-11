@@ -359,7 +359,7 @@ export default function TimelinePosts() {
                 {postActions.map((action, index) => (
                   <Button
                     variant="default"
-                    className={`flex gap-1 bg-transparent outline-none px-1 py-0 rounded-none text-xs leading-4 ${action.isActive ? 'text-[#cff073cc] fill-[#cff07366] stroke-[#cff07366]' : 'text-light fill-[#B3B3B3] stroke-[#B3B3B3]'}`}
+                    className={`flex gap-1 bg-transparent outline-none px-1 py-0 rounded-none text-xs leading-4 ${action.isActive ? 'text-[#cff073cc] fill-[#cff07366] stroke-[#cff07366]' : 'text-light fill-light stroke-light'}`}
                     key={index}
                     onClick={() => handleClick(index)}
                   >

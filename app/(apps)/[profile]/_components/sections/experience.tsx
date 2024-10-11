@@ -19,7 +19,7 @@ export default function Experience({ data }: { data: UserExperience[] }) {
               className="hover:bg-transparent"
               onClick={() => navigateTo('/settings?tab=Experience')}
             >
-              <PlusIcon className="w-[14px] h-[14px] stroke-[#CFF073]" />
+              <PlusIcon className="w-[14px] h-[14px] stroke-primary" />
             </Button>
           </div>
         )}
@@ -37,8 +37,17 @@ export default function Experience({ data }: { data: UserExperience[] }) {
         </div>
       ) : (
         data.map((experienceItem: UserExperience) => (
-          <div className="flex gap-4 w-full" key={experienceItem?.id}>
-            <Briefcase className="w-[43px] h-[43px] stroke-[#CFF073]" />
+          <div
+            className="flex items-start gap-4 w-full"
+            key={experienceItem?.id}
+          >
+            <div className="w-[43px] h-[43px] flex items-center justify-center">
+              <Briefcase
+                variant="Bold"
+                size={43}
+                className="w-[43px] h-[43px] stroke-primary"
+              />
+            </div>
             <div className="flex flex-col gap-[13px]">
               <div className="flex flex-col gap-[3px]">
                 <p className=" text-lg font-semibold">{experienceItem?.role}</p>

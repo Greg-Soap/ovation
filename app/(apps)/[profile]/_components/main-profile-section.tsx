@@ -74,7 +74,7 @@ export default function MainProfileSection({
             <TabsTrigger
               key={value}
               value={value}
-              className="text-xs text-lighter px-5 py-[10px] bg-transparent border-b-2 border-transparent font-normal data-[state=active]:bg-transparent data-[state=active]:border-[#CFF073] data-[state=active]: transition-all duration-300"
+              className="text-xs text-lighter px-5 py-[10px] bg-transparent border-b-2 border-transparent font-normal data-[state=active]:bg-transparent data-[state=active]:border-primary data-[state=active]: transition-all duration-300"
             >
               {label}
             </TabsTrigger>

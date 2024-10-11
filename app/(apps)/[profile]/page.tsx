@@ -161,7 +161,7 @@ export default function Page() {
                 className="bg-[#333726] p-[9px] border border-[#507100]"
                 onClick={openDM}
               >
-                <AsideMsgIcon className="w-5 h-5 stroke-black fill-[#CFF073]" />
+                <AsideMsgIcon className="w-5 h-5 stroke-black fill-primary" />
               </Button>
               <Button
                 variant={'default'}
@@ -174,8 +174,8 @@ export default function Page() {
                 py-[9px] px-[13px] text-xs font-semibold border
                 ${
                   profileData?.isFollowing
-                    ? 'bg-[#333726]  border-[#E6E6E64D] hover:bg-red-900 hover:text-red-200 hover:border-red-700'
-                    : ' text-[#0B0A10] border-[#E6E6E64D]'
+                    ? 'bg-primary-bright  border-foreground hover:bg-red-900 hover:text-red-200 hover:border-red-700'
+                    : ' text-primary-foreground border-[#E6E6E64D]'
                 }
                 transition-colors duration-200
                 ${profileData?.isFollowing ? 'group' : ''}

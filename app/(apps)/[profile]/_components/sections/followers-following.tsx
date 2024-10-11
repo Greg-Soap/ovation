@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { usePathname } from 'next/navigation'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
@@ -19,10 +18,8 @@ import { useIsDesktop, useIsMobileToTablet } from '@/lib/use-breakpoints'
 export default function FollowersFollowing({
   username,
   userId,
-  secondaryProfile,
 }: {
   username?: string
-  secondaryProfile?: boolean
   userId: string
 }) {
   const navigateTo = useAnchorNavigation()
@@ -38,11 +35,7 @@ export default function FollowersFollowing({
 
   const handleTabChange = (value: string) => {
     setActiveTab(value as 'followers' | 'following')
-    if (secondaryProfile) {
-      navigateTo(`/${username}/${value}`)
-    } else {
-      navigateTo(`/${value}`)
-    }
+    navigateTo(`/${username}/${value}`)
   }
 
   return (

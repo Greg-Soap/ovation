@@ -111,7 +111,6 @@ export default function AccountForm({ setOptionalLeft }: Props) {
       navigateTo('/discover')
     },
     onError: (error) => {
-      console.log(error)
       // @ts-ignore
       toast.error(error.response.data.message)
     },

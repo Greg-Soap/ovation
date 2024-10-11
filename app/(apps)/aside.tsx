@@ -1,5 +1,4 @@
 'use client'
-import Image from 'next/image'
 import React from 'react'
 import { usePathname } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -11,8 +10,6 @@ import {
   NotificationBing,
   More,
 } from 'iconsax-react'
-import { useLocalStorage } from '@/lib/use-local-storage'
-import type { UserData } from '@/models/all.model'
 import ovationService from '@/services/ovation.service'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'

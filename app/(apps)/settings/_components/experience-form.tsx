@@ -17,8 +17,9 @@ import type { UserExperience } from '@/models/all.model'
 import { FormBase, FormField } from '@/components/customs/custom-form'
 import CustomTooltip from '@/components/customs/custom-tooltip'
 import CustomModal from '@/components/customs/custom-modal'
-import { PlusIcon, PenIcon } from 'lucide-react'
+import { PlusIcon, PenIcon, TrashIcon } from 'lucide-react'
 import MiniLoader from '@/components/mini-loader'
+import CustomDialog from '@/components/customs/custom-dialog'
 
 const formSchema = z.object({
   company: z.string().min(1, 'Company is required'),
@@ -35,9 +36,11 @@ interface FormValues extends z.infer<typeof formSchema> {}
 function ExperienceCard({
   experience,
   onEdit,
+  onDelete,
 }: {
   experience: UserExperience
   onEdit: () => void
+  onDelete: () => void
 }) {
   return (
     <div className="border border-[#FFFFFF14] p-4 rounded-lg mb-4 relative flex flex-col gap-2">
@@ -49,13 +52,23 @@ function ExperienceCard({
       </p>
       <p className="text-sm text-foreground">{experience.description}</p>
       <p className="text-sm text-light">Skills: {experience.skill}</p>
-      <Button
-        variant="ghost"
-        onClick={onEdit}
-        className="absolute top-2 right-2"
-      >
-        <PenIcon size={16} />
-      </Button>
+      <div className="absolute top-2 right-2 flex items-center gap-1">
+        <Button variant="ghost" onClick={onEdit}>
+          <PenIcon size={16} />
+        </Button>
+
+        <CustomDialog
+          trigger={
+            <Button variant="ghost" className="text-red-500">
+              <TrashIcon size={16} />
+            </Button>
+          }
+          title="Delete Experience"
+          description="Are you sure you want to delete this experience?"
+          onConfirm={() => onDelete()}
+          actionVariant="destructive"
+        />
+      </div>
     </div>
   )
 }
@@ -123,6 +136,15 @@ export default function ExperienceForm({
       toast.error(
         `Failed to ${editingExperience ? 'update' : 'add'} experience. Please try again later.`,
       )
+    },
+  })
+
+  const { mutate: deleteExperience } = useMutation({
+    mutationFn: (id: string) => ovationService.deleteExperience(id),
+    onSuccess: () => {
+      toast.success('Experience deleted successfully')
+      queryClient.invalidateQueries({ queryKey: ['experiences'] })
+      refetchExperience()
     },
   })
 
@@ -195,6 +217,7 @@ export default function ExperienceForm({
                 key={experience.id}
                 experience={experience}
                 onEdit={() => handleEdit(experience)}
+                onDelete={() => deleteExperience(experience.id as string)}
               />
             ))}
           </>

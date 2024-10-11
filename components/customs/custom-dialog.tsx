@@ -43,6 +43,7 @@ function CustomDialog({
   const handleTriggerClick = (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
+
     setIsOpen(true)
   }
 

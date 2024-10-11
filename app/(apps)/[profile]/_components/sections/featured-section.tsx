@@ -51,7 +51,7 @@ function ActionButtons() {
     <div className="flex items-center gap-2.5">
       <Popover>
         <PopoverTrigger>
-          <PlusIcon className="stroke-[#CFF073] w-4 h-4" />
+          <PlusIcon className="stroke-primary w-4 h-4" />
         </PopoverTrigger>
         <PopoverContent className="max-w-[104px] flex flex-col rounded-[6px] bg-[#232227] p-0 border-none">
           {['Event', 'NFT', 'Article'].map((item, index) => (
@@ -69,7 +69,7 @@ function ActionButtons() {
 
       <Button asChild className="p-1 h-fit rounded-none bg-transparent">
         <a href="///edit-featured">
-          <Editicon className="fill-[#CFF073] w-4 h-4" />
+          <Editicon className="fill-primary w-4 h-4" />
         </a>
       </Button>
     </div>
