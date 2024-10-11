@@ -44,7 +44,7 @@ export default function Hamburger() {
     queryFn: () => ovationService.getProfile(),
   })
 
-  const navLinks = notUser
+  const navLinks = !notUser
     ? [
         {
           icon: LocationDiscover,

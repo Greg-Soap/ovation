@@ -17,7 +17,7 @@ export function useAppStore() {
   // Check if the current user is the profile owner
   const isUser = user?.username === urlUsername || urlUsername === 'profile'
 
-  const notUser = !user || (!isUser && urlUsername !== 'profile') || !token
+  const notUser = !user || !token
 
   return {
     user,

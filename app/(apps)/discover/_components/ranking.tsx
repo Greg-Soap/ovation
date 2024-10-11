@@ -11,6 +11,7 @@ import { LoginToView } from './login-to-view'
 
 export function Ranking() {
   const { notUser } = useAppStore()
+  console.log({ notUser })
 
   const { data: creators, isLoading: creatorsLoading } = useQuery({
     queryKey: ['creators'],
