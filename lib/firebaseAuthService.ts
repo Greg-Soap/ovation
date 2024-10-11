@@ -1,7 +1,7 @@
 import type { UserData } from '@/models/all.model'
 import { auth, firestore } from './firebase'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
-import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateEmail } from 'firebase/auth'
+import { doc, setDoc, serverTimestamp, updateDoc } from 'firebase/firestore'
 import type { Participant, ParticipantMod } from './firebaseChatService'
 
 // Sign up a new user
@@ -47,11 +47,34 @@ export const setUserData = async (user: Participant) => {
   await setDoc(userRef, { ...user, createdAt: serverTimestamp() }, { merge: true })
 }
 
-export const updateUserData = async (user: ParticipantMod, userId: string) => {
-  const userRef = doc(firestore, `auth_users/${userId}`)
+export const updateUserData = async (user: Partial<ParticipantMod>, userId: string) => {
+  const userRef = doc(firestore, `auth_users`, userId)
+  console.log(auth.currentUser)
+
+  try {
+    await updateDoc(userRef, user);
+    console.log("User updated successfully");
+  } catch (error) {
+    console.error("Error updating user:", error);
+  }
 
   // Store chat details for both users (using merge to avoid overwriting)
-  await setDoc(userRef, { ...user, updatedAt: serverTimestamp() }, { merge: true })
+  // await setDoc(userRef, { ...user, updatedAt: serverTimestamp() }, { merge: true })
+}
+
+async function changeUserEmail(newEmail: string) {
+  const user = auth.currentUser;
+
+  if (user) {
+    try {
+      await updateEmail(user, newEmail);
+      console.log("Email updated successfully");
+    } catch (error) {
+      console.error("Error updating email:", error);
+    }
+  } else {
+    console.log("No user is currently signed in");
+  }
 }
 
 const generatePassword = (userId: string) => {
