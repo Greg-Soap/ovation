@@ -46,6 +46,7 @@ export default function WalletForm() {
       refetchWallets()
     },
     onError: (error) => {
+      // @ts-ignore
       toast.error(error?.response?.data?.message)
       setWalletAutomatically(false)
       setWaletConnected(false)
@@ -157,7 +158,7 @@ export default function WalletForm() {
               cancelText="No, keep it"
               onConfirm={() => {
                 console.log(wallet)
-                deleteWallet(wallet?.id)
+                deleteWallet(wallet?.id ?? '')
               }}
             />
           </div>
@@ -179,7 +180,7 @@ export default function WalletForm() {
               </Button>
             </FormFooter>
           </FormBase>
-        ) : walletAutomatically == true ? (
+        ) : walletAutomatically === true ? (
           <div>
             <ErrorBoundary FallbackComponent={ErrorFallback}>
               {walletConnected ? (
@@ -209,7 +210,7 @@ export default function WalletForm() {
                     </Button>
                   </div>
 
-                  <div className={`grid grid-cols-2 gap-4`}>
+                  <div className="grid grid-cols-2 gap-4">
                     {sortedWallets?.slice(1, 9).map((wallet) => (
                       <ErrorBoundary
                         key={wallet.walletId}

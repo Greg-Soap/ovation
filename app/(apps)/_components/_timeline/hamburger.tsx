@@ -15,7 +15,6 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer'
 import { useQuery } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
-import type { ProfileData } from '@/models/all.model'
 import MiniLoader from '@/components/mini-loader'
 import FeedbackModal from '../../_feedback/feedback'
 import { useAnchorNavigation } from '@/lib/use-navigation'
@@ -40,12 +39,10 @@ export default function Hamburger() {
     setOpen(false)
   }
 
-  const { data: profile, isLoading } = useQuery({
+  const { data: profileData, isLoading } = useQuery({
     queryKey: ['profile'],
     queryFn: () => ovationService.getProfile(),
   })
-
-  const profileData = profile?.data as ProfileData
 
   const navLinks = [
     { href: '/discover', icon: LocationDiscover, label: 'Discover' },

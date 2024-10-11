@@ -64,7 +64,7 @@ class OvationService {
   // Profile Management
   static async getProfile() {
     const response = await api.get<{ data: ProfileData; message: string }>('/Profile')
-    return response.data
+    return response.data?.data
   }
 
   static async getUserProfile(username: string) {

@@ -23,7 +23,7 @@ export default function UserProfile({
   isLoading: boolean
   experienceData: UserExperience[]
   secondaryProfile?: boolean
-  isUser: any
+  isUser?: boolean
 }) {
   const latestExperience = experienceData?.[0] ?? null
 
@@ -77,24 +77,19 @@ export default function UserProfile({
                   </p>
                 )}
 
-                <>
-                  {isUser && (
-                    <>
-                      {profileData?.profile?.bio ? (
-                        <p className="font-normal text-foreground text-sm">
-                          {linkify(profileData?.profile?.bio)}
-                        </p>
-                      ) : (
-                        <a
-                          href="/settings"
-                          className="font-normal text-primary text-sm hover:underline"
-                        >
-                          Add a bio
-                        </a>
-                      )}
-                    </>
-                  )}
-                </>
+                {isUser &&
+                  (profileData?.profile?.bio ? (
+                    <p className="font-normal text-foreground text-sm">
+                      {linkify(profileData?.profile?.bio)}
+                    </p>
+                  ) : (
+                    <a
+                      href="/settings"
+                      className="font-normal text-primary text-sm hover:underline"
+                    >
+                      Add a bio
+                    </a>
+                  ))}
 
                 {profileData?.createdDate && (
                   <p className="font-normal text-lighter text-sm flex items-center gap-1">

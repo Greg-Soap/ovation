@@ -29,14 +29,12 @@ import { getToken } from '@/lib/cookies'
 export default function Aside() {
   const navigateTo = useAnchorNavigation()
   const currentPath = usePathname()
-  const { removeValue } = useLocalStorage<UserData | null>('userData', null)
   const token = getToken()
-
-  const { user } = useAppStore()
+  const { user, clearUser } = useAppStore()
 
   const handleLogout = () => {
     ovationService.logout()
-    removeValue()
+    clearUser()
 
     // Remove all items with 'Draft' in the key
     for (let i = 0; i < localStorage.length; i++) {
@@ -205,6 +203,7 @@ export function FeedbackButton({ className }: { className?: string }) {
           </p>
         </div>
         <CustomModal
+          size="full"
           trigger={
             <Button
               variant={'default'}

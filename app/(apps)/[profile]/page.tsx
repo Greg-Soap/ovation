@@ -11,28 +11,22 @@ import { useEffect, useState } from 'react'
 import { useParams, usePathname } from 'next/navigation'
 import { toast } from 'sonner'
 import AsideMsgIcon from '@/components/icons/asideMsgIcon'
-import { FriendProps } from '../messages/message-container'
+import type { FriendProps } from '../messages/message-container'
 import { useLocalStorage } from '@/lib/use-local-storage'
 import { useAnchorNavigation } from '@/lib/use-navigation'
 import { getToken } from '@/lib/cookies'
+import { useAppStore } from '@/store/use-app-store'
 
 export default function Page() {
   const params = useParams()
   const username = params.profile as string
-  const [profileData, setProfileData] = useState<ProfileData | null>(null)
   const { setValue } = useLocalStorage<FriendProps | null>('receiver', null)
   const navigateTo = useAnchorNavigation()
   const token = getToken()
+  const { isUser } = useAppStore()
 
-  const { storedValue: draft, setValue: setDraft } = useLocalStorage(
-    'userInformation',
-    {},
-  )
-  const isUser = draft?.user?.username == username || username === 'profile'
-
-  console.log(draft)
   const {
-    data: _profileData,
+    data: profileData,
     isLoading,
     refetch,
   } = useQuery({
@@ -43,14 +37,6 @@ export default function Page() {
         : ovationService.getUserProfile(username),
   })
 
-  useEffect(() => {
-    if (isUser) {
-      setProfileData(_profileData?.data)
-    } else {
-      setProfileData(_profileData)
-    }
-  }, [_profileData])
-
   const { data: experienceData } = useQuery({
     queryKey: ['experience', profileData?.userId],
     queryFn: () => ovationService.getExperience(profileData?.userId as string),
@@ -58,7 +44,6 @@ export default function Page() {
   })
 
   const [isCopying, setIsCopying] = useState(false)
-  const pathname = usePathname()
 
   const copyProfileLinkToClipboard = async () => {
     if (!profileData?.username) return
@@ -81,15 +66,15 @@ export default function Page() {
   const openDM = () => {
     if (profileData) {
       const receiver: FriendProps = {
-        displayName: profileData.profile?.displayName!,
-        followerCount: profileData.userStats?.followers! || 0,
-        followingCount: profileData.userStats?.following! || 0,
-        friendDisplayPicture: profileData.profile?.profileImage!,
+        displayName: profileData.profile?.displayName || '',
+        followerCount: profileData.userStats?.followers || 0,
+        followingCount: profileData.userStats?.following || 0,
+        friendDisplayPicture: profileData.profile?.profileImage || '',
         isOpened: true,
         lastActive: '',
-        userId: profileData.userId!,
-        biography: profileData.profile?.bio!,
-        userName: profileData.username!,
+        userId: profileData.userId as string,
+        biography: profileData.profile?.bio || '',
+        userName: profileData.username || '',
         lastMessage: '',
       }
       setValue(receiver)

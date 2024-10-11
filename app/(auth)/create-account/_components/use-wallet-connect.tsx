@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useEffect } from 'react'
 import Web3Modal from 'web3modal'
 import WalletConnectProvider from '@walletconnect/web3-provider'
@@ -27,6 +29,7 @@ setTimeout(async () => {
 
   ethereum = coinbaseWallet.makeWeb3Provider(
     DEFAULT_ETH_JSONRPC_URL,
+    // @ts-ignore
     DEFAULT_CHAIN_ID,
   )
 }, 4000)
@@ -343,7 +346,8 @@ export function useWalletConnect(
         })
         const chainId = await SafePalProvider.request({ method: 'eth_chainId' })
 
-        const doesChainExist = chainIdToChainName[Number(parseInt(chainId, 16))]
+        const doesChainExist =
+          chainIdToChainName[Number(Number.parseInt(chainId, 16))]
 
         if (!doesChainExist) {
           return toast.error(
@@ -354,7 +358,7 @@ export function useWalletConnect(
         setProvider(SafePalProvider)
         handleWalletConnection(
           address,
-          chainIdToChainName[Number(parseInt(chainId, 16))],
+          chainIdToChainName[Number(Number.parseInt(chainId, 16))],
           Number(chainId).toString(),
         )
         console.log('Connected with SafePal Wallet:', account)

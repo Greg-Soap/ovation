@@ -13,7 +13,6 @@ import { ErrorFallback } from '@/components/error-boundary'
 import colors from '@/lib/colors'
 import { useWalletConnect } from './use-wallet-connect'
 import { Badge } from '@/components/ui/badge'
-import CustomDialog from '@/components/customs/custom-dialog'
 
 interface WalletConnectComponentProps {
   onWalletConnected?: (account: string, chain: string) => void

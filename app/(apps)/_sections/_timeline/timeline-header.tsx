@@ -34,7 +34,7 @@ export default function TimelineHeader() {
                 <Moon />
               )}
               <p className="text-gray text-base lg:text-xl font-medium">
-                {getGreeting()} {token && ', ' + user?.displayName}
+                {getGreeting()} {token && `, ${user?.displayName}`}
               </p>
             </div>
           </div>

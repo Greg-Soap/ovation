@@ -66,15 +66,15 @@ export default function SecondaryProfile() {
   const openDM = () => {
     if (profileData) {
       const receiver: FriendProps = {
-        displayName: profileData.profile?.displayName!,
-        followerCount: profileData.userStats?.followers! || 0,
-        followingCount: profileData.userStats?.following! || 0,
-        friendDisplayPicture: profileData.profile?.profileImage!,
+        displayName: profileData.profile?.displayName || '',
+        followerCount: profileData.userStats?.followers || 0,
+        followingCount: profileData.userStats?.following || 0,
+        friendDisplayPicture: profileData.profile?.profileImage || '',
         isOpened: true,
         lastActive: '',
-        userId: profileData.userId!,
-        biography: profileData.profile?.bio!,
-        userName: profileData.username!,
+        userId: profileData.userId as string,
+        biography: profileData.profile?.bio || '',
+        userName: profileData.username || '',
         lastMessage: '',
       }
       setValue(receiver)
@@ -99,10 +99,10 @@ export default function SecondaryProfile() {
           <div className="flex items-end justify-end gap-3 h-[inherit] w-full pr-10 pb-10">
             <Button
               variant="default"
-              className="bg-[#333726] p-[9px] border border-[#507100]"
+              className="bg-primary-bright p-[9px] border border-foreground"
               onClick={openDM}
             >
-              <AsideMsgIcon className="w-5 h-5 stroke-black fill-[#CFF073]" />
+              <AsideMsgIcon className="w-5 h-5 stroke-black fill-primary" />
             </Button>
             <Button
               variant={'default'}
@@ -115,8 +115,8 @@ export default function SecondaryProfile() {
                 py-[9px] px-[13px] text-xs font-semibold border
                 ${
                   profileData?.isFollowing
-                    ? 'bg-[#333726]  border-[#E6E6E64D] hover:bg-red-900 hover:text-red-200 hover:border-red-700'
-                    : ' text-[#0B0A10] border-[#E6E6E64D]'
+                    ? 'bg-primary-bright  border-foreground hover:bg-red-900 hover:text-red-200 hover:border-red-700'
+                    : ' text-primary-foreground border-[#E6E6E64D]'
                 }
                 transition-colors duration-200
                 ${profileData?.isFollowing ? 'group' : ''}

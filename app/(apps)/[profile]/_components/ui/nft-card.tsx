@@ -1,15 +1,12 @@
 import CustomModal from '@/components/customs/custom-modal'
 import CustomPopover from '@/components/customs/custom-popover'
 import { Button } from '@/components/ui/button'
-import { getToken } from '@/lib/cookies'
-import { useLocalStorage } from '@/lib/use-local-storage'
 import type { NFT } from '@/models/all.model'
 import ovationService from '@/services/ovation.service'
 import { useAppStore } from '@/store/use-app-store'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { EllipsisVertical } from 'lucide-react'
 import Image from 'next/image'
-import { useParams } from 'next/navigation'
 import { toast } from 'sonner'
 
 export function NFTCard({
@@ -22,17 +19,7 @@ export function NFTCard({
   secondaryProfile,
 }: NFT & { secondaryProfile?: boolean }) {
   const queryClient = useQueryClient()
-  const { userId } = useAppStore()
-  const token = getToken()
-  const params = useParams()
-  const username = params.profile as string
-
-  const { storedValue: draft, setValue: setDraft } = useLocalStorage(
-    'userInformation',
-    {},
-  )
-  const notUser =
-    username != draft?.user?.username || !token || username != 'profile'
+  const { userId, notUser } = useAppStore()
 
   const { data: favouriteNfts } = useQuery({
     queryKey: ['favouriteNft', userId],

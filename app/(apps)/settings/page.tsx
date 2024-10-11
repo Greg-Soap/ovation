@@ -29,7 +29,7 @@ export default function Page() {
 
   useEffect(() => {
     const tabFromUrl = searchParams.get('tab')
-    console.log({ tabFromUrl, currentTab })
+
     if (tabFromUrl && tabFromUrl !== currentTab) {
       setTab(tabFromUrl)
     }
@@ -51,9 +51,8 @@ export default function Page() {
     refetch: refetchExperience,
   } = useQuery({
     queryKey: ['experience'],
-    queryFn: () =>
-      ovationService.getExperience(profileData?.data?.userId as string),
-    enabled: !!profileData?.data?.userId,
+    queryFn: () => ovationService.getExperience(profileData?.userId as string),
+    enabled: !!profileData?.userId,
   })
 
   const tabComponents = {
@@ -180,14 +179,14 @@ export default function Page() {
 
                       {tab.heading &&
                         tabComponents[tab.heading as TabHeading]({
-                          profileData: profileData?.data as ProfileData,
+                          profileData: profileData as ProfileData,
                           isProfileLoading: isProfileLoading,
                           refetch: refetch,
                           experienceData: experienceData?.data
                             ?.data as UserExperience[],
                           isLoading: isExperienceLoading,
                           refetchExperience: refetchExperience,
-                          userId: profileData?.data?.userId as string,
+                          userId: profileData?.userId as string,
                         })}
                     </section>
                   </ErrorBoundary>

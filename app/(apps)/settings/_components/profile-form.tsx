@@ -155,17 +155,17 @@ export default function ProfileForm({
           image: tempFormValues.profileImage,
           username: tempFormValues.username,
         } as ParticipantMod,
-        // biome-ignore lint/style/noNonNullAssertion: <explanation>
-        userData?.userId!,
+
+        userData?.userId ?? '',
       )
 
       toast.success('Profile updated successfully')
       refetch()
-      // TODO: FIX LATER
+
       setUserData({
         ...userData,
         ...tempFormValues,
-        userId: userData?.userId!,
+        userId: userData?.userId ?? '',
         badges: userData?.badges ?? [],
         nft: userData?.nft ?? [],
         paths: userData?.paths ?? [],
