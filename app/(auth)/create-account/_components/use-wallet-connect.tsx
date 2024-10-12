@@ -72,7 +72,7 @@ export function useWalletConnect(
   }
 
   const connectMetaMask = async () => {
-    if ((window as any)?.ethereum) {
+    if ((window as any)?.ethereum?.isMetaMask) {
       try {
         const provider = new BrowserProvider((window as any)?.ethereum)
 
@@ -89,7 +89,9 @@ export function useWalletConnect(
         setProvider(provider)
         console.log('Connected with MetaMask:', account)
       } catch (error) {
-        toast.error('An Error occured with Metamask!')
+        toast.error(
+          'An Error occured with Metamask, try using another browser to connect your metamask or confirm if your metamask has a processing request!',
+        )
         console.error('MetaMask connection failed:', error)
       }
     } else {
@@ -129,6 +131,7 @@ export function useWalletConnect(
         console.log('Connected with Phantom:', response.publicKey.toString())
       } catch (err) {
         console.error('Phantom connection failed:', err)
+        toast.error('An error occured with Phantom!')
       }
     } else {
       toast.error('Please install Phantom Wallet!')
@@ -179,6 +182,7 @@ export function useWalletConnect(
         console.log('Connected with Trust Wallet:', account)
       } catch (error) {
         console.error('Trust Wallet connection failed:', error)
+        toast.error('An error occured with Trust wallet!')
       }
     } else {
       toast.error('Please install Trust Wallet!')
