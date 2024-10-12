@@ -1,51 +1,46 @@
 import CustomAvatar from '@/components/customs/custom-avatar'
-import VerifyIcon from '@/components/icons/verifyIcon'
 import MiniLoader from '@/components/mini-loader'
-import { formatUsername } from '@/lib/helper-func'
+import { debounce, formatUsername } from '@/lib/helper-func'
+import type { UserData } from '@/models/all.model'
 import ovationService from '@/services/ovation.service'
-import { useMutation, useQuery } from '@tanstack/react-query'
-import { useEffect, useRef, useState } from 'react'
-import { toast } from 'sonner'
+import { useQuery } from '@tanstack/react-query'
+import { SearchIcon } from 'lucide-react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 
 export function Header() {
-  const [query, setsearchQuery] = useState('')
-  const divRef = useRef(null)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [debouncedQuery, setDebouncedQuery] = useState('')
+  const divRef = useRef<HTMLDivElement>(null)
+
+  const debouncedSetQuery = useCallback(
+    debounce((value: string) => setDebouncedQuery(value), 300),
+    [],
+  )
 
   useEffect(() => {
-    function handleClickOutside(event) {
-      if (divRef.current && !divRef.current.contains(event.target)) {
-        setsearchQuery('')
-      } else {
-        // setIsOutside(false) // User clicked inside the div
+    debouncedSetQuery(searchQuery)
+  }, [searchQuery, debouncedSetQuery])
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (divRef.current && !divRef.current.contains(event.target as Node)) {
+        setSearchQuery('')
+        setDebouncedQuery('')
       }
     }
 
-    // Add event listener for clicks
     document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
-    // Clean up the event listener when the component unmounts
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [divRef])
-
-  const {
-    data: searchResult,
-    isLoading,
-    refetch,
-  } = useQuery({
-    queryKey: ['query', query],
-    queryFn: () => ovationService.search(query as string),
-    enabled: query ? true : false,
+  const { data: searchResult, isLoading } = useQuery({
+    queryKey: ['search', debouncedQuery],
+    queryFn: () => ovationService.search(debouncedQuery),
+    enabled: !!debouncedQuery,
   })
 
-  useEffect(() => {
-    if (query !== '') {
-      refetch()
-    }
-  }, [query])
+  const hasResults = searchResult?.data?.data?.length > 0
 
-  console.log(query, searchResult)
   return (
     <div
       className="h-[250px] relative w-full flex items-center justify-center bg-cover shadow px-7"
@@ -56,95 +51,78 @@ export function Header() {
         backgroundRepeat: 'no-repeat',
       }}
     >
-      <input
-        type="text"
-        className="bg-[#fff] color-[black] md:w-[720px] w-[90%] h-[53.36px] pl-[47.54px] placeholder:text-[13.14px]"
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: ' translate(-50%, -50%)',
-          borderRadius: '8.21px',
-          color: 'black',
-          fontSize: '13.14px',
-        }}
-        placeholder="Search assets"
-        onChange={(e) => setsearchQuery(e.target.value)}
-      />
-      <img
-        src={
-          '../../../public/assets/images/search/vuesax/outline/vuesax/outline/search-normal.png'
-        }
-        alt=""
-        className=""
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: ' translate(-50%, -50%)',
-          // zIndex: 22,
-        }}
-      />
-      <div
-        className={` ${searchResult?.data?.data?.length == 0 ? 'mt-[180px]' : 'mt-[480px]'}`}
-        style={{ zIndex: 2222 }}
-        ref={divRef}
-      >
-        {query !== '' && (
+      <div className="relative md:w-[420px] w-full h-[53px]">
+        <input
+          type="text"
+          className="bg-white text-black md:w-[420px] w-[90%] h-[53px] pl-[47px] placeholder:text-[13px] rounded-[8px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+          placeholder="Search users"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <SearchIcon
+          size={20}
+          color="black"
+          className="absolute top-1/2 left-6 md:left-4 transform -translate-y-1/2 z-50"
+        />
+      </div>
+
+      {debouncedQuery && (
+        <div
+          className="absolute w-[80%] md:w-[420px] rounded-[8px] top-[160px] left-1/2 transform -translate-x-1/2 mt-1 z-50"
+          ref={divRef}
+        >
           <div
-            className={`${searchResult?.data?.data.length == 0 ? '' : 'bg-[black] '} rounded-[20px] p-[20px] md:w-[720px] w-[90%] ${searchResult?.data?.data.length == 0 ? 'h-[100px]' : 'h-[400px]'} `}
-            style={{
-              overflow: 'scroll',
-              border:
-                searchResult?.data?.data.length == 0 ? '' : '1px solid grey',
-            }}
+            className={`${
+              hasResults ? 'bg-black' : ''
+            } rounded-[8px] p-[10px] md:w-[420px] w-full max-h-[400px] overflow-auto ${
+              hasResults ? 'border border-[#FFFFFF14]' : ''
+            }`}
           >
             {isLoading ? (
-              <MiniLoader size="average" />
-            ) : searchResult?.data?.data.length == 0 ? (
-              <div>
+              <div className="flex flex-wrap gap-4 py-4 px-4 bg-[#18181C] rounded-[8px] items-center justify-between border border-[#FFFFFF14]">
+                <MiniLoader size="average" />
+              </div>
+            ) : !hasResults ? (
+              <div className="flex flex-wrap gap-4 py-4 px-4 bg-[#18181C] rounded-[8px] items-center justify-between border border-[#FFFFFF14]">
                 <p className="text-center font-bold">
-                  No User found with the username
+                  No user found with the username
                 </p>
               </div>
             ) : (
-              searchResult?.data?.data?.map((user: any, index: any) => (
-                <div key={index} className="w-full mb-[20px]">
-                  <div className="flex flex-wrap gap-4 py-4  pl-4 pr-4 bg-[#18181C] rounded-[20px] items-center justify-between border border-[#35353880]">
-                    <div className="flex items-center gap-2">
-                      <div className="w-[30px] h-[30px] rounded-full overflow-hidden border-2 border-white">
-                        <CustomAvatar src={user?.profileImage} size="sm" />
-                      </div>
-
-                      <div className="flex flex-col">
-                        <a
-                          href={`/${user?.username}`}
-                          className="text-sm font-semibold"
-                        >
-                          {user?.displayName}
-                        </a>
-
-                        <a
-                          href={`/${user?.username}`}
-                          className="flex gap-1 text-xs text-light items-center"
-                        >
-                          <span>{formatUsername(user?.username)} </span>
-                          <VerifyIcon />
-                        </a>
-                      </div>
-                    </div>
-                    <div className="bg-primary ml-auto text-[10px] font-medium text-black px-[10px] py-2 rounded-3xl">
-                      {user?.views > 1000
-                        ? `${(user?.views / 1000).toFixed(1)}k`
-                        : user?.views}{' '}
-                      Views
-                    </div>
-                  </div>
-                </div>
+              searchResult?.data?.data?.map((user: UserData) => (
+                <UserSearchResult key={user.userId} user={user} />
               ))
             )}
           </div>
-        )}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function UserSearchResult({ user }: { user: UserData }) {
+  return (
+    <div className="w-full mb-[20px]">
+      <div className="flex flex-wrap gap-4 py-4 px-4 bg-[#18181C] rounded-[8px] items-center justify-between border border-[#FFFFFF14]">
+        <div className="flex items-center gap-2">
+          <CustomAvatar
+            src={user?.profileImage}
+            size="lg"
+            className="object-cover object-center"
+          />
+
+          <div className="flex flex-col">
+            <a href={`/${user?.username}`} className="text-sm font-semibold">
+              {user?.displayName}
+            </a>
+            <a
+              href={`/${user?.username}`}
+              className="flex gap-1 text-xs text-light items-center"
+            >
+              <span>{formatUsername(user?.username)} </span>
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   )

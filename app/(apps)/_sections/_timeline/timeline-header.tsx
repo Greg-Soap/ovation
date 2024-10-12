@@ -39,7 +39,7 @@ export default function TimelineHeader() {
             </div>
           </div>
         </div>
-        <Hamburger />
+        {user && <Hamburger />}
       </nav>
     </header>
   )

@@ -38,7 +38,7 @@ export default function WalletConnectionChoice({
           confirmText="Yes, make my profile"
           cancelText="No, go back"
           onConfirm={onSkipWallet}
-          actionVariant="secondary"
+          actionVariant="default"
         />
       </div>
     </div>

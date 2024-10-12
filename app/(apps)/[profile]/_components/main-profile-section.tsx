@@ -16,10 +16,8 @@ interface TabData {
 
 export default function MainProfileSection({
   profileData,
-  secondaryProfile = false,
 }: {
   profileData: ProfileData
-  secondaryProfile?: boolean
 }) {
   const { currentTab, setTab } = useTabUrlSync('portfolio')
 
@@ -40,11 +38,7 @@ export default function MainProfileSection({
       value: 'portfolio',
       label: 'Portfolio',
       content: (nfts) => (
-        <Portfolio
-          nfts={nfts?.data?.data || []}
-          isLoading={isNftsLoading}
-          secondaryProfile={secondaryProfile}
-        />
+        <Portfolio nfts={nfts?.data?.data || []} isLoading={isNftsLoading} />
       ),
     },
     {

@@ -2,16 +2,17 @@
 import { Skeleton } from '@/components/ui/skeleton'
 import type { NFT } from '@/models/all.model'
 import { NFTCard } from '../ui/nft-card'
+import { useAppStore } from '@/store/use-app-store'
 
 export default function Portfolio({
   nfts,
   isLoading,
-  secondaryProfile,
 }: {
   nfts: NFT[]
   isLoading: boolean
-  secondaryProfile?: boolean
 }) {
+  const { isUser } = useAppStore()
+
   const filteredNfts = nfts.filter((nft) => !nft.isPrivate)
 
   return (
@@ -32,21 +33,11 @@ export default function Portfolio({
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2  xl:grid-cols-3 gap-4">
-            {secondaryProfile
+            {!isUser
               ? filteredNfts.map((nft, index) => (
-                  <NFTCard
-                    key={index}
-                    {...nft}
-                    secondaryProfile={secondaryProfile}
-                  />
+                  <NFTCard key={index} {...nft} />
                 ))
-              : nfts.map((nft, index) => (
-                  <NFTCard
-                    key={index}
-                    {...nft}
-                    secondaryProfile={secondaryProfile}
-                  />
-                ))}
+              : nfts.map((nft, index) => <NFTCard key={index} {...nft} />)}
           </div>
         )}
       </div>
