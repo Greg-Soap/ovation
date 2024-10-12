@@ -91,6 +91,7 @@ export default function WalletForm() {
       walletAddress: account,
       walletTypeId: walletTypeUId,
     }
+    console.log(data)
     addWallet(data)
   }
 
@@ -183,9 +184,12 @@ export default function WalletForm() {
           <div>
             <ErrorBoundary FallbackComponent={ErrorFallback}>
               {walletConnected ? (
-                <div>
+                <div className="flex" style={{ alignItems: 'self-end' }}>
                   Connected Account: {account?.slice(0, 10)}...
-                  {account?.slice(38)}
+                  {account?.slice(38)}{' '}
+                  <Button className="text-[10px] font-medium h-fit ml-4">
+                    {chain}
+                  </Button>
                 </div>
               ) : (
                 <>

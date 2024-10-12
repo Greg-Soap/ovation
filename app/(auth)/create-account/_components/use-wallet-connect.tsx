@@ -74,12 +74,13 @@ export function useWalletConnect(
   const connectMetaMask = async () => {
     if ((window as any)?.ethereum) {
       try {
-        const provider = new BrowserProvider(window?.ethereum)
+        const provider = new BrowserProvider((window as any)?.ethereum)
 
         await provider.send('eth_requestAccounts', [])
-        const signer = await provider.getSigner()
 
+        const signer = await provider.getSigner()
         const network = await provider.getNetwork()
+
         handleWalletConnection(
           signer.address,
           chainIdToChainName[Number(network.chainId)],
@@ -88,6 +89,7 @@ export function useWalletConnect(
         setProvider(provider)
         console.log('Connected with MetaMask:', account)
       } catch (error) {
+        toast.error('An Error occured with Metamask!')
         console.error('MetaMask connection failed:', error)
       }
     } else {
@@ -254,6 +256,7 @@ export function useWalletConnect(
         console.log('Connected with Coinbase Wallet:', account)
       } catch (error) {
         console.error('Coinbase Wallet connection failed:', error)
+        toast.error('Coinbase Wallet connection failed:')
       }
     } else {
       toast.error('Please install Coinbase Wallet!')
@@ -311,7 +314,7 @@ export function useWalletConnect(
   }
 
   const connectMathWallet = async () => {
-    if ((window as any).ethereum.isMathWallet) {
+    if ((window as any).ethereum) {
       try {
         const provider = new BrowserProvider((window as any).ethereum)
         await provider.send('eth_requestAccounts', [])

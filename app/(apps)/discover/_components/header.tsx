@@ -66,6 +66,7 @@ export function Header() {
           transform: ' translate(-50%, -50%)',
           borderRadius: '8.21px',
           color: 'black',
+          fontSize: '13.14px',
         }}
         placeholder="Search assets"
         onChange={(e) => setsearchQuery(e.target.value)}
