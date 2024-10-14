@@ -6,47 +6,8 @@ import Image from 'next/image'
 import colors from '@/lib/colors'
 import { useAppStore } from '@/store/use-app-store'
 
-function convertToISOString(dateString: string): string {
-  // Expected format: "YYYY MM DD : HH mm"
-  const [datePart, timePart] = dateString.split(' : ')
-  const [year, month, day] = datePart.split(' ')
-  const [hour, minute] = timePart.split(' ')
-
-  const date = new Date(
-    Number.parseInt(year),
-    Number.parseInt(month) - 1,
-    Number.parseInt(day),
-    Number.parseInt(hour),
-    Number.parseInt(minute),
-  )
-
-  const isoString = date.toISOString()
-  return isoString
-}
-
 export function Header({ navLinks = links }: HeaderProps) {
   const { isAuthenticated } = useAppStore()
-  const [showButton, setShowButton] = useState(false)
-
-  const showButtonTime = '2024 10 11 : 21 00'
-
-  const isoShowButtonTime = showButtonTime.includes(' : ')
-    ? convertToISOString(showButtonTime)
-    : showButtonTime
-
-  useEffect(() => {
-    const checkTime = () => {
-      const currentTime = new Date()
-      const targetTime = new Date(isoShowButtonTime)
-      const shouldShow = currentTime >= targetTime
-      setShowButton(shouldShow)
-    }
-
-    checkTime()
-    const timer = setInterval(checkTime, 10000)
-
-    return () => clearInterval(timer)
-  }, [isoShowButtonTime])
 
   return (
     <header className="relative border-b border-[#FFFFFF33] bg-transparent">
@@ -56,15 +17,14 @@ export function Header({ navLinks = links }: HeaderProps) {
         </a>
         <Navigation navLinks={navLinks} />
         <Navigation mobile navLinks={navLinks} />
-        {showButton && (
-          <Button variant={'default'}>
-            {isAuthenticated ? (
-              <a href={'/discover'}>Dashboard</a>
-            ) : (
-              <a href={'/login'}>Login</a>
-            )}
-          </Button>
-        )}
+
+        <Button variant={'default'}>
+          {isAuthenticated ? (
+            <a href={'/discover'}>Dashboard</a>
+          ) : (
+            <a href={'/login'}>Login</a>
+          )}
+        </Button>
       </nav>
     </header>
   )

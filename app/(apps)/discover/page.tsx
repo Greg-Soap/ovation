@@ -29,6 +29,7 @@ export default function Page() {
     <div className="flex flex-col w-full bg-[#111115] h-fit items-center justify-center">
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <Header />
+
         {user && (
           <GetStarted
             user={user as UserData}

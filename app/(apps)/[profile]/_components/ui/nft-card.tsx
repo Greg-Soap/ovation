@@ -15,10 +15,9 @@ export function NFTCard({
   metaData,
   id,
   isPrivate,
-  secondaryProfile,
-}: NFT & { secondaryProfile?: boolean }) {
+}: NFT) {
   const queryClient = useQueryClient()
-  const { userId, notUser } = useAppStore()
+  const { userId, notUser, isUser } = useAppStore()
 
   const { data: favouriteNfts } = useQuery({
     queryKey: ['favouriteNft', userId],
@@ -150,7 +149,7 @@ export function NFTCard({
               </CustomModal>
             )}
           </div>
-          {!notUser && (
+          {!notUser && isUser && (
             <CustomPopover
               trigger={
                 <Button variant="ghost" size="icon" className=" h-8 w-8 p-0">
@@ -158,11 +157,11 @@ export function NFTCard({
                 </Button>
               }
               content={
-                <div className="flex flex-col w-fit p-0">
+                <div className="flex flex-col bg-[#232227]  p-0">
                   <Button
                     variant="ghost"
                     onClick={() => toggleFavoriteNft(id)}
-                    className=" text-xs justify-start font-medium px-3 py-[10px] w-full h-fit border-b border-[#333333] rounded-none"
+                    className=" text-foreground text-xs justify-start font-medium px-3 py-[10px] w-full h-fit border-b border-[#FFFFFF14] rounded-none"
                   >
                     {isNftFavorite
                       ? 'Remove from Favorite NFTs'
@@ -173,13 +172,13 @@ export function NFTCard({
                     onClick={() =>
                       hideNft({ nftId: id, isPublic: !!isPrivate })
                     }
-                    className=" text-xs justify-start font-medium px-3 py-[10px] w-full h-fit"
+                    className=" text-foreground text-xs justify-start font-medium px-3 py-[10px] w-full h-fit border-b border-[#333333] rounded-none"
                   >
                     {isPrivate ? 'Show NFT' : 'Hide NFT'}
                   </Button>
                 </div>
               }
-              className="rounded-[7px] bg-[#232227] p-0 border-none"
+              className=" bg-[#232227]  w-[150px] p-0 "
             />
           )}
         </div>

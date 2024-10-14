@@ -69,22 +69,30 @@ export const decodeIdToken = (idToken: string): DecodedToken => {
 }
 
 export const chainIdToChainName: { [key: number]: string } = {
-  1: 'eth',
-  137: 'polygon',
-  56: 'bsc',
-  43114: 'avalanche',
-  250: 'fantom',
-  11297108109: 'palm',
-  25: 'cronos',
-  42161: 'arbitrum',
-  100: 'gnosis',
-  901: 'chiliz',
-  8453: 'base',
-  10: 'optimism',
-  59144: 'linea',
-  1284: 'moonbeam',
-  1285: 'moonriver',
-}
+  1: 'eth',               // Ethereum Mainnet
+  137: 'polygon',         // Polygon Mainnet
+  56: 'bsc',              // Binance Smart Chain
+  43114: 'avalanche',     // Avalanche Mainnet
+  250: 'fantom',          // Fantom Opera
+  11297108109: 'palm',    // Palm Mainnet
+  25: 'cronos',           // Cronos Mainnet
+  42161: 'arbitrum',      // Arbitrum One Mainnet
+  100: 'gnosis',          // Gnosis (xDai)
+  901: 'chiliz',          // Chiliz Mainnet
+  8453: 'base',           // Base Mainnet
+  10: 'optimism',         // Optimism Mainnet
+  59144: 'linea',         // Linea Mainnet
+  1284: 'moonbeam',       // Moonbeam Mainnet
+  1285: 'moonriver',      // Moonriver Mainnet
+  1666600000: 'harmony',  // Harmony Mainnet
+  42220: 'celo',          // Celo Mainnet
+  122: 'fuse',            // Fuse Mainnet
+  8217: 'klaytn',         // Klaytn Mainnet
+  1313161554: 'aurora',   // Aurora Mainnet
+  40: 'telos',            // Telos Mainnet
+  128: 'heco',            // Huobi ECO Chain Mainnet
+  4689: 'iotex',          // IoTeX Mainnet
+};
 
 export const optionValueToBlockchainName: { [optionValue: string]: string } = {
   eth: 'Ethereum',
@@ -104,8 +112,15 @@ export const optionValueToBlockchainName: { [optionValue: string]: string } = {
   moonriver: 'Moonriver',
   solana: 'Solana',
   archway: 'Archway',
-}
-
+  harmony: 'Harmony',
+  celo: 'Celo',
+  fuse: 'Fuse',
+  klaytn: 'Klaytn',
+  aurora: 'Aurora',
+  telos: 'Telos',
+  heco: 'HECO',
+  iotex: 'IoTeX',
+};
 export interface NotificationMessage {
   reference: string
   referenceId: string

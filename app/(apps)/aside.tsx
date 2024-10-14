@@ -43,41 +43,33 @@ export default function Aside() {
     navigateTo('/')
   }
 
-  const menuItems = !notUser
-    ? [
-        {
-          icon: LocationDiscover,
-          text: 'Discover',
-          path: '/discover',
-        },
-        {
-          icon: Profile,
-          text: 'Profile',
-          path: '/profile',
-        },
-        {
-          icon: Setting2,
-          text: 'Settings',
-          path: '/settings',
-        },
-        {
-          icon: Message,
-          text: 'Messages',
-          path: '/messages',
-        },
-        {
-          icon: NotificationBing,
-          text: 'Notification',
-          path: '/notification',
-        },
-      ]
-    : [
-        {
-          icon: LocationDiscover,
-          text: 'Discover',
-          path: '/discover',
-        },
-      ]
+  const menuItems = !notUser && [
+    {
+      icon: LocationDiscover,
+      text: 'Discover',
+      path: '/discover',
+    },
+    {
+      icon: Profile,
+      text: 'Profile',
+      path: '/profile',
+    },
+    {
+      icon: Setting2,
+      text: 'Settings',
+      path: '/settings',
+    },
+    {
+      icon: Message,
+      text: 'Messages',
+      path: '/messages',
+    },
+    {
+      icon: NotificationBing,
+      text: 'Notification',
+      path: '/notification',
+    },
+  ]
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
@@ -124,6 +116,7 @@ export default function Aside() {
                     confirmText="Logout"
                     cancelText="Cancel"
                     onConfirm={handleLogout}
+                    actionVariant="destructive"
                   />
                 }
                 side="bottom"
@@ -132,45 +125,47 @@ export default function Aside() {
             </div>
           )}
         </ErrorBoundary>
+        {menuItems && (
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <div className="w-full h-fit lg:h-[550px] lg:w-[85%] flex flex-row lg:flex-col justify-between lg:justify-start px-6 gap-2">
+              {menuItems?.map((item, index) => {
+                const isActive = currentPath.includes(item.path)
+                const Icon = item.icon
 
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <div className="w-full h-fit lg:h-[550px] lg:w-[85%] flex flex-row lg:flex-col justify-between lg:justify-start px-6 gap-2">
-            {menuItems.map((item, index) => {
-              const isActive = currentPath.includes(item.path)
-              const Icon = item.icon
-
-              return (
-                <Button
-                  type="button"
-                  className={`w-fit lg:w-full ${isActive ? 'text-primary lg:text-light' : 'text-light'}  items-center justify-start gap-2 p-3 lg:py-7 lg:px-[30px] rounded-[50px] hover:bg-[#18181C] focus:bg-[#232227] group transition-all duration-300 ${
-                    isActive
-                      ? 'bg-transparent lg:bg-[#232227]'
-                      : 'bg-transparent'
-                  }`}
-                  key={index}
-                  asChild
-                >
-                  <a href={item.path}>
-                    <Icon
-                      size={24}
-                      variant={isActive ? 'Bold' : 'Outline'}
-                      color={isActive ? colors.primary.DEFAULT : colors.light}
-                    />
-                    <p
-                      className={`hidden lg:flex items-center gap-2 text-lg group-hover: group-focus:text-gray ${isActive ? ' font-medium' : 'text-light'}`}
-                    >
-                      {item.text}
-                    </p>
-                  </a>
-                </Button>
-              )
-            })}
-          </div>
-        </ErrorBoundary>
-
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <FeedbackButton className="hidden lg:flex" />
-        </ErrorBoundary>
+                return (
+                  <Button
+                    type="button"
+                    className={`w-fit lg:w-full ${isActive ? 'text-primary lg:text-light' : 'text-light'}  items-center justify-start gap-2 p-3 lg:py-7 lg:px-[30px] rounded-[50px] hover:bg-[#18181C] focus:bg-[#232227] group transition-all duration-300 ${
+                      isActive
+                        ? 'bg-transparent lg:bg-[#232227]'
+                        : 'bg-transparent'
+                    }`}
+                    key={index}
+                    asChild
+                  >
+                    <a href={item.path}>
+                      <Icon
+                        size={24}
+                        variant={isActive ? 'Bold' : 'Outline'}
+                        color={isActive ? colors.primary.DEFAULT : colors.light}
+                      />
+                      <p
+                        className={`hidden lg:flex items-center gap-2 text-lg group-hover: group-focus:text-gray ${isActive ? ' font-medium' : 'text-light'}`}
+                      >
+                        {item.text}
+                      </p>
+                    </a>
+                  </Button>
+                )
+              })}
+            </div>
+          </ErrorBoundary>
+        )}
+        {user && (
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <FeedbackButton className="hidden lg:flex" />
+          </ErrorBoundary>
+        )}
       </aside>
     </ErrorBoundary>
   )
