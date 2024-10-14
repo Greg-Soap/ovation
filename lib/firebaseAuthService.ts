@@ -6,7 +6,7 @@ import type { Participant, ParticipantMod } from './firebaseChatService'
 
 // Sign up a new user
 export const signUp = async (user: UserData) => {
-  const data = await createUserWithEmailAndPassword(auth, user.email, generatePassword(user.userId))
+  const data = await createUserWithEmailAndPassword(auth, user.googleId, generatePassword(user.userId))
 
   const userData = {
     displayName: user.displayName,
@@ -23,7 +23,7 @@ export const signUp = async (user: UserData) => {
 // Sign in a user
 export const signInOrSignUp = async (user: UserData) => {
   try {
-    await signInWithEmailAndPassword(auth, user.email, generatePassword(user.userId))
+    await signInWithEmailAndPassword(auth, user.googleId, generatePassword(user.userId))
   } catch (error: any) {
     await signUp(user)
   }
@@ -52,9 +52,9 @@ export const updateUserData = async (user: Partial<ParticipantMod>, userId: stri
 
   try {
     await updateDoc(userRef, user);
-    await changeUserEmail(user.email!);
+    // await changeUserEmail(user.email!);
   } catch (error) {
-    console.error("Error updating user:", error);
+    // console.error("Error updating user:", error);
   }
 
   // Store chat details for both users (using merge to avoid overwriting)
