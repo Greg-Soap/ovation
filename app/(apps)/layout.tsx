@@ -66,7 +66,7 @@ export default function AsideLayout({
 
   const firebaseSignIn = async () => {
     // biome-ignore lint/style/noNonNullAssertion: <explanation>
-    await signIn(user!.userId, user!.email)
+    await signIn(user!.userId, user!.googleId)
   }
 
   const firebaseSignOut = async () => {
