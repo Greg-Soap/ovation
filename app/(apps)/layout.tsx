@@ -32,9 +32,9 @@ export default function AsideLayout({
   useEffect(() => {
     connectSignalR()
     firebaseSignIn()
-    // const unsubscribe = listenForUserMessages((newMessages) => {
-    //   // toast.success(`You have ${newMessages.length} new messages`);
-    // })
+    // // const unsubscribe = listenForUserMessages((newMessages) => {
+     //   // toast.success(`You have ${newMessages.length} new messages`);
+    // // })
 
     // Listen for incoming notifications
     notificationServices.onMessage(
@@ -65,7 +65,8 @@ export default function AsideLayout({
   }
 
   const firebaseSignIn = async () => {
-    if (user != null) await signIn(user.email, user.userId)
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
+    await signIn(user!.userId, user!.email)
   }
 
   const firebaseSignOut = async () => {
