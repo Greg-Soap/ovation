@@ -81,7 +81,7 @@ const formSchema = z.object({
 
 export type FormData = z.infer<typeof formSchema>
 
-export default function FeedbackModal() {
+export default function FeedbackModal({ onClose }: { onClose?: () => void }) {
   const [formPage, setFormPage] = React.useState(1)
 
   const form = useForm<FormData>({
@@ -117,6 +117,9 @@ export default function FeedbackModal() {
       usefulFeature: data.usefulFeature?.join(','),
     }
     mutate(transformedData)
+    if (onClose) {
+      onClose()
+    }
   }
 
   const handleNextClick = async () => {
@@ -147,7 +150,7 @@ export default function FeedbackModal() {
   )
 
   return (
-    <div className="px-6 py-8 gap-[30px] bg-[#232227] rounded-2xl flex flex-col max-w-[700px] mx-auto overflow-y-scroll overflow-x-hidden h-[90vh] w-fit sm:w-full">
+    <div className="px-6 py-8 gap-[30px] bg-[#232227] rounded-[10px] flex flex-col max-w-[700px] mx-auto overflow-y-scroll overflow-x-hidden h-[90vh] w-fit sm:w-full">
       {renderFormHeader()}
       <FormBase
         form={form}

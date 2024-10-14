@@ -15,6 +15,7 @@ import { listenForUserMessages } from '@/lib/firebaseChatService'
 import { AuthMiddleware } from './auth-middleware'
 import { StoreProvider } from 'easy-peasy'
 import store from '@/store/store'
+import { FeedbackPopup } from './_feedback/feedback-popup'
 
 const queryClient = new QueryClient()
 
@@ -33,7 +34,7 @@ export default function AsideLayout({
     connectSignalR()
     firebaseSignIn()
     // // const unsubscribe = listenForUserMessages((newMessages) => {
-     //   // toast.success(`You have ${newMessages.length} new messages`);
+    //   // toast.success(`You have ${newMessages.length} new messages`);
     // // })
 
     // Listen for incoming notifications
@@ -79,6 +80,7 @@ export default function AsideLayout({
       <div className="px-0  container flex flex-col items-center justify-center relative">
         <QueryClientProvider client={queryClient}>
           <TimelineHeader />
+          <FeedbackPopup />
           <div className="flex flex-col lg:flex-row lg:flex-nowrap w-full other-link overflow-y-scroll">
             <Aside />
             <div id="empty space" className="min-w-[310px]" />
