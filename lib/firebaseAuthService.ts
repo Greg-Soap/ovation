@@ -49,11 +49,10 @@ export const setUserData = async (user: Participant) => {
 
 export const updateUserData = async (user: Partial<ParticipantMod>, userId: string) => {
   const userRef = doc(firestore, `auth_users`, userId)
-  console.log(auth.currentUser)
 
   try {
     await updateDoc(userRef, user);
-    console.log("User updated successfully");
+    await changeUserEmail(user.email!);
   } catch (error) {
     console.error("Error updating user:", error);
   }
