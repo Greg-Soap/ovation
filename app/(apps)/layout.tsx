@@ -16,6 +16,8 @@ import { AuthMiddleware } from './auth-middleware'
 import { StoreProvider } from 'easy-peasy'
 import store from '@/store/store'
 import { FeedbackPopup } from './_feedback/feedback-popup'
+import { useParams } from 'next/navigation'
+import ProfileMetadata from './[profile]/metadata'
 
 const queryClient = new QueryClient()
 
@@ -26,6 +28,8 @@ export default function AsideLayout({
 }: {
   children: React.ReactNode
 }) {
+  const params = useParams()
+  const isProfilePage = params.profile !== undefined
   const [notifications, setNotifications] = useState<NotificationMessage[]>([])
   const { storedValue } = useLocalStorage<UserData | null>('userData', null)
   const user = storedValue
@@ -75,22 +79,25 @@ export default function AsideLayout({
   }
 
   return (
-    // <AuthMiddleware>
-    <StoreProvider store={store}>
-      <div className="px-0  container flex flex-col items-center justify-center relative">
-        <QueryClientProvider client={queryClient}>
-          <TimelineHeader />
-          <FeedbackPopup />
-          <div className="flex flex-col lg:flex-row lg:flex-nowrap w-full other-link overflow-y-scroll">
-            <Aside />
-            <div id="empty space" className="min-w-[310px]" />
-            <Suspense fallback={<MiniLoader size="huge" />}>
-              <div className="w-full px-0 pb-[65px] lg:pb-0">{children}</div>
-            </Suspense>
-          </div>
-        </QueryClientProvider>
-      </div>
-    </StoreProvider>
-    // </AuthMiddleware>
+    <>
+      {isProfilePage && <ProfileMetadata profile={params.profile as string} />}
+      {/* // <AuthMiddleware> */}
+      <StoreProvider store={store}>
+        <div className="px-0  container flex flex-col items-center justify-center relative">
+          <QueryClientProvider client={queryClient}>
+            <TimelineHeader />
+            <FeedbackPopup />
+            <div className="flex flex-col lg:flex-row lg:flex-nowrap w-full other-link overflow-y-scroll">
+              <Aside />
+              <div id="empty space" className="min-w-[310px]" />
+              <Suspense fallback={<MiniLoader size="huge" />}>
+                <div className="w-full px-0 pb-[65px] lg:pb-0">{children}</div>
+              </Suspense>
+            </div>
+          </QueryClientProvider>
+        </div>
+      </StoreProvider>
+      {/* // </AuthMiddleware> */}
+    </>
   )
 }
