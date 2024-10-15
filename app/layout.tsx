@@ -1,6 +1,9 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { Toaster } from '@/components/ui/sonner'
+import { generateMetadata } from './(apps)/[profile]/metadata'
+
+export { generateMetadata }
 
 export const metadata: Metadata = {
   title: 'Ovation: All your NFTs – One Powerful Platform',
@@ -26,7 +29,7 @@ export const metadata: Metadata = {
   },
   icons: { shortcut: ['/favicon.ico'] },
   keywords:
-    '‘nft social platform, web3 social platform, nft marketplace, most expensive nft, digital collectibles, explore nfts, nft collector, nft collection, nft app, nft value, nfts for sale',
+    'nft social platform, web3 social platform, nft marketplace, most expensive nft, digital collectibles, explore nfts, nft collector, nft collection, nft app, nft value, nfts for sale, nft portfolio, multi-chain portfolio, nft portfolio tracker',
 }
 export default function RootLayout({
   children,
