@@ -1,9 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { Toaster } from '@/components/ui/sonner'
-import { generateMetadata } from './(apps)/[profile]/metadata'
-
-export { generateMetadata }
 
 export const metadata: Metadata = {
   title: 'Ovation: All your NFTs – One Powerful Platform',

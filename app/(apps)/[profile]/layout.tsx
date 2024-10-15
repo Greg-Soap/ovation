@@ -7,7 +7,6 @@ export async function generateMetadata({
   params: { profile: string }
 }): Promise<Metadata> {
   const username = params.profile
-  console.log('username', username)
   const profileData = await ovationService.getUserProfile(username)
 
   const title = profileData.profile?.displayName || profileData.username
@@ -29,4 +28,12 @@ export async function generateMetadata({
       images: [`/${username}/opengraph-image`],
     },
   }
+}
+
+export default function ProfileLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return <>{children}</>
 }
