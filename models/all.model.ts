@@ -83,6 +83,7 @@ export interface WalletAcct {
 
 export interface NFT {
   isPrivate?: boolean
+  isVerified?: boolean
   id: string
   imageUrl: string
   description?: string
@@ -228,11 +229,11 @@ export interface DiscoverUserData {
 }
 
 export interface FollowersFollowing {
-displayName: string
-isUserFollowing: boolean
-isFollowing: boolean
-profileImage: string
-userId: string
+  displayName: string
+  isUserFollowing: boolean
+  isFollowing: boolean
+  profileImage: string
+  userId: string
   username: string
   bio: string
 }
