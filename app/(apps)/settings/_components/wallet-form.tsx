@@ -185,7 +185,7 @@ export default function WalletForm() {
             <ErrorBoundary FallbackComponent={ErrorFallback}>
               {walletConnected ? (
                 <div className="flex" style={{ alignItems: 'self-end' }}>
-                  Connecting Account: {account?.slice(0, 10)}...
+                  Connect Account: {account?.slice(0, 10)}...
                   {account?.slice(38)}{' '}
                   <Button className="text-[10px] font-medium h-fit ml-4">
                     {chain}
