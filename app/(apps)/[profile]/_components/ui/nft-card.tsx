@@ -5,7 +5,7 @@ import type { NFT } from '@/models/all.model'
 import ovationService from '@/services/ovation.service'
 import { useAppStore } from '@/store/use-app-store'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { EllipsisVertical } from 'lucide-react'
+import { CheckCircle, EllipsisVertical } from 'lucide-react'
 import { toast } from 'sonner'
 
 export function NFTCard({
@@ -15,6 +15,7 @@ export function NFTCard({
   metaData,
   id,
   isPrivate,
+  isVerified,
 }: NFT) {
   const queryClient = useQueryClient()
   const { userId, notUser, isUser } = useAppStore()
@@ -65,7 +66,18 @@ export function NFTCard({
     },
   })
 
-  const getImageSrc = () => {
+  const getMediaSrc = () => {
+    if (metaData?.Metadata) {
+      const parsedMetadata = JSON.parse(metaData.Metadata)
+      const animationUrl = parsedMetadata.animation_url
+      if (animationUrl) {
+        if (animationUrl.startsWith('ipfs://')) {
+          return `https://gateway.pinata.cloud/ipfs/${animationUrl.slice(7)}`
+        }
+        return animationUrl
+      }
+    }
+
     if (imageUrl) {
       if (imageUrl.startsWith('ipfs://')) {
         return `https://gateway.pinata.cloud/ipfs/${imageUrl.slice(7)}`
@@ -85,6 +97,14 @@ export function NFTCard({
     }
 
     return ''
+  }
+
+  const isVideo = () => {
+    if (metaData?.Metadata) {
+      const parsedMetadata = JSON.parse(metaData.Metadata)
+      return !!parsedMetadata.animation_url
+    }
+    return false
   }
 
   const getNFTName = () => {
@@ -121,12 +141,33 @@ export function NFTCard({
           Private
         </div>
       )}
+      {isVerified && (
+        <div className="bg-[#232227] absolute top-2 right-2 z-10 text-primary text-xs font-medium py-1 px-2 rounded-full flex items-center  overflow-hidden group">
+          <CheckCircle size={12} />
+          <span className="ml-1 max-w-0 group-hover:max-w-[60px] transition-all duration-300 ease-in-out whitespace-nowrap overflow-hidden">
+            Verified
+          </span>
+        </div>
+      )}
       <div className="relative pt-[100%]">
-        <img
-          src={getImageSrc()}
-          alt="NFT Preview"
-          className="absolute top-0 left-0 w-full h-full object-cover"
-        />
+        {isVideo() ? (
+          <video
+            src={getMediaSrc()}
+            className="absolute top-0 left-0 w-full h-full object-cover"
+            controls
+            loop
+            muted
+            autoPlay
+            playsInline
+            controlsList="nodownload noremoteplayback nofullscreen"
+          />
+        ) : (
+          <img
+            src={getMediaSrc()}
+            alt="NFT Preview"
+            className="absolute top-0 left-0 w-full h-full object-cover"
+          />
+        )}
       </div>
       <div className="flex flex-col justify-between bg-[#111115] border-t border-[#FFFFFF0D] p-3 flex-grow">
         <div className="flex items-start justify-between w-full mb-2">
