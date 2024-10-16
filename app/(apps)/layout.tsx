@@ -16,6 +16,8 @@ import { AuthMiddleware } from './auth-middleware'
 import { StoreProvider } from 'easy-peasy'
 import store from '@/store/store'
 import { FeedbackPopup } from './_feedback/feedback-popup'
+import { analytics } from '@/lib/firebase'
+import { useRouter } from 'next/router';
 
 const queryClient = new QueryClient()
 
@@ -29,6 +31,7 @@ export default function AsideLayout({
   const [notifications, setNotifications] = useState<NotificationMessage[]>([])
   const { storedValue } = useLocalStorage<UserData | null>('userData', null)
   const user = storedValue
+  const router = useRouter();
 
   useEffect(() => {
     connectSignalR()
@@ -54,12 +57,15 @@ export default function AsideLayout({
       },
     )
 
+    router.events.on('routeChangeComplete', logEvent);
+
     return () => {
       notificationServices.stopConnection()
       firebaseSignOut()
+      router.events.off('routeChangeComplete', logEvent);
       // if (unsubscribe != null) unsubscribe()
     }
-  }, [])
+  }, [router.events])
 
   const connectSignalR = async () => {
     await notificationServices.startConnection()
@@ -73,6 +79,14 @@ export default function AsideLayout({
   const firebaseSignOut = async () => {
     await logOut()
   }
+
+  const logEvent = (url: string) => {
+    if (analytics) {
+      analytics.logEvent('page_view', {
+        page_path: url,
+      });
+    }
+  };
 
   return (
     // <AuthMiddleware>

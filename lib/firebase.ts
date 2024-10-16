@@ -2,6 +2,7 @@ import { initializeApp, getApps, getApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
+import { getAnalytics, isSupported } from "firebase/analytics";
 
 // ovation web app Firebase configuration
 const firebaseConfig = {
@@ -16,6 +17,18 @@ const firebaseConfig = {
 
 // Initialize Firebase (ensure it is only initialized once)
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+
+let fbAnalytics: any = null;
+
+if (typeof window !== "undefined") {
+    isSupported().then((yes) => {
+        if (yes) {
+            fbAnalytics = getAnalytics(app);
+        }
+    });
+}
+
+export const analytics = fbAnalytics ;
 
 // Firebase services
 export const auth = getAuth(app);
