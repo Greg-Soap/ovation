@@ -30,8 +30,11 @@ export function FeedbackPopup() {
   function handleClose() {
     setIsOpen(false)
     setShowFeedbackForm(false)
-    // Update the last popup time when the user clicks "Maybe Later"
     localStorage.setItem('lastFeedbackPopupTime', Date.now().toString())
+  }
+
+  function handleFeedbackModalClose() {
+    setShowFeedbackForm(false)
   }
 
   return (
@@ -62,7 +65,7 @@ export function FeedbackPopup() {
           onOpenChange={setShowFeedbackForm}
           className="flex flex-col items-center justify-center p-0 m-0 w-fit h-fit overflow-auto border-none"
         >
-          <FeedbackModal onClose={() => setShowFeedbackForm(false)} />
+          <FeedbackModal onClose={handleFeedbackModalClose} />
         </CustomModal>
       )}
     </>
