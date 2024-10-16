@@ -44,6 +44,7 @@ export default function LoginForm() {
         toast.success('Login successful!')
         await signInOrSignUp(data?.data?.userData)
 
+        // await signInOrSignUp(data?.data?.userData)
         // Check for stored destination
         const intendedDestination = localStorage.getItem('intendedDestination')
         if (intendedDestination) {

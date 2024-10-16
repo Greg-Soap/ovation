@@ -148,6 +148,7 @@ export default function ProfileForm({
       return ovationService.updatePersonalInfo(data)
     },
     onSuccess: async () => {
+      toast.success('Profile updated successfully')
       await updateUserData(
         {
           displayName: tempFormValues.displayName,
@@ -159,7 +160,7 @@ export default function ProfileForm({
         userData?.userId ?? '',
       )
 
-      toast.success('Profile updated successfully')
+      
       refetch()
 
       setUserData({

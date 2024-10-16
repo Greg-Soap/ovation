@@ -158,6 +158,7 @@ export interface UserData {
   userId: string
   username: string
   email: string
+  googleId: string
   displayName: string | null
   birthDate: string | null
   location: string | null

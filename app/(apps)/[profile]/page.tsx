@@ -1,21 +1,20 @@
 'use client'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { Button } from '@/components/ui/button'
 import UserProfile from './_components/user-profile'
 import MainProfileSection from './_components/main-profile-section'
 import ovationService from '@/services/ovation.service'
 import type { ProfileData, UserExperience } from '@/models/all.model'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
-import { useEffect, useState } from 'react'
-import { useParams, usePathname } from 'next/navigation'
+import { useState } from 'react'
+import { useParams } from 'next/navigation'
 import { toast } from 'sonner'
-import AsideMsgIcon from '@/components/icons/asideMsgIcon'
 import type { FriendProps } from '../messages/message-container'
 import { useLocalStorage } from '@/lib/use-local-storage'
 import { useAnchorNavigation } from '@/lib/use-navigation'
 import { getToken } from '@/lib/cookies'
 import { useAppStore } from '@/store/use-app-store'
+import ProfileHeader from './_components/sections/profile-header'
 
 export default function Page() {
   const params = useParams()
@@ -55,7 +54,6 @@ export default function Page() {
       await navigator.clipboard.writeText(profileLink)
       toast.success('Profile link copied!')
     } catch (err) {
-      8
       console.error('Failed to copy profile link:', err)
       toast.error('Copy failed')
     } finally {
@@ -100,113 +98,21 @@ export default function Page() {
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <div
-        className="relative w-full h-[262px]"
-        style={{
-          backgroundImage: profileData?.profile?.coverImage
-            ? `url('${profileData?.profile?.coverImage}')`
-            : 'url("/assets/images/profile/image8.png")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
-      >
-        {!token ? (
-          <div className="flex items-end justify-end gap-3 h-[inherit] w-full pr-10 pb-10">
-            <Button
-              variant={'default'}
-              className={`
-                py-[9px] px-[13px] text-xs font-semibold border
-                ${
-                  profileData?.isFollowing
-                    ? 'bg-[#333726]  border-[#E6E6E64D] hover:bg-red-900 hover:text-red-200 hover:border-red-700'
-                    : ' text-[#0B0A10] border-[#E6E6E64D]'
-                }
-                transition-colors duration-200
-                ${profileData?.isFollowing ? 'group' : ''}
-              `}
-              onClick={() => navigateTo('/create-account')}
-            >
-              <span
-                className={profileData?.isFollowing ? 'group relative' : ''}
-              >
-                Create an account
-              </span>
-            </Button>
-          </div>
-        ) : isUser ? (
-          <ErrorBoundary FallbackComponent={ErrorFallback}>
-            <div className="flex flex-col-reverse sm:flex-row items-end justify-start sm:justify-end gap-3 h-[inherit] w-full pb-4 pr-4 md:pr-10 md:pb-10">
-              <Button
-                variant="secondary"
-                onClick={copyProfileLinkToClipboard}
-                disabled={isCopying}
-                className=" rounded-full py-[11px] px-4 border border-[#E6E6E64D] text-[#333333] text-xs"
-              >
-                {isCopying ? 'Copying...' : 'Copy Profile Link'}
-              </Button>
-              <Button
-                variant="default"
-                className="py-[11px] px-4 border border-[#E6E6E64D]  text-xs"
-              >
-                <a href="/settings">Edit Profile</a>
-              </Button>
-            </div>
-          </ErrorBoundary>
-        ) : (
-          <ErrorBoundary FallbackComponent={ErrorFallback}>
-            <div className="flex items-end justify-end gap-3 h-[inherit] w-full pr-10 pb-10">
-              <Button
-                variant="default"
-                className="bg-[#333726] p-[9px] border border-[#507100]"
-                onClick={openDM}
-              >
-                <AsideMsgIcon className="w-5 h-5 stroke-black fill-primary" />
-              </Button>
-              <Button
-                variant={'default'}
-                disabled={isFollowingPending || isUnfollowingPending}
-                isLoading={isFollowingPending || isUnfollowingPending}
-                loadingText={
-                  isFollowingPending ? 'Following...' : 'Unfollowing...'
-                }
-                className={`
-                py-[9px] px-[13px] text-xs font-semibold border
-                ${
-                  profileData?.isFollowing
-                    ? 'bg-primary-bright  border-foreground hover:bg-red-900 hover:text-red-200 hover:border-red-700'
-                    : ' text-primary-foreground border-[#E6E6E64D]'
-                }
-                transition-colors duration-200
-                ${profileData?.isFollowing ? 'group' : ''}
-              `}
-                onClick={() => {
-                  if (profileData?.isFollowing) {
-                    unfollowUser(profileData?.userId as string)
-                  } else {
-                    followUser(profileData?.userId as string)
-                  }
-                }}
-              >
-                <span
-                  className={profileData?.isFollowing ? 'group relative' : ''}
-                >
-                  {profileData?.isFollowing ? (
-                    <>
-                      <span className="group-hover:hidden">Following</span>
-                      <span className="hidden group-hover:inline">
-                        Unfollow
-                      </span>
-                    </>
-                  ) : (
-                    'Follow'
-                  )}
-                </span>
-              </Button>
-            </div>
-          </ErrorBoundary>
-        )}
-      </div>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <ProfileHeader
+          profileData={profileData as ProfileData}
+          isUser={isUser}
+          isFollowingPending={isFollowingPending}
+          isUnfollowingPending={isUnfollowingPending}
+          followUser={followUser}
+          unfollowUser={unfollowUser}
+          copyProfileLinkToClipboard={copyProfileLinkToClipboard}
+          isCopying={isCopying}
+          openDM={openDM}
+          navigateTo={navigateTo}
+          token={token as string}
+        />
+      </ErrorBoundary>
 
       <div className="flex flex-col lg:flex-row relative h-auto">
         <ErrorBoundary FallbackComponent={ErrorFallback}>
