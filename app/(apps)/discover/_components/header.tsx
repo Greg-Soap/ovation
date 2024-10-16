@@ -62,7 +62,7 @@ export function Header() {
         <SearchIcon
           size={20}
           color="black"
-          className="absolute top-1/2 left-6 md:left-4 transform -translate-y-1/2 z-50"
+          className="absolute top-1/2 left-[40px] md:left-4 transform -translate-y-1/2 z-50"
         />
       </div>
 
