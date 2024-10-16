@@ -1,22 +1,23 @@
 import { ImageResponse } from 'next/og'
+import type { NextRequest } from 'next/server'
 import ovationService from '@/services/ovation.service'
 
 export const runtime = 'edge'
-export const alt = 'User Profile'
-export const size = {
-  width: 1200,
-  height: 630,
-}
 
-export default async function Image({
-  params,
-}: {
-  params: { profile: string }
-}) {
-  const profileData = await getProfileData(params.profile)
+export async function GET(req: NextRequest) {
+  const { searchParams } = req.nextUrl
+  const username = searchParams.get('username') || 'default'
+
+  const profileData = await getProfileData(username)
 
   const backgroundImage =
     profileData?.profile?.coverImage || '/assets/images/profile/image8.png'
+  const displayName =
+    profileData?.profile?.displayName || profileData?.username || 'User'
+  const bio = profileData?.profile?.bio || ''
+  const profileImage =
+    profileData?.profile?.profileImage ||
+    'https://www.ovation.network/assets/images/default-avatar.png'
 
   return new ImageResponse(
     (
@@ -47,11 +48,8 @@ export default async function Image({
           }}
         >
           <img
-            src={
-              profileData?.profile?.profileImage ||
-              'https://www.ovation.network/assets/images/default-avatar.png'
-            }
-            alt={profileData?.username}
+            src={profileImage}
+            alt={displayName}
             width={100}
             height={100}
             style={{
@@ -61,9 +59,9 @@ export default async function Image({
             }}
           />
           <h1 style={{ color: 'white', fontSize: 48, margin: '0 0 10px 0' }}>
-            {profileData?.profile?.displayName || profileData?.username}
+            {displayName}
           </h1>
-          {profileData?.profile?.bio && (
+          {bio && (
             <p
               style={{
                 color: '#E6E6E6',
@@ -72,7 +70,7 @@ export default async function Image({
                 maxWidth: '80%',
               }}
             >
-              {profileData?.profile?.bio}
+              {bio}
             </p>
           )}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -93,16 +91,18 @@ export default async function Image({
       </div>
     ),
     {
-      ...size,
+      width: 1200,
+      height: 630,
     },
   )
 }
 
-export async function getProfileData(username: string) {
+async function getProfileData(username: string) {
   try {
     const profileData = await ovationService.getUserProfile(username)
     return profileData
   } catch (error) {
     console.error('Error fetching profile data:', error)
+    return null
   }
 }
