@@ -8,12 +8,16 @@ export function FeedbackPopup() {
   const [showFeedbackForm, setShowFeedbackForm] = useState(false)
 
   useEffect(() => {
-    const hasSeenPopup = localStorage.getItem('hasSeenFeedbackPopup')
-    if (!hasSeenPopup) {
+    const lastPopupTime = localStorage.getItem('lastFeedbackPopupTime')
+    const currentTime = Date.now()
+    const twoDaysInMs = 2 * 24 * 60 * 60 * 1000 // 2 days in milliseconds
+    const fiveMinutesInMs = 5 * 60 * 1000 // 5 minutes in milliseconds
+
+    if (!lastPopupTime || currentTime - Number(lastPopupTime) >= twoDaysInMs) {
       const timer = setTimeout(() => {
         setIsOpen(true)
-        localStorage.setItem('hasSeenFeedbackPopup', 'true')
-      }, 60000) // 1 minute delay
+        localStorage.setItem('lastFeedbackPopupTime', currentTime.toString())
+      }, fiveMinutesInMs) // 5 minutes delay
 
       return () => clearTimeout(timer)
     }
@@ -26,6 +30,8 @@ export function FeedbackPopup() {
   function handleClose() {
     setIsOpen(false)
     setShowFeedbackForm(false)
+    // Update the last popup time when the user clicks "Maybe Later"
+    localStorage.setItem('lastFeedbackPopupTime', Date.now().toString())
   }
 
   return (
