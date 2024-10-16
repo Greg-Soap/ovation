@@ -185,7 +185,7 @@ export default function WalletForm() {
             <ErrorBoundary FallbackComponent={ErrorFallback}>
               {walletConnected ? (
                 <div className="flex" style={{ alignItems: 'self-end' }}>
-                  Connected Account: {account?.slice(0, 10)}...
+                  Connecting Account: {account?.slice(0, 10)}...
                   {account?.slice(38)}{' '}
                   <Button className="text-[10px] font-medium h-fit ml-4">
                     {chain}
@@ -242,7 +242,7 @@ export default function WalletForm() {
                 </>
               )}
             </ErrorBoundary>
-            <div className="flex">
+            <div className="flex mt-10">
               <div className="w-full mr-2">
                 <Button
                   type="button"
@@ -251,7 +251,7 @@ export default function WalletForm() {
                     setWaletConnected(false)
                     setWalletAutomatically(false)
                   }}
-                  className="flex-1  mt-10 w-full"
+                  className="flex-1 w-full"
                 >
                   Cancel
                 </Button>
@@ -259,10 +259,10 @@ export default function WalletForm() {
               {walletConnected && (
                 <div className="w-full ml-2">
                   <Button
-                    type="button"
-                    variant="outline"
-                    onClick={addWalletForUser}
-                    className="flex-1  mt-10 w-full"
+                    className="w-full hover:scale-105 h-[40px] text-sm font-semibold"
+                    variant={'default'}
+                    disabled={isAddingWallet}
+                    onClick={() => addWalletForUser()}
                   >
                     {isAddingWallet ? 'Adding Wallet' : 'Add Wallet'}
                   </Button>
