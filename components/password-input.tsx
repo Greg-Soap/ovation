@@ -29,13 +29,13 @@ function PasswordInput({ placeholder, value, onChange }: PasswordInputProps) {
         type="button"
         variant="ghost"
         size="icon"
-        className="absolute right-0 top-0 h-full rounded-full hover:bg-transparent hover:/75"
+        className="absolute right-0 top-0 h-full rounded-full hover:text-primary/75 hover:bg-transparent"
         onClick={toggleVisibility}
       >
         {isVisible ? (
-          <EyeOff className="h-4 w-4" />
-        ) : (
           <Eye className="h-4 w-4" />
+        ) : (
+          <EyeOff className="h-4 w-4" />
         )}
       </Button>
     </div>

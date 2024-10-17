@@ -143,6 +143,11 @@ const config = {
             'offset-distance': '100%',
           },
         },
+        'caret-blink': {
+          '0%,70%,100%': { opacity: '1' },
+          '20%,50%': { opacity: '0' },
+        },
+
         pulse: {
           '0%, 100%': { boxShadow: '0 0 0 0 var(--pulse-color)' },
           '50%': { boxShadow: '0 0 0 8px var(--pulse-color)' },
@@ -157,6 +162,7 @@ const config = {
         'accordion-up': 'accordion-up 0.2s ease-out',
         marquee: 'marquee var(--duration) linear infinite',
         'marquee-vertical': 'marquee-vertical var(--duration) linear infinite',
+        'caret-blink': 'caret-blink 1.5s ease-out infinite',
       },
     },
   },

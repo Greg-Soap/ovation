@@ -9,7 +9,11 @@ import { Button } from '@/components/ui/button'
 
 const formSchema = z
   .object({
-    password: z.string().min(8, 'Password must be at least 8 characters'),
+    password: z
+      .string()
+      .min(8, 'Password should be at least 8 characters long')
+      .regex(/[A-Z]/, 'Password should contain at least one uppercase letter')
+      .regex(/[a-z]/, 'Password should contain at least one lowercase letter'),
     passwordConfirm: z.string(),
   })
   .refine((data) => data.password === data.passwordConfirm, {
@@ -46,11 +50,7 @@ export default function PasswordResetForm({
           Choose a new password for your account
         </p>
       </div>
-      <FormBase
-        form={form}
-        onSubmit={handleSubmit}
-        className="flex flex-col gap-6"
-      >
+      <FormBase form={form} onSubmit={handleSubmit} className="flex flex-col ">
         <FormField name="password" label="Password" form={form} showMessage>
           {(field) => (
             <PasswordInput
@@ -67,11 +67,18 @@ export default function PasswordResetForm({
           showMessage
         >
           {(field) => (
-            <PasswordInput
-              value={field.value}
-              placeholder="Enter your new password"
-              onChange={field.onChange}
-            />
+            <>
+              <PasswordInput
+                value={field.value}
+                placeholder="Enter your new password"
+                onChange={field.onChange}
+              />
+              <p className="text-xs text-light mt-2">
+                Password should be at least 8 characters long and contain at
+                least one uppercase letter, one lowercase letter, one number,
+                and one special character.
+              </p>
+            </>
           )}
         </FormField>
         <Button
