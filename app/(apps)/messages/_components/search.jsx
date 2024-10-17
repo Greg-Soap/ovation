@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import PopUp from './popup'
 
 const search = () => {
-  const [popup, setPopUp] = useState(false)
+  // const [popup, setPopUp] = useState(false)
 
   return (
     <>
