@@ -11,8 +11,9 @@ import {
   type Participant,
 } from '@/lib/firebaseChatService'
 import { useAppStore } from '@/store/use-app-store'
+import Searchinput from './search'
 
-export default function FriendList() {
+export default function Search() {
   const [friends, setFriends] = useState<ChatData[]>([])
   const [selectedFriend, setSelectedFriend] = useState<ChatData | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -101,7 +102,7 @@ export default function FriendList() {
           <p className="text-[22px]  font-semibold">Messages</p>
           {/* <SearchInput width="full" /> */}
         </div>
-
+        <Searchinput />
         <div className="flex flex-col gap-4 w-full">
           {isLoading ? (
             <div className="flex justify-center items-center h-64">
