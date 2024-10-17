@@ -171,7 +171,7 @@ export default function LoginForm() {
           <div style={{ position: 'absolute', opacity: '0' }}>
             <GoogleLogin
               onSuccess={handleSuccess}
-              onError={handleError}
+              onError={handleError as any}
               size="large"
             />
           </div>
