@@ -24,7 +24,14 @@ export default function ResetForm() {
       setPage(2)
       toast.success('OTP sent successfully!')
     } catch (error) {
-      toast.error('Failed to send OTP. Please try again.')
+      // @ts-ignore
+      if (error.response.status === 404) {
+        toast.error('User not found. Please check your email address.')
+      }
+      // @ts-ignore
+      if (error.response.status === 400) {
+        toast.error('Failed to send OTP. Please try again.')
+      }
     }
   }
 

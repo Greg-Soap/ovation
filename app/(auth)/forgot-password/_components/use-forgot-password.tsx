@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
+import { toast } from 'sonner'
 
 export function useForgotPassword() {
   const [userId, setUserId] = useState<string>('')
@@ -35,11 +36,16 @@ export function useForgotPassword() {
     await resetPasswordMutation.mutateAsync(password)
   }
 
+  const resendOtp = async () => {
+    await sendEmailMutation.mutateAsync(email)
+    toast.success('OTP resent successfully!')
+  }
+
   return {
     sendEmail,
     resetPassword,
     verifyOtp,
-    resendOtp: () => sendEmail(email),
+    resendOtp,
     isEmailSending: sendEmailMutation.isPending,
     isPasswordResetting: resetPasswordMutation.isPending,
   }

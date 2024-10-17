@@ -91,7 +91,7 @@ export default function WalletForm() {
       walletAddress: account,
       walletTypeId: walletTypeUId,
     }
-    console.log(data)
+
     addWallet(data)
   }
 
