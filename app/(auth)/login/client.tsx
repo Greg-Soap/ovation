@@ -15,10 +15,7 @@ import { FormBase, FormField } from '@/components/customs/custom-form'
 import { useAnchorNavigation } from '@/lib/use-navigation'
 import { signInOrSignUp } from '@/lib/firebaseAuthService'
 import { useAppStore } from '@/store/use-app-store'
-import { GoogleLogin } from '@react-oauth/google'
-import axios from 'axios'
-import { decodeIdToken } from '@/lib/helper-func'
-import { useEffect, useState } from 'react'
+import GoogleAuth from '../../../components/google-auth'
 
 const formSchema = z.object({
   userId: z.string(),
@@ -28,7 +25,6 @@ const formSchema = z.object({
 export default function LoginForm() {
   const navigateTo = useAnchorNavigation()
   const { setUser } = useAppStore()
-  const [googleLoginInfo, setGoogleLoginInfo] = useState(null as any)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -93,61 +89,8 @@ export default function LoginForm() {
     },
   })
 
-  // const loginGoogle = useGoogleLogin({
-  //   onSuccess: async (codeResponse) => {
-  //     try {
-  //       // console.log(codeResponse.code)
-  //       loginG(codeResponse.code)
-  //     } catch (error) {
-  //       console.error('Google login failed:', error)
-  //       toast.error('Google login failed. Please try again.')
-  //     }
-  //   },
-  //   onError: (error) => {
-  //     console.error('Google login error:', error)
-  //     toast.error('Google login failed. Please try again.')
-  //   },
-  //   flow: 'auth-code',
-  // })
-
-  const handleSuccess = async (response: any) => {
-    // Extract access token from response
-    const { credential } = response
-    if (!credential) {
-      //handle no credentials
-      return
-    }
-
-    try {
-      const userInfo = decodeIdToken(credential)
-      window.localStorage.setItem(
-        'google_info',
-        JSON.stringify({
-          email: userInfo.email,
-          name: userInfo.name,
-          profile: userInfo.picture,
-        }) as string,
-      )
-      console.log(userInfo.email)
-      loginG(userInfo.email)
-      // Handle user info and perform authentication to check if user already exist in the api
-    } catch (error) {
-      console.error('Error decoding ID token:', error)
-    }
-  }
-
-  useEffect(() => {
-    const getInfo = () => {
-      const googleInfo = window.localStorage.getItem('google_info')
-      if (googleInfo) {
-        setGoogleLoginInfo(JSON.parse(googleInfo))
-      }
-    }
-    getInfo()
-  }, [])
-
-  const handleError = (error: any) => {
-    console.error('Login Failed:', error)
+  const loginGoogle = ({ googleObject }: any) => {
+    loginG(googleObject.email)
   }
 
   return (
@@ -159,58 +102,8 @@ export default function LoginForm() {
           Hi, Welcome back ✋
         </p>
       </div>
-      <div className="  flex justify-between mb-4">
-        <div
-          className="px-4 h-[51.31px] text-[10px] md:text-base w-full bg-white  flex gap-4 w-[262px] flex justify-center items-center cursor-pointer"
-          style={{
-            borderRadius: '500px',
-            justifyContent: !googleLoginInfo ? 'center' : 'flex-start',
-            display: 'flex',
-          }}
-        >
-          <div style={{ position: 'absolute', opacity: '0' }}>
-            <GoogleLogin
-              onSuccess={handleSuccess}
-              onError={handleError as any}
-              size="large"
-            />
-          </div>
-          {googleLoginInfo ? (
-            <div className="flex">
-              <img
-                src={googleLoginInfo?.profile}
-                alt="profile"
-                className="w-[30px] h-[30px] mr-[10px]"
-                style={{ borderRadius: '50%' }}
-              />
-              <div>
-                <p className="text-xs text-black">
-                  sign in as {googleLoginInfo?.name?.slice(0, 20)}.
-                </p>
-                <p className="text-xs text-black">{googleLoginInfo?.email}</p>
-              </div>
-            </div>
-          ) : (
-            <>
-              <img
-                src={'assets/images/google.png'}
-                alt=""
-                className="w-[21px] h-[20px]"
-              />
-              <p className="text-xs text-black">Login with Google</p>
-            </>
-          )}
-        </div>
-      </div>
-      <div id="login__connect-wallet" className="flex flex-col gap-4 mb-[45px]">
-        <span className="flex gap-2 items-center justify-center">
-          <span className="w-[45%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]  text-[#C1C0C6]" />
-          <p className="text-[10px] font-medium text-[#C1C0C6] text-center">
-            OR
-          </p>
-          <span className="w-[47%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]" />
-        </span>
-      </div>
+      <GoogleAuth func={loginGoogle} />
+
       <FormBase form={form} onSubmit={formSubmit}>
         <FormField name="userId" form={form} label="Username">
           {(field) => (
