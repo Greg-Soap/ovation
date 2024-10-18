@@ -59,8 +59,6 @@ export default function OtpForm({ onSubmit, onResendOtp }: OtpFormProps) {
     return () => subscription.unsubscribe()
   }, [form])
 
-  console.log('values', form.watch())
-
   return (
     <div className="flex flex-col gap-7">
       <div>

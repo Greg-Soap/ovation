@@ -107,7 +107,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
       toast.success('Profile created successfully')
       await signUp(data.data?.userData) // for firebase
       setDraft({}) // Clear the draft
-      navigateTo('/discover')
+      navigateTo(`/verify-account?email=${form.getValues().personalInfo.email}`)
     },
     onError: (error) => {
       // @ts-ignore
