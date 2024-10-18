@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+    body {
+      background-color: black;
+      padding: 40px;
+    }
+    .title {
+      font-weight: 600;
+      font-size: 20px;
+    }
+    .desc {
+      color: #cccccc;
+    }
+    a {
+      color: #a4b2fe;
+      font-size: 14px;
+      margin-block: 16px;
+      text-decoration: none;
+    }
+    p {
+      font-size: 14px;
+      color: #cccccc;
+      margin-bottom: 20px;
+      line-height: 30px;
+    }
+
+    button {
+      background-color: #cff073;
+      width: 200px;
+      color: black;
+      height: 53px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 28px;
+      border: none;
+    }
+    .welcome {
+      margin-top: 16px;
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    .ovation {
+      font-weight: 400;
+    }
+  </style>
+  <body>
+    <p class="title">Hello Ovationist,</p>
+    <p class="desc">
+      Verify your email address on Ovation! The link below will expire in 'time
+      frame,' so be sure to complete the process soon.
+    </p>
+    <a
+      href="https://ovation.network/verify-account?email={person%20email}&code={OTP}"
+    >
+      <button on>Verify email</button>
+    </a>
+    <p>You can also copy link below into your browser window</p>
+    <a
+      href="https://ovation.network/verify-account?email={person%20email}&code={OTP}"
+    >
+      https://ovation.network/verify-account?email={person%20email}&code={OTP}
+    </a>
+    <p class="welcome">Welcome aboard!</p>
+    <p class="ovation">The Ovation Team</p>
+  </body>
+</html>
