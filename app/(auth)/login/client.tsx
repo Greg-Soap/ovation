@@ -3,12 +3,10 @@ import { Button } from '@/components/ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import Google from '@/public/assets/images/ovationAuthGoogle'
 import { Input } from '@/components/ui/input'
 import { toast } from 'sonner'
 import arrow from '@/public/assets/images/arrow-right.png'
 import Image from 'next/image'
-import { useGoogleLogin } from '@react-oauth/google'
 import { useMutation } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
 import { setToken } from '@/lib/cookies'
@@ -17,6 +15,7 @@ import { FormBase, FormField } from '@/components/customs/custom-form'
 import { useAnchorNavigation } from '@/lib/use-navigation'
 import { signInOrSignUp } from '@/lib/firebaseAuthService'
 import { useAppStore } from '@/store/use-app-store'
+import GoogleAuth from '../../../components/google-auth'
 
 const formSchema = z.object({
   userId: z.string(),
@@ -68,7 +67,7 @@ export default function LoginForm() {
   }
 
   const { mutate: loginG } = useMutation({
-    mutationFn: (code: string) => ovationService.loginGoogle(code),
+    mutationFn: (email: string) => ovationService.loginGoogle(email),
     onSuccess: (data) => {
       if (data?.data?.token) {
         setToken(data?.data?.token)
@@ -80,54 +79,31 @@ export default function LoginForm() {
         toast.error('Login failed: No token received')
       }
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error('Google login error:', error)
-      toast.error('Google login failed. Please try again.')
+      toast.error(
+        error?.response?.data?.message == 'Authentication failed!'
+          ? "Email doesn't exist, please sign up!"
+          : error?.response?.data?.message,
+      )
     },
   })
 
-  const loginGoogle = useGoogleLogin({
-    onSuccess: async (codeResponse) => {
-      try {
-        // console.log(codeResponse.code)
-        loginG(codeResponse.code)
-      } catch (error) {
-        console.error('Google login failed:', error)
-        toast.error('Google login failed. Please try again.')
-      }
-    },
-    onError: (error) => {
-      console.error('Google login error:', error)
-      toast.error('Google login failed. Please try again.')
-    },
-    flow: 'auth-code',
-  })
+  const loginGoogle = ({ googleObject }: any) => {
+    loginG(googleObject.email)
+  }
 
   return (
-    <div className="flex flex-col gap-11">
-      <div id="login__header">
+    <div className="flex flex-col">
+      <div id="login__header ">
         <h1 className="text-3xl font-semibold ">Login</h1>
-        <p className="text-sm text-light mt-1"> Hi, Welcome back ✋</p>
+        <p className="text-sm text-light mt-1 mb-[45px]">
+          {' '}
+          Hi, Welcome back ✋
+        </p>
       </div>
-      {/* TODO: Add Google Login */}
-      {/* <div className="  flex justify-between mb-4">
-        <Button
-          onClick={loginGoogle}
-          className="p-4 text-[10px] font-semibold md:text-base w-full bg-white flex gap-4"
-        >
-          <Google />
-          <p>Login with Google</p>
-        </Button>
-      </div> */}
-      {/* <div id="login__connect-wallet" className="flex flex-col gap-4">
-        <span className="flex gap-2 items-center justify-center">
-          <span className="w-[47%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]  text-[#C1C0C6]" />
-          <p className="text-[10px] font-medium text-[#C1C0C6] text-center">
-            OR
-          </p>
-          <span className="w-[47%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]" />
-        </span>
-      </div> */}
+      <GoogleAuth func={loginGoogle} />
+
       <FormBase form={form} onSubmit={formSubmit}>
         <FormField name="userId" form={form} label="Username">
           {(field) => (

@@ -1,6 +1,6 @@
 'use client'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
+import { useForm, useFormContext } from 'react-hook-form'
 import { z } from 'zod'
 import { ChevronRight } from 'lucide-react'
 import { toast } from 'sonner'
@@ -184,12 +184,12 @@ export default function AccountForm({ setOptionalLeft }: Props) {
   }
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col">
       <div className="space-y-4">
         <h1 className="text-3xl font-semibold ">Create Account</h1>
         <nav
           aria-label="Account creation steps"
-          className="flex flex-wrap items-center gap-2 text-sm md:text-base"
+          className="flex flex-wrap items-center gap-2 text-sm md:text-base pb-8"
         >
           {[
             { label: 'Personal info', step: 1 },
