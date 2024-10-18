@@ -193,9 +193,7 @@ export default function LoginForm() {
           ) : (
             <>
               <img
-                src={
-                  'https://s3-alpha-sig.figma.com/img/8f71/8a60/1dbc390743f14ffcef03171fdfb2b6a9?Expires=1730073600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=QEDsaHq86w8cJI4Ngk6tIa~Q5Fm-gXDEoEy~Z7EZ1fL3S2t7t8lQxfaI5zJBhpzWp0~AXii~qooMwex0CSA6IpfjwHqzfr-AK~DJ~C5NIn4nX86z814KHI9mrUZteozyB~xMNyo9ZBG~UT1tVggZeUu8OKhM9IN-jDb4svXISdBxcMdedKjlen75nMsColgktPY-gLV3w80xO0YIu6DFZw8aG8nnNgRPRqNytUjFINH~R8AVK~KZLBruA~jg~8xiZ31TyrtaRlx0JuWz-suw1BxJz0h0HDbYLn-7XJz~6ExhYe8ubidm0BhY9SeaIiHCNbhZdkAmulHAtCZNAYycQA__'
-                }
+                src={'assets/images/google.png'}
                 alt=""
                 className="w-[21px] h-[20px]"
               />
