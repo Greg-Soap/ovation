@@ -3,7 +3,7 @@ import { decodeIdToken } from '@/lib/helper-func'
 import { GoogleLogin } from '@react-oauth/google'
 import React, { useEffect, useState } from 'react'
 
-const GoogleAuth = ({ func }: any) => {
+const GoogleAuth = ({ func, form }: any) => {
   const [googleLoginInfo, setGoogleLoginInfo] = useState(null as any)
 
   const handleSuccess = async (response: any) => {
@@ -24,7 +24,7 @@ const GoogleAuth = ({ func }: any) => {
           profile: userInfo.picture,
         }) as string,
       )
-      console.log(userInfo)
+      form.setValue('type', 'Google')
       func({ googleObject: userInfo })
       // Handle user info and perform authentication to check if user already exist in the api
     } catch (error) {

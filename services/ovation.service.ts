@@ -45,6 +45,11 @@ class OvationService {
     return api.get(`/Auth/verify/otp/${userId}/${otp}`)
   }
 
+
+  static verifyAccount(code: string, otp: string) {
+    return api.get(`/Auth/account/verify/${code}/${otp}`)
+  }
+
   static logout() {
     removeToken()
   }
