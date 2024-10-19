@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { format, setMonth, setYear, subYears } from 'date-fns'
+import { format, setMonth, setYear } from 'date-fns'
 import { Calendar as CalendarIcon } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
@@ -24,7 +24,7 @@ interface DatePickerProps {
   disableDate?: boolean
   onChange: (date: Date | undefined) => void
   placeholder?: string
-  value?: string // Add this line to accept an initial value
+  value?: string
 }
 
 export function DatePicker({
@@ -34,28 +34,15 @@ export function DatePicker({
   value,
 }: DatePickerProps) {
   const [selectedDate, setSelectedDate] = React.useState<Date | undefined>(
-    () => {
-      // Initialize selectedDate with the provided value, if it exists
-      return value ? new Date(value) : undefined
-    },
+    () => (value ? new Date(value) : undefined),
   )
-  const [currentMonth, setCurrentMonth] = React.useState(() => {
-    // Initialize currentMonth with the provided value or current date
-    return value ? new Date(value) : new Date()
-  })
-
-  const handleChange = React.useCallback(
-    (date: Date | undefined) => {
-      if (typeof onChange === 'function') {
-        onChange(date)
-      }
-    },
-    [onChange],
+  const [currentMonth, setCurrentMonth] = React.useState(() =>
+    value ? new Date(value) : new Date(),
   )
 
   const handleSelectDate = (date: Date | undefined) => {
     setSelectedDate(date)
-    handleChange(date)
+    onChange(date)
   }
 
   const currentYear = new Date().getFullYear()
@@ -84,33 +71,23 @@ export function DatePicker({
   }
 
   React.useEffect(() => {
-    // Update selectedDate when value prop changes
     if (value) {
       setSelectedDate(new Date(value))
       setCurrentMonth(new Date(value))
     }
   }, [value])
 
-  const handlePopoverInteraction = (
-    event: React.MouseEvent | React.FocusEvent,
-  ) => {
-    event.stopPropagation()
-  }
-
   return (
     <Popover>
-      <PopoverTrigger
-        asChild
-        className=" h-[47px] rounded-3xl border-[#353538] border-[1px] border-solid"
-      >
+      <PopoverTrigger asChild>
         <Button
           variant={'outline'}
           disabled={disableDate}
           className={cn(
-            'w-full justify-start text-left  font-normal hover:bg-transparent hover:text-light ',
-            !selectedDate && 'text-lighter',
+            'w-full justify-start text-left font-normal h-[47px] rounded-3xl border-[#353538] border-[1px] border-solid',
+            !selectedDate &&
+              'text-lighter hover:bg-transparent hover:text-light',
           )}
-          onClick={handlePopoverInteraction}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
           {selectedDate ? (
@@ -120,16 +97,24 @@ export function DatePicker({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0 bg-black text-foreground border-[#353538]  z-[9999]">
+      <PopoverContent
+        className="w-auto p-0 bg-black text-foreground border-[#353538] "
+        align="start"
+      >
         <div className="flex justify-between gap-2 px-2 py-1 pt-2">
           <Select
             value={currentMonth.getMonth().toString()}
-            onValueChange={(value) => handleMonthChange(Number.parseInt(value))}
+            onValueChange={(value) =>
+              handleMonthChange(Number.parseInt(value, 10))
+            }
           >
-            <SelectTrigger className="bg-black  border-[#353538]">
+            <SelectTrigger className="bg-black border-[#353538]">
               <SelectValue>{months[currentMonth.getMonth()]}</SelectValue>
             </SelectTrigger>
-            <SelectContent className="bg-black  border-[#353538] max-h-[200px]">
+            <SelectContent
+              position="popper"
+              className="bg-black border-[#353538] max-h-[200px]"
+            >
               {months.map((month, index) => (
                 <SelectItem key={month} value={index.toString()}>
                   {month}
@@ -139,12 +124,17 @@ export function DatePicker({
           </Select>
           <Select
             value={currentMonth.getFullYear().toString()}
-            onValueChange={(value) => handleYearChange(Number.parseInt(value))}
+            onValueChange={(value) =>
+              handleYearChange(Number.parseInt(value, 10))
+            }
           >
-            <SelectTrigger className="bg-black  border-[#353538]">
+            <SelectTrigger className="bg-black border-[#353538]">
               <SelectValue>{currentMonth.getFullYear()}</SelectValue>
             </SelectTrigger>
-            <SelectContent className="bg-black  border-[#353538] max-h-[200px]">
+            <SelectContent
+              position="popper"
+              className="bg-black border-[#353538] max-h-[200px]"
+            >
               {years.map((year) => (
                 <SelectItem key={year} value={year.toString()}>
                   {year}
