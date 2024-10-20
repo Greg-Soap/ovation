@@ -20,7 +20,8 @@ import { useParams } from 'next/navigation'
 // import ProfileMetadata from './[profile]/metadata'
 // import PopUp from '../..'
 import { analytics } from '@/lib/firebase'
-import { useRouter } from 'next/router';
+import { logEvent } from 'firebase/analytics';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 const queryClient = new QueryClient()
 
@@ -36,7 +37,8 @@ export default function AsideLayout({
   const [notifications, setNotifications] = useState<NotificationMessage[]>([])
   const { storedValue } = useLocalStorage<UserData | null>('userData', null)
   const user = storedValue
-  // const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     connectSignalR()
@@ -62,15 +64,17 @@ export default function AsideLayout({
       },
     )
 
-    // router.events.on('routeChangeComplete', logEvent);
+    if (analytics) {
+      const url = pathname + searchParams.toString();
+      logEvent(analytics, 'page_view', { page_path: url });
+    }
 
     return () => {
       notificationServices.stopConnection()
       firebaseSignOut()
-      // router.events.off('routeChangeComplete', logEvent);
       // if (unsubscribe != null) unsubscribe()
     }
-  },// [router.events]
+  }, [pathname, searchParams]
   )
 
   const connectSignalR = async () => {
@@ -85,14 +89,6 @@ export default function AsideLayout({
   const firebaseSignOut = async () => {
     await logOut()
   }
-
-  const logEvent = (url: string) => {
-    if (analytics) {
-      analytics.logEvent('page_view', {
-        page_path: url,
-      });
-    }
-  };
 
   return (
     <>
