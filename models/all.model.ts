@@ -124,6 +124,7 @@ export interface Wallet {
 export interface ProfileData {
   createdDate: string
   email: string
+  pathName: string
   profile: {
     displayName: string | null
     username: string

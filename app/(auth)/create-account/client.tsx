@@ -1,6 +1,6 @@
 'use client'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, useFormContext } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { ChevronRight } from 'lucide-react'
 import { toast } from 'sonner'
@@ -10,7 +10,7 @@ import ovationService from '@/services/ovation.service'
 import { useMutation } from '@tanstack/react-query'
 import { setToken } from '@/lib/cookies'
 import { useLocalStorage } from '@/lib/use-local-storage'
-import { signInOrSignUp, signUp } from '@/lib/firebaseAuthService'
+import { signInOrSignUp } from '@/lib/firebaseAuthService'
 import { useGoogleLogin } from '@react-oauth/google'
 import RenderWalletAndConfirmation from './_components/manual-wallect'
 import PersonalInfoForm from './_components/personal-form-section'
@@ -20,6 +20,7 @@ import { Form } from '@/components/ui/form'
 import { useAnchorNavigation } from '@/lib/use-navigation'
 import { useAppStore } from '@/store/use-app-store'
 import WalletConnectionChoice from './_components/wallet-connection-choice'
+import ProfileCompleted from './_components/profile-completed'
 
 const formSchema = z.object({
   personalInfo: z.object({
@@ -59,6 +60,8 @@ interface Props {
 export default function AccountForm({ setOptionalLeft }: Props) {
   const navigateTo = useAnchorNavigation()
   const [page, setPage] = useState(1)
+  const [isProfileCreated, setIsProfileCreated] = useState(false)
+  const [userEmail, setUserEmail] = useState('')
 
   const [isManualWallet, setIsManualWallet] = useState(false)
 
@@ -105,11 +108,13 @@ export default function AccountForm({ setOptionalLeft }: Props) {
       setUser(data.data?.userData)
 
       toast.success('Profile created successfully')
-      await signInOrSignUp(data?.data?.userData)
+
       setDraft({}) // Clear the draft
       if (form.getValues('type') === 'Google') {
+        await signInOrSignUp(data?.data?.userData)
         navigateTo('/discover')
       } else {
+        setIsProfileCreated(true)
         toast.success(
           'Successfully signed up, please check your email to verify your account!',
         )
@@ -137,6 +142,7 @@ export default function AccountForm({ setOptionalLeft }: Props) {
   })
 
   const handleFormSubmit = (data: z.infer<typeof formSchema>) => {
+    setUserEmail(data.personalInfo.email)
     createAccount(data)
   }
 
@@ -151,6 +157,10 @@ export default function AccountForm({ setOptionalLeft }: Props) {
   }
 
   function renderCurrentForm() {
+    if (isProfileCreated) {
+      return <ProfileCompleted email={userEmail} />
+    }
+
     switch (page) {
       case 1:
         return <PersonalInfoForm setPage={setPage} />

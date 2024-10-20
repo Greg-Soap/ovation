@@ -9,6 +9,7 @@ import { toast } from 'sonner'
 import { setToken } from '@/lib/cookies'
 import { useAppStore } from '@/store/use-app-store'
 import MiniLoader from '@/components/mini-loader'
+import { signInOrSignUp } from '@/lib/firebaseAuthService'
 
 export default function VerifyAccountPage() {
   const searchParams = useSearchParams()
@@ -25,6 +26,7 @@ export default function VerifyAccountPage() {
     onSuccess: async (data) => {
       setToken(data?.data?.token)
       setUser(data?.data?.userData)
+      await signInOrSignUp(data?.data?.userData)
       toast.success('Verification successful, welcome!')
       setTimeout(() => navigateTo('/discover'), 3000)
     },
