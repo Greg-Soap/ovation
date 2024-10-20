@@ -16,7 +16,7 @@ export async function generateMetadata(
   const profileData = await ovationService.getUserProfile(username)
 
   const name = profileData?.profile?.displayName || profileData?.username
-  const title = `${name} | Ovation`
+  const title = name ? `${name} | Ovation` : 'Ovation'
 
   const description =
     profileData?.profile?.bio || `Check out ${name}'s profile on our platform`
