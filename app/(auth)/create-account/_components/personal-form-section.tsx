@@ -23,7 +23,7 @@ export default function PersonalInfoForm({
     onSuccess: () => {
       form.clearErrors('personalInfo.username')
 
-      if (form.getValues('type') == 'Google') {
+      if (form.getValues('type') === 'Google') {
         const googleObject = JSON.parse(
           window.localStorage.getItem('google_info') as string,
         )
@@ -57,7 +57,7 @@ export default function PersonalInfoForm({
     }
   }
   function generateRandomValue() {
-    let result = Math.floor(Math.random() * 1000)
+    const result = Math.floor(Math.random() * 1000)
     return result
   }
 
