@@ -40,12 +40,10 @@ export default function LoginForm() {
         setToken(data?.data?.token)
         setUser(data?.data?.userData)
 
-        toast.success('Login successful!')
         await signInOrSignUp(data?.data?.userData)
-
-        // await signInOrSignUp(data?.data?.userData)
         // Check for stored destination
         const intendedDestination = localStorage.getItem('intendedDestination')
+        toast.success('Login successful!')
         if (intendedDestination) {
           localStorage.removeItem('intendedDestination')
           navigateTo(intendedDestination)
@@ -81,11 +79,7 @@ export default function LoginForm() {
     },
     onError: (error: any) => {
       console.error('Google login error:', error)
-      toast.error(
-        error?.response?.data?.message == 'Authentication failed!'
-          ? "Email doesn't exist, please sign up!"
-          : error?.response?.data?.message,
-      )
+      toast.error(error?.response?.data?.message)
     },
   })
 
@@ -102,7 +96,7 @@ export default function LoginForm() {
           Hi, Welcome back ✋
         </p>
       </div>
-      <GoogleAuth func={loginGoogle} />
+      <GoogleAuth func={loginGoogle} form={form} />
 
       <FormBase form={form} onSubmit={formSubmit}>
         <FormField name="userId" form={form} label="Username">

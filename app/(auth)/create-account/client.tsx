@@ -10,7 +10,7 @@ import ovationService from '@/services/ovation.service'
 import { useMutation } from '@tanstack/react-query'
 import { setToken } from '@/lib/cookies'
 import { useLocalStorage } from '@/lib/use-local-storage'
-import { signUp } from '@/lib/firebaseAuthService'
+import { signInOrSignUp, signUp } from '@/lib/firebaseAuthService'
 import { useGoogleLogin } from '@react-oauth/google'
 import RenderWalletAndConfirmation from './_components/manual-wallect'
 import PersonalInfoForm from './_components/personal-form-section'
@@ -105,13 +105,21 @@ export default function AccountForm({ setOptionalLeft }: Props) {
       setUser(data.data?.userData)
 
       toast.success('Profile created successfully')
-      await signUp(data.data?.userData) // for firebase
+      await signInOrSignUp(data?.data?.userData)
       setDraft({}) // Clear the draft
-      navigateTo(`/verify-account?email=${form.getValues().personalInfo.email}`)
+      if (form.getValues('type') === 'Google') {
+        navigateTo('/discover')
+      } else {
+        toast.success(
+          'Successfully signed up, please check your email to verify your account!',
+        )
+      }
     },
-    onError: (error) => {
+    onError: (error: any) => {
       // @ts-ignore
-      toast.error(error.response.data.message)
+      console.log(form.getValues('type'))
+      console.log(form.getValues().personalInfo.username)
+      toast.error(error?.response?.data?.message || 'An error occurred')
     },
   })
 
@@ -182,7 +190,6 @@ export default function AccountForm({ setOptionalLeft }: Props) {
         return null
     }
   }
-
   return (
     <div className="flex flex-col">
       <div className="space-y-4">
