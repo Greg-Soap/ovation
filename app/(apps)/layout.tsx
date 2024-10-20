@@ -31,7 +31,7 @@ export default function AsideLayout({
   const [notifications, setNotifications] = useState<NotificationMessage[]>([])
   const { storedValue } = useLocalStorage<UserData | null>('userData', null)
   const user = storedValue
-  const router = useRouter();
+  // const router = useRouter();
 
   useEffect(() => {
     connectSignalR()
@@ -57,15 +57,16 @@ export default function AsideLayout({
       },
     )
 
-    router.events.on('routeChangeComplete', logEvent);
+    // router.events.on('routeChangeComplete', logEvent);
 
     return () => {
       notificationServices.stopConnection()
       firebaseSignOut()
-      router.events.off('routeChangeComplete', logEvent);
+      // router.events.off('routeChangeComplete', logEvent);
       // if (unsubscribe != null) unsubscribe()
     }
-  }, [router.events])
+  },// [router.events]
+  )
 
   const connectSignalR = async () => {
     await notificationServices.startConnection()
