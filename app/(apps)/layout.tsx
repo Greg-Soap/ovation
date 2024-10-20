@@ -19,6 +19,9 @@ import { FeedbackPopup } from './_feedback/feedback-popup'
 import { useParams } from 'next/navigation'
 // import ProfileMetadata from './[profile]/metadata'
 // import PopUp from '../..'
+import { analytics } from '@/lib/firebase'
+import { logEvent } from 'firebase/analytics';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 const queryClient = new QueryClient()
 
@@ -34,6 +37,8 @@ export default function AsideLayout({
   const [notifications, setNotifications] = useState<NotificationMessage[]>([])
   const { storedValue } = useLocalStorage<UserData | null>('userData', null)
   const user = storedValue
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     connectSignalR()
@@ -59,12 +64,18 @@ export default function AsideLayout({
       },
     )
 
+    if (analytics) {
+      const url = pathname + searchParams.toString();
+      logEvent(analytics, 'page_view', { page_path: url });
+    }
+
     return () => {
       notificationServices.stopConnection()
       firebaseSignOut()
       // if (unsubscribe != null) unsubscribe()
     }
-  }, [])
+  }, [pathname, searchParams]
+  )
 
   const connectSignalR = async () => {
     await notificationServices.startConnection()
