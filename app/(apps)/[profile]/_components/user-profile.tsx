@@ -6,6 +6,7 @@ import MiniLoader from '@/components/mini-loader'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
 import ProfileInfo from './sections/profile-info'
+import PathBadge from './ui/path-badge'
 
 export default function UserProfile({
   profileData,
@@ -45,6 +46,7 @@ export default function UserProfile({
                   <p className="text-[22px] font-semibold">
                     {profileData?.profile?.displayName}
                   </p>
+                  <PathBadge pathName={profileData?.pathName} />
                 </div>
 
                 <p className="flex items-center gap-1 text-base text-light">

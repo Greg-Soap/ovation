@@ -1,13 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 
-import { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { ArrowLeft } from 'iconsax-react'
 import { FormBase, FormField } from '@/components/customs/custom-form'
+import { CustomOTP } from '@/components/customs/custom-otp'
+import { Loader2 } from 'lucide-react'
 
 const formSchema = z.object({
   otp: z.string().length(6, 'OTP must be 6 digits'),
@@ -20,6 +22,7 @@ type OtpFormProps = {
 
 export default function OtpForm({ onSubmit, onResendOtp }: OtpFormProps) {
   const [isResending, setIsResending] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -29,7 +32,12 @@ export default function OtpForm({ onSubmit, onResendOtp }: OtpFormProps) {
   })
 
   const handleSubmit = async (data: z.infer<typeof formSchema>) => {
-    await onSubmit(data.otp)
+    setIsSubmitting(true)
+    try {
+      await onSubmit(data.otp)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   const handleResendOtp = async () => {
@@ -40,6 +48,16 @@ export default function OtpForm({ onSubmit, onResendOtp }: OtpFormProps) {
       setIsResending(false)
     }
   }
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name === 'otp' && value.otp?.length === 6) {
+        form.handleSubmit(handleSubmit)()
+      }
+    })
+    return () => subscription.unsubscribe()
+  }, [form])
 
   return (
     <div className="flex flex-col gap-7">
@@ -59,15 +77,24 @@ export default function OtpForm({ onSubmit, onResendOtp }: OtpFormProps) {
       <FormBase
         form={form}
         onSubmit={handleSubmit}
-        className="flex flex-col gap-7"
+        className="flex flex-col items-center gap-7"
       >
         <FormField name="otp" label="One-Time Password" form={form}>
-          <Input
-            className="h-[46px] bg-transparent border-[#353538] border-solid border-[1px] focus:border-solid focus:border-[1px] focus:border-[#353538] rounded-full"
-            placeholder="Enter 6-digit OTP"
-            type="text"
-            maxLength={6}
-          />
+          {(field) => (
+            <div className="flex items-center gap-2">
+              <CustomOTP
+                value={field.value}
+                onChange={field.onChange}
+                length={6}
+                showSeparator
+                separatorAfter={[2]}
+                disabled={isSubmitting}
+              />
+              {isSubmitting && (
+                <Loader2 className="w-4 h-4 animate-spin text-primary" />
+              )}
+            </div>
+          )}
         </FormField>
       </FormBase>
 

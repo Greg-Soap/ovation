@@ -12,7 +12,6 @@ export default function FollowingPage() {
   const { profile } = useParams()
   const username = profile as string
 
-  console.log({ username })
   const { data: profileData } = useQuery({
     queryKey: ['profile', username],
     queryFn: () => ovationService.getUserProfile(username as string),

@@ -14,7 +14,6 @@ export default function Portfolio({
   const { isUser } = useAppStore()
 
   const filteredNfts = nfts.filter((nft) => !nft.isPrivate)
-  console.log({ nfts })
 
   return (
     <div className="w-full py-10 flex items-center justify-center">

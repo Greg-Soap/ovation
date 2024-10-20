@@ -31,9 +31,9 @@ class OvationService {
     return api.post<{ message: string; token: string; userData: UserData }>('/Auth/register', data)
   }
 
-  static loginGoogle(code: string) {
-    return api.get<{ message: string; token: string; userData: UserData }>(
-      `/Auth/login/google/${code}`,
+  static loginGoogle(email: string) {
+    return api.post<{ message: string; token: string; userData: UserData }>(
+      `/Auth/login/google/${email}`,
     )
   }
 
@@ -43,6 +43,11 @@ class OvationService {
 
   static verifyOtp(userId: string, otp: string) {
     return api.get(`/Auth/verify/otp/${userId}/${otp}`)
+  }
+
+
+  static verifyAccount(code: string, otp: string) {
+    return api.get(`/Auth/account/verify/${code}/${otp}`)
   }
 
   static logout() {

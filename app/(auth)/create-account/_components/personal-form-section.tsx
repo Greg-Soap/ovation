@@ -7,21 +7,34 @@ import { ArrowUpRight } from 'lucide-react'
 import OvationService from '@/services/ovation.service'
 import { FormField } from '@/components/customs/custom-form'
 import colors from '@/lib/colors'
+import GoogleAuth from '../../../../components/google-auth'
+import { useState } from 'react'
 
 export default function PersonalInfoForm({
   setPage,
 }: {
   setPage: (page: number) => void
 }) {
-  const form = useFormContext()
+  const [username, setUsername] = useState('')
 
+  const form = useFormContext()
   const { mutate: checkUsername, isPending } = useMutation({
     mutationFn: OvationService.checkUsername,
     onSuccess: () => {
       form.clearErrors('personalInfo.username')
+
+      if (form.getValues('type') === 'Google') {
+        const googleObject = JSON.parse(
+          window.localStorage.getItem('google_info') as string,
+        )
+        form.setValue('personalInfo.displayName', googleObject.name)
+        form.setValue('personalInfo.email', googleObject.email)
+        form.setValue('personalInfo.username', username)
+      }
       setPage(2)
     },
     onError: () => {
+      form.setValue('type', 'Normal')
       form.setError('personalInfo.username', {
         type: 'manual',
         message: 'This username is already taken',
@@ -38,8 +51,25 @@ export default function PersonalInfoForm({
       'personalInfo.password',
     ])
     if (isValid) {
-      const username = form.getValues('personalInfo.username')
-      checkUsername(username)
+      const _username = form.getValues('personalInfo.username')
+      form.setValue('type', 'Normal')
+      checkUsername(_username)
+    }
+  }
+  function generateRandomValue() {
+    const result = Math.floor(Math.random() * 1000)
+    return result
+  }
+
+  const signUpGoogle = async ({ googleObject }: any) => {
+    const username = googleObject.email.split('@')[0]
+    const formedusername = username + generateRandomValue()
+
+    try {
+      setUsername(formedusername)
+      checkUsername(formedusername)
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -59,6 +89,7 @@ export default function PersonalInfoForm({
           <p className="text-[10px] font-medium text-[#C1C0C6]">OR</p>
           <span className="w-[46%] h-[1px] border-[#C1C0C6] border-b-0 border-[1px]" />
         </div> */}
+      <GoogleAuth func={signUpGoogle} form={form} />
       <FormField
         name="personalInfo.displayName"
         form={form}
