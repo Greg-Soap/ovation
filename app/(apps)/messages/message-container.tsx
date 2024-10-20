@@ -18,13 +18,11 @@ import EmojiPicker, {
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
 import { getMessagesForChat, sendMessage } from '@/lib/firebaseChatService'
-import GalleryIcon from '@/components/icons/galleryIcon'
 import EmojiIcon from '@/components/icons/emojiIcon'
 import SendIcon from '@/components/icons/sendIcon'
 import { getReceiver } from '@/lib/helper-func'
 import type { Timestamp } from 'firebase/firestore'
 import Spinner from '@/components/ui/spinner'
-import { notificationServices } from '../layout'
 import { useAppStore } from '@/store/use-app-store'
 
 export interface FriendProps {
