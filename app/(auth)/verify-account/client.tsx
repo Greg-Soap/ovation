@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { useSearchParams } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
 import ovationService from '@/services/ovation.service'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useAnchorNavigation } from '@/lib/use-navigation'
 import { toast } from 'sonner'
 import { setToken } from '@/lib/cookies'
@@ -15,6 +15,7 @@ export default function VerifyAccountPage() {
   const searchParams = useSearchParams()
   const navigateTo = useAnchorNavigation()
   const { setUser } = useAppStore()
+  const [userVerified, setUserVerified] = useState(false)
 
   const email = searchParams.get('email')
   const code = searchParams.get('code')
@@ -28,6 +29,7 @@ export default function VerifyAccountPage() {
       setUser(data?.data?.userData)
       await signInOrSignUp(data?.data?.userData)
       toast.success('Verification successful, welcome!')
+      setUserVerified(true)
       setTimeout(() => navigateTo('/discover'), 3000)
     },
     onError: (error: any) => {
@@ -57,7 +59,7 @@ export default function VerifyAccountPage() {
         You will be redirected shortly immediately after verification.
       </p>
 
-      {!isVerifying && (
+      {!isVerifying && !userVerified && (
         <Button onClick={handleRetryVerification} disabled={isVerifying}>
           Retry Verification
         </Button>
