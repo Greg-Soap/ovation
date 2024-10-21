@@ -48,9 +48,9 @@ const GoogleAuth = ({ func, form }: any) => {
 
   return (
     <>
-      <div className="  flex justify-between mb-4">
+      <div className="flex justify-between mb-4">
         <div
-          className="px-4 h-[51.31px] text-[10px] md:text-base w-full bg-white  flex gap-4 w-[262px] flex justify-center items-center cursor-pointer"
+          className="px-4 h-[51px] text-[14px] md:text-base w-full bg-white  flex gap-4  justify-center items-center cursor-pointer"
           style={{
             borderRadius: '500px',
             justifyContent: !googleLoginInfo ? 'center' : 'flex-start',
@@ -86,7 +86,9 @@ const GoogleAuth = ({ func, form }: any) => {
                 alt=""
                 className="w-[21px] h-[20px]"
               />
-              <p className="text-xs text-black">Login with Google</p>
+              <p className="text-sm text-black font-semibold">
+                Login with Google
+              </p>
             </>
           )}
         </div>

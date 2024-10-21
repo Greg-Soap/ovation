@@ -2,7 +2,6 @@
 
 import Image from 'next/image'
 import React, { useState, useEffect } from 'react'
-import SearchInput from '../../_components/_timeline/search-input'
 import MessageContainer, { type FriendProps } from '../message-container'
 import { Button } from '@/components/ui/button'
 import {
