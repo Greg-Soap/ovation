@@ -59,6 +59,7 @@ interface Props {
 export default function AccountForm({ setOptionalLeft }: Props) {
   const navigateTo = useAnchorNavigation()
   const [page, setPage] = useState(1)
+  const [walletTypeUId, setWalletTypeUId] = useState<string | null>('')
 
   const [isManualWallet, setIsManualWallet] = useState(false)
 
@@ -117,8 +118,6 @@ export default function AccountForm({ setOptionalLeft }: Props) {
     },
     onError: (error: any) => {
       // @ts-ignore
-      console.log(form.getValues('type'))
-      console.log(form.getValues().personalInfo.username)
       toast.error(error?.response?.data?.message || 'An error occurred')
     },
   })
@@ -176,7 +175,9 @@ export default function AccountForm({ setOptionalLeft }: Props) {
             onWalletConnected={(account, chain) => {
               form.setValue('userWallet.walletAddress', account)
               form.setValue('userWallet.chain', chain)
+              form.setValue('userWallet.walletTypeId', walletTypeUId)
             }}
+            setWalletTypeUId={setWalletTypeUId}
             onWalletDisconnected={() => {
               form.setValue('userWallet', null)
               handleFormSubmit(form.getValues())

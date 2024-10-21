@@ -1,5 +1,5 @@
 import type React from 'react'
-import { Suspense, useMemo } from 'react'
+import { Dispatch, SetStateAction, Suspense, useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import arrow from '@/public/assets/images/arrow-right.png'
@@ -21,6 +21,7 @@ interface WalletConnectComponentProps {
   form: any
   handleFormSubmit: any
   isPending: boolean
+  setWalletTypeUId: Dispatch<SetStateAction<string | null>>
 }
 
 const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
@@ -30,6 +31,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
   form,
   handleFormSubmit,
   isPending,
+  setWalletTypeUId,
 }) => {
   const { account, chain, connectWallet, disconnectWallet } = useWalletConnect(
     (account, chain) => onWalletConnected?.(account, chain),
@@ -68,6 +70,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
                       className="text-start flex justify-center p-2 md:p-[1rem] h-[58px] w-full text-xs md:text-sm font-semibold  border-[1px] border-solid bg-transparent border-[#353538]"
                       onClick={() => {
                         connectWallet(sortedWallets[0].name)
+                        setWalletTypeUId(sortedWallets[0].walletId)
                       }}
                     >
                       <p className="text-foreground mr-2">
@@ -91,6 +94,7 @@ const WalletConnectComponent: React.FC<WalletConnectComponentProps> = ({
                               className="text-start flex justify-between p-2 md:p-[1rem] h-[58px] w-full md:w-[242px] text-xs md:text-sm font-semibold  border-[1px] border-solid bg-transparent border-[#353538]"
                               onClick={() => {
                                 connectWallet(wallet.name)
+                                setWalletTypeUId(wallet.walletId)
                               }}
                             >
                               <p className="text-foreground">
