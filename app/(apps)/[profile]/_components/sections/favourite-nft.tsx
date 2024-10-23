@@ -17,7 +17,7 @@ export default function FavouriteNft({ userId }: { userId: string }) {
 
   return (
     <div className="flex flex-col bg-[#18181C] rounded-[20px] gap-4 px-5 py-[18px]">
-      <p className="text-xs font-medium text-lighter">Favorite NFT</p>
+      <p className="text-xs font-medium text-lighter">Favorite NFT&apos;s</p>
       {isLoading ? (
         <div className="grid grid-cols-3 gap-[6px]">
           {[...Array(3)].map((_, index) => (

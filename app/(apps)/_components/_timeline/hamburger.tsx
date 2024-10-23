@@ -10,6 +10,7 @@ import {
   Setting2,
   Message,
   NotificationBing,
+  Logout,
 } from 'iconsax-react'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer'
@@ -89,19 +90,32 @@ export default function Hamburger() {
             )}
           </Button>
         </DrawerTrigger>
-        <DrawerContent
-          className="p-0 border-0 w-[80vw] max-w-[400px] h-screen fixed top-0 left-0 rounded-none bg-[#111115] border-r-[0.5px] border-solid border-gray-500 transform transition-transform duration-300 ease-in-out"
-          style={{}}
-        >
+        <DrawerContent className="p-0 border-0 w-[80vw] max-w-[400px] h-screen fixed top-0 left-0 rounded-none bg-[#111115] border-r-[0.5px] border-solid border-gray-500 transform transition-transform duration-300 ease-in-out">
           <div className="bg-[#111115] flex flex-col p-5 h-full overflow-y-scroll justify-between">
             <div>
               <div className="flex flex-col gap-5 justify-between">
-                <CustomAvatar
-                  src={profileData?.profile?.profileImage}
-                  alt="User Display Picture"
-                  size="huge"
-                />
-
+                <div className="flex items-center gap-4 justify-between">
+                  <CustomAvatar
+                    src={profileData?.profile?.profileImage}
+                    alt="User Display Picture"
+                    size="huge"
+                  />
+                  <CustomDialog
+                    trigger={
+                      <Button
+                        variant={'ghost'}
+                        className="py-[10px]  text-red-500 bg-red-500/10 rounded-full w-fit h-fit self-start justify-end"
+                      >
+                        <Logout size={24} />
+                      </Button>
+                    }
+                    onConfirm={handleLogout}
+                    confirmText="Logout"
+                    title="Confirm logout?"
+                    description="Are you sure you want to log out?"
+                    actionVariant="destructive"
+                  />
+                </div>
                 <div className="flex flex-col gap-9">
                   {isLoading ? (
                     <MiniLoader />
@@ -146,20 +160,6 @@ export default function Hamburger() {
             </div>
             <div className="flex flex-col gap-4">
               <FeedbackButton className="w-full mb-4" />
-              <CustomDialog
-                trigger={
-                  <Button
-                    variant={'ghost'}
-                    className="py-[10px] w-full text-red-500"
-                  >
-                    Logout {user?.username}
-                  </Button>
-                }
-                onConfirm={handleLogout}
-                confirmText="Logout"
-                title="Confirm logout?"
-                description="Are you sure you want to log out?"
-              />
             </div>
           </div>
         </DrawerContent>
