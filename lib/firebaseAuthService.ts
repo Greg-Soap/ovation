@@ -29,7 +29,7 @@ export const signInOrSignUp = async (user: UserData) => {
   }
 }
 
-export const signIn = async (email: string, userId: string) => {
+export const signIn = async (userId: string, email: string) => {
   try {
     const userr = await signInWithEmailAndPassword(auth, email, generatePassword(userId))
   } catch (error: any) {}

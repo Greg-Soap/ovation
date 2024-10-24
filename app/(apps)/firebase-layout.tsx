@@ -15,8 +15,6 @@ export default function FirebaseLayout({
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  console.log('user', user)
-
   useEffect(() => {
     firebaseSignIn()
 
