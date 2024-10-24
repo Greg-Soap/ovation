@@ -82,23 +82,24 @@ export default function ProfileHeader({
           </div>
         </ErrorBoundary>
       ) : (
-        <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <div className="flex items-end justify-end gap-3 h-[inherit] w-full pr-10 pb-10">
-            <Button
-              variant="default"
-              className="bg-[#333726] p-[9px] border border-[#507100]"
-              onClick={openDM}
-            >
-              <AsideMsgIcon className="w-5 h-5 stroke-black fill-primary" />
-            </Button>
-            <Button
-              variant={'default'}
-              disabled={isFollowingPending || isUnfollowingPending}
-              isLoading={isFollowingPending || isUnfollowingPending}
-              loadingText={
-                isFollowingPending ? 'Following...' : 'Unfollowing...'
-              }
-              className={`
+        profileData && (
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <div className="flex items-end justify-end gap-3 h-[inherit] w-full pr-10 pb-10">
+              <Button
+                variant="default"
+                className="bg-[#333726] p-[9px] border border-[#507100]"
+                onClick={openDM}
+              >
+                <AsideMsgIcon className="w-5 h-5 stroke-black fill-primary" />
+              </Button>
+              <Button
+                variant={'default'}
+                disabled={isFollowingPending || isUnfollowingPending}
+                isLoading={isFollowingPending || isUnfollowingPending}
+                loadingText={
+                  isFollowingPending ? 'Following...' : 'Unfollowing...'
+                }
+                className={`
                 py-[9px] px-[13px] text-xs font-semibold border
                 ${
                   profileData?.isFollowing
@@ -108,29 +109,32 @@ export default function ProfileHeader({
                 transition-colors duration-200
                 ${profileData?.isFollowing ? 'group' : ''}
               `}
-              onClick={() => {
-                if (profileData?.isFollowing) {
-                  unfollowUser(profileData?.userId as string)
-                } else {
-                  followUser(profileData?.userId as string)
-                }
-              }}
-            >
-              <span
-                className={profileData?.isFollowing ? 'group relative' : ''}
+                onClick={() => {
+                  if (profileData?.isFollowing) {
+                    unfollowUser(profileData?.userId as string)
+                  } else {
+                    followUser(profileData?.userId as string)
+                  }
+                }}
               >
-                {profileData?.isFollowing ? (
-                  <>
-                    <span className="group-hover:hidden">Following</span>
-                    <span className="hidden group-hover:inline">Unfollow</span>
-                  </>
-                ) : (
-                  'Follow'
-                )}
-              </span>
-            </Button>
-          </div>
-        </ErrorBoundary>
+                <span
+                  className={profileData?.isFollowing ? 'group relative' : ''}
+                >
+                  {profileData?.isFollowing ? (
+                    <>
+                      <span className="group-hover:hidden">Following</span>
+                      <span className="hidden group-hover:inline">
+                        Unfollow
+                      </span>
+                    </>
+                  ) : (
+                    'Follow'
+                  )}
+                </span>
+              </Button>
+            </div>
+          </ErrorBoundary>
+        )
       )}
     </div>
   )

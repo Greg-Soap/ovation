@@ -6,7 +6,7 @@ import ovationService from '@/services/ovation.service'
 import type { ProfileData, UserExperience } from '@/models/all.model'
 import { ErrorBoundary } from 'react-error-boundary'
 import { ErrorFallback } from '@/components/error-boundary'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useParams } from 'next/navigation'
 import { toast } from 'sonner'
 import type { FriendProps } from '../messages/message-container'
@@ -125,9 +125,24 @@ export default function Profile() {
         </ErrorBoundary>
 
         <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <MainProfileSection profileData={profileData as ProfileData} />
+          {profileData ? (
+            <MainProfileSection profileData={profileData as ProfileData} />
+          ) : (
+            <ProfileNotFound />
+          )}
         </ErrorBoundary>
       </div>
     </ErrorBoundary>
+  )
+}
+
+function ProfileNotFound() {
+  return (
+    <div className="min-h-[300px] w-full flex flex-col items-center justify-center">
+      <p className="text-3xl font-semibold">This account doesn&apos;t exist</p>
+      <p className="text-lg font-semibold text-lighter">
+        Please check the URL or search for something else.
+      </p>
+    </div>
   )
 }

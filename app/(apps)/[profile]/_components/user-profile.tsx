@@ -44,9 +44,11 @@ export default function UserProfile({
               <div className="w-full h-fit flex flex-col gap-0.5">
                 <div className="flex items-center gap-[13px]">
                   <p className="text-[22px] font-semibold">
-                    {profileData?.profile?.displayName}
+                    {profileData?.profile?.displayName || 'No User found'}
                   </p>
-                  <PathBadge pathName={profileData?.pathName} />
+                  {profileData?.pathName && (
+                    <PathBadge pathName={profileData?.pathName} />
+                  )}
                 </div>
 
                 <p className="flex items-center gap-1 text-base text-light">
@@ -58,29 +60,33 @@ export default function UserProfile({
             )}
           </ErrorBoundary>
 
-          <ErrorBoundary FallbackComponent={ErrorFallback}>
-            {isLoading ? (
-              <MiniLoader />
-            ) : (
-              <ProfileInfo
-                profileData={profileData}
-                latestExperience={latestExperience}
-                isUser={isUser}
-              />
-            )}
-          </ErrorBoundary>
+          {profileData && (
+            <>
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                {isLoading ? (
+                  <MiniLoader />
+                ) : (
+                  <ProfileInfo
+                    profileData={profileData}
+                    latestExperience={latestExperience}
+                    isUser={isUser}
+                  />
+                )}
+              </ErrorBoundary>
 
-          <ErrorBoundary FallbackComponent={ErrorFallback}>
-            <Badges userId={profileData?.userId as string} />
-          </ErrorBoundary>
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <Badges userId={profileData?.userId as string} />
+              </ErrorBoundary>
 
-          <ErrorBoundary FallbackComponent={ErrorFallback}>
-            <Socials socials={profileData?.socials || {}} />
-          </ErrorBoundary>
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <Socials socials={profileData?.socials || {}} />
+              </ErrorBoundary>
 
-          <ErrorBoundary FallbackComponent={ErrorFallback}>
-            <FavouriteNft userId={profileData?.userId as string} />
-          </ErrorBoundary>
+              <ErrorBoundary FallbackComponent={ErrorFallback}>
+                <FavouriteNft userId={profileData?.userId as string} />
+              </ErrorBoundary>
+            </>
+          )}
         </div>
       </div>
     </ErrorBoundary>
