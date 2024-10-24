@@ -189,7 +189,8 @@ const renderHoldersList = (
     <>
       <div id="top-3 section" className="w-full flex flex-col gap-10">
         {data.slice(0, 3).map((user, index) => (
-          <div
+          <a
+            href={`/${user?.username}`}
             key={index}
             id={`no-${index + 1}-user`}
             className="rounded-lg border border-[#353538] h-[360px] bg-cover flex flex-col justify-end center items-center"
@@ -224,7 +225,6 @@ const renderHoldersList = (
                     className="flex gap-1 text-xs items-center text-foreground"
                   >
                     <span>{formatUsername(user?.username)} </span>
-                    <VerifyIcon />
                   </a>
                 </div>
               </div>
@@ -235,12 +235,12 @@ const renderHoldersList = (
                 )(user)}
               </div>
             </div>
-          </div>
+          </a>
         ))}
       </div>
       <div id="top-4-10 section" className="flex flex-col gap-5 w-full mt-5">
         {data.slice(3).map((user, index) => (
-          <div key={index} className="w-full">
+          <a href={`/${user?.username}`} key={index} className="w-full">
             <div className="flex h-[90px]  pl-4 pr-4 bg-[#18181C] rounded-[20px] items-center justify-between border border-[#35353880]">
               <div className="flex items-center gap-2">
                 <span className="font-semibold">{index + 4}</span>
@@ -274,7 +274,7 @@ const renderHoldersList = (
                 )(user)}
               </div>
             </div>
-          </div>
+          </a>
         ))}
       </div>
     </>

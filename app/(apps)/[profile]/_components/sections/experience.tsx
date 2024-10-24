@@ -2,17 +2,19 @@ import PlusIcon from '@/components/icons/plus-icon'
 import { Button } from '@/components/ui/button'
 import { useAnchorNavigation } from '@/lib/use-navigation'
 import type { UserExperience } from '@/models/all.model'
+import { useAppStore } from '@/store/use-app-store'
 import { Briefcase } from 'iconsax-react'
 
 export default function Experience({ data }: { data: UserExperience[] }) {
   const navigateTo = useAnchorNavigation()
+  const { isUser } = useAppStore()
 
   return (
     <div className="w-[95%] ml-[2.5%] flex items-center justify-center rounded-[14px] flex-col gap-[34px] mt-[34px]">
       <div className="flex items-center justify-between w-full">
         <p className=" text-sm font-medium uppercase">Experience</p>
 
-        {data.length === 0 && (
+        {isUser && (
           <div className="flex items-center gap-3">
             <Button
               variant="ghost"

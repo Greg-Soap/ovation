@@ -39,11 +39,13 @@ export default function NotificationCard({
         return (
           <div className="flex gap-3 justify-between items-center">
             <div className="flex gap-3 items-center">
-              <CustomAvatar
-                src={initiator?.profileImage}
-                alt="Department Icon"
-                size="md"
-              />
+              <a href={`/${initiator?.username}`}>
+                <CustomAvatar
+                  src={initiator?.profileImage}
+                  alt="Department Icon"
+                  size="md"
+                />
+              </a>
               <div className="flex flex-col gap-1">
                 <a href={`/${initiator?.username}`}>
                   <p className="font-semibold text-sm ">{title}</p>

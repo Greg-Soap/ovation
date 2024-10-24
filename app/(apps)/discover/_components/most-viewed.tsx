@@ -102,7 +102,7 @@ export function MostViewed() {
       </div>
       <div id="top-4-10 section" className="flex flex-col gap-4 w-full pt-4">
         {mostViewed.slice(3).map((user, index) => (
-          <div key={index} className="w-full">
+          <a href={`/${user?.username}`} key={index} className="w-full">
             <div className="flex flex-wrap gap-4 py-4  pl-4 pr-4 bg-[#18181C] rounded-[20px] items-center justify-between border border-[#35353880]">
               <div className="flex items-center gap-2">
                 <div className="w-[30px] h-[30px] rounded-full overflow-hidden border-2 border-white">
@@ -133,7 +133,7 @@ export function MostViewed() {
                 Views
               </div>
             </div>
-          </div>
+          </a>
         ))}
       </div>
     </div>
