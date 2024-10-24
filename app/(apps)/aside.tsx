@@ -81,7 +81,6 @@ export default function Aside() {
     },
   ]
 
-  console.log('Notifications for user', Notifications)
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <aside className="fixed z-50 lg:fixed py-3 lg:py-0 flex flex-col items-center justify-between lg:justify-start lg:gap-7 lg:pt-4 min-w-[310px] w-full lg:w-[310px] lg:border-r border-[#1A1A1A] other-link overflow-scroll bg-[#232227] lg:bg-[#111115] bottom-0">
